@@ -373,6 +373,23 @@
     "6a4920e2fb1eff152bd64986": "Locate the IDEA-side pharmacy on Interchange",
     "6a4920e2fb1eff152bd64987": "Recover the cold-chain medical case",
     "6a4920e2fb1eff152bd6498d": "Survive and extract from Interchange",
-    "6a4920e2fb1eff152bd6498f": "Hand over the cold-chain medical case"
+    "6a4920e2fb1eff152bd6498f": "Hand over the cold-chain medical case",
+
+    // Side quest - Ragman's side quest 2 - Street Colors
+    "6a494a6bfb1eff152bd649d2 name": "Street Colors",
+    "6a494a6bfb1eff152bd649d2 description": "Streets has colors. Not pretty ones \u2014 working colors. Masks, rigs, jackets, little signs men use so their friends know who not to shoot. I want my color remembered. Put on the Death Shadow mask and work the street. Ten PMCs. Let them see the face before the shooting starts.",
+    "6a494a6bfb1eff152bd649d2 note": "Tony wants you to eliminate PMCs on Streets while wearing a Death Shadow mask.",
+    "6a494a6bfb1eff152bd649d2 startedMessageText": "Streets. Death Shadow mask. Ten PMCs. Make the face mean something.",
+    "6a494a6bfb1eff152bd649d2 successMessageText": "Good. Now that mask is not just cloth and paint. It is a warning. Ragman will understand the value of that better than most.",
+    "6a494a6bfb1eff152bd649d2 failMessageText": "You wore the face and did not make it matter. Streets does not remember almost.",
+    "6a494a6bfb1eff152bd649d2 acceptPlayerMessage": "I'll wear the mask.",
+    "6a494a6bfb1eff152bd649d2 declinePlayerMessage": "Not wearing Tony's colors yet.",
+    "6a494a6bfb1eff152bd649d2 completePlayerMessage": "The street saw the mask.",
+    "6a494a6bfb1eff152bd649d2 changeQuestMessageText": "Tony wants PMC kills on Streets while wearing a Death Shadow mask.",
+
+    "6a494a6bfb1eff152bd649d6": "Eliminate 10 PMCs on Streets while wearing a Death Shadow mask",
+    "6a494a6bfb1eff152bd649da": "Survive and extract from Streets"
+
+    // Side quest - Skier's side quest 1 - Pocket Work
 
 }
