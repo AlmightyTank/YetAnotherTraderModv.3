@@ -1,0 +1,30 @@
+{
+  "69ac9191b5d3ed0dcbfa29c7": {
+    "itemTplToClone": "587e02ff24597743df3deaeb",
+    "parentId": "5447b5fc4bdc2d87278b4567",
+    "handbookParentId": "5b5f78e986f77447ed5636b1",
+    "overrideProperties": {
+        "ExaminedByDefault": true,
+        "RecoilForceBack": 300,
+        "RecoilForceUp": 98,
+        "RecolDispersion": 9,
+        "DurabilityBurnRatio": 1.05,
+        "Ergonomics": 48,
+        "bFirerate": 50,
+        "weapFireType": [
+            "single",
+            "fullauto"
+        ],
+        "CanSellOnRagfair": false
+    },
+    "fleaPriceRoubles": 17500,
+    "handbookPriceRoubles": 12500,
+    "locales": {
+      "en": {
+        "name": "OP-SKS \"Relic Reborn\"",
+        "shortName": "SKS RR",
+        "description": "This OP-SKS started life as a quiet civilian hunting carbine, the kind of rifle that should have stayed behind a cabin door and aged in peace. Tony saw something older under the varnish: a forgotten war relic with enough steel left to misbehave. He rebuilt the action, replaced the fire-control work, and converted it to full-auto. The old SKS does not become modern — it becomes furious. Relic Reborn is what happens when a hunting rifle remembers it came from a battlefield."
+      }
+    }
+  }
+}

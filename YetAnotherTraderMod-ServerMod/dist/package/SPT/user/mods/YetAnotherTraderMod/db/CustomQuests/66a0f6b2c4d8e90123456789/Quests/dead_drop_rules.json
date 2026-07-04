@@ -1,0 +1,322 @@
+{
+    "6a417a6c82d8dd83f87b20d4": {
+        "QuestName": "Dead Drop Rules",
+        "_id": "6a417a6c82d8dd83f87b20d4",
+        "acceptPlayerMessage": "6a417a6c82d8dd83f87b20d4 acceptPlayerMessage",
+        "acceptanceAndFinishingSource": "eft",
+        "arenaLocations": [],
+        "canShowNotificationsInGame": true,
+        "changeQuestMessageText": "6a417a6c82d8dd83f87b20d4 changeQuestMessageText",
+        "completePlayerMessage": "6a417a6c82d8dd83f87b20d4 completePlayerMessage",
+        "conditions": {
+            "AvailableForFinish": [
+                {
+                    "conditionType": "CounterCreator",
+                    "counter": {
+                        "conditions": [
+                            {
+                                "conditionType": "Location",
+                                "dynamicLocale": false,
+                                "id": "6a417a6c82d8dd83f87b20d5",
+                                "target": [
+                                    "Woods"
+                                ]
+                            },
+                            {
+                                "conditionType": "VisitPlace",
+                                "dynamicLocale": false,
+                                "id": "6a417a6c82d8dd83f87b20d6",
+                                "target": "visit_tony_woods_first_dead_drop_rules",
+                                "value": 1
+                            }
+                        ],
+                        "id": "6a417a6c82d8dd83f87b20d7"
+                    },
+                    "completeInSeconds": 0,
+                    "doNotResetIfCounterCompleted": false,
+                    "dynamicLocale": false,
+                    "globalQuestCounterId": "",
+                    "id": "6a417a6c82d8dd83f87b20d8",
+                    "index": 0,
+                    "isNecessary": false,
+                    "isResetOnConditionFailed": false,
+                    "oneSessionOnly": true,
+                    "parentId": "",
+                    "type": "Completion",
+                    "value": 1,
+                    "visibilityConditions": []
+                },
+                {
+                    "conditionType": "FindItem",
+                    "dogtagLevel": 0,
+                    "dynamicLocale": false,
+                    "globalQuestCounterId": "",
+                    "id": "6a417a6c82d8dd83f87b20da",
+                    "index": 1,
+                    "isEncoded": false,
+                    "maxDurability": 100,
+                    "minDurability": 0,
+                    "onlyFoundInRaid": true,
+                    "parentId": "",
+                    "target": [
+                        "6a417b0582d8dd83f87b20f4"
+                    ],
+                    "value": 1,
+                    "visibilityConditions": [
+                        {
+                            "conditionType": "CompleteCondition",
+                            "id": "6a417a6c82d8dd83f87b20db",
+                            "target": "6a417a6c82d8dd83f87b20d8"
+                        }
+                    ]
+                },
+                {
+                    "conditionType": "LeaveItemAtLocation",
+                    "dynamicLocale": false,
+                    "globalQuestCounterId": "",
+                    "id": "6a417a6c82d8dd83f87b20dc",
+                    "index": 2,
+                    "isEncoded": false,
+                    "maxDurability": 100,
+                    "minDurability": 0,
+                    "onlyFoundInRaid": false,
+                    "parentId": "",
+                    "plantTime": 20,
+                    "target": [
+                        "6a417b0582d8dd83f87b20f4"
+                    ],
+                    "value": 1,
+                    "visibilityConditions": [
+                        {
+                            "conditionType": "CompleteCondition",
+                            "id": "6a417a6c82d8dd83f87b20dd",
+                            "target": "6a417a6c82d8dd83f87b20da"
+                        }
+                    ],
+                    "zoneId": "place_tony_woods_second_dead_drop_rules"
+                },
+                {
+                    "conditionType": "CounterCreator",
+                    "counter": {
+                        "conditions": [
+                            {
+                                "conditionType": "Location",
+                                "dynamicLocale": false,
+                                "id": "6a417a6c82d8dd83f87b20de",
+                                "target": [
+                                    "Woods"
+                                ]
+                            },
+                            {
+                                "conditionType": "ExitStatus",
+                                "dynamicLocale": false,
+                                "id": "6a417a6c82d8dd83f87b20df",
+                                "status": [
+                                    "Survived"
+                                ]
+                            }
+                        ],
+                        "id": "6a417a6c82d8dd83f87b20e0"
+                    },
+                    "completeInSeconds": 0,
+                    "doNotResetIfCounterCompleted": false,
+                    "dynamicLocale": false,
+                    "globalQuestCounterId": "",
+                    "id": "6a417a6c82d8dd83f87b20e1",
+                    "index": 3,
+                    "isNecessary": false,
+                    "isResetOnConditionFailed": false,
+                    "oneSessionOnly": true,
+                    "parentId": "",
+                    "type": "Completion",
+                    "value": 1,
+                    "visibilityConditions": [
+                        {
+                            "conditionType": "CompleteCondition",
+                            "id": "6a417a6c82d8dd83f87b20e2",
+                            "target": "6a417a6c82d8dd83f87b20dc"
+                        }
+                    ]
+                }
+            ],
+            "AvailableForStart": [
+                {
+                    "availableAfter": 0,
+                    "conditionType": "Quest",
+                    "dispersion": 0,
+                    "dynamicLocale": false,
+                    "globalQuestCounterId": "",
+                    "id": "6a417a6c82d8dd83f87b20e3",
+                    "index": 0,
+                    "parentId": "",
+                    "status": [
+                        4
+                    ],
+                    "target": "6a415fe582d8dd83f87b209b",
+                    "visibilityConditions": []
+                }
+            ],
+            "Fail": [
+                {
+                    "conditionType": "CounterCreator",
+                    "counter": {
+                        "conditions": [
+                            {
+                                "conditionType": "Location",
+                                "dynamicLocale": false,
+                                "id": "6a417b0582d8dd83f87b20f5",
+                                "target": [
+                                    "Woods"
+                                ]
+                            },
+                            {
+                                "conditionType": "ExitStatus",
+                                "dynamicLocale": false,
+                                "id": "6a417b0582d8dd83f87b20f6",
+                                "status": [
+                                    "Killed",
+                                    "Left",
+                                    "MissingInAction"
+                                ]
+                            }
+                        ],
+                        "id": "6a417b0582d8dd83f87b20f7"
+                    },
+                    "completeInSeconds": 0,
+                    "doNotResetIfCounterCompleted": false,
+                    "dynamicLocale": false,
+                    "globalQuestCounterId": "",
+                    "id": "6a417b0582d8dd83f87b20f8",
+                    "index": 0,
+                    "isNecessary": false,
+                    "isResetOnConditionFailed": false,
+                    "oneSessionOnly": true,
+                    "parentId": "",
+                    "type": "Completion",
+                    "value": 1,
+                    "visibilityConditions": []
+                }
+            ]
+        },
+        "declinePlayerMessage": "6a417a6c82d8dd83f87b20d4 declinePlayerMessage",
+        "description": "6a417a6c82d8dd83f87b20d4 description",
+        "failMessageText": "6a417a6c82d8dd83f87b20d4 failMessageText",
+        "gameModes": [],
+        "image": "/files/quest/icon/596b465486f77457ca186188.jpg",
+        "instantComplete": false,
+        "isKey": false,
+        "location": "5704e3c2d2720bac5b8b4567",
+        "name": "6a417a6c82d8dd83f87b20d4 name",
+        "note": "6a417a6c82d8dd83f87b20d4 note",
+        "progressSource": "eft",
+        "rankingModes": [],
+        "restartable": true,
+        "rewards": {
+            "Fail": [],
+            "Started": [],
+            "Success": [
+                {
+                    "availableInGameEditions": [],
+                    "id": "6a417a6c82d8dd83f87b20e4",
+                    "index": 0,
+                    "type": "Experience",
+                    "unknown": false,
+                    "value": 10000
+                },
+                {
+                    "availableInGameEditions": [],
+                    "id": "6a417a6c82d8dd83f87b20e5",
+                    "index": 1,
+                    "target": "66a0f6b2c4d8e90123456789",
+                    "type": "TraderStanding",
+                    "unknown": false,
+                    "value": 0.11
+                },
+                {
+                    "availableInGameEditions": [],
+                    "findInRaid": false,
+                    "id": "6a417a6c82d8dd83f87b20e6",
+                    "index": 2,
+                    "items": [
+                        {
+                            "_id": "6a417b0582d8dd83f87b20e7",
+                            "_tpl": "5449016a4bdc2d6f028b456f",
+                            "upd": {
+                                "StackObjectsCount": 75000
+                            }
+                        }
+                    ],
+                    "target": "6a417b0582d8dd83f87b20e7",
+                    "type": "Item",
+                    "unknown": false,
+                    "value": 75000
+                },
+                {
+                    "availableInGameEditions": [],
+                    "findInRaid": false,
+                    "id": "6a417b0582d8dd83f87b20e8",
+                    "index": 3,
+                    "items": [
+                        {
+                            "_id": "6a417b0582d8dd83f87b20e9",
+                            "_tpl": "59fb042886f7746c5005a7b2",
+                            "upd": {
+                                "StackObjectsCount": 1
+                            }
+                        }
+                    ],
+                    "target": "6a417b0582d8dd83f87b20e9",
+                    "type": "Item",
+                    "unknown": false,
+                    "value": 1
+                },
+                {
+                    "availableInGameEditions": [],
+                    "gameMode": [
+                        "regular",
+                        "pve"
+                    ],
+                    "id": "6a417b0582d8dd83f87b20ed",
+                    "isHidden": false,
+                    "items": [
+                        {
+                            "_id": "6a417b0582d8dd83f87b20ee",
+                            "_tpl": "6a417b0582d8dd83f87b20f0"
+                        }
+                    ],
+                    "loyaltyLevel": 3,
+                    "target": "6a417b0582d8dd83f87b20ee",
+                    "traderId": "66a0f6b2c4d8e90123456789",
+                    "type": "AssortmentUnlock",
+                    "unknown": false
+                },
+                {
+                    "availableInGameEditions": [],
+                    "gameMode": [
+                        "regular",
+                        "pve"
+                    ],
+                    "id": "6a417b0582d8dd83f87b20ed",
+                    "isHidden": false,
+                    "items": [
+                        {
+                            "_id": "6a417b0582d8dd83f87b20ee",
+                            "_tpl": "6a417b0582d8dd83f87b20ef"
+                        }
+                    ],
+                    "loyaltyLevel": 3,
+                    "target": "6a417b0582d8dd83f87b20ee",
+                    "traderId": "66a0f6b2c4d8e90123456789",
+                    "type": "AssortmentUnlock",
+                    "unknown": false
+                }
+            ]
+        },
+        "secretQuest": false,
+        "side": "Pmc",
+        "startedMessageText": "6a417a6c82d8dd83f87b20d4 startedMessageText",
+        "successMessageText": "6a417a6c82d8dd83f87b20d4 successMessageText",
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "type": "PickUp"
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "6a39f49c82d8dd83f87b1f9b": {
+        "itemTplToClone": "5ae9a0dd86f7742e5f454a05",
+        "parentId": "5448ecbe4bdc2d60728b4568",
+        "handbookParentId": "5b619f1a86f77450a702a6f3",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Width": 1,
+            "Height": 2,
+            "Weight": 0.2,
+            "StackMaxSize": 1,
+            "DiscardingBlock": true,
+            "CanSellOnRagfair": false,
+            "QuestItem": true
+        },
+        "locales": {
+            "en": {
+                "name": "Forged route documents",
+                "shortName": "Route docs",
+                "description": "A sealed packet of forged transport papers, customs stamps, route manifests, and false ownership records recovered from the guard office in two-story Dorms. The signatures look official enough to fool a tired checkpoint guard, which is all Tony needs."
+            }
+        },
+        "fleaPriceRoubles": 1,
+        "handbookPriceRoubles": 1,
+        "addtoItemBlacklist": true
+    }
+}

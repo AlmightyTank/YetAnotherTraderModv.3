@@ -1,0 +1,27 @@
+{
+    "6a3210dbd2999bc7b9bbab26": {
+        "itemTplToClone": "5910922b86f7747d96753483",
+        "parentId": "5448ecbe4bdc2d60728b4568",
+        "handbookParentId": "5b619f1a86f77450a702a6f3",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Width": 2,
+            "Height": 2,
+            "Weight": 2.2,
+            "StackMaxSize": 1,
+            "DiscardingBlock": true,
+            "CanSellOnRagfair": false,
+            "QuestItem": true
+        },
+        "locales": {
+            "en": {
+                "name": "Experimental stim case",
+                "shortName": "Stim case",
+                "description": "A sealed medical case recovered from room W301 at the Health Resort. It contains standard injectors, rejected batches, and prototype stimulants packed under faded medical labels. Some markings are official. Some are handwritten. Tony only cares that the seals are intact."
+            }
+        },
+        "fleaPriceRoubles": 1,
+        "handbookPriceRoubles": 1,
+        "addtoItemBlacklist": true
+    }
+}

@@ -1,0 +1,82 @@
+{
+    "699bacc55a0601415c931358": {
+        "_changeWeaponName": false,
+        "_encyclopedia": "699bacc55a0601415c931358",
+        "_id": "699bb1d3214edb1b8e4903e4",
+        "_name": "STM-9 Default",
+        "_parent": "699bacc55a0601415c931358",
+        "_type": "Preset",
+        "_items": [
+            {
+                "_id": "699bacc55a0601415c931358",
+                "_tpl": "699bacc55a0601415c931358",
+                "upd": {
+                    "Repairable": {
+                        "MaxDurability": 100,
+                        "Durability": 100
+                    }
+                }
+            },
+            {
+                "_id": "699bb1eb3110218af2364d88",
+                "_tpl": "602e71bd53a60014f9705bfa",
+                "parentId": "699bacc55a0601415c931358",
+                "slotId": "mod_pistol_grip"
+            },
+            {
+                "_id": "699bb1ef90e3658e912e9f33",
+                "_tpl": "5a7ad2e851dfba0016153692",
+                "parentId": "699bacc55a0601415c931358",
+                "slotId": "mod_magazine"
+            },
+            {
+                "_id": "699bb1f66675127ad5a0a708",
+                "_tpl": "602e63fb6335467b0c5ac94d",
+                "parentId": "699bacc55a0601415c931358",
+                "slotId": "mod_reciever"
+            },
+            {
+                "_id": "699bb1fd96767d45fea1c91f",
+                "_tpl": "603372b4da11d6478d5a07ff",
+                "parentId": "699bb1f66675127ad5a0a708",
+                "slotId": "mod_barrel"
+            },
+            {
+                "_id": "699bb20385f86f359eba9159",
+                "_tpl": "60337f5dce399e10262255d1",
+                "parentId": "699bb1fd96767d45fea1c91f",
+                "slotId": "mod_muzzle"
+            },
+            {
+                "_id": "699bb20a17e177efbd169313",
+                "_tpl": "6034e3cb0ddce744014cb870",
+                "parentId": "699bb1f66675127ad5a0a708",
+                "slotId": "mod_handguard"
+            },
+            {
+                "_id": "699bb210266ebe7060c50f05",
+                "_tpl": "602e3f1254072b51b239f713",
+                "parentId": "699bacc55a0601415c931358",
+                "slotId": "mod_stock_001"
+            },
+            {
+                "_id": "699bb21c43b5fe42f2753277",
+                "_tpl": "602e620f9b513876d4338d9a",
+                "parentId": "699bb210266ebe7060c50f05",
+                "slotId": "mod_stock_000"
+            },
+            {
+                "_id": "699bb2220f4eb8a0d7b126ed",
+                "_tpl": "6033749e88382f4fab3fd2c5",
+                "parentId": "699bacc55a0601415c931358",
+                "slotId": "mod_charge"
+            },
+            {
+                "_id": "699bb226d2373b4e9efabdd9",
+                "_tpl": "602f85fd9b513876d4338d9c",
+                "parentId": "699bacc55a0601415c931358",
+                "slotId": "mod_tactical_000"
+            }
+        ]
+    }
+}

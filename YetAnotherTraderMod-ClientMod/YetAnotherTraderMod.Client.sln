@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37411.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YetAnotherTraderMod.Client", "YetAnotherTraderMod.Client.csproj", "{B9E7765B-1DCF-7E43-B3F1-CDA5B308B146}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B9E7765B-1DCF-7E43-B3F1-CDA5B308B146}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9E7765B-1DCF-7E43-B3F1-CDA5B308B146}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9E7765B-1DCF-7E43-B3F1-CDA5B308B146}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9E7765B-1DCF-7E43-B3F1-CDA5B308B146}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2030FFBF-261C-4329-8D8A-FDBB4AB2BE7B}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,32 @@
+{
+    "6a3210dbd2999bc7b9bbab28": {
+        "itemTplToClone": "5e997f0b86f7741ac73993e2",
+        "parentId": "5448e53e4bdc2d60728b4567",
+        "handbookParentId": "5b5f6f6c86f774093f2ecf0b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Width": 3,
+            "Height": 3,
+            "Weight": 3.5,
+            "StackMaxSize": 1,
+            "DiscardingBlock": true,
+            "CanSellOnRagfair": false,
+            "QuestItem": true,
+            "isQuestItem": true,
+            "Grids": [],
+            "mousePenalty": 0,
+            "speedPenaltyPercent": 0,
+            "weaponErgonomicPenalty": 0
+        },
+        "locales": {
+            "en": {
+                "name": "Trauma bag",
+                "shortName": "Trauma bag",
+                "description": "A sealed field trauma bag recovered from Mantis on Interchange. It contains pressure bandages, clotting agents, surgical tools, painkillers, and a folded casualty tag marked with one of Tony's route codes."
+            }
+        },
+        "fleaPriceRoubles": 1,
+        "handbookPriceRoubles": 1,
+        "addtoItemBlacklist": true
+    }
+}

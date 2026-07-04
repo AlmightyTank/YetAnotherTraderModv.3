@@ -1,0 +1,21 @@
+{
+    "MinLevel": 1, //[Level Requirement] The minimum level required to access the trader's level 1 loyalty.
+    "UnlockedByDefault": false, //[Unlock] If true, the trader is unlocked immediately regardless of level.
+    "TraderRefreshMin": 1800, //[Restock Timer] Minimum and Maximum time in seconds. 1800s = 30 min, 3600s = 60 min.
+    "TraderRefreshMax": 3600,
+    "RerollAssortOnRestock": true, //[Restock Reroll] If true, YATM rerolls paired ammo offers, cash/barter split, stock, and questassort after Tony restocks.
+    "AddTraderToFleaMarket": true, //[Flea Market] If true, Tony's offers appear on the Flea Market search.
+    "EnableCustomQuests": true, //[Quests] If false, Tony custom quests and quest zones will not load.
+    "InsurancePriceCoef": 45, //[Insurance] Price multiplier for insurance. 95 = 95%. Higher is more expensive.
+    "RepairQuality": 0.9, //[Repair] Quality of repairs. 0.0 to 1.0.
+    "RandomizeStockAvailable": true, //[Stock] If true, some items will randomly be out of stock each reset.
+    "OutOfStockChance": 5, //[Stock] Percentage chance, 0-100, that an item is out of stock.
+    "PreventBarterOffersOutOfStock": true, //[Stock] If true, offers that rolled into barter cannot be picked as out of stock.
+    "UnlimitedStock": false, //[Stock] If true, all items have infinite stock. Overrides randomization.
+    "PriceMultiplier": 1.0927, //[Pricing] Global multiplier for all item prices. 1.0 = standard price.
+    "CashOffersOnly": false, //[Pricing] If true, Tony will only use cash offers and barter randomization is disabled.
+    "RandomizeCashBarterOffers": true, //[Pricing] If true, configured offers randomly become cash or barter when the server loads.
+    "CashOfferPercent": 85, //[Pricing] Percent of configured offers that become cash. Remaining offers become barter when a real barter scheme exists.
+    "DebugLogging": false, //[Debug] Enables detailed logs in the server console for troubleshooting.
+    "RealDebugLogging": false //[Debug] Enables more detailed logs in the server console for troubleshooting.
+}

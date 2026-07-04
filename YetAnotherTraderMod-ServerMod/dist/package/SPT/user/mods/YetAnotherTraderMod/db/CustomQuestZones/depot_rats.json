@@ -1,0 +1,56 @@
+[
+    {
+        "ZoneId": "visit_tony_reserve_train_depot_skimmed_ammo_stash",
+        "ZoneName": "visit_tony_reserve_train_depot_skimmed_ammo_stash",
+        "ZoneLocation": "RezervBase",
+        "ZoneType": "visit",
+        "FlareType": "",
+        "Position": {
+            "X": "58.85558",
+            "Y": "-3.637513",
+            "Z": "-111.9271",
+            "W": "0"
+        },
+        "Rotation": {
+            "X": "0",
+            "Y": "0.1736482",
+            "Z": "0",
+            "W": "0.9848078"
+        },
+        "Scale": {
+            "X": "4.75",
+            "Y": "3",
+            "Z": "9",
+            "W": "0"
+        },
+        "GroupPosition": null,
+        "Salvage": null
+    },
+    {
+        "ZoneId": "place_tony_reserve_train_depot_skimmed_ammo_stash",
+        "ZoneName": "place_tony_reserve_train_depot_skimmed_ammo_stash",
+        "ZoneLocation": "RezervBase",
+        "ZoneType": "placeitem",
+        "FlareType": "",
+        "Position": {
+            "X": "61.4084",
+            "Y": "-4.819335",
+            "Z": "-112.869",
+            "W": "0"
+        },
+        "Rotation": {
+            "X": "0",
+            "Y": "0.167199",
+            "Z": "0",
+            "W": "0.9859232"
+        },
+        "Scale": {
+            "X": "1.25",
+            "Y": "2.25",
+            "Z": "4.75",
+            "W": "0"
+        },
+        "GroupPosition": null,
+        "Salvage": null
+    }
+]

@@ -1,0 +1,70 @@
+{
+    "69ac2686f67026da2c75948f": {
+        "_changeWeaponName": false,
+        "_encyclopedia": "69ac2686f67026da2c75948f",
+        "_id": "69ac274c7ca0cb046705db89",
+        "_name": "136 HR Default",
+        "_parent": "69ac2686f67026da2c75948f",
+        "_type": "Preset",
+        "_items": [
+            {
+                "_id": "69ac2686f67026da2c75948f",
+                "_tpl": "69ac2686f67026da2c75948f",
+                "upd": {
+                    "Repairable": {
+                        "MaxDurability": 100,
+                        "Durability": 100
+                    }
+                }
+            },
+            {
+                "_id": "69ac27632a99563b3de1527b",
+                "_tpl": "59e649f986f77411d949b246",
+                "parentId": "69ac2686f67026da2c75948f",
+                "slotId": "mod_gas_block"
+            },
+            {
+                "_id": "69ac277760242d1806e1c681",
+                "_tpl": "59e6284f86f77440d569536f",
+                "parentId": "69ac27632a99563b3de1527b",
+                "slotId": "mod_handguard"
+            },
+            {
+                "_id": "69ac277eb57e9022a8e41780",
+                "_tpl": "59e61eb386f77440d64f5daf",
+                "parentId": "69ac2686f67026da2c75948f",
+                "slotId": "mod_muzzle"
+            },
+            {
+                "_id": "69ac2784a99dafb351376875",
+                "_tpl": "59e6318286f77444dd62c4cc",
+                "parentId": "69ac2686f67026da2c75948f",
+                "slotId": "mod_pistol_grip"
+            },
+            {
+                "_id": "69ac27898d46f8989c5bd4fb",
+                "_tpl": "59e6449086f7746c9f75e822",
+                "parentId": "69ac2686f67026da2c75948f",
+                "slotId": "mod_reciever"
+            },
+            {
+                "_id": "69ac278e5adcb3163b966ace",
+                "_tpl": "59d650cf86f7741b846413a4",
+                "parentId": "69ac2686f67026da2c75948f",
+                "slotId": "mod_sight_rear"
+            },
+            {
+                "_id": "69ac27946db806a643f074b7",
+                "_tpl": "59e6227d86f77440d64f5dc2",
+                "parentId": "69ac2686f67026da2c75948f",
+                "slotId": "mod_stock"
+            },
+            {
+                "_id": "69ac2799f152fdfbb52df1ad",
+                "_tpl": "5b1fd4e35acfc40018633c39",
+                "parentId": "69ac2686f67026da2c75948f",
+                "slotId": "mod_magazine"
+            }
+        ]
+    }
+}

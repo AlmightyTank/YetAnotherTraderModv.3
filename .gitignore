@@ -1,2 +1,7 @@
 /.vs
 /dist
+/YetAnotherTraderMod-ServerMod/.vs
+/YetAnotherTraderMod-ServerMod/bin
+YetAnotherTraderMod-ServerMod/config/tarkovdev_items_cache.json
+/YetAnotherTraderMod-ClientMod/.vs
+/YetAnotherTraderMod-ClientMod/bin

@@ -1,0 +1,61 @@
+{
+    "cloneOrigin": "5751a25924597722c463c472",
+    "id": "6a41373a82d8dd83f87b2045",
+    "fleaPrice": 1.45,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.45,
+    "inheritOriginBuffs": false,
+
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "MaxHpResource": 8,
+        "ExaminedByDefault": false,
+        "effects_health": {},
+        "effects_damage": {
+            "LightBleeding": {
+                "delay": 0,
+                "duration": 0,
+                "fadeOut": 0
+            }
+        }
+    },
+
+    "Buffs": [
+        {
+            "BuffType": "HealthRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 20,
+            "Value": 1.0,
+            "AbsoluteValue": true,
+            "SkillName": ""
+        },
+        {
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 20,
+            "Value": -0.01,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 20,
+            "Value": -0.01,
+            "AbsoluteValue": false
+        }
+    ],
+
+    "locales": {
+        "en": {
+            "name": "Volkov Field Bandage",
+            "shortName": "V-Field",
+            "description": "A reinforced field bandage from Tony Volkov's private medical stash. Repacked from army surplus and treated with clotting compound, it is meant for quick pressure wraps when a light bleed needs to stop before the next corner."
+        }
+    }
+}

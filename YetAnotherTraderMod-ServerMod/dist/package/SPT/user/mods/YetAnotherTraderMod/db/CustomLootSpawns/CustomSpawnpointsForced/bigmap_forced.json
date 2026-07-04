@@ -1,0 +1,46 @@
+{
+    "bigmap": [
+        {
+            "locationId": "(100.966, 13.347, 49.843)",
+            "probability": 1,
+            "template": {
+                "Id": "forge_route_documents",
+                "IsContainer": false,
+                "useGravity": false,
+                "randomRotation": false,
+                "Position": {
+                    "x": 223.8570,
+                    "y": 0.7257,
+                    "z": 140.6358
+                },
+                "Rotation": {
+                    "x": -90.0000,
+                    "y": 0.0000,
+                    "z": 180.0000
+                },
+                "IsGroupPosition": false,
+                "GroupPositions": [],
+                "IsAlwaysSpawn": true,
+                "Root": "6a39f49c82d8dd83f87b1f9c",
+                "Items": [
+                    {
+                        "_id": "6a39f49c82d8dd83f87b1f9c",
+                        "_tpl": "6a39f49c82d8dd83f87b1f9b",
+                        "upd": {
+                            "StackObjectsCount": 1,
+                            "SpawnedInSession": true
+                        }
+                    }
+                ]
+            },
+            "itemDistribution": [
+                {
+                    "composedKey": {
+                        "key": "6a39f49c82d8dd83f87b1f9b"
+                    },
+                    "relativeProbability": 1
+                }
+            ]
+        }
+    ]
+}

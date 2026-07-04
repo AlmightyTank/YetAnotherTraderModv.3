@@ -1,0 +1,79 @@
+{
+    "cloneOrigin": "57347d9c245977448b40fa85",
+    "id": "6a43f00438a6d33bffe98313",
+    "fleaPrice": 1.1,
+    "handBookPrice": 1.1,
+    "includeInSameQuestsAsOrigin": true,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.1,
+    "BackgroundColor": "blue",
+    "effects_health": {
+        "Hydration": {
+            "value": -5
+        },
+        "Energy": {
+            "value": 52
+        }
+    },
+    "Buffs": [
+        {
+            "AbsoluteValue": true,
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 60,
+            "SkillName": "",
+            "Value": 0.15
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 90,
+            "SkillName": "Strength",
+            "Value": 1
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "Volkov Cooked herring",
+            "shortName": "Cooked Herring",
+            "description": "A can of herring heated in the sealed-can tradition of people who stopped caring about kitchen rules years ago. Sharp, salty, and strong enough to clear a room before the first shot."
+        }
+    },
+    "craft": {
+        "_id": "6a43f01438a6d33bffe98323",
+        "areaType": 5,
+        "requirements": [
+            {
+                "areaType": 5,
+                "requiredLevel": 1,
+                "type": "Area"
+            },
+            {
+                "templateId": "57347b8b24597737dd42e192",
+                "type": "Tool"
+            },
+            {
+                "templateId": "5d1b36a186f7742523398433",
+                "type": "Tool"
+            },
+            {
+                "templateId": "57347d9c245977448b40fa85",
+                "count": 1,
+                "isFunctional": false,
+                "isEncoded": false,
+                "type": "Item"
+            }
+        ],
+        "productionTime": 2700,
+        "needFuelForAllProductionTime": false,
+        "locked": false,
+        "endProduct": "6a43f00438a6d33bffe98313",
+        "continuous": false,
+        "count": 1,
+        "productionLimitCount": 0,
+        "isEncoded": false
+    }
+}

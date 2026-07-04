@@ -1,0 +1,29 @@
+[
+    {
+        "ZoneId": "visit_tony_shoreline_w301_experimental_stim_case",
+        "ZoneName": "visit_tony_shoreline_w301_experimental_stim_case",
+        "ZoneLocation": "Shoreline",
+        "ZoneType": "visit",
+        "FlareType": "",
+        "Position": {
+            "X": "-229.5928",
+            "Y": "2.858126",
+            "Z": "-99.66574",
+            "W": "0"
+        },
+        "Rotation": {
+            "X": "0",
+            "Y": "0",
+            "Z": "0",
+            "W": "1"
+        },
+        "Scale": {
+            "X": "1",
+            "Y": "2.5",
+            "Z": "1",
+            "W": "0"
+        },
+        "GroupPosition": null,
+        "Salvage": null
+    }
+]

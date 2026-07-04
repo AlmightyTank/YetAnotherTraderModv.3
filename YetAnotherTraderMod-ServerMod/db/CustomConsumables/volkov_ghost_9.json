@@ -1,0 +1,80 @@
+{
+    "cloneOrigin": "5fca13ca637ee0341a484f46",
+    "id": "6a3fd8c382d8dd83f87b2011",
+    "fleaPrice": 0.45,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.18,
+    "inheritOriginBuffs": false,
+
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "ExaminedByDefault": false,
+        "effects_health": {},
+        "effects_damage": {}
+    },
+
+    "Buffs": [
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "CovertMovement",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 240,
+            "Value": 12,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "StressResistance",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 240,
+            "Value": 8,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Perception",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 240,
+            "Value": -8,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "StaminaRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 240,
+            "Value": -0.04,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 240,
+            "Value": -0.04,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "QuantumTunnelling",
+            "Chance": 1,
+            "Delay": 250,
+            "Duration": 45,
+            "Value": 0,
+            "AbsoluteValue": true
+        }
+    ],
+
+    "locales": {
+        "en": {
+            "name": "GHOST-9 Neural Dampener",
+            "shortName": "GHOST-9",
+            "description": "A quiet-route neural dampener used by scouts, couriers, and people who do not want their footsteps remembered. It steadies nerves and improves covert movement, but dulls awareness and leaves the user with tunnel vision once the dose wears off."
+        }
+    }
+}

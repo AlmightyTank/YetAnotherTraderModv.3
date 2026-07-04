@@ -1,0 +1,87 @@
+{
+    "cloneOrigin": "637b612fb7afa97bfc3d7005",
+    "id": "6a3fd8c382d8dd83f87b2014",
+    "fleaPrice": -0.0,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": true,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.45,
+    "inheritOriginBuffs": false,
+
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "ExaminedByDefault": false,
+        "effects_health": {},
+        "effects_damage": {}
+    },
+
+    "Buffs": [
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Perception",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": 0.24,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Attention",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": 0.08,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "BodyTemperature",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": -0.035,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": 0.04,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": 0.04,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "BodyTemperature",
+            "Chance": 1,
+            "Delay": 606,
+            "Duration": 300,
+            "Value": 0.05,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HandsTremor",
+            "Chance": 1,
+            "Delay": 650,
+            "Duration": 60,
+            "Value": 0,
+            "AbsoluteValue": true
+        }
+    ],
+
+    "locales": {
+        "en": {
+            "name": "Volkov COLD-12 Field Stabilizer",
+            "shortName": "COLD-12",
+            "description": "A black-market field stabilizer based on stolen TerraGroup temperature-regulation research. Tony's contacts stripped the formula down for long raids, improving perception and keeping the body cool while slowly restoring energy and hydration. Once the dose burns out, body temperature rebounds hard and the hands may begin to shake."
+        }
+    }
+}

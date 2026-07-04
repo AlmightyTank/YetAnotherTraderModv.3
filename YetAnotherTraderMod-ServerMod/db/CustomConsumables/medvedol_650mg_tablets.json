@@ -1,0 +1,53 @@
+{
+    "cloneOrigin": "544fb37f4bdc2dee738b4567",
+    "id": "6a43f02238a6d33bffe98332",
+    "fleaPrice": 1.6,
+    "handBookPrice": 1.6,
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.08,
+    "BackgroundColor": "violet",
+    "effects_damage": {
+        "Pain": {
+            "delay": 20,
+            "duration": 300,
+            "fadeOut": 15
+        }
+    },
+    "effects_health": {
+        "Hydration": {
+            "value": -18
+        },
+        "Energy": {
+            "value": -6
+        }
+    },
+    "Buffs": [
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 35,
+            "Duration": 240,
+            "SkillName": "StressResistance",
+            "Value": 3
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 35,
+            "Duration": 180,
+            "SkillName": "Vitality",
+            "Value": 2
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "Medvedol 650 mg tablets",
+            "shortName": "Medvedol",
+            "description": "A stronger analgesic tablet pack with no clean pharmacy label and too many warning marks on the foil. Tony says they came from an old BEAR medical crate. They work, but they pull water out of you fast."
+        }
+    },
+    "addtoItemBlacklist": false
+}

@@ -1,0 +1,26 @@
+{
+    "6a3ca35382d8dd83f87b1fc9": {
+        "itemTplToClone": "67409848d0b2f8eb9b034db9",
+        "parentId": "590c745b86f7743cc433c5f2",
+        "handbookParentId": "5b619f1a86f77450a702a6f3",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Width": 3,
+            "Height": 3,
+            "Weight": 2.5,
+            "StackMaxSize": 1,
+            "DiscardingBlock": false,
+            "CanSellOnRagfair": false
+        },
+        "locales": {
+            "en": {
+                "name": "Sealed cargo package",
+                "shortName": "Cargo package",
+                "description": "A sealed cargo package marked for one of Tony's smuggling routes. The outside is wrapped in fake shipping paper and stamped with forged route markings. The inside carries valuables packed tight enough to pass as legitimate freight. If you lose one, Tony expects you to replace the value yourself."
+            }
+        },
+        "fleaPriceRoubles": 1,
+        "handbookPriceRoubles": 1,
+        "addtoItemBlacklist": true
+    }
+}

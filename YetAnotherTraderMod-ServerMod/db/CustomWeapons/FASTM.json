@@ -1,0 +1,30 @@
+{
+  "699bacc55a0601415c931358": {
+    "itemTplToClone": "60339954d62c9b14ed777c06",
+    "parentId": "5447b5e04bdc2d62278b4567",
+    "handbookParentId": "5b5f796a86f774093f2ed3c0",
+    "overrideProperties": {
+        "ExaminedByDefault": true,
+        "RecoilForceBack": 250,
+        "RecoilForceUp": 49,
+        "RecolDispersion": 9,
+        "DurabilityBurnRatio": 1.3,
+        "Ergonomics": 48,
+        "bFirerate": 750,
+        "weapFireType": [
+            "single",
+            "fullauto"
+        ],
+        "CanSellOnRagfair": false
+    },
+    "fleaPriceRoubles": 17500,
+    "handbookPriceRoubles": 12500,
+    "locales": {
+      "en": {
+        "name": "STM-9 Gen.2 \"Competition Ghost\"",
+        "shortName": "STM-9 CG",
+        "description": "The STM-9 was built for clean stages, fast splits, and shooters who care about timers. Tony cared about the smooth recoil impulse and Glock-pattern magazines. He kept the competition polish, then changed the purpose: tuned cycling, reinforced feed work, and a full-auto conversion that turns a race gun into a hallway cleaner. Competition Ghost still feels controlled in the hands, but the trophy-table manners are gone. This one left the range and learned how to haunt rooms."
+      }
+    }
+  }
+}

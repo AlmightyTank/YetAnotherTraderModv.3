@@ -1,0 +1,53 @@
+{
+    "cloneOrigin": "544fb37f4bdc2dee738b4567",
+    "id": "6a43f02338a6d33bffe98333",
+    "fleaPrice": 1.55,
+    "handBookPrice": 1.55,
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.06,
+    "BackgroundColor": "red",
+    "effects_damage": {
+        "Pain": {
+            "delay": 25,
+            "duration": 260,
+            "fadeOut": 15
+        }
+    },
+    "effects_health": {
+        "Hydration": {
+            "value": -14
+        },
+        "Energy": {
+            "value": -5
+        }
+    },
+    "Buffs": [
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 35,
+            "Duration": 220,
+            "SkillName": "Perception",
+            "Value": 2
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 35,
+            "Duration": 220,
+            "SkillName": "Search",
+            "Value": 2
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "Noctapyrin focus tablets",
+            "shortName": "Noctapyrin",
+            "description": "A small blister of bitter focus tablets passed through Tony's night crews. They dull pain slowly and keep the eyes working, but they are not gentle on the body."
+        }
+    },
+    "addtoItemBlacklist": false
+}

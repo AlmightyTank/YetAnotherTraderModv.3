@@ -1,0 +1,50 @@
+{
+    "6a417b0582d8dd83f87b20ef": {
+        "itemTplToClone": "5c093db286f7740a1b2617e3",
+        "parentId": "5795f317245977243854e041",
+        "handbookParentId": "5b5f6fa186f77409407a7eb7",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Width": 4,
+            "Height": 3,
+            "Weight": 16,
+            "CanSellOnRagfair": false,
+            "Grids": [
+                {
+                    "_name": "main",
+                    "_id": "66a0f6b2c4d8e90123456101",
+                    "_parent": "66a0f6b2c4d8e90123456001",
+                    "_props": {
+                        "cellsH": 10,
+                        "cellsV": 10,
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "5af0484c86f7740f02001f7f",
+                                    "5e54f6af86f7742199090bf3",
+                                    "5bc9be8fd4351e00334cae6e",
+                                    "543be6674bdc2df1348b4569",
+                                    "6389c6463485cf0eeb260715",
+                                    "67586af7036d7f3da60c3612",
+                                    "67586b7e49c2fa592e0d8ed9"
+                                ],
+                                "ExcludedFilter": []
+                            }
+                        ]
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                }
+            ]
+        },
+        "locales": {
+            "en": {
+                "name": "THICC Holodilnick thermal bag",
+                "shortName": "THICC Holodilnick",
+                "description": "Tony's oversized cold-storage case for food, booze, and field supplies. If it can keep a squad fed or drunk, it goes in here."
+            }
+        },
+        "fleaPriceRoubles": 1650000,
+        "handbookPriceRoubles": 1650000,
+        "addtoItemBlacklist": true
+    }
+}

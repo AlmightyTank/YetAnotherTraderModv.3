@@ -1,0 +1,80 @@
+{
+    "cloneOrigin": "637b6179104668754b72f8f5",
+    "id": "6a3fd8c382d8dd83f87b200c",
+    "fleaPrice": 1.8,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": true,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.35,
+    "inheritOriginBuffs": false,
+
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "ExaminedByDefault": false,
+        "effects_health": {},
+        "effects_damage": {}
+    },
+
+    "Buffs": [
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Assault",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 180,
+            "Value": 10,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "AimDrills",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 180,
+            "Value": 10,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "StressResistance",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 180,
+            "Value": 10,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 180,
+            "Value": -0.08,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 180,
+            "Value": -0.06,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HandsTremor",
+            "Chance": 1,
+            "Delay": 190,
+            "Duration": 45,
+            "Value": 0,
+            "AbsoluteValue": true
+        }
+    ],
+
+    "locales": {
+        "en": {
+            "name": "Volkov RUS Alpha",
+            "shortName": "V-Alpha",
+            "description": "A BEAR combat focus ampoule supplied through Tony Volkov's old network. It sharpens weapon handling, steadies the shooter under automatic fire, and keeps the mind locked in during close fighting. The crash comes late, leaving the hands shaking once the compound burns out."
+        }
+    }
+}

@@ -1,0 +1,47 @@
+{
+    "interchange": [
+        {
+            "locationId": "(25.2702, 27.6249, -76.3549)",
+            "probability": 1,
+            "template": {
+                "Id": "tony_trauma_bag",
+                "IsContainer": false,
+                "useGravity": false,
+                "randomRotation": false,
+                "Position": {
+                    "x": 25.2702,
+                    "y": 27.6249,
+                    "z": -76.3549
+                },
+                "Rotation": {
+                    "x": -90.0000,
+                    "y": 0.0000,
+                    "z": 0.0000
+                },
+                "IsGroupPosition": false,
+                "GroupPositions": [],
+                "IsAlwaysSpawn": true,
+                "Root": "6a3210dbd2999bc7b9bbab42",
+                "Items": [
+                    {
+                        "_id": "6a3210dbd2999bc7b9bbab42",
+                        "_tpl": "6a3210dbd2999bc7b9bbab28",
+                        "upd": {
+                            "StackObjectsCount": 1,
+                            "SpawnedInSession": true
+                        }
+                    }
+                ]
+            },
+            "itemDistribution": [
+                {
+                    "composedKey": {
+                        "key": "6a3210dbd2999bc7b9bbab28"
+                    },
+                    "relativeProbability": 1
+                }
+            ]
+        }
+    ]
+}
+

@@ -1,0 +1,88 @@
+{
+    "rezervbase": [
+        {
+            "locationId": "(140.2858, -10.3771, 39.8715)",
+            "probability": 1,
+            "template": {
+                "Id": "tony_sealed_crate_spawn_1",
+                "IsContainer": false,
+                "useGravity": false,
+                "randomRotation": false,
+                "Position": {
+                    "x": 140.2858,
+                    "y": -10.3771,
+                    "z": 39.8715
+                },
+                "Rotation": {
+                    "x": 0,
+                    "y": 90,
+                    "z": 0
+                },
+                "IsGroupPosition": false,
+                "GroupPositions": [],
+                "IsAlwaysSpawn": true,
+                "Root": "6a30b2fbd2999bc7b9bbaad1",
+                "Items": [
+                    {
+                        "_id": "6a30b2fbd2999bc7b9bbaad1",
+                        "_tpl": "6a30b2fbd2999bc7b9bbaaba",
+                        "upd": {
+                            "StackObjectsCount": 1,
+                            "SpawnedInSession": true
+                        }
+                    }
+                ]
+            },
+            "itemDistribution": [
+                {
+                    "composedKey": {
+                        "key": "6a30b2fbd2999bc7b9bbaaba"
+                    },
+                    "relativeProbability": 1
+                }
+            ]
+        },
+        {
+            "locationId": "(146.4405, -10.6578, 31.5577)",
+            "probability": 1,
+            "template": {
+                "Id": "tony_sealed_crate_spawn_2",
+                "IsContainer": false,
+                "useGravity": false,
+                "randomRotation": false,
+                "Position": {
+                    "x": 146.6756,
+                    "y": -9.5474,
+                    "z": 30.0298
+                },
+                "Rotation": {
+                    "x": 0.0000,
+                    "y": 90.0000,
+                    "z": 0.0000
+                },
+                "IsGroupPosition": false,
+                "GroupPositions": [],
+                "IsAlwaysSpawn": true,
+                "Root": "6a3007dfd2999bc7b9bba9ae",
+                "Items": [
+                    {
+                        "_id": "6a3007dfd2999bc7b9bba9ae",
+                        "_tpl": "6a30b2fbd2999bc7b9bbaaba",
+                        "upd": {
+                            "StackObjectsCount": 1,
+                            "SpawnedInSession": true
+                        }
+                    }
+                ]
+            },
+            "itemDistribution": [
+                {
+                    "composedKey": {
+                        "key": "6a30b2fbd2999bc7b9bbaaba"
+                    },
+                    "relativeProbability": 1
+                }
+            ]
+        }
+    ]
+}

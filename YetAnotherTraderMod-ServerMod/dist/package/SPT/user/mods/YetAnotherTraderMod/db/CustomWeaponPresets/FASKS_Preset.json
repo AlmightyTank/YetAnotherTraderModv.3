@@ -1,0 +1,82 @@
+{
+    "69ac9191b5d3ed0dcbfa29c7": {
+        "_changeWeaponName": false,
+        "_encyclopedia": "69ac9191b5d3ed0dcbfa29c7",
+        "_id": "69ac91bc523143999a91771e",
+        "_name": "SKS RR Default",
+        "_parent": "69ac9191b5d3ed0dcbfa29c7",
+        "_type": "Preset",
+        "_items": [
+            {
+                "_id": "69ac9191b5d3ed0dcbfa29c7",
+                "_tpl": "69ac9191b5d3ed0dcbfa29c7",
+                "upd": {
+                    "Repairable": {
+                        "MaxDurability": 100,
+                        "Durability": 100
+                    }
+                }
+            },
+            {
+                "_id": "69ac91c6fd30149f1b5a5476",
+                "_tpl": "587e0531245977466077a0f7",
+                "parentId": "69ac9191b5d3ed0dcbfa29c7",
+                "slotId": "mod_stock"
+            },
+            {
+                "_id": "69ac91ce39720d8f81e57b01",
+                "_tpl": "634eff66517ccc8a960fc735",
+                "parentId": "69ac9191b5d3ed0dcbfa29c7",
+                "slotId": "mod_barrel"
+            },
+            {
+                "_id": "69ac91d42f4770183bd26408",
+                "_tpl": "634f05a21f9f536910079b56",
+                "parentId": "69ac91ce39720d8f81e57b01",
+                "slotId": "mod_mount_000"
+            },
+            {
+                "_id": "69ac91dbe17e71aae6792f6e",
+                "_tpl": "634f036a517ccc8a960fc746",
+                "parentId": "69ac91d42f4770183bd26408",
+                "slotId": "mod_gas_block"
+            },
+            {
+                "_id": "69ac91e118d60d231d3aceb5",
+                "_tpl": "634f03d40384a3ba4f06f874",
+                "parentId": "69ac91dbe17e71aae6792f6e",
+                "slotId": "mod_mount_000"
+            },
+            {
+                "_id": "69ac91e85c68b0d1274d4447",
+                "_tpl": "574db213245977459a2f3f5d",
+                "parentId": "69ac91d42f4770183bd26408",
+                "slotId": "mod_sight_rear"
+            },
+            {
+                "_id": "69ac91efedb99369b4bb6949",
+                "_tpl": "587df3a12459772c28142567",
+                "parentId": "69ac9191b5d3ed0dcbfa29c7",
+                "slotId": "mod_magazine"
+            },
+            {
+                "_id": "69ac91f62873f4d6b3b4d21c",
+                "_tpl": "587e08ee245977446b4410cf",
+                "parentId": "69ac9191b5d3ed0dcbfa29c7",
+                "slotId": "mod_mount"
+            },
+            {
+                "_id": "69ac91fc3cd764c2a8909542",
+                "_tpl": "5c82343a2e221644f31c0611",
+                "parentId": "69ac91f62873f4d6b3b4d21c",
+                "slotId": "mod_scope"
+            },
+            {
+                "_id": "69ac9204235ca444de721d1f",
+                "_tpl": "634f06262e5def262d0b30ca",
+                "parentId": "69ac9191b5d3ed0dcbfa29c7",
+                "slotId": "mod_reciever"
+            }
+        ]
+    }
+}

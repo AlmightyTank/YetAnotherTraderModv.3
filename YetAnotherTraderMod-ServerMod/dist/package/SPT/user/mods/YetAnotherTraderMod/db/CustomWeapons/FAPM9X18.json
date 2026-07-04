@@ -1,0 +1,38 @@
+{
+  "6a3804fd82d8dd83f87b1f52": {
+    "itemTplToClone": "5448bd6b4bdc2dfc2f8b4569",
+    "parentId": "5447b5cf4bdc2d65278b4567",
+    "handbookParentId": "5b5f792486f77447ed5636b3",
+    "overrideProperties": {
+        "ExaminedByDefault": true,
+        "Weight": 0.333,
+        "Ergonomics": 85,
+        "bFirerate": 550,
+        "bEffDist": 50,
+        "CenterOfImpact": 0.39,
+        "AimPlane": 0.026,
+        "RecoilCategoryMultiplierHandRotation": 0.11,
+        "RecoilReturnSpeedHandRotation": 5,
+        "RecoilDampingHandRotation": 0.75,
+        "RecoilCamera": 0.01,
+        "RecoilForceBack": 265,
+        "RecoilForceUp": 380,
+        "RecolDispersion": 12,
+        "RecoilReturnPathDampingHandRotation": 0.43,
+        "weapFireType": [
+            "single",
+            "fullauto"
+        ],
+        "CanSellOnRagfair": false
+    },
+    "fleaPriceRoubles": 3850,
+    "handbookPriceRoubles": 4097,
+    "locales": {
+      "en": {
+        "name": "Makarov PM \"Loose Ends\"",
+        "shortName": "PM LE",
+        "description": "A plain 9x18PM Makarov should be simple: cheap, reliable, and easy to hide. Tony took that little pistol and made it dangerously unreasonable. The fire-control parts were rebuilt, the slide was tuned, and the internals were pushed until the old PM could dump a magazine in full-auto. It is ugly, jumpy, and nearly impossible to control past bad-breath distance — which is exactly where Tony expects it to work. Loose Ends is not a sidearm. It is a pocket-sized problem solver."
+      }
+    }
+  }
+}

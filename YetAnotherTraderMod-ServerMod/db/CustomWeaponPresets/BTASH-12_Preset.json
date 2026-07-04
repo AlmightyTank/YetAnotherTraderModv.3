@@ -1,0 +1,52 @@
+{
+    "6a43472938a6d33bffe982c7": {
+        "_changeWeaponName": false,
+        "_encyclopedia": "6a43472938a6d33bffe982c8",
+        "_id": "6a43472938a6d33bffe982c7",
+        "_name": "Better ASH12 Default",
+        "_parent": "5d32cdef86f774403c15985a",
+        "_type": "Preset",
+        "_items": [
+            {
+                "_id": "5d32cdef86f774403c15985a",
+                "_tpl": "6a43472938a6d33bffe982c8"
+            },
+            {
+                "_id": "5d32cdef86f774403c15985b",
+                "_tpl": "5caf17c9ae92150b30006be1",
+                "parentId": "5d32cdef86f774403c15985a",
+                "slotId": "mod_muzzle"
+            },
+            {
+                "_id": "5d32cdef86f774403c15985c",
+                "_tpl": "5caf1041ae92157c28402e3f",
+                "parentId": "5d32cdef86f774403c15985a",
+                "slotId": "mod_magazine"
+            },
+            {
+                "_id": "5d32cdef86f774403c15985d",
+                "_tpl": "5caf16a2ae92152ac412efbc",
+                "parentId": "5d32cdef86f774403c15985a",
+                "slotId": "mod_sight_front"
+            },
+            {
+                "_id": "5d32cdef86f774403c15985e",
+                "_tpl": "5cdaa99dd7f00c002412d0b2",
+                "parentId": "5d32cdef86f774403c15985a",
+                "slotId": "mod_handguard"
+            },
+            {
+                "_id": "5d32cdef86f774403c15985f",
+                "_tpl": "5cda9bcfd7f00c0c0b53e900",
+                "parentId": "5d32cdef86f774403c15985e",
+                "slotId": "mod_foregrip"
+            },
+            {
+                "_id": "5d32cdef86f774403c159860",
+                "_tpl": "5caf1691ae92152ac412efb9",
+                "parentId": "5d32cdef86f774403c15985a",
+                "slotId": "mod_scope"
+            }
+        ]
+    }
+}

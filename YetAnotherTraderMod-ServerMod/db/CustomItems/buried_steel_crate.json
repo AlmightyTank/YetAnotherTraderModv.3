@@ -1,0 +1,27 @@
+{
+    "6a30b2fbd2999bc7b9bbaaba": {
+        "itemTplToClone": "6489d89debac5a4a1b73caf7",
+        "parentId": "5795f317245977243854e041",
+        "handbookParentId": "5b619f1a86f77450a702a6f3",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Width": 3,
+            "Height": 2,
+            "Weight": 9,
+            "StackMaxSize": 1,
+            "DiscardingBlock": true,
+            "CanSellOnRagfair": false,
+            "QuestItem": true
+        },
+        "locales": {
+            "en": {
+                "name": "Sealed military weapon crate",
+                "shortName": "Sealed crate",
+                "description": "A sealed military weapon crate left in the Reserve E2 bunkers by one of Tony's people. The lock wire is intact, the markings are fresh, and the contents are not your concern."
+            }
+        },
+        "fleaPriceRoubles": 1,
+        "handbookPriceRoubles": 1,
+        "addtoItemBlacklist": true
+    }
+}

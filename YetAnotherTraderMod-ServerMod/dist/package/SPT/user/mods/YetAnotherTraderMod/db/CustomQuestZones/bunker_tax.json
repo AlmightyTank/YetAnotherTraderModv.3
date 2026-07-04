@@ -1,0 +1,29 @@
+[
+    {
+        "ZoneId": "place_bunker_tax_killzone",
+        "ZoneName": "place_bunker_tax_killzone",
+        "ZoneLocation": "RezervBase",
+        "ZoneType": "botkillzone",
+        "FlareType": "",
+        "Position": {
+            "X": "-110.671",
+            "Y": "-11.92729",
+            "Z": "33.7534",
+            "W": "0"
+        },
+        "Rotation": {
+            "X": "0",
+            "Y": "0.1279301",
+            "Z": "0",
+            "W": "0.9917832"
+        },
+        "Scale": {
+            "X": "109.5",
+            "Y": "11.75",
+            "Z": "86.75",
+            "W": "0"
+        },
+        "GroupPosition": null,
+        "Salvage": null
+    }
+]

@@ -1,0 +1,99 @@
+{
+    "cloneOrigin": "5ed51652f6c34d2cc26336a1",
+    "id": "6a3fd8c382d8dd83f87b2010",
+    "fleaPrice": -0.55,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.25,
+    "inheritOriginBuffs": false,
+
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "ExaminedByDefault": false,
+        "effects_health": {},
+        "effects_damage": {}
+    },
+
+    "Buffs": [
+        {
+            "AbsoluteValue": false,
+            "BuffType": "WeightLimit",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "SkillName": "",
+            "Value": 0.25
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "HealthRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "SkillName": "",
+            "Value": -0.05
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Strength",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": 5,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Endurance",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": 5,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": -0.05,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": -0.05,
+            "AbsoluteValue": false
+        },
+        {
+            "AbsoluteValue": false,
+            "BuffType": "MaxStamina",
+            "Chance": 0.75,
+            "Delay": 610,
+            "Duration": 180,
+            "SkillName": "",
+            "Value": -0.08
+        },
+        {
+            "AbsoluteValue": false,
+            "BuffType": "StaminaRate",
+            "Chance": 0.75,
+            "Delay": 610,
+            "Duration": 180,
+            "SkillName": "",
+            "Value": -0.08
+        }
+    ],
+
+    "locales": {
+        "en": {
+            "name": "MULE-Lite Field Carrier",
+            "shortName": "MULE-L",
+            "description": "A cut-down field carrier stimulant made for moving heavy gear without the full shock of a military M.U.L.E. dose. It improves load tolerance and physical output for several minutes, but drains the body and leaves endurance weakened after the compound fades."
+        }
+    }
+}

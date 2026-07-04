@@ -1,0 +1,12 @@
+{
+  "rules": {
+    "6a41d30482d8dd83f87b20fb": {
+      "enabled": true,
+      "compareMethod": "<=",
+      "value": 60,
+      "useCurrentDurability": true,
+      "sourceConditionId": "6a41d30482d8dd83f87b20fd",
+      "boundKillConditionId": "6a41d30482d8dd83f87b20fb"
+    }
+  }
+}

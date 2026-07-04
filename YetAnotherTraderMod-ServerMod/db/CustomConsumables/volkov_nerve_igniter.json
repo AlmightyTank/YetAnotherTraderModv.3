@@ -1,0 +1,123 @@
+{
+    "cloneOrigin": "637b60c3b7afa97bfc3d7001",
+    "id": "6a3fd8c382d8dd83f87b2013",
+    "fleaPrice": 1.75,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.12,
+    "inheritOriginBuffs": false,
+
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "ExaminedByDefault": false,
+        "effects_damage": {
+            "Contusion": {
+                "delay": 0,
+                "duration": 240,
+                "fadeOut": 0
+            },
+            "Pain": {
+                "delay": 0,
+                "duration": 240,
+                "fadeOut": 5
+            }
+        },
+        "effects_health": {}
+    },
+
+    "Buffs": [
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Strength",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 90,
+            "Value": 15,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "StressResistance",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 90,
+            "Value": 15,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Vitality",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 90,
+            "Value": 15,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "StaminaRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 90,
+            "Value": 0.1,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HealthRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 35,
+            "Value": 0.1,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 90,
+            "Value": -0.18,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 90,
+            "Value": -0.16,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HandsTremor",
+            "Chance": 1,
+            "Delay": 100,
+            "Duration": 75,
+            "Value": 0,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "QuantumTunnelling",
+            "Chance": 1,
+            "Delay": 100,
+            "Duration": 60,
+            "Value": 0,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "StaminaRate",
+            "Chance": 1,
+            "Delay": 100,
+            "Duration": 120,
+            "Value": -0.10,
+            "AbsoluteValue": false
+        }
+    ],
+
+    "locales": {
+        "en": {
+            "name": "VOLT-3 Nerve Igniter",
+            "shortName": "VOLT-3",
+            "description": "A dirty black-market nerve igniter that forces the body past normal limits. It kills pain, spikes physical output, and keeps the user fighting through shock, but the crash is brutal: shaking hands, tunnel vision, and a deep stamina collapse."
+        }
+    }
+}

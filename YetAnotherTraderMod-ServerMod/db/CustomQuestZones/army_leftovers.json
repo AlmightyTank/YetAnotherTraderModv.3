@@ -1,0 +1,56 @@
+[
+    {
+        "ZoneId": "visit_tony_reserve_army_leftovers_cache",
+        "ZoneName": "visit_tony_reserve_army_leftovers_cache",
+        "ZoneLocation": "RezervBase",
+        "ZoneType": "visit",
+        "FlareType": "",
+        "Position": {
+            "X": "101.4501",
+            "Y": "-5.633238",
+            "Z": "44.42813",
+            "W": "0"
+        },
+        "Rotation": {
+            "X": "0",
+            "Y": "0",
+            "Z": "0",
+            "W": "1"
+        },
+        "Scale": {
+            "X": "1.25",
+            "Y": "2.75",
+            "Z": "1",
+            "W": "0"
+        },
+        "GroupPosition": null,
+        "Salvage": null
+    },
+    {
+        "ZoneId": "place_tony_reserve_army_leftovers_cache_marker",
+        "ZoneName": "place_tony_reserve_army_leftovers_cache_marker",
+        "ZoneLocation": "RezervBase",
+        "ZoneType": "placeitem",
+        "FlareType": "",
+        "Position": {
+            "X": "101.4324",
+            "Y": "-5.441587",
+            "Z": "57.82242",
+            "W": "0"
+        },
+        "Rotation": {
+            "X": "0",
+            "Y": "0",
+            "Z": "0",
+            "W": "1"
+        },
+        "Scale": {
+            "X": "4.5",
+            "Y": "4.5",
+            "Z": "4.5",
+            "W": "0"
+        },
+        "GroupPosition": null,
+        "Salvage": null
+    }
+]

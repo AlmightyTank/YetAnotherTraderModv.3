@@ -1,0 +1,44 @@
+{
+    "cloneOrigin": "544fb37f4bdc2dee738b4567",
+    "id": "6a43f02138a6d33bffe98331",
+    "fleaPrice": 1.35,
+    "handBookPrice": 1.35,
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.12,
+    "BackgroundColor": "yellow",
+    "effects_damage": {
+        "Pain": {
+            "delay": 20,
+            "duration": 240,
+            "fadeOut": 15
+        }
+    },
+    "effects_health": {
+        "Hydration": {
+            "value": -12
+        },
+        "Energy": {
+            "value": -4
+        }
+    },
+    "Buffs": [
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 30,
+            "Duration": 180,
+            "SkillName": "StressResistance",
+            "Value": 2
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "Dolmet-F field analgesic tablets",
+            "shortName": "Dolmet-F",
+            "description": "A foil strip of field analgesic tablets marked with a faded Cyrillic batch stamp. Tony sells them as military surplus. They take the edge off, steady the nerves a little, and leave your mouth dry as concrete."
+        }
+    },
+    "addtoItemBlacklist": false
+}

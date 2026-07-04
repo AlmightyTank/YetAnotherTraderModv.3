@@ -1,0 +1,202 @@
+items.json generation report
+============================
+Output: config\items.json
+Rows written: 154
+Cash default rows (CashOnly=true): 154
+AlwaysBarter rows: 1
+AlwaysInStock rows: 2
+Rows with real barter scheme: 138
+Rows with cash-only scheme: 16
+Generated barter schemes: 30
+Generated ammo pack item-barter schemes: 30
+Ammo rows with pack template target: 30
+Ammo rows with pack offer id: 30
+Ammo rows missing pack template target: 0
+Unique TplIds: 154
+Duplicate TplIds preserved: {}
+Unique barter ingredients: 48
+Most-used barter ingredients: Bottle of Tarkovskaya vodka x8; Bottle of Dan Jackiel whiskey x8; Can of Max Energy energy drink x8; Roler Submariner gold wrist watch x8; Military cable x8
+
+Warnings:
+  - Generated barter scheme details suppressed in report summary: 30 rows
+  - Loaded 5043 names from tarkov.dev cache: config\tarkovdev_items_cache.json
+  - Loaded 1 custom item names from db\CustomConsumables\dolmet_f_field_tablets.json
+  - Loaded 1 custom item names from db\CustomConsumables\medvedol_650mg_tablets.json
+  - Loaded 1 custom item names from db\CustomConsumables\noctapyrin_focus_tablets.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkarin_500mg_tablets.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_cocoa_thermos.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_cooked_green_peas.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_cooked_herring.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_cooked_pacific_saury.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_cooked_sprats.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_cooked_squash_spread.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_cooked_tushonka_large.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_cooked_tushonka_small.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_field_stabilizer.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_ghost_9.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_hemostat.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_mule_lite.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_nerve_igniter.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_razliv_mineral_water.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_redline.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_regen.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_rus_alpha.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_super_army_bandage.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_super_calok_b.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_super_iskra.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_warm_milk_thermos.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_zarya_energy_drink.json
+  - Loaded 1 custom item names from db\CustomConsumables\volkov_zaryad_vitamin_pouch.json
+  - Loaded 1 custom item names from db\CustomItems\altyn_with_headphones.json
+  - Loaded 1 custom item names from db\CustomItems\buried_steel_crate.json
+  - Loaded 1 custom item names from db\CustomItems\coded_dead_drop_tag.json
+  - Loaded 1 custom item names from db\CustomItems\dead-drop_package.json
+  - Loaded 1 custom item names from db\CustomItems\experimental_stim_case.json
+  - Loaded 1 custom item names from db\CustomItems\forged_route_documents.json
+  - Loaded 1 custom item names from db\CustomItems\rogue_shipment_evidence.json
+  - Loaded 1 custom item names from db\CustomItems\sealed_cargo_package.json
+  - Loaded 1 custom item names from db\CustomItems\thicc_holodilnick_thermal_bag.json
+  - Loaded 1 custom item names from db\CustomItems\thicc_medicine_case.json
+  - Loaded 1 custom item names from db\CustomItems\tony_calling_card.json
+  - Loaded 1 custom item names from db\CustomItems\trauma_bag.json
+  - Loaded 1 custom item names from db\CustomItems\volkov_gssh_01.json
+  - Loaded 1 custom item names from db\CustomItems\volkov_gssh_01m.json
+  - Loaded 1 custom item names from db\CustomItems\volkov_gssh_02.json
+  - Loaded 1 custom item names from db\CustomItems\volkov_gssh_02m.json
+  - Loaded 1 custom item names from db\CustomItems\volkovs_concordia_ledger.json
+  - Loaded 1 custom item names from db\CustomQuests\579dc571d53a0658a154fbec\Quests\a_friend_of_a_friend.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\army_leftovers.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\back_room_etiquette.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\broken_radios.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\buried_steel.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\clean_run.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\cold_freight.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\dead_drop_rules.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\depot_rats.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\first_dead_drop.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\foreign_parts.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\no_names_spoken.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\old_bear_trails.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\paper_shields.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\red_caliber.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\safe_hands.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\street_clinic.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\street_tax.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\test_batch.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\used_but_usable.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\worn_down.json
+  - Loaded 1 custom item names from db\CustomTrader\Tony\base.json
+  - Loaded 1 custom item names from db\CustomWeapons\BTAKM.json
+  - Loaded 1 custom item names from db\CustomWeapons\BTASH12.json
+  - Loaded 1 custom item names from db\CustomWeapons\BTASVAL.json
+  - Loaded 1 custom item names from db\CustomWeapons\FA136.json
+  - Loaded 1 custom item names from db\CustomWeapons\FA209.json
+  - Loaded 1 custom item names from db\CustomWeapons\FAPM9X18.json
+  - Loaded 1 custom item names from db\CustomWeapons\FASKS.json
+  - Loaded 1 custom item names from db\CustomWeapons\FASTM.json
+  - Loaded 1 custom item names from db\CustomWeapons\SVDSARB.json
+  - Scanned 117 local db/data JSON files for custom item names
+  - Loaded 154 current settings rows from config\items.json
+  - Ammo barter pack target for 9x18mm PM SP7 gzh (6a300025d2999bc7b9bba957): 657026341419851aef03e730 via pack offer 6be62191093d5f0617efb5d8
+  - Skipped standalone ammo pack offer 6be62191093d5f0617efb5d8 / 657026341419851aef03e730; linked from loose ammo rows with PackOfferId instead
+  - Offer 6a2f1c3bd2999bc7b9bba8e2 / 5a01ad4786f77450561fda02 is barter-only; using fallback Price 2904.0 RUB for the cash fallback field
+  - Offer 6a2f1c3bd2999bc7b9bba8e3 / 59fb375986f7741b681b81a6 is barter-only; using fallback Price 20355.0 RUB for the cash fallback field
+  - Offer 6a2f1c3bd2999bc7b9bba8e4 / 5e21ca18e4d47f0da15e77dd is barter-only; using fallback Price 2615.0 RUB for the cash fallback field
+  - Offer 6a2f2001d2999bc7b9bba8e5 / 5a0c59791526d8dba737bba7 is barter-only; using fallback Price 3231.0 RUB for the cash fallback field
+  - Ammo barter pack target for 9x19mm Pst gzh (6a300025d2999bc7b9bba958): 657025a81419851aef03e724 via pack offer 6bfe9dbc0b15f24681944766
+  - Skipped standalone ammo pack offer 6bfe9dbc0b15f24681944766 / 657025a81419851aef03e724; linked from loose ammo rows with PackOfferId instead
+  - Offer 6a300025d2999bc7b9bba959 / 5de652c31b7e3716273428be is barter-only; using fallback Price 23350.0 RUB for the cash fallback field
+  - Ammo barter pack target for 9x19mm RIP (6a300025d2999bc7b9bba95a): 5c1127bdd174af44217ab8b9 via pack offer 6be506418c29d232be9e3963
+  - Skipped standalone ammo pack offer 6be506418c29d232be9e3963 / 5c1127bdd174af44217ab8b9; linked from loose ammo rows with PackOfferId instead
+  - Offer 6a3007dfd2999bc7b9bba9b4 / 5a0d63621526d8dba31fe3bf is barter-only; using fallback Price 48176.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba9b5 / 57ffb0e42459777d047111c5 is barter-only; using fallback Price 32991.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba9b6 / 59bfc5c886f7743bf6794e62 is barter-only; using fallback Price 20343.0 RUB for the cash fallback field
+  - Offer 6a2bfc3951ab7898b840fc8c / 5ab8e79e86f7742d8b372e78 is barter-only; using fallback Price 78098.0 RUB for the cash fallback field
+  - Ammo barter pack target for 5.45x39mm PS gs (6a300025d2999bc7b9bba95b): 57372e73245977685d4159b4 via pack offer 6baa525e70a4697d98c99ef4
+  - Skipped standalone ammo pack offer 6baa525e70a4697d98c99ef4 / 57372e73245977685d4159b4; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 7.62x39mm PS gzh (6a300025d2999bc7b9bba95c): 5649ed104bdc2d3d1c8b458b via pack offer 6ba93b92f2bc2360bdc8207e
+  - Skipped standalone ammo pack offer 6ba93b92f2bc2360bdc8207e / 5649ed104bdc2d3d1c8b458b; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for .366 TKM EKO (6a300025d2999bc7b9bba95d): 657024011419851aef03e6f4 via pack offer 6b2014edfd3149d18e8646b8
+  - Skipped standalone ammo pack offer 6b2014edfd3149d18e8646b8 / 657024011419851aef03e6f4; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 12/70 7mm buckshot (6a300025d2999bc7b9bba961): 657024361419851aef03e6fa via pack offer 6bbff46e945fe8eb36bcf527
+  - Skipped standalone ammo pack offer 6bbff46e945fe8eb36bcf527 / 657024361419851aef03e6fa; linked from loose ammo rows with PackOfferId instead
+  - Offer 6a300025d2999bc7b9bba966 / 54491c4f4bdc2db1078b4568 is barter-only; using fallback Price 30443.0 RUB for the cash fallback field
+  - Offer 6a300025d2999bc7b9bba955 / 5c0e57ba86f7747fa141986d is barter-only; using fallback Price 34794.0 RUB for the cash fallback field
+  - Offer 6a2b7f99d2999bc7b9bba8be / 6a3fd8c382d8dd83f87b2013 is barter-only; using fallback Price 107555.0 RUB for the cash fallback field
+  - Offer 6a2b83fcd2999bc7b9bba8c4 / 6a3fd8c382d8dd83f87b2010 is barter-only; using fallback Price 43550.0 RUB for the cash fallback field
+  - Offer 6a2b8279d2999bc7b9bba8c0 / 6a3fd8c382d8dd83f87b2014 is barter-only; using fallback Price 41000.0 RUB for the cash fallback field
+  - Offer 6a3fd8c382d8dd83f87b200d / 6a3fd8c382d8dd83f87b2011 is barter-only; using fallback Price 56000.0 RUB for the cash fallback field
+  - Offer 6a2b82bed2999bc7b9bba8c2 / 6a3fd8c382d8dd83f87b200c is barter-only; using fallback Price 76000.0 RUB for the cash fallback field
+  - Ammo barter pack target for 5.45x39mm PP gs (6a3007dfd2999bc7b9bba972): 57372d1b2459776862260581 via pack offer 6b6e6439bbfaab88eeb1e0c9
+  - Skipped standalone ammo pack offer 6b6e6439bbfaab88eeb1e0c9 / 57372d1b2459776862260581; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 5.45x39mm BP gs (6a3007dfd2999bc7b9bba973): 5737292724597765e5728562 via pack offer 6beb59961278d465897bef8c
+  - Skipped standalone ammo pack offer 6beb59961278d465897bef8c / 5737292724597765e5728562; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 5.45x39mm BT gs (6a3007dfd2999bc7b9bba974): 57372c21245977670937c6c2 via pack offer 6b7568b2a473a220a91b062e
+  - Skipped standalone ammo pack offer 6b7568b2a473a220a91b062e / 57372c21245977670937c6c2; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 7.62x39mm PP gzh (6a3007dfd2999bc7b9bba975): 64ace9f9c4eda9354b0226aa via pack offer 6b68789b4aa66d411dac368d
+  - Skipped standalone ammo pack offer 6b68789b4aa66d411dac368d / 64ace9f9c4eda9354b0226aa; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 9x19mm AP 6.3 (6a3007dfd2999bc7b9bba976): 65702591c5d7d4cb4d07857c via pack offer 6ba1a3bcbe25b2146f730900
+  - Skipped standalone ammo pack offer 6ba1a3bcbe25b2146f730900 / 65702591c5d7d4cb4d07857c; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 9x39mm SP-5 gs (6a3007dfd2999bc7b9bba977): 657025d4c5d7d4cb4d078585 via pack offer 6bcee0b4fd6e6026f3fffa3d
+  - Skipped standalone ammo pack offer 6bcee0b4fd6e6026f3fffa3d / 657025d4c5d7d4cb4d078585; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 12/70 flechette (6a3007dfd2999bc7b9bba978): 65702474bfc87b3a34093226 via pack offer 6b3d00168cb366f16a7fd12b
+  - Skipped standalone ammo pack offer 6b3d00168cb366f16a7fd12b / 65702474bfc87b3a34093226; linked from loose ammo rows with PackOfferId instead
+  - Offer 6a300025d2999bc7b9bba956 / 5d5d646386f7742797261fd9 is barter-only; using fallback Price 44420.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba97e / 5d02778e86f774203e7dedbe is barter-only; using fallback Price 28800.0 RUB for the cash fallback field
+  - Offer 6a2abd18d2999bc7b9bba8bc / 5d02797c86f774203f38e30a is barter-only; using fallback Price 57600.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba97f / 5910968f86f77425cf569c32 is barter-only; using fallback Price 70000.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba980 / 591094e086f7747caa7bb2ef is barter-only; using fallback Price 200000.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba981 / 5991b51486f77447b112d44f is barter-only; using fallback Price 13923.0 RUB for the cash fallback field
+  - Offer 6a2b75aed2999bc7b9bba8bd / 5b4391a586f7745321235ab2 is barter-only; using fallback Price 35092.0 RUB for the cash fallback field
+  - Ammo barter pack target for 5.45x39mm BS gs (6a3007dfd2999bc7b9bba982): 57372b832459776701014e41 via pack offer 6b224d2dcfaae84da56a3145
+  - Skipped standalone ammo pack offer 6b224d2dcfaae84da56a3145 / 57372b832459776701014e41; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 7.62x39mm BP gzh (6a3007dfd2999bc7b9bba983): 64acea16c4eda9354b0226b0 via pack offer 6bea023e61b95969517107ae
+  - Skipped standalone ammo pack offer 6bea023e61b95969517107ae / 64acea16c4eda9354b0226b0; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 9x19mm PBP gzh (6a3007dfd2999bc7b9bba984): 648987d673c462723909a151 via pack offer 6b2687767d46a78eebcc08bb
+  - Skipped standalone ammo pack offer 6b2687767d46a78eebcc08bb / 648987d673c462723909a151; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 9x39mm SP-6 gs (6a3007dfd2999bc7b9bba985): 657025dabfc87b3a34093256 via pack offer 6bae032bcd3c6ef35c3dd674
+  - Skipped standalone ammo pack offer 6bae032bcd3c6ef35c3dd674 / 657025dabfc87b3a34093256; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 9x39mm SPP gs (6a3007dfd2999bc7b9bba986): 657025dfcfc010a0f5006a3b via pack offer 6b1b06e40b4196d378a3d4c8
+  - Skipped standalone ammo pack offer 6b1b06e40b4196d378a3d4c8 / 657025dfcfc010a0f5006a3b; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for .366 TKM AP-M (6a3007dfd2999bc7b9bba987): 657023f81419851aef03e6f1 via pack offer 6bc44f10412a56b764637823
+  - Skipped standalone ammo pack offer 6bc44f10412a56b764637823 / 657023f81419851aef03e6f1; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 12/70 AP-20 armor-piercing slug (6a3007dfd2999bc7b9bba988): 64898838d5b4df6140000a20 via pack offer 6b7827a51f027d3824b781b1
+  - Skipped standalone ammo pack offer 6b7827a51f027d3824b781b1 / 64898838d5b4df6140000a20; linked from loose ammo rows with PackOfferId instead
+  - Offer 6a2e2072d2999bc7b9bba8dd / 6570aead4d84f81fd002a033 is barter-only; using fallback Price 52130.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba989 / 5beed0f50db834001c062b12 is barter-only; using fallback Price 95360.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba98c / 69b3eecb340e9925c26e1852 is barter-only; using fallback Price 150000.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba98d / 5aafbde786f774389d0cbc0f is barter-only; using fallback Price 162552.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba98e / 590c60fc86f77412b13fddcf is barter-only; using fallback Price 167469.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba98f / 59fafd4b86f7745ca07e1232 is barter-only; using fallback Price 748453.0 RUB for the cash fallback field
+  - Ammo barter pack target for 5.45x39mm PPBS gs Igolnik (6a3007dfd2999bc7b9bba990): 657025ebc5d7d4cb4d078588 via pack offer 6b3a19e1ea16d414f8fb4d13
+  - Skipped standalone ammo pack offer 6b3a19e1ea16d414f8fb4d13 / 657025ebc5d7d4cb4d078588; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 9x39mm PAB-9 gs (6a3007dfd2999bc7b9bba991): 657025cfbfc87b3a34093253 via pack offer 6b3ad57b7d40b5a1ee7ab525
+  - Skipped standalone ammo pack offer 6b3ad57b7d40b5a1ee7ab525 / 657025cfbfc87b3a34093253; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 7.62x39mm MAI AP (6a3007dfd2999bc7b9bba992): 6489851fc827d4637f01791b via pack offer 6b7bc78fedf2aefeffb9c1de
+  - Skipped standalone ammo pack offer 6b7bc78fedf2aefeffb9c1de / 6489851fc827d4637f01791b; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 9x39mm BP gs (6a3007dfd2999bc7b9bba993): 6489854673c462723909a14e via pack offer 6b02db5fba5c748b08bdcea8
+  - Skipped standalone ammo pack offer 6b02db5fba5c748b08bdcea8 / 6489854673c462723909a14e; linked from loose ammo rows with PackOfferId instead
+  - Offer 6a3007dfd2999bc7b9bba994 / 5c0e625a86f7742d77340f62 is barter-only; using fallback Price 94152.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba995 / 59fb023c86f7746d0d4b423c is barter-only; using fallback Price 1093207.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba996 / 59fb042886f7746c5005a7b2 is barter-only; using fallback Price 1229994.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba997 / 5c0a840b86f7742ffa4f2482 is barter-only; using fallback Price 3100000.0 RUB for the cash fallback field
+  - Offer 6a2c05b4d2999bc7b9bba8c5 / 5b6d9ce188a4501afc1b2b25 is barter-only; using fallback Price 1350000.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba998 / 5a1eaa87fcdbcb001865f75e is barter-only; using fallback Price 355794.0 RUB for the cash fallback field
+  - Offer 6a3007dfd2999bc7b9bba999 / 5d1b5e94d7ad1a2b865a96b0 is barter-only; using fallback Price 144794.0 RUB for the cash fallback field
+  - Offer 6a2c15ff0ad81c90c80166df / 5c0e541586f7747fa54205c9 is barter-only; using fallback Price 148542.0 RUB for the cash fallback field
+  - Offer 6a2c1a18d2999bc7b9bba8d0 / 5f60c74e3b85f6263c145586 is barter-only; using fallback Price 178001.0 RUB for the cash fallback field
+  - Offer 6a3210dbd2999bc7b9bbab44 / 6a300025d2999bc7b9bba950 is barter-only; using fallback Price 65000.0 RUB for the cash fallback field
+  - Offer 6a3210dbd2999bc7b9bbab43 / 683288ecdf6daf7c654cdb06 is barter-only; using fallback Price 111000.0 RUB for the cash fallback field
+  - Offer 6a3210dbd2999bc7b9bbab45 / 6832890f4951707edabbe776 is barter-only; using fallback Price 155000.0 RUB for the cash fallback field
+  - Offer 6a41407d82d8dd83f87b206c / 5ca20abf86f77418567a43f2 is barter-only; using fallback Price 21827.0 RUB for the cash fallback field
+  - Ammo barter pack target for 7.62x54mm R LPS gzh (6a427a2e38a6d33bffe9829b): 65702577cfc010a0f5006a2c via pack offer 153b8c53ec84eafbd9a52a29
+  - Ammo barter pack target for 7.62x54mm R BS gs (6a427a2e38a6d33bffe98292): 648984b8d5b4df6140000a1a via pack offer 2cd004e264ee00bc945ecdea
+  - Ammo barter pack target for 7.62x54mm R SNB gzh (6a427a2e38a6d33bffe9829d): 560d75f54bdc2da74d8b4573 via pack offer f4c3efd544106707944d8915
+  - Skipped standalone ammo pack offer 153b8c53ec84eafbd9a52a29 / 65702577cfc010a0f5006a2c; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer 2cd004e264ee00bc945ecdea / 648984b8d5b4df6140000a1a; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer f4c3efd544106707944d8915 / 560d75f54bdc2da74d8b4573; linked from loose ammo rows with PackOfferId instead
+  - Added/updated standalone ammo pack offer 1126f676c9a82a88e9f5ff60 for 12.7x55mm PS12B (bc866c61bea0d584d4ae4de1) using pack template 6570241bcfc010a0f50069f5
+  - Ammo barter pack target for 12.7x55mm PS12B (bc866c61bea0d584d4ae4de1): 6570241bcfc010a0f50069f5 via pack offer 1126f676c9a82a88e9f5ff60
+  - Ammo barter pack target for 12.7x55mm PS12B (10 pcs) (f2db56fac2706c82ab6634e8): 6570241bcfc010a0f50069f5 via pack offer 1126f676c9a82a88e9f5ff60
+  - --overwrite-except-barter complete from config\items.json: preserved existing BarterScheme on 154 rows, used generated BarterScheme on 0 rows
+  - Updated assort.json with generated ammo pack offers: db\CustomTrader\Tony\assort.json

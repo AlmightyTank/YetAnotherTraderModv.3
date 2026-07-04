@@ -1,0 +1,243 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>YetAnotherTraderMod</RootNamespace>
+    <AssemblyName>YetAnotherTraderMod</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+    <Version>0.1.1</Version>
+    <Configurations>Debug;Release;Package</Configurations>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <DefaultItemExcludes>$(DefaultItemExcludes);dist\**;Inspector\**</DefaultItemExcludes>
+    <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+    <DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SPTarkov.Common" Version="4.0.13" />
+    <PackageReference Include="SPTarkov.DI" Version="4.0.13" />
+    <PackageReference Include="SPTarkov.Server.Core" Version="4.0.13" />
+	<PackageReference Include="WTT-ServerCommonLib" Version="2.0.20" />
+  </ItemGroup>
+      <ItemGroup>
+	    <None Include="config\items.json">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </None>
+
+	    <None Include="config\settings.json">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </None>
+		
+	    <None Include="db\**\*.*" Exclude="db\**\*.cs">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </None>
+    </ItemGroup>
+  <ItemGroup>
+    <Content Remove="db\CustomConsumables\dolmet_f_field_tablets.json" />
+    <Content Remove="db\CustomConsumables\medvedol_650mg_tablets.json" />
+    <Content Remove="db\CustomConsumables\noctapyrin_focus_tablets.json" />
+    <Content Remove="db\CustomConsumables\volkarin_500mg_tablets.json" />
+    <Content Remove="db\CustomConsumables\volkov_cocoa_thermos.json" />
+    <Content Remove="db\CustomConsumables\volkov_cooked_green_peas.json" />
+    <Content Remove="db\CustomConsumables\volkov_cooked_herring.json" />
+    <Content Remove="db\CustomConsumables\volkov_cooked_pacific_saury.json" />
+    <Content Remove="db\CustomConsumables\volkov_cooked_sprats.json" />
+    <Content Remove="db\CustomConsumables\volkov_cooked_squash_spread.json" />
+    <Content Remove="db\CustomConsumables\volkov_cooked_tushonka_large.json" />
+    <Content Remove="db\CustomConsumables\volkov_cooked_tushonka_small.json" />
+    <Content Remove="db\customconsumables\volkov_field_stabilizer.json" />
+    <Content Remove="db\CustomConsumables\volkov_ghost_9.json" />
+    <Content Remove="db\customconsumables\volkov_mule_lite.json" />
+    <Content Remove="db\customconsumables\volkov_nerve_igniter.json" />
+    <Content Remove="db\CustomConsumables\volkov_razliv_mineral_water.json" />
+    <Content Remove="db\CustomConsumables\volkov_rus_alpha.json" />
+    <Content Remove="db\CustomConsumables\volkov_super_army_bandage.json" />
+    <Content Remove="db\CustomConsumables\volkov_super_calok_b.json" />
+    <Content Remove="db\CustomConsumables\volkov_super_iskra.json" />
+    <Content Remove="db\CustomConsumables\volkov_warm_milk_thermos.json" />
+    <Content Remove="db\customconsumables\volkov_zaryad_vitamin_pouch.json" />
+    <Content Remove="db\CustomConsumables\volkov_zarya_energy_drink.json" />
+    <Content Remove="db\CustomHideoutRecipes\clean_run_sealed_cargo_package.json" />
+    <Content Remove="db\CustomItems\altyn_with_headphones.json" />
+    <Content Remove="db\CustomItems\buried_steel_crate.json" />
+    <Content Remove="db\CustomItems\coded_dead_drop_tag.json" />
+    <Content Remove="db\customitems\dead-drop_package.json" />
+    <Content Remove="db\CustomItems\experimental_stim_case.json" />
+    <Content Remove="db\CustomItems\forged_route_documents.json" />
+    <Content Remove="db\CustomItems\rogue_shipment_evidence.json" />
+    <Content Remove="db\CustomItems\sealed_cargo_package.json" />
+    <Content Remove="db\customitems\super_salad.json" />
+    <Content Remove="db\CustomItems\thicc_holodilnick_thermal_bag.json" />
+    <Content Remove="db\CustomItems\thicc_medicine_case.json" />
+    <Content Remove="db\customitems\tony_calling_card.json" />
+    <Content Remove="db\CustomItems\tony_quest_items.json" />
+    <Content Remove="db\customitems\trauma_bag.json" />
+    <Content Remove="db\CustomItems\volkovs_concordia_ledger.json" />
+    <Content Remove="db\CustomItems\volkov_gssh_01.json" />
+    <Content Remove="db\CustomItems\volkov_gssh_01m.json" />
+    <Content Remove="db\CustomItems\volkov_gssh_02.json" />
+    <Content Remove="db\CustomItems\volkov_gssh_02m.json" />
+    <Content Remove="db\customlocales\en.json" />
+    <Content Remove="db\CustomLootSpawns\CustomSpawnpointsForced\bigmap_forced.json" />
+    <Content Remove="db\customlootspawns\customspawnpointsforced\factory_forced.json" />
+    <Content Remove="db\CustomLootSpawns\CustomSpawnpointsForced\interchange_forced.json" />
+    <Content Remove="db\customlootspawns\customspawnpointsforced\lighthouse_forced.json" />
+    <Content Remove="db\CustomLootSpawns\CustomSpawnpointsForced\rezervbase_forced.json" />
+    <Content Remove="db\customlootspawns\customspawnpointsforced\shoreline_forced.json" />
+    <Content Remove="db\CustomLootSpawns\CustomSpawnpointsForced\woods_forced.json" />
+    <Content Remove="db\customquests\66a0f6b2c4d8e90123456789\questassort\assort.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\quests\back_room_etiquette.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\broken_radios.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\bunker_tax.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\buried_steel.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\clean_run.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\cold_freight.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\dead_drop_rules.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\depot_rats.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\foreign_parts.json" />
+    <Content Remove="db\customquests\66a0f6b2c4d8e90123456789\quests\no_names_spoken.json" />
+    <Content Remove="db\customquests\66a0f6b2c4d8e90123456789\quests\old_bear_trails.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\paper_shields.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\quest.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\red_caliber.json" />
+    <Content Remove="db\customquests\66a0f6b2c4d8e90123456789\quests\safe_hands.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\street_clinic.json" />
+    <Content Remove="db\customquests\66a0f6b2c4d8e90123456789\quests\street_tax.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\test_batch.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\used_but_usable.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\worn_down.json" />
+    <Content Remove="db\CustomQuestZones\back_room_etiquette.json" />
+    <Content Remove="db\CustomQuestZones\broken_radios.json" />
+    <Content Remove="db\customquestzones\bunker_tax.json" />
+    <Content Remove="db\CustomQuestZones\buried_steel.json" />
+    <Content Remove="db\customquestzones\clean_run.json" />
+    <Content Remove="db\CustomQuestZones\cold_freight.json" />
+    <Content Remove="db\CustomQuestZones\dead_drop_rules.json" />
+    <Content Remove="db\CustomQuestZones\depot_rats.json" />
+    <Content Remove="db\customquestzones\first_dead_drop.json" />
+    <Content Remove="db\customquestzones\foreign_parts.json" />
+    <Content Remove="db\customquestzones\no_names_spoken.json" />
+    <Content Remove="db\customquestzones\old_bear_trails.json" />
+    <Content Remove="db\CustomQuestZones\paper_shields.json" />
+    <Content Remove="db\customquestzones\safe_hands.json" />
+    <Content Remove="db\customquestzones\street_clinic.json" />
+    <Content Remove="db\customquestzones\street_tax.json" />
+    <Content Remove="db\CustomQuestZones\test_batch.json" />
+    <Content Remove="db\CustomConsumables\volkov_hemostat.json" />
+    <Content Remove="db\CustomConsumables\volkov_redline.json" />
+    <Content Remove="db\CustomConsumables\volkov_regen.json" />
+    <Content Remove="db\customquestzones\used_but_usable.json" />
+    <Content Remove="db\CustomWeaponPresets\BTAKM_Preset.json" />
+    <Content Remove="db\CustomWeaponPresets\BTASH-12_Preset.json" />
+    <Content Remove="db\CustomWeaponPresets\BTASVAL_Preset.json" />
+    <Content Remove="db\CustomWeaponPresets\FA209_Preset.json" />
+    <Content Remove="db\CustomWeaponPresets\FAPM9X18_Preset.json" />
+    <Content Remove="db\CustomWeaponPresets\FASKS_Preset.json" />
+    <Content Remove="db\CustomWeaponPresets\FASTM_Preset.json" />
+    <Content Remove="db\CustomWeaponPresets\SVDSARB_Preset.json" />
+    <Content Remove="db\CustomWeapons\BTAKM.json" />
+    <Content Remove="db\CustomWeapons\BTASH12.json" />
+    <Content Remove="db\CustomWeapons\BTASVAL.json" />
+    <Content Remove="db\CustomWeapons\FA136.json" />
+    <Content Remove="db\CustomWeapons\FA136_Preset.json" />
+    <Content Remove="db\CustomWeapons\FA209.json" />
+    <Content Remove="db\CustomWeapons\FAPM9X18.json" />
+    <Content Remove="db\CustomWeapons\FASKS.json" />
+    <Content Remove="db\CustomWeapons\FASTM.json" />
+    <Content Remove="db\CustomWeapons\SVDSARB.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="db\CustomQuests\579dc571d53a0658a154fbec\QuestAssort\assort.json" />
+    <None Include="db\CustomQuests\579dc571d53a0658a154fbec\Quests\a_friend_of_a_friend.json" />
+    <None Include="db\CustomTrader\Tony\assort.json" />
+    <None Include="db\CustomTrader\Tony\base.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="db\CustomQuests\579dc571d53a0658a154fbec\Images\" />
+    <Folder Include="db\CustomQuests\66a0f6b2c4d8e90123456789\Images\" />
+    <Folder Include="db\CustomQuests\66a0f6b2c4d8e90123456789\QuestAssort\" />
+    <Folder Include="db\CustomLocales\" />
+    <Folder Include="src\Models\" />
+    <Folder Include="src\Services\ItemHelpers\" />
+  </ItemGroup>
+
+	<PropertyGroup>
+		<!-- Change this to your SPT server root folder, or pass /p:SptInstallPath="C:\RealSPT" from the root solution. -->
+		<SptInstallPath Condition="'$(SptInstallPath)' == ''">C:\RealSPT</SptInstallPath>
+		<TestSptServerPath Condition="'$(TestSptServerPath)' == ''">$(SptInstallPath)</TestSptServerPath>
+
+		<!-- Local test deploy path -->
+		<TestSptModDeployPath>$(TestSptServerPath)\SPT\user\mods\$(AssemblyName)\</TestSptModDeployPath>
+
+		<!-- Build switches -->
+		<DeployToTestSpt>true</DeployToTestSpt>
+		<CreateModZip>true</CreateModZip>
+
+		<!-- Full install zip output -->
+		<DistPath>$(MSBuildProjectDirectory)\dist\</DistPath>
+		<PackageStageRoot>$(DistPath)package\</PackageStageRoot>
+
+		<!-- This creates: package/SPT/user/mods/Tony_Origins/ -->
+		<PackageModRoot>$(PackageStageRoot)SPT\user\mods\$(AssemblyName)\</PackageModRoot>
+
+		<!-- Final zip -->
+		<ModZipPath>$(DistPath)$(AssemblyName)-v$(Version).zip</ModZipPath>
+	</PropertyGroup>
+
+	<Target Name="DeployTonyToTestSpt" AfterTargets="Build" Condition="'$(DeployToTestSpt)' == 'true' and '$(Configuration)' == 'Debug' and '$(TestSptServerPath)' != ''">
+
+		<Message Text="Deploying $(AssemblyName) to $(TestSptModDeployPath)" Importance="high" />
+
+		<RemoveDir Directories="$(TestSptModDeployPath)" Condition="Exists('$(TestSptModDeployPath)')" />
+		<MakeDir Directories="$(TestSptModDeployPath)" />
+
+		<ItemGroup>
+			<TonyDeployFiles Include="$(TargetDir)**\*.*" Exclude="$(TargetDir)tools\**\*.*;&#xD;&#xA;                            $(TargetDir)**\*.pdb;&#xD;&#xA;                            $(TargetDir)config\**\*.*" />
+
+			<TonyDeployConfigFiles Include="$(TargetDir)config\items.json" />
+			<TonyDeployConfigFiles Include="$(TargetDir)config\settings.json" />
+		</ItemGroup>
+
+		<Copy SourceFiles="@(TonyDeployFiles)" DestinationFiles="@(TonyDeployFiles->'$(TestSptModDeployPath)%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="false" />
+
+		<MakeDir Directories="$(TestSptModDeployPath)config\" />
+
+		<Copy SourceFiles="@(TonyDeployConfigFiles)" DestinationFolder="$(TestSptModDeployPath)config\" SkipUnchangedFiles="false" />
+	</Target>
+
+	<Target Name="CreateTonyFullInstallZip" AfterTargets="Build" Condition="'$(CreateModZip)' == 'true'">
+
+		<Message Text="Creating full install zip: $(ModZipPath)" Importance="high" />
+
+		<!-- Clean old package staging folder -->
+		<RemoveDir Directories="$(PackageStageRoot)" Condition="Exists('$(PackageStageRoot)')" />
+
+		<!-- Make full install path: dist/package/SPT/user/mods/Tony_Origins/ -->
+		<MakeDir Directories="$(PackageModRoot)" />
+
+		<ItemGroup>
+			<TonyPackageFiles Include="$(TargetDir)**\*.*" Exclude="$(TargetDir)tools\**\*.*;&#xD;&#xA;                             $(TargetDir)**\*.pdb;&#xD;&#xA;                             $(TargetDir)config\**\*.*" />
+
+			<TonyPackageConfigFiles Include="$(TargetDir)config\items.json" />
+			<TonyPackageConfigFiles Include="$(TargetDir)config\settings.json" />
+		</ItemGroup>
+
+		<Copy SourceFiles="@(TonyPackageFiles)" DestinationFiles="@(TonyPackageFiles->'$(PackageModRoot)%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="false" />
+
+		<MakeDir Directories="$(PackageModRoot)config\" />
+
+		<Copy SourceFiles="@(TonyPackageConfigFiles)" DestinationFolder="$(PackageModRoot)config\" SkipUnchangedFiles="false" />
+
+		<!-- Remove old zip -->
+		<Delete Files="$(ModZipPath)" Condition="Exists('$(ModZipPath)')" />
+
+		<!-- Zip package root so the zip contains /SPT/user/mods/Tony_Origins/... -->
+		<ZipDirectory SourceDirectory="$(PackageStageRoot)" DestinationFile="$(ModZipPath)" Overwrite="true" />
+
+		<Message Text="Created full install zip: $(ModZipPath)" Importance="high" />
+	</Target>
+</Project>
