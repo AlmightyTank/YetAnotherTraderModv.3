@@ -173,6 +173,21 @@
                     ],
                     "target": "6a4341ac38a6d33bffe9829e",
                     "visibilityConditions": []
+                },
+                {
+                    "availableAfter": 0,
+                    "conditionType": "Quest",
+                    "dispersion": 0,
+                    "dynamicLocale": false,
+                    "globalQuestCounterId": "",
+                    "id": "6a4920e2fb1eff152bd64992",
+                    "index": 0,
+                    "parentId": "",
+                    "status": [
+                        4
+                    ],
+                    "target": "6a3cab9782d8dd83f87b1fd1",
+                    "visibilityConditions": []
                 }
             ],
             "Fail": []
