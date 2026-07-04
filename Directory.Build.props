@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <!-- One shared SPT root for every project in this solution.
+         Override from the command line with: /p:SptInstallPath="D:\SPT" -->
+    <SptInstallPath Condition="'$(SptInstallPath)' == ''">C:\RealSPT</SptInstallPath>
+
+    <!-- Client plugin project uses SptPath. Server project uses TestSptServerPath. -->
+    <SptPath Condition="'$(SptPath)' == ''">$(SptInstallPath)</SptPath>
+    <TestSptServerPath Condition="'$(TestSptServerPath)' == ''">$(SptInstallPath)</TestSptServerPath>
+  </PropertyGroup>
+</Project>
