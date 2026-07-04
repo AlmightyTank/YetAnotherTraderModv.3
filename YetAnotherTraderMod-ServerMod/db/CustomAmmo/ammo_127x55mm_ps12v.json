@@ -1,0 +1,93 @@
+{
+    "6a4933e1fb1eff152bd649ab": {
+        "itemTplToClone": "5cadf6eeae921500134b2799",
+        "parentId": "5485a8684bdc2da71d8b4567",
+        "handbookParentId": "5b47574386f77428ca22b33b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "CanRequireOnRagfair": false,
+            "DiscardingBlock": false,
+            "QuestItem": false,
+            "Unlootable": false,
+            "IsUnbuyable": false,
+            "IsUnsaleable": false,
+            "HideEntrails": false,
+            "MergesWithChildren": false,
+            "ExplosionStrength": 0,
+            "ExplosionType": "",
+            "HasGrenaderComponent": false,
+            "FuzeArmTimeSec": 0,
+            "MinExplosionDistance": 0,
+            "MaxExplosionDistance": 0,
+            "ArmorDistanceDistanceDamage": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "Blindness": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "Contusion": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "LightAndSoundShotAngle": 0,
+            "LightAndSoundShotSelfContusionStrength": 0,
+            "LightAndSoundShotSelfContusionTime": 0,
+            "ShowBullet": false,
+            "ShowHitEffectOnExplode": false,
+            "UsePrefab": {
+                "path": "",
+                "rcid": ""
+            },
+            "airDropTemplateId": "",
+            "DiscardLimit": -1,
+            "LootExperience": 0,
+            "ExamineExperience": 10,
+            "ExamineTime": 1,
+            "Height": 1,
+            "Width": 1,
+            "StackObjectsCount": 1,
+            "Damage": 118,
+            "PenetrationPower": 36,
+            "ArmorDamage": 54,
+            "ammoAccr": -4,
+            "ammoRec": 12,
+            "InitialSpeed": 295,
+            "DurabilityBurnModificator": 1.3,
+            "HeatFactor": 1.45,
+            "Caliber": "Caliber127x55",
+            "AmmoTooltipClass": "ArmorPiercing",
+            "ammoType": "bullet",
+            "ProjectileCount": 1,
+            "StackMaxSize": 30,
+            "StackMaxRandom": 10,
+            "StackMinRandom": 1,
+            "PenetrationPowerDiviation": 1,
+            "PenetrationChanceObstacle": 0.36,
+            "PenetrationDamageMod": 0.1,
+            "FragmentationChance": 0.08,
+            "Tracer": false,
+            "TracerColor": "red",
+            "TracerDistance": 0,
+            "MalfFeedChance": 0.01,
+            "MalfMisfireChance": 0.01,
+            "MisfireChance": 0.01,
+            "BackgroundColor": "yellow"
+        },
+        "locales": {
+            "en": {
+                "name": "12.7x55mm PS12V",
+                "shortName": "PS12V",
+                "description": "A heavy 12.7x55mm cartridge loaded for close-range stopping power rather than clean armor penetration. Tony sells it in small numbers to people who understand that subtlety is already gone."
+            }
+        },
+        "fleaPriceRoubles": 1800,
+        "handbookPriceRoubles": 1800,
+        "addtoItemBlacklist": false
+    }
+}

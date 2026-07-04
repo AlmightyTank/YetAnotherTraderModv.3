@@ -1,0 +1,40 @@
+{
+    "6a493587fb1eff152bd649c0": {
+        "itemTplToClone": "57372c21245977670937c6c2",
+        "parentId": "543be5cb4bdc2deb348b4568",
+        "handbookParentId": "5b47574386f77428ca22b33b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "StackMaxSize": 1,
+            "StackSlots": [
+                {
+                    "_name": "cartridges",
+                    "_id": "6a493587fb1eff152bd649c1",
+                    "_parent": "6a493587fb1eff152bd649c0",
+                    "_max_count": 30,
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a4933e1fb1eff152bd649ae"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "CanRequireOnRagfair": false
+        },
+        "locales": {
+            "en": {
+                "name": "5.45x39mm BT-R gs ammo pack (30 pcs)",
+                "shortName": "BT-R",
+                "description": "A paper package of 30 repacked 5.45x39mm BT-R gs tracer cartridges."
+            }
+        },
+        "fleaPriceRoubles": 21600,
+        "handbookPriceRoubles": 21600,
+        "addtoItemBlacklist": true
+    }
+}

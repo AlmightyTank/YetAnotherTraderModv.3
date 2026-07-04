@@ -1,0 +1,40 @@
+{
+    "6a493587fb1eff152bd649cd": {
+        "itemTplToClone": "657025d4c5d7d4cb4d078585",
+        "parentId": "543be5cb4bdc2deb348b4568",
+        "handbookParentId": "5b47574386f77428ca22b33b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "StackMaxSize": 1,
+            "StackSlots": [
+                {
+                    "_name": "cartridges",
+                    "_id": "6a493587fb1eff152bd649ce",
+                    "_parent": "6a493587fb1eff152bd649cd",
+                    "_max_count": 20,
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a4933e1fb1eff152bd649b4"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "CanRequireOnRagfair": false
+        },
+        "locales": {
+            "en": {
+                "name": "9x39mm SP-5M gs ammo pack (20 pcs)",
+                "shortName": "SP-5M",
+                "description": "A box of 20 modified 9x39mm SP-5M gs cartridges."
+            }
+        },
+        "fleaPriceRoubles": 14000,
+        "handbookPriceRoubles": 14000,
+        "addtoItemBlacklist": false
+    }
+}

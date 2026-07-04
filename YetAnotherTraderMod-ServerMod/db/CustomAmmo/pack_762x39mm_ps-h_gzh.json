@@ -1,0 +1,40 @@
+{
+    "6a493587fb1eff152bd649c9": {
+        "itemTplToClone": "5649ed104bdc2d3d1c8b458b",
+        "parentId": "543be5cb4bdc2deb348b4568",
+        "handbookParentId": "5b47574386f77428ca22b33b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "StackMaxSize": 1,
+            "StackSlots": [
+                {
+                    "_name": "cartridges",
+                    "_id": "6a493587fb1eff152bd649ca",
+                    "_parent": "6a493587fb1eff152bd649c9",
+                    "_max_count": 20,
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a4933e1fb1eff152bd649b2"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "CanRequireOnRagfair": false
+        },
+        "locales": {
+            "en": {
+                "name": "7.62x39mm PS-H gzh ammo pack (20 pcs)",
+                "shortName": "PS-H",
+                "description": "A box of 20 modified 7.62x39mm PS-H gzh cartridges."
+            }
+        },
+        "fleaPriceRoubles": 10800,
+        "handbookPriceRoubles": 10800,
+        "addtoItemBlacklist": false
+    }
+}

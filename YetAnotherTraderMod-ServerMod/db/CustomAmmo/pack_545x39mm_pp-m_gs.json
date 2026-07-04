@@ -1,0 +1,40 @@
+{
+    "6a493587fb1eff152bd649c2": {
+        "itemTplToClone": "57372d1b2459776862260581",
+        "parentId": "543be5cb4bdc2deb348b4568",
+        "handbookParentId": "5b47574386f77428ca22b33b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "StackMaxSize": 1,
+            "StackSlots": [
+                {
+                    "_name": "cartridges",
+                    "_id": "6a493587fb1eff152bd649c3",
+                    "_parent": "6a493587fb1eff152bd649c2",
+                    "_max_count": 30,
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a4933e1fb1eff152bd649af"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "CanRequireOnRagfair": false
+        },
+        "locales": {
+            "en": {
+                "name": "5.45x39mm PP-M gs ammo pack (30 pcs)",
+                "shortName": "PP-M",
+                "description": "A paper package of 30 modified 5.45x39mm PP-M gs cartridges."
+            }
+        },
+        "fleaPriceRoubles": 12600,
+        "handbookPriceRoubles": 12600,
+        "addtoItemBlacklist": false
+    }
+}

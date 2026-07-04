@@ -1,0 +1,40 @@
+{
+    "6a4933e1fb1eff152bd649b9": {
+        "itemTplToClone": "6570241bcfc010a0f50069f5",
+        "parentId": "543be5cb4bdc2deb348b4568",
+        "handbookParentId": "5b47574386f77428ca22b33b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "StackMaxSize": 1,
+            "StackSlots": [
+                {
+                    "_name": "cartridges",
+                    "_id": "6a4933e1fb1eff152bd649ba",
+                    "_parent": "6a4933e1fb1eff152bd649b9",
+                    "_max_count": 10,
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a4933e1fb1eff152bd649ab"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "CanRequireOnRagfair": false
+        },
+        "locales": {
+            "en": {
+                "name": "12.7x55mm PS12V ammo pack (10 pcs)",
+                "shortName": "PS12V",
+                "description": "A box of 10 heavy 12.7x55mm PS12V cartridges."
+            }
+        },
+        "fleaPriceRoubles": 18000,
+        "handbookPriceRoubles": 18000,
+        "addtoItemBlacklist": true
+    }
+}

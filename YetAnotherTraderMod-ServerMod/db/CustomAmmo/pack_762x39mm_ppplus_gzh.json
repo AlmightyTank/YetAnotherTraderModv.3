@@ -1,0 +1,40 @@
+{
+    "6a493587fb1eff152bd649c7": {
+        "itemTplToClone": "64ace9f9c4eda9354b0226aa",
+        "parentId": "543be5cb4bdc2deb348b4568",
+        "handbookParentId": "5b47574386f77428ca22b33b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "StackMaxSize": 1,
+            "StackSlots": [
+                {
+                    "_name": "cartridges",
+                    "_id": "6a493587fb1eff152bd649c8",
+                    "_parent": "6a493587fb1eff152bd649c7",
+                    "_max_count": 20,
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a4933e1fb1eff152bd649b1"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "CanRequireOnRagfair": false
+        },
+        "locales": {
+            "en": {
+                "name": "7.62x39mm PP+ gzh ammo pack (20 pcs)",
+                "shortName": "PP+",
+                "description": "A box of 20 reinforced 7.62x39mm PP+ gzh cartridges."
+            }
+        },
+        "fleaPriceRoubles": 21000,
+        "handbookPriceRoubles": 21000,
+        "addtoItemBlacklist": false
+    }
+}

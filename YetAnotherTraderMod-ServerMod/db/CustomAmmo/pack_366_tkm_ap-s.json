@@ -1,0 +1,40 @@
+{
+    "6a4933e1fb1eff152bd649bb": {
+        "itemTplToClone": "657023f81419851aef03e6f1",
+        "parentId": "543be5cb4bdc2deb348b4568",
+        "handbookParentId": "5b47574386f77428ca22b33b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "StackMaxSize": 1,
+            "StackSlots": [
+                {
+                    "_name": "cartridges",
+                    "_id": "6a4933e1fb1eff152bd649bc",
+                    "_parent": "6a4933e1fb1eff152bd649bb",
+                    "_max_count": 20,
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a4933e1fb1eff152bd649ac"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "CanRequireOnRagfair": false
+        },
+        "locales": {
+            "en": {
+                "name": ".366 TKM AP-S ammo pack (20 pcs)",
+                "shortName": "AP-S",
+                "description": "A box of 20 modified .366 TKM AP-S cartridges."
+            }
+        },
+        "fleaPriceRoubles": 29000,
+        "handbookPriceRoubles": 29000,
+        "addtoItemBlacklist": false
+    }
+}

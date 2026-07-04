@@ -1,0 +1,40 @@
+{
+    "6a493587fb1eff152bd649be": {
+        "itemTplToClone": "5737292724597765e5728562",
+        "parentId": "543be5cb4bdc2deb348b4568",
+        "handbookParentId": "5b47574386f77428ca22b33b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "StackMaxSize": 1,
+            "StackSlots": [
+                {
+                    "_name": "cartridges",
+                    "_id": "6a493587fb1eff152bd649bf",
+                    "_parent": "6a493587fb1eff152bd649be",
+                    "_max_count": 30,
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a4933e1fb1eff152bd649ad"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "CanRequireOnRagfair": false
+        },
+        "locales": {
+            "en": {
+                "name": "5.45x39mm BP-M gs ammo pack (30 pcs)",
+                "shortName": "BP-M",
+                "description": "A paper package of 30 modified 5.45x39mm BP-M gs cartridges."
+            }
+        },
+        "fleaPriceRoubles": 42000,
+        "handbookPriceRoubles": 42000,
+        "addtoItemBlacklist": true
+    }
+}

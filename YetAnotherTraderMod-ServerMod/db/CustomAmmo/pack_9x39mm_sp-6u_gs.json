@@ -1,0 +1,40 @@
+{
+    "6a493587fb1eff152bd649cf": {
+        "itemTplToClone": "657025dabfc87b3a34093256",
+        "parentId": "543be5cb4bdc2deb348b4568",
+        "handbookParentId": "5b47574386f77428ca22b33b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "StackMaxSize": 1,
+            "StackSlots": [
+                {
+                    "_name": "cartridges",
+                    "_id": "6a493587fb1eff152bd649d0",
+                    "_parent": "6a493587fb1eff152bd649cf",
+                    "_max_count": 20,
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a4933e1fb1eff152bd649b5"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "CanRequireOnRagfair": false
+        },
+        "locales": {
+            "en": {
+                "name": "9x39mm SP-6U gs ammo pack (20 pcs)",
+                "shortName": "SP-6U",
+                "description": "A box of 20 unstable 9x39mm SP-6U gs cartridges."
+            }
+        },
+        "fleaPriceRoubles": 33000,
+        "handbookPriceRoubles": 33000,
+        "addtoItemBlacklist": false
+    }
+}

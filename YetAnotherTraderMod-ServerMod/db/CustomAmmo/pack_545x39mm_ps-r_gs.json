@@ -1,0 +1,40 @@
+{
+    "6a493587fb1eff152bd649c5": {
+        "itemTplToClone": "57372e73245977685d4159b4",
+        "parentId": "543be5cb4bdc2deb348b4568",
+        "handbookParentId": "5b47574386f77428ca22b33b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "StackMaxSize": 1,
+            "StackSlots": [
+                {
+                    "_name": "cartridges",
+                    "_id": "6a493587fb1eff152bd649c6",
+                    "_parent": "6a493587fb1eff152bd649c5",
+                    "_max_count": 30,
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a4933e1fb1eff152bd649b0"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "CanRequireOnRagfair": false
+        },
+        "locales": {
+            "en": {
+                "name": "5.45x39mm PS-R gs ammo pack (30 pcs)",
+                "shortName": "PS-R",
+                "description": "A paper package of 30 modified 5.45x39mm PS-R gs cartridges."
+            }
+        },
+        "fleaPriceRoubles": 8700,
+        "handbookPriceRoubles": 8700,
+        "addtoItemBlacklist": false
+    }
+}

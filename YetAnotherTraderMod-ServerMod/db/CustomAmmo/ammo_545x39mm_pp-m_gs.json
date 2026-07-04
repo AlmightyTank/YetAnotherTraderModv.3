@@ -1,0 +1,93 @@
+{
+    "6a4933e1fb1eff152bd649af": {
+        "itemTplToClone": "56dff2ced2720bb4668b4567",
+        "parentId": "5485a8684bdc2da71d8b4567",
+        "handbookParentId": "5b47574386f77428ca22b33b",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "CanRequireOnRagfair": false,
+            "DiscardingBlock": false,
+            "QuestItem": false,
+            "Unlootable": false,
+            "IsUnbuyable": false,
+            "IsUnsaleable": false,
+            "HideEntrails": false,
+            "MergesWithChildren": false,
+            "ExplosionStrength": 0,
+            "ExplosionType": "",
+            "HasGrenaderComponent": false,
+            "FuzeArmTimeSec": 0,
+            "MinExplosionDistance": 0,
+            "MaxExplosionDistance": 0,
+            "ArmorDistanceDistanceDamage": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "Blindness": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "Contusion": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "LightAndSoundShotAngle": 0,
+            "LightAndSoundShotSelfContusionStrength": 0,
+            "LightAndSoundShotSelfContusionTime": 0,
+            "ShowBullet": false,
+            "ShowHitEffectOnExplode": false,
+            "UsePrefab": {
+                "path": "",
+                "rcid": ""
+            },
+            "airDropTemplateId": "",
+            "DiscardLimit": -1,
+            "LootExperience": 0,
+            "ExamineExperience": 10,
+            "ExamineTime": 1,
+            "Height": 1,
+            "Width": 1,
+            "StackObjectsCount": 1,
+            "Damage": 50,
+            "PenetrationPower": 37,
+            "ArmorDamage": 43,
+            "ammoAccr": -1,
+            "ammoRec": 4,
+            "InitialSpeed": 875,
+            "DurabilityBurnModificator": 1.25,
+            "HeatFactor": 1.35,
+            "Caliber": "Caliber545x39",
+            "AmmoTooltipClass": "ArmorPiercing",
+            "ammoType": "bullet",
+            "ProjectileCount": 1,
+            "StackMaxSize": 60,
+            "StackMaxRandom": 40,
+            "StackMinRandom": 1,
+            "PenetrationPowerDiviation": 1,
+            "PenetrationChanceObstacle": 0.34,
+            "PenetrationDamageMod": 0.1,
+            "FragmentationChance": 0.16,
+            "Tracer": false,
+            "TracerColor": "red",
+            "TracerDistance": 0,
+            "MalfFeedChance": 0.01,
+            "MalfMisfireChance": 0.01,
+            "MisfireChance": 0.01,
+            "BackgroundColor": "yellow"
+        },
+        "locales": {
+            "en": {
+                "name": "5.45x39mm PP-M gs",
+                "shortName": "PP-M",
+                "description": "A modified 5.45x39mm PP cartridge assembled from mixed depot stock. Tony's people cleaned up the powder charge and core consistency, giving it slightly better armor performance at the cost of extra weapon wear."
+            }
+        },
+        "fleaPriceRoubles": 420,
+        "handbookPriceRoubles": 420,
+        "addtoItemBlacklist": false
+    }
+}
