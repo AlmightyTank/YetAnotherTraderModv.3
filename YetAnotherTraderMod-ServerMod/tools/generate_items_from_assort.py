@@ -41,6 +41,9 @@ Load custom item/locales names from your mod db/data folders so custom templates
 Generate missing real barter recipes for cash-only rows, using Price as the target value:
   python tools/generate_items_from_assort.py --assort data/assort.json --out config/items.json --catalog config/items.json --generate-barter-schemes cash-only
 
+Fill only empty/missing non-currency barter recipes without touching existing real barters:
+  python tools/generate_items_from_assort.py --assort data/assort.json --out config/items.json --catalog config/items.json --fill-empty-barters
+
 Ammo rows generate a real item BarterScheme valued as a whole ammo pack and, when possible,
 write the matching ammo pack template so the runtime loader can sell the pack when the offer rolls barter:
   python tools/generate_items_from_assort.py --assort data/assort.json --out config/items.json --catalog config/items.json --generate-barter-schemes cash-only --ammo-barter-pack-size 30
@@ -66,6 +69,11 @@ to keep the old warning-only behavior.
 Custom ammo helpers:
   python tools/generate_items_from_assort.py --assort data/assort.json --out config/items.json --custom-ammo-tpl <looseTpl>
   python tools/generate_items_from_assort.py --assort data/assort.json --out config/items.json --ammo-pack-map config/custom_ammo_packs.json
+
+Custom ammo packs can also be auto-detected from local db/data item JSON. If a pack item
+has StackSlots -> cartridges -> _props.filters[].Filter, the Filter value is treated as
+the loose ammo tpl to link to that pack item. The containing pack tpl, or the slot _parent
+when present, is used as AmmoBarterPackTplId, and _max_count is used as pack size.
 """
 
 from __future__ import annotations
@@ -80,7 +88,7 @@ import time
 import urllib.error
 import urllib.request
 
-SCRIPT_VERSION = "2.13.1"
+SCRIPT_VERSION = "2.13.6"
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -431,7 +439,7 @@ AMMO_NAME_START_RE = re.compile(
 )
 
 AMMO_PACK_SIZE_RE = re.compile(r"\((\d+)\s*pcs?\)", re.IGNORECASE)
-AMMO_PACK_NAME_RE = re.compile(r"\s+ammo\s+pack\s*\(\d+\s*pcs?\).*?$", re.IGNORECASE)
+AMMO_PACK_NAME_RE = re.compile(r"\s+(?:ammo\s+)?pack\s*\(\d+\s*pcs?\).*?$", re.IGNORECASE)
 
 # Offline fallback pack templates for common Tony ammo rows. The generator still prefers
 # tarkov.dev or locale/catalog name discovery when available. If a row is not here and no
@@ -713,6 +721,243 @@ def load_custom_ammo_pack_map(path: Path | None, default_pack_size: int) -> tupl
 
     return mapping, warnings
 
+
+
+def get_candidate_tpl_id_from_obj(obj: dict[str, Any], current_key: str | None = None) -> str | None:
+    """Return a likely template id for a custom item object or keyed item row."""
+    candidates = [
+        current_key,
+        get_ci(obj, "id", "Id", "_id", "TplId", "tplId", "TemplateId", "templateId", default=None),
+    ]
+    for candidate in candidates:
+        if looks_like_item_id(candidate):
+            return str(candidate).strip()
+    return None
+
+
+def normalize_filter_tpl_values(raw_filter: Any) -> list[str]:
+    """Normalize StackSlots _props.filters[].Filter values into loose-ammo template ids."""
+    raw_values: list[Any]
+    if isinstance(raw_filter, list):
+        raw_values = raw_filter
+    elif isinstance(raw_filter, str):
+        raw_values = [raw_filter]
+    else:
+        return []
+
+    tpl_ids: list[str] = []
+    for raw_value in raw_values:
+        if not isinstance(raw_value, str):
+            continue
+        for part in raw_value.replace(";", ",").split(","):
+            tpl = part.strip()
+            if looks_like_item_id(tpl):
+                tpl_ids.append(tpl)
+    return tpl_ids
+
+
+def extract_stack_slot_loose_ammo_mappings(
+    pack_tpl: str,
+    pack_name: str | None,
+    stack_slots: Any,
+    default_pack_size: int,
+) -> dict[str, dict[str, Any]]:
+    """Read custom ammo pack StackSlots and return loose-ammo -> pack info mappings.
+
+    Expected custom pack shape:
+    StackSlots: [{
+      "_name": "cartridges",
+      "_parent": "<pack tpl>",
+      "_max_count": 20,
+      "_props": {"filters": [{"Filter": ["<loose ammo tpl>"]}]}
+    }]
+
+    Important: Filter is the loose ammo tpl. The pack tpl comes from the containing
+    pack item or, when available, the StackSlot _parent.
+    """
+    mapping: dict[str, dict[str, Any]] = {}
+    if not looks_like_item_id(pack_tpl) or not isinstance(stack_slots, list):
+        return mapping
+
+    for slot in stack_slots:
+        if not isinstance(slot, dict):
+            continue
+
+        slot_name = str(get_ci(slot, "_name", "name", "Name", default="") or "").strip().lower()
+        # Ammo packs use a cartridges stack slot. Do not require this name, because
+        # some custom JSON omits it, but prefer it when present.
+        if slot_name and slot_name != "cartridges":
+            continue
+
+        # The slot Filter below is the loose ammo tpl. The pack tpl is the
+        # containing item tpl, with StackSlot _parent as a stronger hint when present.
+        slot_parent_tpl = str(get_ci(slot, "_parent", "parent", "Parent", "parentId", "ParentId", default="") or "").strip()
+        effective_pack_tpl = slot_parent_tpl if looks_like_item_id(slot_parent_tpl) else pack_tpl
+
+        max_count_raw = get_ci(slot, "_max_count", "max_count", "MaxCount", "maxCount", default=default_pack_size)
+        try:
+            pack_size = max(1, int(max_count_raw or default_pack_size or 30))
+        except (TypeError, ValueError):
+            pack_size = max(1, int(default_pack_size or 30))
+
+        props = get_ci(slot, "_props", "props", "Props", default={})
+        filters = get_ci(props if isinstance(props, dict) else {}, "filters", "Filters", default=[])
+        if not isinstance(filters, list):
+            continue
+
+        for filter_row in filters:
+            if not isinstance(filter_row, dict):
+                continue
+            # Every Filter entry is the loose ammo template this pack accepts.
+            allowed_tpls = normalize_filter_tpl_values(get_ci(filter_row, "Filter", "filter", default=[]))
+            for loose_tpl in allowed_tpls:
+                if loose_tpl == effective_pack_tpl:
+                    continue
+                pack_info: dict[str, Any] = {
+                    "AmmoBarterPackTplId": effective_pack_tpl,
+                    "AmmoBarterPackSize": pack_size,
+                }
+                if is_readable_item_name(pack_name):
+                    pack_info["AmmoBarterPackItemName"] = str(pack_name).strip()
+                mapping.setdefault(loose_tpl, pack_info)
+
+    return mapping
+
+
+
+def has_ammo_pack_hint(obj: dict[str, Any], pack_tpl: str | None, pack_name: str | None) -> bool:
+    """Avoid treating magazines or weapons with cartridge StackSlots as ammo packs."""
+    if pack_tpl and pack_tpl in get_known_ammo_pack_tpl_ids():
+        return True
+
+    if is_readable_item_name(pack_name):
+        normalized_name = str(pack_name).lower()
+        if "ammo pack" in normalized_name or " pack" in normalized_name or normalized_name.endswith("pack"):
+            return True
+
+    cloned_tpl = str(get_ci(
+        obj,
+        "itemTplToClone",
+        "ItemTplToClone",
+        "tplToClone",
+        "TplToClone",
+        "cloneTpl",
+        "CloneTpl",
+        default="",
+    ) or "").strip()
+    if cloned_tpl and cloned_tpl in get_known_ammo_pack_tpl_ids():
+        return True
+
+    return False
+
+def scan_db_ammo_pack_mappings_from_json_value(
+    value: Any,
+    mapping: dict[str, dict[str, Any]],
+    default_pack_size: int,
+    current_key: str | None = None,
+    current_tpl: str | None = None,
+    current_name: str | None = None,
+    current_pack_like: bool = False,
+) -> None:
+    """Recursively scan db/data JSON for custom ammo pack StackSlots filters."""
+    if isinstance(value, dict):
+        local_tpl = get_candidate_tpl_id_from_obj(value, current_key) or current_tpl
+        local_name = read_inline_item_name(value) or (CUSTOM_DB_NAMES.get(local_tpl or "") if local_tpl else None) or current_name
+        local_pack_like = current_pack_like or has_ammo_pack_hint(value, local_tpl, local_name)
+
+        stack_slots = get_ci(value, "StackSlots", "stackSlots", "stack_slots", default=None)
+        if stack_slots is not None and local_tpl and local_pack_like:
+            extracted = extract_stack_slot_loose_ammo_mappings(
+                pack_tpl=local_tpl,
+                pack_name=local_name,
+                stack_slots=stack_slots,
+                default_pack_size=default_pack_size,
+            )
+            for loose_tpl, pack_info in extracted.items():
+                mapping.setdefault(loose_tpl, pack_info)
+
+        for raw_key, child in value.items():
+            scan_db_ammo_pack_mappings_from_json_value(
+                child,
+                mapping=mapping,
+                default_pack_size=default_pack_size,
+                current_key=str(raw_key),
+                current_tpl=local_tpl,
+                current_name=local_name,
+                current_pack_like=local_pack_like,
+            )
+        return
+
+    if isinstance(value, list):
+        for child in value:
+            scan_db_ammo_pack_mappings_from_json_value(
+                child,
+                mapping=mapping,
+                default_pack_size=default_pack_size,
+                current_key=current_key,
+                current_tpl=current_tpl,
+                current_name=current_name,
+                current_pack_like=current_pack_like,
+            )
+
+
+def path_looks_like_ammo_pack_file(path: Path) -> bool:
+    """True for local custom ammo pack files such as pack_545x39mm_bt-r_gs.json."""
+    stem = path.stem.lower()
+    return (
+        stem.startswith("pack_")
+        or stem.startswith("ammo_pack_")
+        or stem.endswith("_pack")
+        or "ammo_pack" in stem
+    )
+
+
+def load_db_ammo_pack_mappings(paths: list[Path], default_pack_size: int) -> tuple[dict[str, dict[str, Any]], list[str]]:
+    """Auto-detect custom loose-ammo -> pack mappings from local db/data item JSON.
+
+    This lets custom ammo packs define their relationship normally through their
+    StackSlots cartridge filter instead of requiring a separate --ammo-pack-map row.
+    """
+    warnings: list[str] = []
+    mapping: dict[str, dict[str, Any]] = {}
+
+    existing_paths = [path for path in paths if path.expanduser().exists()]
+    if not existing_paths:
+        return mapping, warnings
+
+    json_files = iter_db_json_files(existing_paths)
+    unreadable_count = 0
+
+    for json_file in json_files:
+        try:
+            data = load_json(json_file)
+        except Exception:
+            unreadable_count += 1
+            continue
+
+        before_count = len(mapping)
+        file_pack_like = path_looks_like_ammo_pack_file(json_file)
+        scan_db_ammo_pack_mappings_from_json_value(
+            data,
+            mapping=mapping,
+            default_pack_size=max(1, int(default_pack_size or 30)),
+            current_name=json_file.stem if file_pack_like else None,
+            current_pack_like=file_pack_like,
+        )
+        added_count = len(mapping) - before_count
+        if added_count:
+            warnings.append(f"Auto-detected {added_count} custom ammo pack mappings from StackSlots in {json_file}")
+
+    if mapping:
+        warnings.append(
+            f"Auto-detected {len(mapping)} total custom ammo pack mappings from StackSlots Filter loose-ammo links"
+        )
+    if unreadable_count:
+        warnings.append(
+            f"Skipped {unreadable_count} unreadable local db/data JSON files while auto-detecting ammo packs"
+        )
+
+    return mapping, warnings
 
 def configure_custom_ammo_support(
     custom_ammo_tpls: set[str],
@@ -1038,10 +1283,15 @@ def preserve_current_barter_schemes(
     existing_rows: list[dict[str, Any]],
     current_settings_path: Path | None,
 ) -> tuple[list[dict[str, Any]], list[str]]:
-    """Overwrite/regenerate every generated field except existing BarterScheme.
+    """Overwrite/regenerate every generated field except existing real BarterScheme values.
 
     Matching is OfferId-first because duplicate TplIds are allowed in trader
     assorts. TplId fallback is only used when the generated TplId is unique.
+
+    Empty lists and cash-only schemes are not considered preserved barters here.
+    This is important for --fill-empty-barters and ammo pack rows: old
+    config/items.json entries with ``BarterScheme: []`` should not wipe out the
+    newly generated item-for-item barter recipe.
     """
     warnings: list[str] = []
 
@@ -1070,6 +1320,8 @@ def preserve_current_barter_schemes(
     generated_barter_rows = 0
     ambiguous_tpl_matches = 0
     existing_match_without_barter = 0
+    empty_existing_barter_rows = 0
+    cash_only_existing_barter_rows = 0
 
     for generated_row in generated_rows:
         merged_row = copy.deepcopy(generated_row)
@@ -1087,8 +1339,19 @@ def preserve_current_barter_schemes(
         if existing_row is not None:
             existing_barter_key = get_existing_key_ci(existing_row, "BarterScheme", "barterScheme", "barter_scheme")
             if existing_barter_key is not None:
-                merged_row["BarterScheme"] = copy.deepcopy(existing_row[existing_barter_key])
-                preserved_barter_rows += 1
+                existing_barter_scheme = copy.deepcopy(existing_row[existing_barter_key])
+
+                if is_real_barter_scheme(existing_barter_scheme):
+                    merged_row["BarterScheme"] = existing_barter_scheme
+                    preserved_barter_rows += 1
+                else:
+                    # Keep the generated row's barter. This fills rows that had
+                    # BarterScheme: [] or a simple cash-only scheme in old config/items.json.
+                    generated_barter_rows += 1
+                    if not existing_barter_scheme:
+                        empty_existing_barter_rows += 1
+                    elif is_cash_only_scheme(existing_barter_scheme):
+                        cash_only_existing_barter_rows += 1
             else:
                 existing_match_without_barter += 1
                 generated_barter_rows += 1
@@ -1100,10 +1363,18 @@ def preserve_current_barter_schemes(
     source_text = f" from {current_settings_path}" if current_settings_path is not None else ""
     warnings.append(
         "--overwrite-except-barter complete"
-        f"{source_text}: preserved existing BarterScheme on {preserved_barter_rows} rows, "
+        f"{source_text}: preserved existing real BarterScheme on {preserved_barter_rows} rows, "
         f"used generated BarterScheme on {generated_barter_rows} rows"
     )
 
+    if empty_existing_barter_rows:
+        warnings.append(
+            f"--overwrite-except-barter replaced {empty_existing_barter_rows} empty existing BarterScheme values with generated BarterScheme values"
+        )
+    if cash_only_existing_barter_rows:
+        warnings.append(
+            f"--overwrite-except-barter replaced {cash_only_existing_barter_rows} cash-only existing BarterScheme values with generated BarterScheme values"
+        )
     if existing_match_without_barter:
         warnings.append(
             f"--overwrite-except-barter found {existing_match_without_barter} matching existing rows without BarterScheme; generated BarterScheme was kept for those rows"
@@ -1797,6 +2068,9 @@ def normalize_ammo_pack_match_name(item_name: str) -> str:
     name = AMMO_PACK_NAME_RE.sub("", name)
     name = AMMO_PACK_SIZE_RE.sub("", name)
     name = name.replace("ammo pack", "")
+    # Custom pack locales sometimes say just "pack" instead of "ammo pack".
+    # Strip it only as a standalone word so ammo names like "BP" / "PBP" stay intact.
+    name = re.sub(r"\bpack\b", "", name)
     name = re.sub(r"\s+", " ", name)
     return name.strip(" -")
 
@@ -1841,14 +2115,20 @@ def find_ammo_pack_for_offer(
     # Merge all known name sources. Later entries should not overwrite earlier
     # tarkov.dev results, because those are usually the cleanest current names.
     all_names: dict[str, str] = {}
-    for source in (tarkov_dev_names, locale_names, catalog_names, BUILT_IN_NAMES):
+    for source in (tarkov_dev_names, locale_names, catalog_names, CUSTOM_DB_NAMES, BUILT_IN_NAMES):
         for tpl, name in source.items():
             all_names.setdefault(str(tpl), str(name))
 
     candidates: list[tuple[int, int, str, str]] = []
+    known_pack_tpl_ids = get_known_ammo_pack_tpl_ids()
     for tpl, candidate_name in all_names.items():
         candidate_lower = candidate_name.lower()
-        if "ammo pack" not in candidate_lower:
+        candidate_has_pack_word = (
+            "ammo pack" in candidate_lower
+            or re.search(r"\bpack\b", candidate_lower) is not None
+            or tpl in known_pack_tpl_ids
+        )
+        if not candidate_has_pack_word:
             continue
 
         candidate_base = normalize_ammo_pack_match_name(candidate_name)
@@ -2852,6 +3132,14 @@ def parse_args() -> argparse.Namespace:
             "cash-only = replace simple cash schemes only; missing = replace rows without a real barter; all = replace every row."
         ),
     )
+    parser.add_argument(
+        "--fill-empty-barters",
+        action="store_true",
+        help=(
+            "Shortcut for --generate-barter-schemes missing. "
+            "Preserves existing real BarterScheme values and only fills rows that have no non-currency barter."
+        ),
+    )
     parser.add_argument("--barter-value-multiplier", type=float, default=1.0, help="Generated barter target value multiplier based on Price")
     parser.add_argument("--barter-max-components", type=int, default=4, help="Max different item types in a generated barter recipe")
     parser.add_argument("--barter-max-uses-per-item", type=int, default=0, help="Maximum number of generated offers that should use the same barter ingredient. 0 disables the cap")
@@ -2884,6 +3172,18 @@ def main() -> int:
     tarkov_dev_cache_path = Path(args.tarkov_dev_cache) if args.tarkov_dev_cache else out_path.parent / "tarkovdev_items_cache.json"
     current_settings_path = Path(args.current_settings) if args.current_settings else (catalog_path if catalog_path is not None else out_path)
 
+    cli_warnings: list[str] = []
+    if bool(args.fill_empty_barters):
+        if str(args.generate_barter_schemes).lower() == "none":
+            args.generate_barter_schemes = "missing"
+            cli_warnings.append(
+                "--fill-empty-barters enabled: using --generate-barter-schemes missing"
+            )
+        else:
+            cli_warnings.append(
+                f"--fill-empty-barters left --generate-barter-schemes={args.generate_barter_schemes} unchanged"
+            )
+
     if not assort_path.exists():
         raise FileNotFoundError(f"assort file not found: {assort_path}")
 
@@ -2913,6 +3213,22 @@ def main() -> int:
         custom_ammo_map_path,
         default_pack_size=max(1, int(args.ammo_barter_pack_size or 30)),
     )
+    db_ammo_pack_map, db_ammo_pack_warnings = load_db_ammo_pack_mappings(
+        db_name_paths,
+        default_pack_size=max(1, int(args.ammo_barter_pack_size or 30)),
+    )
+    custom_ammo_warnings.extend(db_ammo_pack_warnings)
+    if db_ammo_pack_map:
+        overlapping_custom_pack_rows = sorted(set(db_ammo_pack_map) & set(custom_ammo_pack_map))
+        # Start with auto-detected StackSlots mappings, then let the explicit
+        # --ammo-pack-map file override anything the user hand-tuned.
+        merged_custom_ammo_pack_map = dict(db_ammo_pack_map)
+        merged_custom_ammo_pack_map.update(custom_ammo_pack_map)
+        custom_ammo_pack_map = merged_custom_ammo_pack_map
+        if overlapping_custom_pack_rows:
+            custom_ammo_warnings.append(
+                f"Explicit --ammo-pack-map entries overrode {len(overlapping_custom_pack_rows)} auto-detected StackSlots mappings"
+            )
     configure_custom_ammo_support(
         custom_ammo_tpls=parse_id_list(args.custom_ammo_tpl),
         custom_ammo_pack_map=custom_ammo_pack_map,
@@ -3002,7 +3318,7 @@ def main() -> int:
 
     output = order_items_rows(output)
 
-    warnings = tarkov_dev_warnings + db_name_warnings + current_settings_warnings + custom_ammo_warnings + warnings
+    warnings = tarkov_dev_warnings + db_name_warnings + current_settings_warnings + custom_ammo_warnings + cli_warnings + warnings
 
     if assort_modified:
         assort_out_path.parent.mkdir(parents=True, exist_ok=True)
