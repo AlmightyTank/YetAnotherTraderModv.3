@@ -1,0 +1,29 @@
+{
+    "6a4920e2fb1eff152bd64988": {
+        "itemTplToClone": "5aafbcd986f7745e590fff23",
+        "parentId": "5795f317245977243854e041",
+        "handbookParentId": "5b5f6fa186f77409407a7eb7",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Width": 2,
+            "Height": 2,
+            "Weight": 2.4,
+            "StackMaxSize": 1,
+            "DiscardingBlock": true,
+            "CanSellOnRagfair": false,
+            "QuestItem": true,
+            "BackgroundColor": "blue",
+            "Grid": []
+        },
+        "locales": {
+            "en": {
+                "name": "Cold-chain medical case",
+                "shortName": "Cold case",
+                "description": "A sealed insulated medical case recovered from the IDEA-side pharmacy on Interchange. The case contains temperature-sensitive clinic stock, faded pharmacy labels, coolant packs, and enough usable medicine to keep a back-room doctor working for a while."
+            }
+        },
+        "fleaPriceRoubles": 1,
+        "handbookPriceRoubles": 1,
+        "addtoItemBlacklist": true
+    }
+}
