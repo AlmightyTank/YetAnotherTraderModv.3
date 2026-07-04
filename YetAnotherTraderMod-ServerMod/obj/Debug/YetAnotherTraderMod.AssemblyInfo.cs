@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("YetAnotherTraderMod")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("0.1.1.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.1+5325eae65452cfa7f375aa78ccb0a12d9ebb8c4f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.1+6ea4ef1d139c0177e23959c2c0ad60ecfd84c95b")]
 [assembly: System.Reflection.AssemblyProductAttribute("YetAnotherTraderMod")]
 [assembly: System.Reflection.AssemblyTitleAttribute("YetAnotherTraderMod")]
 [assembly: System.Reflection.AssemblyVersionAttribute("0.1.1.0")]

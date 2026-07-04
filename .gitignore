@@ -5,3 +5,6 @@
 YetAnotherTraderMod-ServerMod/config/tarkovdev_items_cache.json
 /YetAnotherTraderMod-ClientMod/.vs
 /YetAnotherTraderMod-ClientMod/bin
+/YetAnotherTraderMod-ServerMod/dist
+/YetAnotherTraderMod-ClientMod/obj
+/YetAnotherTraderMod-ServerMod/obj

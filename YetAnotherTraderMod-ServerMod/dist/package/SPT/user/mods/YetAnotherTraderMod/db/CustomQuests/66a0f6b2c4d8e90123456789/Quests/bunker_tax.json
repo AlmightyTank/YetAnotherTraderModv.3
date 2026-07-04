@@ -77,7 +77,7 @@
                                 "resetOnDeath": false,
                                 "savageRole": [],
                                 "target": "AnyPmc",
-                                "value": 6,
+                                "value": 1,
                                 "weapon": [],
                                 "weaponCaliber": [],
                                 "weaponModsExclusive": [],
@@ -86,7 +86,7 @@
                             {
                                 "conditionType": "InZone",
                                 "dynamicLocale": false,
-                                "id": "625ed2ceaa168e51321d69d8",
+                                "id": "6a486d87fb1eff152bd64971",
                                 "zoneIds": [
                                     "place_bunker_tax_killzone"
                                 ]
