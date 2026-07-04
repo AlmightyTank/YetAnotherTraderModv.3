@@ -1,0 +1,27 @@
+{
+    "6a49225efb1eff152bd64996": {
+        "itemTplToClone": "67a5c61c7f52620c5b05b4d8",
+        "parentId": "5a341c4686f77469e155819e",
+        "handbookParentId": "5b47574386f77428ca22b32f",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "Durability": 55,
+            "MaxDurability": 55,
+            "armorClass": "5",
+            "mousePenalty": -1,
+            "speedPenaltyPercent": -1,
+            "weaponErgonomicPenalty": -1
+        },
+        "locales": {
+            "en": {
+                "name": "Atomic Defense CQCM ballistic mask (Demon) V2",
+                "shortName": "Demon V2",
+                "description": "A CQCM ballistic mask dragged into Tony's back room and rebuilt with uglier intentions. The shell has been reinforced, the padding cleaned up, and the fit adjusted so it protects better without punishing your movement as much. Two armor classes higher than the standard mask, with extra durability and reduced penalties. The grin stays because Tony says fear works best when it looks like it is enjoying itself."
+            }
+        },
+        "fleaPriceRoubles": 108463,
+        "handbookPriceRoubles": 108463,
+        "addtoItemBlacklist": true
+    }
+}
