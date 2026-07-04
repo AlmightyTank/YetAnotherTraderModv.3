@@ -21,6 +21,27 @@
         "PackOfferId": "6bc44f10412a56b764637823"
     },
     {
+        "OfferId": "6a50706c5a2b290adb63a56e",
+        "TplId": "6a4933e1fb1eff152bd649ac",
+        "ItemName": ".366 TKM AP-S",
+        "Price": 1450,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "590c31c586f774245e3141b2",
+                    "ItemName": "Pack of nails",
+                    "Count": 2
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6a4933e1fb1eff152bd649bb",
+        "PackOfferId": "6a5137c43e339a0d1e3f5430"
+    },
+    {
         "OfferId": "6a300025d2999bc7b9bba95d",
         "TplId": "59e655cb86f77411dc52a77b",
         "ItemName": ".366 TKM EKO",
@@ -45,7 +66,7 @@
         "OfferId": "bc866c61bea0d584d4ae4de1",
         "TplId": "5cadf6eeae921500134b2799",
         "ItemName": "12.7x55mm PS12B",
-        "Price": 1000,
+        "Price": 1200,
         "Currency": "RUB",
         "CashOnly": true,
         "BarterScheme": [
@@ -59,8 +80,50 @@
         ],
         "AlwaysBarter": false,
         "AlwaysInStock": false,
-        "AmmoBarterPackTplId": "648983d6b5a2df1c815a04ec",
-        "PackOfferId": "f2db56fac2706c82ab6634e8"
+        "AmmoBarterPackTplId": "6570241bcfc010a0f50069f5",
+        "PackOfferId": "1126f676c9a82a88e9f5ff60"
+    },
+    {
+        "OfferId": "f2db56fac2706c82ab6634e8",
+        "TplId": "648983d6b5a2df1c815a04ec",
+        "ItemName": "12.7x55mm PS12B (10 pcs)",
+        "Price": 1200,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "575062b524597720a31c09a1",
+                    "ItemName": "Can of Ice Green tea",
+                    "Count": 1
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6570241bcfc010a0f50069f5",
+        "PackOfferId": "1126f676c9a82a88e9f5ff60"
+    },
+    {
+        "OfferId": "6a504c558967214cccf90bd9",
+        "TplId": "6a4933e1fb1eff152bd649ab",
+        "ItemName": "12.7x55mm PS12V",
+        "Price": 1800,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "62a0a043cf4a99369e2624a5",
+                    "ItemName": "Bottle of OLOLO Multivitamins",
+                    "Count": 1
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6a4933e1fb1eff152bd649b9",
+        "PackOfferId": "6a51f3a3cf4fbbbab407dbd8"
     },
     {
         "OfferId": "6a300025d2999bc7b9bba961",
@@ -136,6 +199,27 @@
         "PackOfferId": "6b3d00168cb366f16a7fd12b"
     },
     {
+        "OfferId": "6a503587210fa9af417ff929",
+        "TplId": "6a4933e1fb1eff152bd649aa",
+        "ItemName": "12/70 handmade slug",
+        "Price": 980,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d40407c86f774318526545a",
+                    "ItemName": "Bottle of Tarkovskaya vodka",
+                    "Count": 1
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6a4933e1fb1eff152bd649b6",
+        "PackOfferId": "6a51fe7430959d504aa3d209"
+    },
+    {
         "OfferId": "6a3007dfd2999bc7b9bba973",
         "TplId": "56dfef82d2720bbd668b4567",
         "ItemName": "5.45x39mm BP gs",
@@ -155,6 +239,27 @@
         "AlwaysInStock": false,
         "AmmoBarterPackTplId": "5737292724597765e5728562",
         "PackOfferId": "6beb59961278d465897bef8c"
+    },
+    {
+        "OfferId": "6a50730e9ee4d87bd95eb846",
+        "TplId": "6a4933e1fb1eff152bd649ad",
+        "ItemName": "5.45x39mm BP-M gs",
+        "Price": 1400,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "57347d7224597744596b4e72",
+                    "ItemName": "Can of beef stew (Small)",
+                    "Count": 3
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6a493587fb1eff152bd649be",
+        "PackOfferId": "6a51f12adbd46c7389d5e367"
     },
     {
         "OfferId": "6a3007dfd2999bc7b9bba982",
@@ -199,6 +304,27 @@
         "PackOfferId": "6b7568b2a473a220a91b062e"
     },
     {
+        "OfferId": "6a503464517ca4def8f2fcf6",
+        "TplId": "6a4933e1fb1eff152bd649ae",
+        "ItemName": "5.45x39mm BT-R gs",
+        "Price": 720,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d1c819a86f774771b0acd6c",
+                    "ItemName": "Weapon parts",
+                    "Count": 1
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6a493587fb1eff152bd649c0",
+        "PackOfferId": "6a516f432bbbe97764113788"
+    },
+    {
         "OfferId": "6a3007dfd2999bc7b9bba972",
         "TplId": "56dff2ced2720bb4668b4567",
         "ItemName": "5.45x39mm PP gs",
@@ -218,6 +344,27 @@
         "AlwaysInStock": false,
         "AmmoBarterPackTplId": "57372d1b2459776862260581",
         "PackOfferId": "6b6e6439bbfaab88eeb1e0c9"
+    },
+    {
+        "OfferId": "6a50093a2d7009a4ebbefb51",
+        "TplId": "6a4933e1fb1eff152bd649af",
+        "ItemName": "5.45x39mm PP-M gs",
+        "Price": 420,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "57347b8b24597737dd42e192",
+                    "ItemName": "Classic matches",
+                    "Count": 5
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6a493587fb1eff152bd649c2",
+        "PackOfferId": "6a511b7726364aee186d281b"
     },
     {
         "OfferId": "6a3007dfd2999bc7b9bba990",
@@ -265,6 +412,27 @@
         "AlwaysInStock": false,
         "AmmoBarterPackTplId": "57372e73245977685d4159b4",
         "PackOfferId": "6baa525e70a4697d98c99ef4"
+    },
+    {
+        "OfferId": "6a5067f4219fd55b4d85121b",
+        "TplId": "6a4933e1fb1eff152bd649b0",
+        "ItemName": "5.45x39mm PS-R gs",
+        "Price": 290,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "590c2d8786f774245b1f03f3",
+                    "ItemName": "Screwdriver",
+                    "Count": 1
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6a493587fb1eff152bd649c5",
+        "PackOfferId": "6a51c1f8c7864d7e9f56906d"
     },
     {
         "OfferId": "6a2c15ff0ad81c90c80166df",
@@ -454,6 +622,27 @@
         "PackOfferId": "6b68789b4aa66d411dac368d"
     },
     {
+        "OfferId": "6a503693b231a34b7b9c8e6b",
+        "TplId": "6a4933e1fb1eff152bd649b1",
+        "ItemName": "7.62x39mm PP+ gzh",
+        "Price": 1050,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "57347c1124597737fb1379e3",
+                    "ItemName": "Duct tape",
+                    "Count": 3
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6a493587fb1eff152bd649c7",
+        "PackOfferId": "6a512e7cc61d943bf7b15d9b"
+    },
+    {
         "OfferId": "6a300025d2999bc7b9bba95c",
         "TplId": "5656d7c34bdc2d9d198b4587",
         "ItemName": "7.62x39mm PS gzh",
@@ -473,6 +662,27 @@
         "AlwaysInStock": false,
         "AmmoBarterPackTplId": "5649ed104bdc2d3d1c8b458b",
         "PackOfferId": "6ba93b92f2bc2360bdc8207e"
+    },
+    {
+        "OfferId": "6a50ccfea10b3ad1707681eb",
+        "TplId": "6a4933e1fb1eff152bd649b2",
+        "ItemName": "7.62x39mm PS-H gzh",
+        "Price": 540,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "590c2b4386f77425357b6123",
+                    "ItemName": "Pliers",
+                    "Count": 1
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6a493587fb1eff152bd649c9",
+        "PackOfferId": "6a5166a8b3d224f30a6d573e"
     },
     {
         "OfferId": "6a427a2e38a6d33bffe98292",
@@ -515,6 +725,27 @@
         "AlwaysInStock": false,
         "AmmoBarterPackTplId": "65702577cfc010a0f5006a2c",
         "PackOfferId": "153b8c53ec84eafbd9a52a29"
+    },
+    {
+        "OfferId": "6a5034d376b3958422e0bdf9",
+        "TplId": "6a4933e1fb1eff152bd649b3",
+        "ItemName": "7.62x54mm R LPS-M",
+        "Price": 1250,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d40407c86f774318526545a",
+                    "ItemName": "Bottle of Tarkovskaya vodka",
+                    "Count": 1
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6a493587fb1eff152bd649cb",
+        "PackOfferId": "6a51ea531a9c757973651591"
     },
     {
         "OfferId": "6a427a2e38a6d33bffe9829d",
@@ -706,6 +937,27 @@
         "PackOfferId": "6bcee0b4fd6e6026f3fffa3d"
     },
     {
+        "OfferId": "6a5013e53c218f136f7d1c7a",
+        "TplId": "6a4933e1fb1eff152bd649b4",
+        "ItemName": "9x39mm SP-5M gs",
+        "Price": 700,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "57347d7224597744596b4e72",
+                    "ItemName": "Can of beef stew (Small)",
+                    "Count": 1
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6a493587fb1eff152bd649cd",
+        "PackOfferId": "6a51cbc7391c64b0a8343193"
+    },
+    {
         "OfferId": "6a3007dfd2999bc7b9bba985",
         "TplId": "57a0e5022459774d1673f889",
         "ItemName": "9x39mm SP-6 gs",
@@ -730,6 +982,27 @@
         "AlwaysInStock": false,
         "AmmoBarterPackTplId": "657025dabfc87b3a34093256",
         "PackOfferId": "6bae032bcd3c6ef35c3dd674"
+    },
+    {
+        "OfferId": "6a503c03e6fdb62eb07736b1",
+        "TplId": "6a4933e1fb1eff152bd649b5",
+        "ItemName": "9x39mm SP-6U gs",
+        "Price": 1650,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "590c2b4386f77425357b6123",
+                    "ItemName": "Pliers",
+                    "Count": 3
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "AmmoBarterPackTplId": "6a493587fb1eff152bd649cf",
+        "PackOfferId": "6a51b8a0b0233d70b81c5e66"
     },
     {
         "OfferId": "6a3007dfd2999bc7b9bba986",
@@ -1093,6 +1366,59 @@
         "AlwaysInStock": false
     },
     {
+        "OfferId": "6a49225efb1eff152bd64998",
+        "TplId": "6a49225efb1eff152bd64996",
+        "ItemName": "Atomic Defense CQCM ballistic mask (Demon) V2",
+        "Price": 89200,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d0375ff86f774186372f685",
+                    "ItemName": "Military cable",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5d403f9186f7743cac3f229b",
+                    "ItemName": "Bottle of Dan Jackiel whiskey",
+                    "Count": 1
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false
+    },
+    {
+        "OfferId": "6a49225efb1eff152bd64999",
+        "TplId": "6a49225efb1eff152bd64997",
+        "ItemName": "Atomic Defense CQCM ballistic mask (Skull) V2",
+        "Price": 89200,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d1c819a86f774771b0acd6c",
+                    "ItemName": "Weapon parts",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5d403f9186f7743cac3f229b",
+                    "ItemName": "Bottle of Dan Jackiel whiskey",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5e2aef7986f7746d3f3c33f5",
+                    "ItemName": "Repellent",
+                    "Count": 1
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false
+    },
+    {
         "OfferId": "6a300025d2999bc7b9bba969",
         "TplId": "5648a69d4bdc2ded0b8b457b",
         "ItemName": "BlackRock chest rig (Gray)",
@@ -1317,9 +1643,14 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 14500
+                    "TplId": "590c2d8786f774245b1f03f3",
+                    "ItemName": "Screwdriver",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5734770f24597738025ee254",
+                    "ItemName": "Strike Cigarettes",
+                    "Count": 1
                 }
             ]
         ],
@@ -1462,6 +1793,25 @@
                 {
                     "TplId": "5d1b32c186f774252167a530",
                     "ItemName": "Analog thermometer",
+                    "Count": 1
+                }
+            ]
+        ],
+        "AlwaysBarter": false,
+        "AlwaysInStock": false
+    },
+    {
+        "OfferId": "6a49225efb1eff152bd6499b",
+        "TplId": "590c657e86f77412b013051d",
+        "ItemName": "Grizzly medical kit",
+        "Price": 35200,
+        "Currency": "RUB",
+        "CashOnly": true,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d40407c86f774318526545a",
+                    "ItemName": "Bottle of Tarkovskaya vodka",
                     "Count": 1
                 }
             ]
@@ -1791,9 +2141,9 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 28500
+                    "TplId": "5d1c819a86f774771b0acd6c",
+                    "ItemName": "Weapon parts",
+                    "Count": 1
                 }
             ]
         ],
@@ -1901,9 +2251,14 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 32000
+                    "TplId": "5e2af29386f7746d4159f077",
+                    "ItemName": "KEKTAPE duct tape",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5d1c819a86f774771b0acd6c",
+                    "ItemName": "Weapon parts",
+                    "Count": 1
                 }
             ]
         ],
@@ -2837,9 +3192,19 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 55500
+                    "TplId": "590c31c586f774245e3141b2",
+                    "ItemName": "Pack of nails",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5d40407c86f774318526545a",
+                    "ItemName": "Bottle of Tarkovskaya vodka",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5e2af29386f7746d4159f077",
+                    "ItemName": "KEKTAPE duct tape",
+                    "Count": 1
                 }
             ]
         ],
@@ -2856,9 +3221,14 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 58500
+                    "TplId": "5d40407c86f774318526545a",
+                    "ItemName": "Bottle of Tarkovskaya vodka",
+                    "Count": 1
+                },
+                {
+                    "TplId": "590c651286f7741e566b6461",
+                    "ItemName": "Slim diary",
+                    "Count": 1
                 }
             ]
         ],
@@ -2875,9 +3245,9 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 18500
+                    "TplId": "57347d7224597744596b4e72",
+                    "ItemName": "Can of beef stew (Small)",
+                    "Count": 1
                 }
             ]
         ],
@@ -2894,9 +3264,14 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 57500
+                    "TplId": "5d40407c86f774318526545a",
+                    "ItemName": "Bottle of Tarkovskaya vodka",
+                    "Count": 1
+                },
+                {
+                    "TplId": "590c651286f7741e566b6461",
+                    "ItemName": "Slim diary",
+                    "Count": 1
                 }
             ]
         ],
@@ -2913,9 +3288,14 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 18500
+                    "TplId": "573476d324597737da2adc13",
+                    "ItemName": "Malboro Cigarettes",
+                    "Count": 1
+                },
+                {
+                    "TplId": "590c2d8786f774245b1f03f3",
+                    "ItemName": "Screwdriver",
+                    "Count": 1
                 }
             ]
         ],
@@ -2932,9 +3312,19 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 62500
+                    "TplId": "5e2aef7986f7746d3f3c33f5",
+                    "ItemName": "Repellent",
+                    "Count": 1
+                },
+                {
+                    "TplId": "590c31c586f774245e3141b2",
+                    "ItemName": "Pack of nails",
+                    "Count": 2
+                },
+                {
+                    "TplId": "62a0a043cf4a99369e2624a5",
+                    "ItemName": "Bottle of OLOLO Multivitamins",
+                    "Count": 1
                 }
             ]
         ],
@@ -2951,9 +3341,14 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 35500
+                    "TplId": "5d1c819a86f774771b0acd6c",
+                    "ItemName": "Weapon parts",
+                    "Count": 1
+                },
+                {
+                    "TplId": "575062b524597720a31c09a1",
+                    "ItemName": "Can of Ice Green tea",
+                    "Count": 1
                 }
             ]
         ],
@@ -2970,9 +3365,14 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 22500
+                    "TplId": "575062b524597720a31c09a1",
+                    "ItemName": "Can of Ice Green tea",
+                    "Count": 1
+                },
+                {
+                    "TplId": "590c2b4386f77425357b6123",
+                    "ItemName": "Pliers",
+                    "Count": 1
                 }
             ]
         ],
@@ -3167,9 +3567,14 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 54500
+                    "TplId": "5734758f24597738025ee253",
+                    "ItemName": "Golden neck chain",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5d1c819a86f774771b0acd6c",
+                    "ItemName": "Weapon parts",
+                    "Count": 1
                 }
             ]
         ],
@@ -3186,9 +3591,9 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 18500
+                    "TplId": "5d1c819a86f774771b0acd6c",
+                    "ItemName": "Weapon parts",
+                    "Count": 1
                 }
             ]
         ],
@@ -3205,9 +3610,9 @@
         "BarterScheme": [
             [
                 {
-                    "TplId": "5449016a4bdc2d6f028b456f",
-                    "ItemName": "Roubles",
-                    "Count": 18500
+                    "TplId": "590c31c586f774245e3141b2",
+                    "ItemName": "Pack of nails",
+                    "Count": 1
                 }
             ]
         ],
