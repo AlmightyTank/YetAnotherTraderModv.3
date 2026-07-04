@@ -41,6 +41,48 @@
                     "relativeProbability": 1
                 }
             ]
+        },
+        {
+            "locationId": "(62.5512, 22.2560, -254.6236)",
+            "probability": 1,
+            "template": {
+                "Id": "sealed_medical_case",
+                "IsContainer": false,
+                "useGravity": false,
+                "randomRotation": false,
+                "Position": {
+                    "x": 62.5512,
+                    "y": 22.2560,
+                    "z": -254.6236
+                },
+                "Rotation": {
+                    "x": 0.0000,
+                    "y": 0.0000,
+                    "z": 0.0000
+                },
+                "IsGroupPosition": false,
+                "GroupPositions": [],
+                "IsAlwaysSpawn": true,
+                "Root": "6a49225efb1eff152bd649a2",
+                "Items": [
+                    {
+                        "_id": "6a49225efb1eff152bd649a2",
+                        "_tpl": "6a4920e2fb1eff152bd64988",
+                        "upd": {
+                            "StackObjectsCount": 1,
+                            "SpawnedInSession": true
+                        }
+                    }
+                ]
+            },
+            "itemDistribution": [
+                {
+                    "composedKey": {
+                        "key": "6a4920e2fb1eff152bd64988"
+                    },
+                    "relativeProbability": 1
+                }
+            ]
         }
     ]
 }

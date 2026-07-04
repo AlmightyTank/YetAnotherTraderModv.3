@@ -343,7 +343,7 @@
     "6a4341ac38a6d33bffe982a6": "Survive and extract from Lighthouse",
     "6a4341ac38a6d33bffe982a7": "Hand over the shipment evidence",
 
-    // Side quest 4 - Parapor's side quest 4 - Bunker Tax
+    // Side quest - Parapor's side quest 4 - Bunker Tax
     "6a480d82fb1eff152bd64946 name": "Bunker Tax",
     "6a480d82fb1eff152bd64946 description": "Reserve has rats under the concrete. Not the hungry kind — the kind with rifles, tools, and boxes of parts they think nobody is counting. They have been stripping military stock and moving repair goods through my route without paying their cut. I like business. I do not like freeloaders. Go underground, find the bunker command center, and put down the PMCs working that space. Six bodies should remind the rest who owns the lane.",
     "6a480d82fb1eff152bd64946 note": "Tony wants you to locate the bunker command center, kill PMCs underground, and extract from Reserve.",
@@ -356,5 +356,23 @@
     "6a480d82fb1eff152bd64946 changeQuestMessageText": "Tony wants PMCs eliminated underground in the Reserve bunker.",
     "6a480d82fb1eff152bd6494a": "Locate the bunker command center under Reserve",
     "6a480d82fb1eff152bd6494e": "Eliminate 6 PMCs underground in the Reserve bunker",
-    "6a480d82fb1eff152bd64953": "Survive and extract from Reserve"
+    "6a480d82fb1eff152bd64953": "Survive and extract from Reserve",
+
+    // Side quest - Therapist's side quest 3 - Cold Chain
+    "6a4920e2fb1eff152bd64982 name": "Cold Chain",
+    "6a4920e2fb1eff152bd64982 description": "The doctor is real. Good. A doctor without stock is just a man with dirty hands and good intentions. Interchange still has pharmacy stock sitting behind dead counters and locked supply shelves. IDEA side, near the front. There should be a sealed cold-chain case there. I do not want loose pills, open bottles, or half-rotten garbage. Bring me the sealed case and leave alive. If the cold packs are dead, someone desperate will still call it medicine.",
+    "6a4920e2fb1eff152bd64982 note": "Tony wants you to recover a sealed cold-chain medical case from the IDEA-side pharmacy on Interchange.",
+    "6a4920e2fb1eff152bd64982 startedMessageText": "Interchange. IDEA side pharmacy, near the front. Find the cold-chain case and leave alive.",
+    "6a4920e2fb1eff152bd64982 successMessageText": "Good. The case is sealed, and that means my street doctor can stop working from empty shelves. Bigger kits, colder stock, and a few special mixes will start moving through the clinic now. Therapist would ask where it came from. I ask whether it still works.",
+    "6a4920e2fb1eff152bd64982 failMessageText": "You lost the case, broke the seals, or let Interchange swallow you. A clinic without stock is just a room with bad lighting.",
+    "6a4920e2fb1eff152bd64982 acceptPlayerMessage": "I'll recover the cold-chain case.",
+    "6a4920e2fb1eff152bd64982 declinePlayerMessage": "Not going to Interchange for clinic stock yet.",
+    "6a4920e2fb1eff152bd64982 completePlayerMessage": "Here's the cold-chain case.",
+    "6a4920e2fb1eff152bd64982 changeQuestMessageText": "Tony wants the cold-chain medical case recovered from the IDEA-side pharmacy.",
+
+    "6a4920e2fb1eff152bd64986": "Locate the IDEA-side pharmacy on Interchange",
+    "6a4920e2fb1eff152bd64987": "Recover the cold-chain medical case",
+    "6a4920e2fb1eff152bd6498d": "Survive and extract from Interchange",
+    "6a4920e2fb1eff152bd6498f": "Hand over the cold-chain medical case"
+
 }
