@@ -65,6 +65,9 @@
     <Content Remove="db\CustomItems\altyn_with_headphones.json" />
     <Content Remove="db\CustomItems\buried_steel_crate.json" />
     <Content Remove="db\CustomItems\coded_dead_drop_tag.json" />
+    <Content Remove="db\CustomItems\cold_chain_medical_case.json" />
+    <Content Remove="db\CustomItems\cqcm_demon_v2.json" />
+    <Content Remove="db\CustomItems\cqcm_skull_v2.json" />
     <Content Remove="db\customitems\dead-drop_package.json" />
     <Content Remove="db\CustomItems\experimental_stim_case.json" />
     <Content Remove="db\CustomItems\forged_route_documents.json" />
@@ -95,6 +98,7 @@
     <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\bunker_tax.json" />
     <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\buried_steel.json" />
     <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\clean_run.json" />
+    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\cold_chain.json" />
     <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\cold_freight.json" />
     <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\dead_drop_rules.json" />
     <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\depot_rats.json" />
@@ -115,6 +119,7 @@
     <Content Remove="db\customquestzones\bunker_tax.json" />
     <Content Remove="db\CustomQuestZones\buried_steel.json" />
     <Content Remove="db\customquestzones\clean_run.json" />
+    <Content Remove="db\CustomQuestZones\cold_chain.json" />
     <Content Remove="db\CustomQuestZones\cold_freight.json" />
     <Content Remove="db\CustomQuestZones\dead_drop_rules.json" />
     <Content Remove="db\CustomQuestZones\depot_rats.json" />
