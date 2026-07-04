@@ -37,6 +37,8 @@ public sealed class YATMWTTLoader(
         var itemPaths = new[]
         {
             Path.Join("db", "CustomItems"),
+            Path.Join("db", "CustomAmmo"),
+            Path.Join("db", "CustomQuestItems"),
             Path.Join("db", "CustomWeapons"),
         };
 
