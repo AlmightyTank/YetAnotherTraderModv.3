@@ -80,29 +80,8 @@
         ],
         "AlwaysBarter": false,
         "AlwaysInStock": false,
-        "AmmoBarterPackTplId": "6570241bcfc010a0f50069f5",
-        "PackOfferId": "1126f676c9a82a88e9f5ff60"
-    },
-    {
-        "OfferId": "f2db56fac2706c82ab6634e8",
-        "TplId": "648983d6b5a2df1c815a04ec",
-        "ItemName": "12.7x55mm PS12B (10 pcs)",
-        "Price": 1200,
-        "Currency": "RUB",
-        "CashOnly": true,
-        "BarterScheme": [
-            [
-                {
-                    "TplId": "575062b524597720a31c09a1",
-                    "ItemName": "Can of Ice Green tea",
-                    "Count": 1
-                }
-            ]
-        ],
-        "AlwaysBarter": false,
-        "AlwaysInStock": false,
-        "AmmoBarterPackTplId": "6570241bcfc010a0f50069f5",
-        "PackOfferId": "1126f676c9a82a88e9f5ff60"
+        "AmmoBarterPackTplId": "648983d6b5a2df1c815a04ec",
+        "PackOfferId": "f2db56fac2706c82ab6634e8"
     },
     {
         "OfferId": "6a504c558967214cccf90bd9",
