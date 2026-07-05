@@ -154,7 +154,18 @@
                     "parentId": "",
                     "type": "Completion",
                     "value": 1,
-                    "visibilityConditions": []
+                    "visibilityConditions": [
+                        {
+                            "conditionType": "CompleteCondition",
+                            "id": "6a497319fb1eff152bd64a02",
+                            "target": "6a301016d2999bc7b9bba918"
+                        },
+                        {
+                            "conditionType": "CompleteCondition",
+                            "id": "6a497319fb1eff152bd64a03",
+                            "target": "6a301016d2999bc7b9bba91c"
+                        }
+                    ]
                 }
             ],
             "AvailableForStart": [
