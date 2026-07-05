@@ -1,6 +1,6 @@
 {
     "6a300025d2999bc7b9bba916 name": "Back Room Etiquette",
-    "6a300025d2999bc7b9bba916 description": "Concordia had security before it had ghosts. Cameras, guards, records, keys, people who looked the other way when paid. One of my old ledgers used to sit in that security room, until someone smart moved it before the wrong eyes found it. Now it is stashed in a maintenance closet under the ramp on Ground Zero. Find it, recover it, and come back breathing.\nDo not make a scene.",
+    "6a300025d2999bc7b9bba916 description": "Concordia had security before it had ghosts. Cameras, guards, records, you name it. One of my old ledgers used to sit in the security room, until someone smart moved it. My source says it's stashed in a maintenance closet under the ramp on Ground Zero. Find it, recover it, and come back breathing. Its in your best interest to be discreet.",
     "6a300025d2999bc7b9bba916 note": "Tony wants you to recover an old security ledger hidden in a maintenance closet under the ramp on Ground Zero.",
     "6a300025d2999bc7b9bba916 startedMessageText": "Ground Zero. Maintenance closet under the ramp. My ledger is there now. Bring it back quiet.",
     "6a300025d2999bc7b9bba916 successMessageText": "That will do. That ledger in the wrong hands would have made problems. You followed instructions and kept your head down.\nThat matters.",
@@ -199,5 +199,18 @@
     "6a4341ac38a6d33bffe982a1": "Mark the Rogue shipment on the beach for Tony's crew",
     "6a4341ac38a6d33bffe982a2": "Recover the Rogue shipment evidence from the Warehouse 3 lower floor bunk room",
     "6a4341ac38a6d33bffe982a6": "Survive and extract from Lighthouse",
-    "6a4341ac38a6d33bffe982a7": "Hand over the shipment evidence"
+    "6a4341ac38a6d33bffe982a7": "Hand over the shipment evidence",
+    "6a301016d2999bc7b9bba916 name": "Red Debt",
+    "6a301016d2999bc7b9bba916 acceptPlayerMessage": "Debt opened.",
+    "6a301016d2999bc7b9bba916 changeQuestMessageText": "Red Debt status changed.",
+    "6a301016d2999bc7b9bba916 completePlayerMessage": "Debt closed.",
+    "6a301016d2999bc7b9bba916 declinePlayerMessage": "Then stay out of the bunker routes.",
+    "6a301016d2999bc7b9bba916 failMessageText": "Red Debt failed.",
+    "6a301016d2999bc7b9bba916 startedMessageText": "Red Debt started.",
+    "6a301016d2999bc7b9bba916 successMessageText": "Good. That debt is closed. Glukhar thought the bunker made him untouchable. His guards thought standing near him made them important. Now the route is quiet again. You did not just kill men. You corrected the price of doing business with me. The next room is open.",
+    "6a301016d2999bc7b9bba916 description": "You want better stock? Then you handle better problems. Reserve has an old route of mine under it. Bunker line. Used to move rifles, armor, medical crates, whatever people paid for. Glukhar's boys found it and started charging a tax on my name. I paid once. That was business. They asked again. That was disrespect. You go there, you find Glukhar, and you put him down. Two of his guards too. I do not want a rumor. I want a message. Come back breathing, and maybe I show you what I keep behind the next door.",
+    "6a301016d2999bc7b9bba916 note": "Eliminate Glukhar and two of his guards on Reserve. Survive and extract from Reserve. Completing this task marks the end of Tony's LL2 work and should push the player into LL3.",
+    "6a301016d2999bc7b9bba918": "Eliminate Glukhar on Reserve",
+    "6a301016d2999bc7b9bba91c": "Eliminate 2 of Glukhar's guards on Reserve",
+    "6a301016d2999bc7b9bba920": "Survive and extract from Reserve"
 }
