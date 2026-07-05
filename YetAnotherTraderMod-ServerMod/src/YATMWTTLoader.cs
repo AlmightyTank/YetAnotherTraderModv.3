@@ -78,11 +78,20 @@ public sealed class YATMWTTLoader(
         await wttCommon.CustomLootspawnService.CreateCustomLootSpawns(assembly);
 
         // 5. Optional quest loading
-        if (CustomQuestsEnabled(modPath))
+        // 5. Optional quest loading
+        if (CustomQuestsEnabled(modPath) && CustomSideQuestEnabled(modPath))
         {
             YATMLogger.LogRealDebug("[CustomContentLoader] Loading custom quests and quest zones...");
 
-            await wttCommon.CustomQuestService.CreateCustomQuests(assembly);
+            await wttCommon.CustomQuestService.CreateCustomQuests(assembly, Path.Join("db", "CustomQuests", "MainQuests"));
+            await wttCommon.CustomQuestService.CreateCustomQuests(assembly, Path.Join("db", "CustomQuests", "SideQuests"));
+            await wttCommon.CustomQuestZoneService.CreateCustomQuestZones(assembly);
+        }
+        else if (CustomQuestsEnabled(modPath) && !CustomSideQuestEnabled(modPath))
+        {
+            YATMLogger.Log("[CustomContentLoader] Custom quests are enabled in settings.json, but custom side quests are disabled.");
+
+            await wttCommon.CustomQuestService.CreateCustomQuests(assembly, Path.Join("db", "CustomQuests", "MainQuests"));
             await wttCommon.CustomQuestZoneService.CreateCustomQuestZones(assembly);
         }
         else
@@ -124,6 +133,42 @@ public sealed class YATMWTTLoader(
         catch (Exception ex)
         {
             YATMLogger.Log($"[CustomContentLoader] Failed to read EnableCustomQuests from settings.json. Defaulting to enabled. Error: {ex.Message}");
+        }
+
+        return true;
+    }
+
+    private static bool CustomSideQuestEnabled(string modPath)
+    {
+        var settingsPath = Path.Combine(modPath, "config", "settings.json");
+
+        // Default true so missing config does not break existing installs.
+        if (!File.Exists(settingsPath))
+        {
+            return true;
+        }
+
+        try
+        {
+            var json = File.ReadAllText(settingsPath);
+
+            using var doc = JsonDocument.Parse(
+                json,
+                new JsonDocumentOptions
+                {
+                    AllowTrailingCommas = true,
+                    CommentHandling = JsonCommentHandling.Skip
+                });
+
+            if (doc.RootElement.TryGetProperty("EnableCustomSideQuests", out var value)
+                && value.ValueKind is JsonValueKind.True or JsonValueKind.False)
+            {
+                return value.GetBoolean();
+            }
+        }
+        catch (Exception ex)
+        {
+            YATMLogger.Log($"[CustomContentLoader] Failed to read EnableCustomSideQuests from settings.json. Defaulting to enabled. Error: {ex.Message}");
         }
 
         return true;

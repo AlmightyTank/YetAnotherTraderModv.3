@@ -92,28 +92,33 @@
     <Content Remove="db\CustomLootSpawns\CustomSpawnpointsForced\rezervbase_forced.json" />
     <Content Remove="db\customlootspawns\customspawnpointsforced\shoreline_forced.json" />
     <Content Remove="db\CustomLootSpawns\CustomSpawnpointsForced\woods_forced.json" />
-    <Content Remove="db\customquests\66a0f6b2c4d8e90123456789\questassort\assort.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\quests\back_room_etiquette.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\broken_radios.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\bunker_tax.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\buried_steel.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\clean_run.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\cold_chain.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\cold_freight.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\dead_drop_rules.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\depot_rats.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\foreign_parts.json" />
-    <Content Remove="db\customquests\66a0f6b2c4d8e90123456789\quests\no_names_spoken.json" />
-    <Content Remove="db\customquests\66a0f6b2c4d8e90123456789\quests\old_bear_trails.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\paper_shields.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\quest.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\red_caliber.json" />
-    <Content Remove="db\customquests\66a0f6b2c4d8e90123456789\quests\safe_hands.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\street_clinic.json" />
-    <Content Remove="db\customquests\66a0f6b2c4d8e90123456789\quests\street_tax.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\test_batch.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\used_but_usable.json" />
-    <Content Remove="db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\worn_down.json" />
+    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Locales\en.json" />
+    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\QuestAssort\assort.json" />
+    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\army_leftovers.json" />
+    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\bunker_tax.json" />
+    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\cold_chain.json" />
+    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\depot_rats.json" />
+    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\red_caliber.json" />
+    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\street_clinic.json" />
+    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\street_colors.json" />
+    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\test_batch.json" />
+    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\used_but_usable.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\questassort\assort.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\quests\back_room_etiquette.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\broken_radios.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\buried_steel.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\clean_run.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\cold_freight.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\dead_drop_rules.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\foreign_parts.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\quests\no_names_spoken.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\quests\old_bear_trails.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\paper_shields.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\quest.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\red_debt.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\quests\safe_hands.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\quests\street_tax.json" />
+    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\worn_down.json" />
     <Content Remove="db\CustomQuestZones\back_room_etiquette.json" />
     <Content Remove="db\CustomQuestZones\broken_radios.json" />
     <Content Remove="db\customquestzones\bunker_tax.json" />
@@ -156,18 +161,71 @@
     <Content Remove="db\CustomWeapons\SVDSARB.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="db\CustomQuests\579dc571d53a0658a154fbec\QuestAssort\assort.json" />
-    <None Include="db\CustomQuests\579dc571d53a0658a154fbec\Quests\a_friend_of_a_friend.json" />
     <None Include="db\CustomTrader\Tony\assort.json" />
     <None Include="db\CustomTrader\Tony\base.json" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="db\CustomQuests\579dc571d53a0658a154fbec\Images\" />
-    <Folder Include="db\CustomQuests\66a0f6b2c4d8e90123456789\Images\" />
-    <Folder Include="db\CustomQuests\66a0f6b2c4d8e90123456789\QuestAssort\" />
+    <Folder Include="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Images\" />
+    <Folder Include="db\CustomQuests\MainQuests\579dc571d53a0658a154fbec\Images\" />
+    <Folder Include="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Images\" />
     <Folder Include="db\CustomLocales\" />
     <Folder Include="src\Models\" />
     <Folder Include="src\Services\ItemHelpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\used_but_usable.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\test_batch.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\street_colors.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\street_clinic.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\red_caliber.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\depot_rats.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\cold_chain.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\bunker_tax.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\army_leftovers.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\QuestAssort\assort.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Locales\en.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 	<PropertyGroup>

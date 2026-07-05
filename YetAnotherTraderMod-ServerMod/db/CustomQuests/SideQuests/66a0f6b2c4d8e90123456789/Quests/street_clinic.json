@@ -381,6 +381,15 @@
                     "traderId": "66a0f6b2c4d8e90123456789",
                     "type": "AssortmentUnlock",
                     "unknown": false
+                },
+                {
+                    "availableInGameEditions": [],
+                    "id": "6a497319fb1eff152bd649ff",
+                    "index": 1,
+                    "target": "54cb57776803fa99248b456e",
+                    "type": "TraderStanding",
+                    "unknown": false,
+                    "value": -0.1
                 }
             ]
         },

@@ -6,6 +6,7 @@
     "RerollAssortOnRestock": true, //[Restock Reroll] If true, YATM rerolls paired ammo offers, cash/barter split, stock, and questassort after Tony restocks.
     "AddTraderToFleaMarket": true, //[Flea Market] If true, Tony's offers appear on the Flea Market search.
     "EnableCustomQuests": true, //[Quests] If false, Tony custom quests and quest zones will not load.
+    "EnableCustomSideQuests": true, //[Quests] If false, Tony custom side quests will not load.
     "InsurancePriceCoef": 45, //[Insurance] Price multiplier for insurance. 95 = 95%. Higher is more expensive.
     "RepairQuality": 0.9, //[Repair] Quality of repairs. 0.0 to 1.0.
     "RandomizeStockAvailable": true, //[Stock] If true, some items will randomly be out of stock each reset.
