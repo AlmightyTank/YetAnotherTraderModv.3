@@ -1,25 +1,49 @@
 items.json generation report
 ============================
 Output: config\items.json
-Rows written: 154
-Cash default rows (CashOnly=true): 154
+Rows written: 169
+Cash default rows (CashOnly=true): 169
 AlwaysBarter rows: 1
 AlwaysInStock rows: 2
-Rows with real barter scheme: 138
-Rows with cash-only scheme: 16
-Generated barter schemes: 30
-Generated ammo pack item-barter schemes: 30
-Ammo rows with pack template target: 30
-Ammo rows with pack offer id: 30
+Rows with real barter scheme: 169
+Rows with cash-only scheme: 0
+Generated barter schemes: 127
+Generated ammo pack item-barter schemes: 42
+Ammo rows with pack template target: 42
+Ammo rows with pack offer id: 42
 Ammo rows missing pack template target: 0
-Unique TplIds: 154
+Unique TplIds: 169
 Duplicate TplIds preserved: {}
 Unique barter ingredients: 48
-Most-used barter ingredients: Bottle of Tarkovskaya vodka x8; Bottle of Dan Jackiel whiskey x8; Can of Max Energy energy drink x8; Roler Submariner gold wrist watch x8; Military cable x8
+Most-used barter ingredients: Weapon parts x15; Bottle of Tarkovskaya vodka x14; Can of beef stew (Small) x11; Pack of nails x10; Bottle of Dan Jackiel whiskey x10
 
 Warnings:
-  - Generated barter scheme details suppressed in report summary: 30 rows
+  - Generated barter scheme details suppressed in report summary: 127 rows
   - Loaded 5043 names from tarkov.dev cache: config\tarkovdev_items_cache.json
+  - Loaded 1 custom item names from db\CustomAmmo\ammo_127x55mm_ps12v.json
+  - Loaded 1 custom item names from db\CustomAmmo\ammo_12_70_handmade_slug.json
+  - Loaded 1 custom item names from db\CustomAmmo\ammo_366_tkm_ap-s.json
+  - Loaded 1 custom item names from db\CustomAmmo\ammo_545x39mm_bp-m_gs.json
+  - Loaded 1 custom item names from db\CustomAmmo\ammo_545x39mm_bt-r_gs.json
+  - Loaded 1 custom item names from db\CustomAmmo\ammo_545x39mm_pp-m_gs.json
+  - Loaded 1 custom item names from db\CustomAmmo\ammo_545x39mm_ps-r_gs.json
+  - Loaded 1 custom item names from db\CustomAmmo\ammo_762x39mm_ppplus_gzh.json
+  - Loaded 1 custom item names from db\CustomAmmo\ammo_762x39mm_ps-h_gzh.json
+  - Loaded 1 custom item names from db\CustomAmmo\ammo_762x54mm_r_lps-m.json
+  - Loaded 1 custom item names from db\CustomAmmo\ammo_9x39mm_sp-5m_gs.json
+  - Loaded 1 custom item names from db\CustomAmmo\ammo_9x39mm_sp-6u_gs.json
+  - Loaded 1 custom item names from db\CustomAmmo\pack_127x55mm_ps12v.json
+  - Loaded 1 custom item names from db\CustomAmmo\pack_12_70_handmade_slug.json
+  - Loaded 1 custom item names from db\CustomAmmo\pack_366_tkm_ap-s.json
+  - Loaded 1 custom item names from db\CustomAmmo\pack_545x39mm_bp-m_gs.json
+  - Loaded 1 custom item names from db\CustomAmmo\pack_545x39mm_bt-r_gs.json
+  - Loaded 1 custom item names from db\CustomAmmo\pack_545x39mm_pp-m_gs.json
+  - Loaded 1 custom item names from db\CustomAmmo\pack_545x39mm_ps-r_gs.json
+  - Loaded 1 custom item names from db\CustomAmmo\pack_762x39mm_ppplus_gzh.json
+  - Loaded 1 custom item names from db\CustomAmmo\pack_762x39mm_ps-h_gzh.json
+  - Loaded 1 custom item names from db\CustomAmmo\pack_762x54mm_r_lps-m.json
+  - Loaded 1 custom item names from db\CustomAmmo\pack_9x39mm_sp-5m_gs.json
+  - Loaded 1 custom item names from db\CustomAmmo\pack_9x39mm_sp-6u_gs.json
   - Loaded 1 custom item names from db\CustomConsumables\dolmet_f_field_tablets.json
   - Loaded 1 custom item names from db\CustomConsumables\medvedol_650mg_tablets.json
   - Loaded 1 custom item names from db\CustomConsumables\noctapyrin_focus_tablets.json
@@ -48,28 +72,28 @@ Warnings:
   - Loaded 1 custom item names from db\CustomConsumables\volkov_zarya_energy_drink.json
   - Loaded 1 custom item names from db\CustomConsumables\volkov_zaryad_vitamin_pouch.json
   - Loaded 1 custom item names from db\CustomItems\altyn_with_headphones.json
-  - Loaded 1 custom item names from db\CustomItems\buried_steel_crate.json
-  - Loaded 1 custom item names from db\CustomItems\coded_dead_drop_tag.json
-  - Loaded 1 custom item names from db\CustomItems\dead-drop_package.json
-  - Loaded 1 custom item names from db\CustomItems\experimental_stim_case.json
-  - Loaded 1 custom item names from db\CustomItems\forged_route_documents.json
-  - Loaded 1 custom item names from db\CustomItems\rogue_shipment_evidence.json
-  - Loaded 1 custom item names from db\CustomItems\sealed_cargo_package.json
+  - Loaded 1 custom item names from db\CustomItems\cqcm_demon_v2.json
+  - Loaded 1 custom item names from db\CustomItems\cqcm_skull_v2.json
   - Loaded 1 custom item names from db\CustomItems\thicc_holodilnick_thermal_bag.json
-  - Loaded 1 custom item names from db\CustomItems\thicc_medicine_case.json
-  - Loaded 1 custom item names from db\CustomItems\tony_calling_card.json
-  - Loaded 1 custom item names from db\CustomItems\trauma_bag.json
   - Loaded 1 custom item names from db\CustomItems\volkov_gssh_01.json
   - Loaded 1 custom item names from db\CustomItems\volkov_gssh_01m.json
   - Loaded 1 custom item names from db\CustomItems\volkov_gssh_02.json
   - Loaded 1 custom item names from db\CustomItems\volkov_gssh_02m.json
-  - Loaded 1 custom item names from db\CustomItems\volkovs_concordia_ledger.json
+  - Loaded 6 custom item names from db\CustomLocales\en.json
+  - Loaded 1 custom item names from db\CustomQuestItems\coded_dead_drop_tag.json
+  - Loaded 1 custom item names from db\CustomQuestItems\cold_chain_medical_case.json
+  - Loaded 1 custom item names from db\CustomQuestItems\forged_route_documents.json
+  - Loaded 1 custom item names from db\CustomQuestItems\rogue_shipment_evidence.json
+  - Loaded 1 custom item names from db\CustomQuestItems\sealed_cargo_package.json
+  - Loaded 1 custom item names from db\CustomQuestItems\thicc_medicine_case.json
   - Loaded 1 custom item names from db\CustomQuests\579dc571d53a0658a154fbec\Quests\a_friend_of_a_friend.json
   - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\army_leftovers.json
   - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\back_room_etiquette.json
   - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\broken_radios.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\bunker_tax.json
   - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\buried_steel.json
   - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\clean_run.json
+  - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\cold_chain.json
   - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\cold_freight.json
   - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\dead_drop_rules.json
   - Loaded 1 custom item names from db\CustomQuests\66a0f6b2c4d8e90123456789\Quests\depot_rats.json
@@ -95,8 +119,22 @@ Warnings:
   - Loaded 1 custom item names from db\CustomWeapons\FASKS.json
   - Loaded 1 custom item names from db\CustomWeapons\FASTM.json
   - Loaded 1 custom item names from db\CustomWeapons\SVDSARB.json
-  - Scanned 117 local db/data JSON files for custom item names
-  - Loaded 154 current settings rows from config\items.json
+  - Scanned 148 local db/data JSON files for custom item names
+  - Loaded 169 current settings rows from config\items.json
+  - Auto-detected 1 custom ammo pack mappings from StackSlots in db\CustomAmmo\pack_127x55mm_ps12v.json
+  - Auto-detected 1 custom ammo pack mappings from StackSlots in db\CustomAmmo\pack_12_70_handmade_slug.json
+  - Auto-detected 1 custom ammo pack mappings from StackSlots in db\CustomAmmo\pack_366_tkm_ap-s.json
+  - Auto-detected 1 custom ammo pack mappings from StackSlots in db\CustomAmmo\pack_545x39mm_bp-m_gs.json
+  - Auto-detected 1 custom ammo pack mappings from StackSlots in db\CustomAmmo\pack_545x39mm_bt-r_gs.json
+  - Auto-detected 1 custom ammo pack mappings from StackSlots in db\CustomAmmo\pack_545x39mm_pp-m_gs.json
+  - Auto-detected 1 custom ammo pack mappings from StackSlots in db\CustomAmmo\pack_545x39mm_ps-r_gs.json
+  - Auto-detected 1 custom ammo pack mappings from StackSlots in db\CustomAmmo\pack_762x39mm_ppplus_gzh.json
+  - Auto-detected 1 custom ammo pack mappings from StackSlots in db\CustomAmmo\pack_762x39mm_ps-h_gzh.json
+  - Auto-detected 1 custom ammo pack mappings from StackSlots in db\CustomAmmo\pack_762x54mm_r_lps-m.json
+  - Auto-detected 1 custom ammo pack mappings from StackSlots in db\CustomAmmo\pack_9x39mm_sp-5m_gs.json
+  - Auto-detected 1 custom ammo pack mappings from StackSlots in db\CustomAmmo\pack_9x39mm_sp-6u_gs.json
+  - Auto-detected 12 total custom ammo pack mappings from StackSlots Filter loose-ammo links
+  - --fill-empty-barters enabled: using --generate-barter-schemes missing
   - Ammo barter pack target for 9x18mm PM SP7 gzh (6a300025d2999bc7b9bba957): 657026341419851aef03e730 via pack offer 6be62191093d5f0617efb5d8
   - Skipped standalone ammo pack offer 6be62191093d5f0617efb5d8 / 657026341419851aef03e730; linked from loose ammo rows with PackOfferId instead
   - Offer 6a2f1c3bd2999bc7b9bba8e2 / 5a01ad4786f77450561fda02 is barter-only; using fallback Price 2904.0 RUB for the cash fallback field
@@ -195,8 +233,33 @@ Warnings:
   - Skipped standalone ammo pack offer 153b8c53ec84eafbd9a52a29 / 65702577cfc010a0f5006a2c; linked from loose ammo rows with PackOfferId instead
   - Skipped standalone ammo pack offer 2cd004e264ee00bc945ecdea / 648984b8d5b4df6140000a1a; linked from loose ammo rows with PackOfferId instead
   - Skipped standalone ammo pack offer f4c3efd544106707944d8915 / 560d75f54bdc2da74d8b4573; linked from loose ammo rows with PackOfferId instead
-  - Added/updated standalone ammo pack offer 1126f676c9a82a88e9f5ff60 for 12.7x55mm PS12B (bc866c61bea0d584d4ae4de1) using pack template 6570241bcfc010a0f50069f5
   - Ammo barter pack target for 12.7x55mm PS12B (bc866c61bea0d584d4ae4de1): 6570241bcfc010a0f50069f5 via pack offer 1126f676c9a82a88e9f5ff60
   - Ammo barter pack target for 12.7x55mm PS12B (10 pcs) (f2db56fac2706c82ab6634e8): 6570241bcfc010a0f50069f5 via pack offer 1126f676c9a82a88e9f5ff60
-  - --overwrite-except-barter complete from config\items.json: preserved existing BarterScheme on 154 rows, used generated BarterScheme on 0 rows
-  - Updated assort.json with generated ammo pack offers: db\CustomTrader\Tony\assort.json
+  - Skipped standalone ammo pack offer 1126f676c9a82a88e9f5ff60 / 6570241bcfc010a0f50069f5; linked from loose ammo rows with PackOfferId instead
+  - Ammo barter pack target for 5.45x39mm PS-R gs (6a5067f4219fd55b4d85121b): 6a493587fb1eff152bd649c5 via pack offer 6a51c1f8c7864d7e9f56906d
+  - Ammo barter pack target for 5.45x39mm PP-M gs (6a50093a2d7009a4ebbefb51): 6a493587fb1eff152bd649c2 via pack offer 6a511b7726364aee186d281b
+  - Ammo barter pack target for 5.45x39mm BT-R gs (6a503464517ca4def8f2fcf6): 6a493587fb1eff152bd649c0 via pack offer 6a516f432bbbe97764113788
+  - Ammo barter pack target for 5.45x39mm BP-M gs (6a50730e9ee4d87bd95eb846): 6a493587fb1eff152bd649be via pack offer 6a51f12adbd46c7389d5e367
+  - Ammo barter pack target for 7.62x39mm PS-H gzh (6a50ccfea10b3ad1707681eb): 6a493587fb1eff152bd649c9 via pack offer 6a5166a8b3d224f30a6d573e
+  - Ammo barter pack target for 7.62x39mm PP+ gzh (6a503693b231a34b7b9c8e6b): 6a493587fb1eff152bd649c7 via pack offer 6a512e7cc61d943bf7b15d9b
+  - Ammo barter pack target for 9x39mm SP-5M gs (6a5013e53c218f136f7d1c7a): 6a493587fb1eff152bd649cd via pack offer 6a51cbc7391c64b0a8343193
+  - Ammo barter pack target for 9x39mm SP-6U gs (6a503c03e6fdb62eb07736b1): 6a493587fb1eff152bd649cf via pack offer 6a51b8a0b0233d70b81c5e66
+  - Ammo barter pack target for 12/70 handmade slug (6a503587210fa9af417ff929): 6a4933e1fb1eff152bd649b6 via pack offer 6a51fe7430959d504aa3d209
+  - Ammo barter pack target for .366 TKM AP-S (6a50706c5a2b290adb63a56e): 6a4933e1fb1eff152bd649bb via pack offer 6a5137c43e339a0d1e3f5430
+  - Ammo barter pack target for 7.62x54mm R LPS-M (6a5034d376b3958422e0bdf9): 6a493587fb1eff152bd649cb via pack offer 6a51ea531a9c757973651591
+  - Ammo barter pack target for 12.7x55mm PS12V (6a504c558967214cccf90bd9): 6a4933e1fb1eff152bd649b9 via pack offer 6a51f3a3cf4fbbbab407dbd8
+  - Skipped standalone ammo pack offer 6a51c1f8c7864d7e9f56906d / 6a493587fb1eff152bd649c5; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer 6a511b7726364aee186d281b / 6a493587fb1eff152bd649c2; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer 6a516f432bbbe97764113788 / 6a493587fb1eff152bd649c0; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer 6a51f12adbd46c7389d5e367 / 6a493587fb1eff152bd649be; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer 6a5166a8b3d224f30a6d573e / 6a493587fb1eff152bd649c9; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer 6a512e7cc61d943bf7b15d9b / 6a493587fb1eff152bd649c7; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer 6a51cbc7391c64b0a8343193 / 6a493587fb1eff152bd649cd; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer 6a51b8a0b0233d70b81c5e66 / 6a493587fb1eff152bd649cf; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer 6a51fe7430959d504aa3d209 / 6a4933e1fb1eff152bd649b6; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer 6a5137c43e339a0d1e3f5430 / 6a4933e1fb1eff152bd649bb; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer 6a51ea531a9c757973651591 / 6a493587fb1eff152bd649cb; linked from loose ammo rows with PackOfferId instead
+  - Skipped standalone ammo pack offer 6a51f3a3cf4fbbbab407dbd8 / 6a4933e1fb1eff152bd649b9; linked from loose ammo rows with PackOfferId instead
+  - --overwrite-except-barter complete from config\items.json: preserved existing real BarterScheme on 140 rows, used generated BarterScheme on 29 rows
+  - --overwrite-except-barter replaced 12 empty existing BarterScheme values with generated BarterScheme values
+  - --overwrite-except-barter replaced 17 cash-only existing BarterScheme values with generated BarterScheme values
