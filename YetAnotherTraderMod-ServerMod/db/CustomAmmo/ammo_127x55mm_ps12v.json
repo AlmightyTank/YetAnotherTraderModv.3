@@ -88,6 +88,9 @@
         },
         "fleaPriceRoubles": 1800,
         "handbookPriceRoubles": 1800,
-        "addtoItemBlacklist": false
+        "addtoItemBlacklist": false,
+        "addCaliberToAllCloneLocations": true,
+        "addtoStaticAmmo": true,
+        "staticAmmoProbability": 275
     }
 }
