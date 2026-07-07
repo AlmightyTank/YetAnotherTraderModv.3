@@ -83,7 +83,6 @@
     <Content Remove="db\CustomItems\sealed_cargo_package.json" />
     <Content Remove="db\customitems\super_salad.json" />
     <Content Remove="db\CustomItems\thicc_holodilnick_thermal_bag.json" />
-    <Content Remove="db\CustomItems\thicc_medicine_case.json" />
     <Content Remove="db\customitems\tony_calling_card.json" />
     <Content Remove="db\CustomItems\tony_quest_items.json" />
     <Content Remove="db\customitems\trauma_bag.json" />
