@@ -93,6 +93,9 @@
             }
         },
         "fleaPriceRoubles": 72548,
-        "handbookPriceRoubles": 72548
+        "handbookPriceRoubles": 72548,
+        "addtoInventorySlots": [
+            "Earpiece"
+        ]
     }
 }
