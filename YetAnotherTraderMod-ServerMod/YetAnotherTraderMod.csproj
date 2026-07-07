@@ -31,8 +31,16 @@
 	    <None Include="config\settings.json">
 		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </None>
+
+	    <None Include="config\generated_trade_settings.jsonc">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </None>
+
+	    <None Include="config\generated_barter_whitelist.jsonc">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </None>
 		
-	    <None Include="db\**\*.*" Exclude="db\**\*.cs">
+	    <None Include="db\**\*.*" Exclude="db\**\*.cs;db\Generated\generated_barters.jsonc">
 		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </None>
     </ItemGroup>
@@ -259,10 +267,12 @@
 		<MakeDir Directories="$(TestSptModDeployPath)" />
 
 		<ItemGroup>
-			<TonyDeployFiles Include="$(TargetDir)**\*.*" Exclude="$(TargetDir)tools\**\*.*;&#xD;&#xA;                            $(TargetDir)**\*.pdb;&#xD;&#xA;                            $(TargetDir)config\**\*.*" />
+			<TonyDeployFiles Include="$(TargetDir)**\*.*" Exclude="$(TargetDir)tools\**\*.*;&#xD;&#xA;                            $(TargetDir)**\*.pdb;&#xD;&#xA;                            $(TargetDir)config\**\*.*;&#xD;&#xA;                            $(TargetDir)db\Generated\generated_barters.jsonc;&#xD;&#xA;                            $(TargetDir)db\Generated\generated_tony_*.json" />
 
 			<TonyDeployConfigFiles Include="$(TargetDir)config\items.json" />
 			<TonyDeployConfigFiles Include="$(TargetDir)config\settings.json" />
+			<TonyDeployConfigFiles Include="$(TargetDir)config\generated_trade_settings.jsonc" />
+			<TonyDeployConfigFiles Include="$(TargetDir)config\generated_barter_whitelist.jsonc" />
 		</ItemGroup>
 
 		<Copy SourceFiles="@(TonyDeployFiles)" DestinationFiles="@(TonyDeployFiles->'$(TestSptModDeployPath)%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="false" />
@@ -283,10 +293,12 @@
 		<MakeDir Directories="$(PackageModRoot)" />
 
 		<ItemGroup>
-			<TonyPackageFiles Include="$(TargetDir)**\*.*" Exclude="$(TargetDir)tools\**\*.*;&#xD;&#xA;                             $(TargetDir)**\*.pdb;&#xD;&#xA;                             $(TargetDir)config\**\*.*" />
+			<TonyPackageFiles Include="$(TargetDir)**\*.*" Exclude="$(TargetDir)tools\**\*.*;&#xD;&#xA;                             $(TargetDir)**\*.pdb;&#xD;&#xA;                             $(TargetDir)config\**\*.*;&#xD;&#xA;                             $(TargetDir)db\Generated\generated_barters.jsonc;&#xD;&#xA;                             $(TargetDir)db\Generated\generated_tony_*.json" />
 
 			<TonyPackageConfigFiles Include="$(TargetDir)config\items.json" />
 			<TonyPackageConfigFiles Include="$(TargetDir)config\settings.json" />
+			<TonyPackageConfigFiles Include="$(TargetDir)config\generated_trade_settings.jsonc" />
+			<TonyPackageConfigFiles Include="$(TargetDir)config\generated_barter_whitelist.jsonc" />
 		</ItemGroup>
 
 		<Copy SourceFiles="@(TonyPackageFiles)" DestinationFiles="@(TonyPackageFiles->'$(PackageModRoot)%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="false" />

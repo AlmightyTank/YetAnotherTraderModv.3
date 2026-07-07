@@ -40,6 +40,35 @@ public class AddCustomTraderHelper(
 
     public void AddTraderToDb(TraderBase traderDetailsToAdd, TraderAssort assort)
     {
+        var traders = databaseService.GetTables().Traders;
+
+        if (traders.TryGetValue(traderDetailsToAdd.Id, out var existingTrader))
+        {
+            // Trader.Base, Trader.QuestAssort, and Trader.Dialogue are init-only in SPT 4.
+            // If Tony was already inserted as an early placeholder, replace the whole Trader
+            // object through the dictionary while preserving any QuestAssort/Dialogue data
+            // that was already imported into the placeholder.
+            var questAssort = existingTrader.QuestAssort ?? new()
+            {
+                { "Started", new() },
+                { "Success", new() },
+                { "Fail", new() }
+            };
+
+            var dialogue = existingTrader.Dialogue ?? [];
+
+            traders[traderDetailsToAdd.Id] = new Trader
+            {
+                Assort = assort,
+                Base = traderDetailsToAdd,
+                QuestAssort = questAssort,
+                Dialogue = dialogue
+            };
+
+            logger.Info($"Trader already exists in DB, replaced Trader object and preserved QuestAssort: {traderDetailsToAdd.Id}");
+            return;
+        }
+
         var traderDataToAdd = new Trader
         {
             Assort = assort,
@@ -53,10 +82,7 @@ public class AddCustomTraderHelper(
             Dialogue = []
         };
 
-        if (!databaseService.GetTables().Traders.TryAdd(traderDetailsToAdd.Id, traderDataToAdd))
-        {
-            logger.Warning($"Trader already exists in DB: {traderDetailsToAdd.Id}");
-        }
+        traders.TryAdd(traderDetailsToAdd.Id, traderDataToAdd);
     }
 
     public void AddTraderToLocales(TraderBase baseJson, string firstName, string description)

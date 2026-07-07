@@ -1,0 +1,366 @@
+{
+    "SchemaVersion": 1,
+    "Description": "Auto-generated Tony barters can only use enabled tpl IDs in this file when GeneratedBarterUseWhitelist is true. Keep this to valuables/barter loot only: no weapons, armor, ammo, rigs, plates, or attachments.",
+    "Items": [
+        {
+            "Enabled": true,
+            "TplId": "59faff1d86f7746c51718c9c",
+            "ItemName": "Physical Bitcoin",
+            "Notes": "High-value valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5e2aedd986f7746d404f3aa4",
+            "ItemName": "GreenBat lithium battery",
+            "Notes": "High-value valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "59faf7ca86f7740dbe19f6c2",
+            "ItemName": "Roler Submariner gold wrist watch",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5bc9bc53d4351e00367fbcee",
+            "ItemName": "Golden rooster figurine",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5734758f24597738025ee253",
+            "ItemName": "Golden neck chain",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "573474f924597738002c6174",
+            "ItemName": "Chainlet",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "573478bc24597738002c6175",
+            "ItemName": "Horse figurine",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "59e3658a86f7741776641ac4",
+            "ItemName": "Cat figurine",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "59e3639286f7741777737013",
+            "ItemName": "Bronze lion figurine",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5c1267ee86f77416ec610f72",
+            "ItemName": "Chain with Prokill medallion",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5d235a5986f77443f6329bc6",
+            "ItemName": "Gold skull ring",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5e54f62086f774219b0f1937",
+            "ItemName": "Raven figurine",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "590de7e986f7741b096e5f32",
+            "ItemName": "Antique vase",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "590de71386f774347051a052",
+            "ItemName": "Antique teapot",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5bc9c1e2d4351e00367fbcf0",
+            "ItemName": "Antique axe",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5bc9bdb8d4351e003562b8a1",
+            "ItemName": "Silver Badge",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5f745ee30acaeb0d490d8c5b",
+            "ItemName": "Veritas guitar pick",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5bc9c049d4351e44f824d360",
+            "ItemName": "Battered antique book",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "62a09e73af34e73a266d932a",
+            "ItemName": "BakeEzy cook book",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "62a09cfe4f842e1bd12da3e4",
+            "ItemName": "Golden egg",
+            "Notes": "Valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "590c645c86f77412b01304d9",
+            "ItemName": "Diary",
+            "Notes": "Info valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "590c651286f7741e566b6461",
+            "ItemName": "Slim diary",
+            "Notes": "Info valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5c12613b86f7743bbe2c3f76",
+            "ItemName": "Intelligence folder",
+            "Notes": "Info valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "57347ca924597744596b4e71",
+            "ItemName": "Graphics card",
+            "Notes": "High-value tech"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5c05308086f7746b2101e90b",
+            "ItemName": "Virtex programmable processor",
+            "Notes": "High-value tech"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5c05300686f7746dce784e5d",
+            "ItemName": "VPX Flash Storage Module",
+            "Notes": "High-value tech"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5c052f6886f7746b1e3db148",
+            "ItemName": "Military COFDM Wireless Signal Transmitter",
+            "Notes": "High-value tech"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5d0378d486f77420421a5ff4",
+            "ItemName": "Military power filter",
+            "Notes": "Tech valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5d0375ff86f774186372f685",
+            "ItemName": "Military cable",
+            "Notes": "Tech valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "61bf7c024770ee6f9c6b8b53",
+            "ItemName": "Secure magnetic tape cassette",
+            "Notes": "Tech valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "590c37d286f77443be3d7827",
+            "ItemName": "SAS drive",
+            "Notes": "Tech valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "590c392f86f77444754deb29",
+            "ItemName": "SSD drive",
+            "Notes": "Tech valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "590c621186f774138d11ea29",
+            "ItemName": "Secure Flash drive",
+            "Notes": "Tech valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "62a0a16d0b9d3c46de5b6e97",
+            "ItemName": "Military flash drive",
+            "Notes": "Tech valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5c052e6986f7746b207bc3c9",
+            "ItemName": "Portable defibrillator",
+            "Notes": "Medical valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5d1b327086f7742525194449",
+            "ItemName": "Pressure gauge",
+            "Notes": "Tool valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "60391afc25aff57af81f7085",
+            "ItemName": "Ratchet wrench",
+            "Notes": "Tool valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "619cbfccbedcde2f5b3f7bdd",
+            "ItemName": "Pipe grip wrench",
+            "Notes": "Tool valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5d1b32c186f774252167a530",
+            "ItemName": "Analog thermometer",
+            "Notes": "Tool valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5d1b376e86f774252519444e",
+            "ItemName": "Bottle of Fierce Hatchling moonshine",
+            "Notes": "High-value alcohol"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5d403f9186f7743cac3f229b",
+            "ItemName": "Bottle of Dan Jackiel whiskey",
+            "Notes": "Valuable alcohol"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5d40407c86f774318526545a",
+            "ItemName": "Bottle of Tarkovskaya vodka",
+            "Notes": "Valuable alcohol"
+        },
+        {
+            "Enabled": true,
+            "TplId": "62a09f32621468534a797acb",
+            "ItemName": "Bottle of Pevko Light beer",
+            "Notes": "Valuable alcohol"
+        },
+        {
+            "Enabled": true,
+            "TplId": "57347da92459774491567cf5",
+            "ItemName": "Can of beef stew (Large)",
+            "Notes": "Valuable food"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5734773724597737fd047c14",
+            "ItemName": "Can of condensed milk",
+            "Notes": "Valuable food"
+        },
+        {
+            "Enabled": true,
+            "TplId": "57347d9c245977448b40fa85",
+            "ItemName": "Can of herring",
+            "Notes": "Valuable food"
+        },
+        {
+            "Enabled": true,
+            "TplId": "57347d8724597744596b4e76",
+            "ItemName": "Can of squash spread",
+            "Notes": "Valuable food"
+        },
+        {
+            "Enabled": true,
+            "TplId": "59e3577886f774176a362503",
+            "ItemName": "Pack of sugar",
+            "Notes": "Valuable food"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5751435d24597720a27126d1",
+            "ItemName": "Can of Max Energy energy drink",
+            "Notes": "Valuable drink"
+        },
+        {
+            "Enabled": true,
+            "TplId": "60b0f93284c20f0feb453da7",
+            "ItemName": "Can of RatCola soda",
+            "Notes": "Valuable drink"
+        },
+        {
+            "Enabled": true,
+            "TplId": "57514643245977207f2c2d09",
+            "ItemName": "Can of TarCola soda",
+            "Notes": "Valuable drink"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5751496424597720a27126da",
+            "ItemName": "Can of Hot Rod energy drink",
+            "Notes": "Valuable drink"
+        },
+        {
+            "Enabled": true,
+            "TplId": "62a091170b9d3c46de5b6cf2",
+            "ItemName": "Axel parrot figure",
+            "Notes": "Valuable drink"
+        },
+        {
+            "Enabled": true,
+            "TplId": "655c652d60d0ac437100fed7",
+            "ItemName": "BEAR operative figure",
+            "Notes": "Valuable drink"
+        },
+        {
+            "Enabled": true,
+            "TplId": "590c2d8786f774245b1f03f3",
+            "ItemName": "Screwdriver",
+            "Notes": "Tool valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "62a0a098de7ac8199358053b",
+            "ItemName": "Awl",
+            "Notes": "Tool valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "5e2af02c86f7746d420957d4",
+            "ItemName": "Pack of chlorine",
+            "Notes": "Tool valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "59e35abd86f7741778269d82",
+            "ItemName": "Pack of sodium bicarbonate",
+            "Notes": "Tool valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "59faf98186f774067b6be103",
+            "ItemName": "Alkaline cleaner for heat exchangers",
+            "Notes": "Tool valuable"
+        },
+        {
+            "Enabled": true,
+            "TplId": "60b0f561c4449e4cb624c1d7",
+            "ItemName": "LVNDMARK's rat poison",
+            "Notes": "Tool valuable"
+        }
+    ]
+}

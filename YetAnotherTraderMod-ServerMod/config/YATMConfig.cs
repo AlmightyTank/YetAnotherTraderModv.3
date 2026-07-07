@@ -18,10 +18,12 @@ public class YATMConfig
     private readonly string _configDir;
     private readonly string _settingsPath;
     private readonly string _pricesPath;
+    private readonly string _generatedTradeSettingsPath;
 
     private readonly DatabaseServer _databaseServer;
 
     public SettingsConfig Settings { get; private set; } = new();
+    public GeneratedTradeConfig GeneratedTrade { get; private set; } = new();
     public List<PriceConfigItem> Prices { get; private set; } = new();
 
     public YATMConfig(string modPath, DatabaseServer databaseServer)
@@ -31,6 +33,7 @@ public class YATMConfig
         _configDir = Path.Combine(_modPath, "config");
         _settingsPath = Path.Combine(_configDir, "settings.json");
         _pricesPath = Path.Combine(_configDir, "items.json");
+        _generatedTradeSettingsPath = Path.Combine(_configDir, "generated_trade_settings.jsonc");
     }
 
     // Helper to find Template ID robustly.
@@ -101,13 +104,30 @@ public class YATMConfig
 
     public void LoadOrGenerate(TraderBase baseJson, TraderAssort assortJson)
     {
+        LoadOrGenerateSettingsOnly(baseJson);
+        LoadOrGeneratePricesOnly(assortJson);
+    }
+
+    public void LoadOrGenerateSettingsOnly(TraderBase baseJson)
+    {
         if (!Directory.Exists(_configDir))
         {
             Directory.CreateDirectory(_configDir);
         }
 
         LoadOrGenerateSettings(baseJson);
+        LoadOrGenerateGeneratedTradeSettings();
+        ApplyGeneratedTradeSettingsToRuntimeSettings();
         YATMRuntimeConfig.Set(Settings);
+    }
+
+    public void LoadOrGeneratePricesOnly(TraderAssort assortJson)
+    {
+        if (!Directory.Exists(_configDir))
+        {
+            Directory.CreateDirectory(_configDir);
+        }
+
         LoadOrGeneratePrices(assortJson);
     }
 
@@ -122,9 +142,32 @@ public class YATMConfig
                     !json.Contains("RerollAssortOnRestock", StringComparison.OrdinalIgnoreCase);
                 var settingsFileMissingPreventBarterOffersOutOfStock =
                     !json.Contains("PreventBarterOffersOutOfStock", StringComparison.OrdinalIgnoreCase);
+                var settingsFileHasOldGeneratedTradeSettings =
+                    json.Contains("AutoPriceGeneratedOffers", StringComparison.OrdinalIgnoreCase)
+                    || json.Contains("GeneratedOffer", StringComparison.OrdinalIgnoreCase)
+                    || json.Contains("GeneratedBarter", StringComparison.OrdinalIgnoreCase);
+
+                if (settingsFileHasOldGeneratedTradeSettings && !File.Exists(_generatedTradeSettingsPath))
+                {
+                    try
+                    {
+                        var migratedGeneratedTrade = JsonSerializer.Deserialize<GeneratedTradeConfig>(json, CachedReadOptions);
+                        if (migratedGeneratedTrade != null)
+                        {
+                            GeneratedTrade = migratedGeneratedTrade;
+                            NormalizeGeneratedTradeSettings(true);
+                        }
+                    }
+                    catch (Exception migrateEx)
+                    {
+                        YATMLogger.Log($"[Config] Failed to migrate generated trade settings out of settings.json: {migrateEx.Message}");
+                    }
+                }
 
                 Settings = JsonSerializer.Deserialize<SettingsConfig>(json, CachedReadOptions) ?? new SettingsConfig();
-                NormalizeSettings(settingsFileMissingRerollAssortOnRestock || settingsFileMissingPreventBarterOffersOutOfStock);
+                NormalizeSettings(settingsFileMissingRerollAssortOnRestock
+                    || settingsFileMissingPreventBarterOffersOutOfStock
+                    || settingsFileHasOldGeneratedTradeSettings);
             }
             catch (Exception ex)
             {
@@ -163,6 +206,8 @@ public class YATMConfig
                 RandomizeCashBarterOffers = true,
                 CashOfferPercent = 85,
 
+                ManualBarters = false,
+
                 DebugLogging = false,
                 RealDebugLogging = false
             };
@@ -172,6 +217,186 @@ public class YATMConfig
         }
     }
 
+
+    private void LoadOrGenerateGeneratedTradeSettings()
+    {
+        if (!Directory.Exists(_configDir))
+        {
+            Directory.CreateDirectory(_configDir);
+        }
+
+        if (File.Exists(_generatedTradeSettingsPath))
+        {
+            try
+            {
+                var json = File.ReadAllText(_generatedTradeSettingsPath);
+                GeneratedTrade = JsonSerializer.Deserialize<GeneratedTradeConfig>(json, CachedReadOptions) ?? new GeneratedTradeConfig();
+                NormalizeGeneratedTradeSettings();
+                return;
+            }
+            catch (Exception ex)
+            {
+                YATMLogger.Log($"[Config] Failed to load generated_trade_settings.jsonc: {ex.Message}. Regenerating defaults.");
+            }
+        }
+
+        GeneratedTrade = TryMigrateGeneratedTradeSettingsFromOldSettingsFile() ?? new GeneratedTradeConfig();
+        NormalizeGeneratedTradeSettings(true);
+    }
+
+    private GeneratedTradeConfig? TryMigrateGeneratedTradeSettingsFromOldSettingsFile()
+    {
+        if (!File.Exists(_settingsPath))
+        {
+            return null;
+        }
+
+        try
+        {
+            var json = File.ReadAllText(_settingsPath);
+            if (!json.Contains("GeneratedOffer", StringComparison.OrdinalIgnoreCase)
+                && !json.Contains("GeneratedBarter", StringComparison.OrdinalIgnoreCase)
+                && !json.Contains("AutoPriceGeneratedOffers", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            return JsonSerializer.Deserialize<GeneratedTradeConfig>(json, CachedReadOptions);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private void NormalizeGeneratedTradeSettings(bool forceSave = false)
+    {
+        var changed = forceSave;
+
+        GeneratedTrade.GeneratedOfferMaxStackObjectsCount = Math.Max(0, GeneratedTrade.GeneratedOfferMaxStackObjectsCount);
+        GeneratedTrade.GeneratedOfferMaxBuyRestrictionMax = Math.Max(0, GeneratedTrade.GeneratedOfferMaxBuyRestrictionMax);
+        GeneratedTrade.GeneratedOfferPriceOffsetPercent = Math.Clamp(GeneratedTrade.GeneratedOfferPriceOffsetPercent, 0, 100);
+        GeneratedTrade.GeneratedPriceExternalFleaGameMode = NormalizeExternalFleaGameMode(GeneratedTrade.GeneratedPriceExternalFleaGameMode);
+        GeneratedTrade.GeneratedPriceExternalFleaPriceFilePaths ??= [];
+        GeneratedTrade.GeneratedBarterPriceOffsetPercent = Math.Clamp(GeneratedTrade.GeneratedBarterPriceOffsetPercent, 0, 100);
+        GeneratedTrade.GeneratedBarterMaxDifferentItems = Math.Clamp(GeneratedTrade.GeneratedBarterMaxDifferentItems, 1, 6);
+        GeneratedTrade.GeneratedBarterAmmoPackMaxDifferentItems = Math.Clamp(GeneratedTrade.GeneratedBarterAmmoPackMaxDifferentItems, 1, 6);
+        GeneratedTrade.GeneratedBarterWeaponMaxDifferentItems = Math.Clamp(GeneratedTrade.GeneratedBarterWeaponMaxDifferentItems, 1, 6);
+        GeneratedTrade.GeneratedBarterMedicalMaxDifferentItems = Math.Clamp(GeneratedTrade.GeneratedBarterMedicalMaxDifferentItems, 1, 6);
+        GeneratedTrade.GeneratedBarterHeadwearMaxDifferentItems = Math.Clamp(GeneratedTrade.GeneratedBarterHeadwearMaxDifferentItems, 1, 6);
+        GeneratedTrade.GeneratedBarterArmorMaxDifferentItems = Math.Clamp(GeneratedTrade.GeneratedBarterArmorMaxDifferentItems, 1, 6);
+        GeneratedTrade.GeneratedBarterCaseValuableMaxDifferentItems = Math.Clamp(GeneratedTrade.GeneratedBarterCaseValuableMaxDifferentItems, 1, 6);
+        GeneratedTrade.GeneratedBarterDefaultMaxDifferentItems = Math.Clamp(GeneratedTrade.GeneratedBarterDefaultMaxDifferentItems, 1, 6);
+        GeneratedTrade.GeneratedBarterMaxItemCount = Math.Clamp(GeneratedTrade.GeneratedBarterMaxItemCount, 1, 99);
+        GeneratedTrade.GeneratedBarterMinItemPrice = Math.Max(1, GeneratedTrade.GeneratedBarterMinItemPrice);
+
+        if (string.IsNullOrWhiteSpace(GeneratedTrade.GeneratedBarterWhitelistPath))
+        {
+            GeneratedTrade.GeneratedBarterWhitelistPath = "config/generated_barter_whitelist.jsonc";
+            changed = true;
+        }
+
+        if (string.IsNullOrWhiteSpace(GeneratedTrade.GeneratedBarterOutputPath)
+            || string.Equals(GeneratedTrade.GeneratedBarterOutputPath, "config/generated_barters.jsonc", StringComparison.OrdinalIgnoreCase))
+        {
+            GeneratedTrade.GeneratedBarterOutputPath = "db/Generated/generated_barters.jsonc";
+            changed = true;
+        }
+
+        if (!string.Equals(GeneratedTrade.GeneratedOfferPriceMode, "Exact", StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(GeneratedTrade.GeneratedOfferPriceMode, "Under", StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(GeneratedTrade.GeneratedOfferPriceMode, "Over", StringComparison.OrdinalIgnoreCase))
+        {
+            GeneratedTrade.GeneratedOfferPriceMode = "Exact";
+            changed = true;
+        }
+
+        if (!string.Equals(GeneratedTrade.GeneratedBarterPriceMode, "Exact", StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(GeneratedTrade.GeneratedBarterPriceMode, "Under", StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(GeneratedTrade.GeneratedBarterPriceMode, "Over", StringComparison.OrdinalIgnoreCase))
+        {
+            GeneratedTrade.GeneratedBarterPriceMode = "Exact";
+            changed = true;
+        }
+
+        if (!string.Equals(GeneratedTrade.GeneratedBarterSelectionMode, "Stable", StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(GeneratedTrade.GeneratedBarterSelectionMode, "Random", StringComparison.OrdinalIgnoreCase))
+        {
+            GeneratedTrade.GeneratedBarterSelectionMode = "Stable";
+            changed = true;
+        }
+
+        GeneratedTrade.GeneratedBarterComponentPriceSource = NormalizeGeneratedBarterComponentPriceSource(GeneratedTrade.GeneratedBarterComponentPriceSource);
+
+        if (GeneratedTrade.GeneratedPriceExternalFleaPriceFilePaths == null)
+        {
+            GeneratedTrade.GeneratedPriceExternalFleaPriceFilePaths = [];
+            changed = true;
+        }
+
+        if (changed)
+        {
+            SaveJson(_generatedTradeSettingsPath, GeneratedTrade);
+        }
+    }
+
+    private void ApplyGeneratedTradeSettingsToRuntimeSettings()
+    {
+        Settings.AutoPriceGeneratedOffers = GeneratedTrade.AutoPriceGeneratedOffers;
+        Settings.GeneratedOfferMaxStackObjectsCount = GeneratedTrade.GeneratedOfferMaxStackObjectsCount;
+        Settings.GeneratedOfferMaxBuyRestrictionMax = GeneratedTrade.GeneratedOfferMaxBuyRestrictionMax;
+        Settings.GeneratedOfferPriceMode = GeneratedTrade.GeneratedOfferPriceMode;
+        Settings.GeneratedOfferPriceOffsetPercent = GeneratedTrade.GeneratedOfferPriceOffsetPercent;
+        Settings.GeneratedPriceUseExternalFleaPriceFiles = GeneratedTrade.GeneratedPriceUseExternalFleaPriceFiles;
+        Settings.GeneratedPriceExternalFleaGameMode = GeneratedTrade.GeneratedPriceExternalFleaGameMode;
+        Settings.GeneratedPriceScanSiblingModsForFleaPriceFiles = GeneratedTrade.GeneratedPriceScanSiblingModsForFleaPriceFiles;
+        Settings.GeneratedPriceExternalFleaPriceFilePaths = GeneratedTrade.GeneratedPriceExternalFleaPriceFilePaths;
+        Settings.GeneratedPricePreferExternalFleaPrices = GeneratedTrade.GeneratedPricePreferExternalFleaPrices;
+        Settings.GeneratedPriceLogExternalFleaPriceSource = GeneratedTrade.GeneratedPriceLogExternalFleaPriceSource;
+        Settings.GeneratedBarterPriceMode = GeneratedTrade.GeneratedBarterPriceMode;
+        Settings.GeneratedBarterSelectionMode = GeneratedTrade.GeneratedBarterSelectionMode;
+        Settings.GeneratedBarterPriceOffsetPercent = GeneratedTrade.GeneratedBarterPriceOffsetPercent;
+        Settings.GeneratedBarterMaxDifferentItems = GeneratedTrade.GeneratedBarterMaxDifferentItems;
+        Settings.GeneratedBarterAmmoPackMaxDifferentItems = GeneratedTrade.GeneratedBarterAmmoPackMaxDifferentItems;
+        Settings.GeneratedBarterWeaponMaxDifferentItems = GeneratedTrade.GeneratedBarterWeaponMaxDifferentItems;
+        Settings.GeneratedBarterMedicalMaxDifferentItems = GeneratedTrade.GeneratedBarterMedicalMaxDifferentItems;
+        Settings.GeneratedBarterHeadwearMaxDifferentItems = GeneratedTrade.GeneratedBarterHeadwearMaxDifferentItems;
+        Settings.GeneratedBarterArmorMaxDifferentItems = GeneratedTrade.GeneratedBarterArmorMaxDifferentItems;
+        Settings.GeneratedBarterCaseValuableMaxDifferentItems = GeneratedTrade.GeneratedBarterCaseValuableMaxDifferentItems;
+        Settings.GeneratedBarterDefaultMaxDifferentItems = GeneratedTrade.GeneratedBarterDefaultMaxDifferentItems;
+        Settings.GeneratedBarterBalanceItemUsage = GeneratedTrade.GeneratedBarterBalanceItemUsage;
+        Settings.GeneratedBarterComponentPriceSource = GeneratedTrade.GeneratedBarterComponentPriceSource;
+        Settings.GeneratedBarterMaxItemCount = GeneratedTrade.GeneratedBarterMaxItemCount;
+        Settings.GeneratedBarterMinItemPrice = GeneratedTrade.GeneratedBarterMinItemPrice;
+        Settings.GeneratedBarterUseWhitelist = GeneratedTrade.GeneratedBarterUseWhitelist;
+        Settings.GeneratedBarterWhitelistPath = GeneratedTrade.GeneratedBarterWhitelistPath;
+        Settings.GeneratedBarterOutputPath = GeneratedTrade.GeneratedBarterOutputPath;
+    }
+
+    private static string NormalizeGeneratedBarterComponentPriceSource(string? source)
+    {
+        if (string.IsNullOrWhiteSpace(source))
+        {
+            return "FleaTraderAverage";
+        }
+
+        var normalized = source.Trim().Replace(" ", string.Empty).Replace("_", string.Empty).Replace("-", string.Empty);
+        return normalized.ToLowerInvariant() switch
+        {
+            "flea" or "fleaonly" => "Flea",
+            "trader" or "traderonly" or "selltotrader" or "traderprice" => "Trader",
+            "average" or "avg" or "middle" or "middleground" or "fleatraderaverage" or "fleaandtrader" => "FleaTraderAverage",
+            _ => "FleaTraderAverage"
+        };
+    }
+
+    private static string NormalizeExternalFleaGameMode(string? gameMode)
+    {
+        return string.Equals(gameMode, "pve", StringComparison.OrdinalIgnoreCase)
+            ? "pve"
+            : "regular";
+    }
+
     private void NormalizeSettings(bool forceSave = false)
     {
         var changed = forceSave;
@@ -179,7 +404,6 @@ public class YATMConfig
         Settings.CashOfferPercent = Math.Clamp(Settings.CashOfferPercent, 0, 100);
         Settings.OutOfStockChance = Math.Clamp(Settings.OutOfStockChance, 0, 100);
         Settings.RepairQuality = Math.Clamp(Settings.RepairQuality, 0.0, 1.0);
-
         if (Settings.CashOffersOnly && Settings.RandomizeCashBarterOffers)
         {
             YATMLogger.Log("[Config] CashOffersOnly and RandomizeCashBarterOffers cannot both be true. CashOffersOnly takes priority, so RandomizeCashBarterOffers was disabled.");
@@ -305,6 +529,210 @@ public class YATMConfig
             YATMLogger.Log($"Generated items.json with {generatedCount} entries.");
         }
     }
+    public void SavePrices()
+    {
+        if (!Directory.Exists(_configDir))
+        {
+            Directory.CreateDirectory(_configDir);
+        }
+
+        SaveJson(_pricesPath, Prices);
+    }
+
+    public void StripManualBarterSchemesForAutoGeneratedMode()
+    {
+        if (Settings.ManualBarters)
+        {
+            return;
+        }
+
+        var stripped = 0;
+
+        foreach (var priceConfig in Prices)
+        {
+            if (priceConfig == null || priceConfig.AutoGeneratedBarter)
+            {
+                continue;
+            }
+
+            // ManualBarters=false means items.json and addon price rows are metadata/rules only.
+            // Keep identity, stock flags, force-barter flags, prices, and paired ammo pack metadata,
+            // but do not let any hard-written BarterScheme become a live payment recipe.
+            if (priceConfig.BarterScheme != null && priceConfig.BarterScheme.Count > 0)
+            {
+                priceConfig.BarterScheme = null;
+                stripped++;
+            }
+
+            priceConfig.AutoGeneratedBarter = false;
+            priceConfig.CashOnly = true;
+
+            if (string.IsNullOrWhiteSpace(priceConfig.BarterSchemeValueBasis))
+            {
+                priceConfig.BarterSchemeValueBasis = !string.IsNullOrWhiteSpace(priceConfig.AmmoBarterPackTplId)
+                    ? "Pack"
+                    : "Unit";
+            }
+        }
+
+        if (stripped > 0)
+        {
+            YATMLogger.LogDebug($"[GeneratedBarters] ManualBarters=false: ignored {stripped} hard-written BarterScheme row(s) from items.json/addon price rules. Generated barter recipes will be used instead.");
+        }
+    }
+
+    public void SaveGeneratedBarters()
+    {
+        if (Settings.ManualBarters)
+        {
+            // Keep manual mode clean: generated barter cache is not written.
+            return;
+        }
+
+        if (!Directory.Exists(_configDir))
+        {
+            Directory.CreateDirectory(_configDir);
+        }
+
+        var generatedBarterRows = Prices
+            .Where(x => x.AutoGeneratedBarter && x.BarterScheme != null && x.BarterScheme.Count > 0)
+            .OrderBy(x => x.ItemName)
+            .ThenBy(x => x.OfferId)
+            .ToList();
+
+        var generatedBarterPath = ResolveGeneratedBarterOutputPath();
+        var generatedBarterDir = Path.GetDirectoryName(generatedBarterPath);
+        if (!string.IsNullOrWhiteSpace(generatedBarterDir) && !Directory.Exists(generatedBarterDir))
+        {
+            Directory.CreateDirectory(generatedBarterDir);
+        }
+
+        if (generatedBarterRows.Count == 0)
+        {
+            if (File.Exists(generatedBarterPath))
+            {
+                File.Delete(generatedBarterPath);
+            }
+
+            YATMLogger.LogDebug($"[GeneratedBarters] No generated barter rows to save. {Settings.GeneratedBarterOutputPath} was left empty/removed.");
+            return;
+        }
+
+        SaveJson(generatedBarterPath, generatedBarterRows);
+        YATMLogger.Log($"[GeneratedBarters] Saved {generatedBarterRows.Count} auto-generated barter row(s) to {Settings.GeneratedBarterOutputPath}. items.json was not overwritten.");
+    }
+
+    public void LoadGeneratedBartersAndMerge()
+    {
+        if (Settings.ManualBarters)
+        {
+            // ManualBarters=true means use only hard-written BarterScheme rows from
+            // items.json/addon price files. Do not merge generated barter cache rows.
+            YATMLogger.LogDebug("[GeneratedBarters] ManualBarters=true: generated barter cache merge skipped.");
+            return;
+        }
+
+        var generatedBarterPath = ResolveGeneratedBarterOutputPath();
+        if (!File.Exists(generatedBarterPath))
+        {
+            return;
+        }
+
+        try
+        {
+            var json = File.ReadAllText(generatedBarterPath);
+            var generatedRows = JsonSerializer.Deserialize<List<PriceConfigItem>>(json, CachedReadOptions) ?? [];
+            var merged = 0;
+            var added = 0;
+
+            var existingIndexByOfferId = Prices
+                .Where(x => !string.IsNullOrWhiteSpace(x.OfferId))
+                .Select((x, index) => new { x.OfferId, index })
+                .ToDictionary(x => x.OfferId!, x => x.index, StringComparer.OrdinalIgnoreCase);
+
+            foreach (var generatedRow in generatedRows)
+            {
+                if (generatedRow == null || string.IsNullOrWhiteSpace(generatedRow.OfferId))
+                {
+                    continue;
+                }
+
+                generatedRow.AutoGeneratedBarter = true;
+
+                if (existingIndexByOfferId.TryGetValue(generatedRow.OfferId, out var existingIndex))
+                {
+                    MergeGeneratedBarterRow(Prices[existingIndex], generatedRow);
+                    merged++;
+                    continue;
+                }
+
+                Prices.Add(generatedRow);
+                existingIndexByOfferId[generatedRow.OfferId] = Prices.Count - 1;
+                added++;
+            }
+
+            if (merged > 0 || added > 0)
+            {
+                YATMLogger.Log($"[GeneratedBarters] Loaded {generatedRows.Count} generated barter row(s) from {Settings.GeneratedBarterOutputPath}: {merged} merged, {added} added.");
+            }
+        }
+        catch (Exception ex)
+        {
+            YATMLogger.Log($"[GeneratedBarters] Failed to load {Settings.GeneratedBarterOutputPath}: {ex.Message}");
+        }
+    }
+
+    private static void MergeGeneratedBarterRow(PriceConfigItem target, PriceConfigItem generatedRow)
+    {
+        if (generatedRow.Price > 0)
+        {
+            target.Price = generatedRow.Price;
+        }
+
+        if (!string.IsNullOrWhiteSpace(generatedRow.Currency))
+        {
+            target.Currency = generatedRow.Currency;
+        }
+
+        if (generatedRow.BarterScheme != null && generatedRow.BarterScheme.Count > 0)
+        {
+            target.BarterScheme = generatedRow.BarterScheme;
+            target.CashOnly = generatedRow.CashOnly;
+            target.BarterSchemeValueBasis = generatedRow.BarterSchemeValueBasis;
+            target.AutoGeneratedBarter = true;
+        }
+
+        // Preserve old items.json as the source of truth for paired ammo metadata when present.
+        if (string.IsNullOrWhiteSpace(target.PackOfferId))
+        {
+            target.PackOfferId = generatedRow.PackOfferId;
+        }
+
+        if (string.IsNullOrWhiteSpace(target.AmmoBarterPackTplId))
+        {
+            target.AmmoBarterPackTplId = generatedRow.AmmoBarterPackTplId;
+        }
+
+        if (string.IsNullOrWhiteSpace(target.AmmoBarterPackItemName))
+        {
+            target.AmmoBarterPackItemName = generatedRow.AmmoBarterPackItemName;
+        }
+
+        if (target.AmmoBarterPackSize <= 0)
+        {
+            target.AmmoBarterPackSize = generatedRow.AmmoBarterPackSize;
+        }
+    }
+
+    private string ResolveGeneratedBarterOutputPath()
+    {
+        var relativePath = string.IsNullOrWhiteSpace(Settings.GeneratedBarterOutputPath)
+            ? "db/Generated/generated_barters.jsonc"
+            : Settings.GeneratedBarterOutputPath;
+
+        return Path.Combine(_modPath, relativePath.Replace('/', Path.DirectorySeparatorChar));
+    }
+
     private static void SaveJson<T>(string path, T data)
     {
         try

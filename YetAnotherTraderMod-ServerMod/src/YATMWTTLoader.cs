@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Text.Json;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
 using SPTarkov.Server.Core.Models.Spt.Mod;
@@ -16,12 +15,13 @@ public sealed class YATMWTTLoader(
 {
     public async Task OnLoad()
     {
-        YATMLogger.Log("[CustomContentLoader] Starting custom content load...");
-
         var assembly = Assembly.GetExecutingAssembly();
 
         var modPath = Path.GetDirectoryName(assembly.Location)
             ?? throw new InvalidOperationException("Could not resolve mod path.");
+
+        YATMLogger.Init(modPath);
+        YATMLogger.Log("[CustomContentLoader] Starting custom content load...");
 
         var dbPath = Path.Combine(modPath, "db");
 
@@ -77,100 +77,10 @@ public sealed class YATMWTTLoader(
         await wttCommon.CustomLocaleService.CreateCustomLocales(assembly);
         await wttCommon.CustomLootspawnService.CreateCustomLootSpawns(assembly);
 
-        // 5. Optional quest loading
-        // 5. Optional quest loading
-        if (CustomQuestsEnabled(modPath) && CustomSideQuestEnabled(modPath))
-        {
-            YATMLogger.LogRealDebug("[CustomContentLoader] Loading custom quests and quest zones...");
-
-            await wttCommon.CustomQuestService.CreateCustomQuests(assembly, Path.Join("db", "CustomQuests", "MainQuests"));
-            await wttCommon.CustomQuestService.CreateCustomQuests(assembly, Path.Join("db", "CustomQuests", "SideQuests"));
-            await wttCommon.CustomQuestZoneService.CreateCustomQuestZones(assembly);
-        }
-        else if (CustomQuestsEnabled(modPath) && !CustomSideQuestEnabled(modPath))
-        {
-            YATMLogger.Log("[CustomContentLoader] Custom quests are enabled in settings.json, but custom side quests are disabled.");
-
-            await wttCommon.CustomQuestService.CreateCustomQuests(assembly, Path.Join("db", "CustomQuests", "MainQuests"));
-            await wttCommon.CustomQuestZoneService.CreateCustomQuestZones(assembly);
-        }
-        else
-        {
-            YATMLogger.Log("[CustomContentLoader] Custom quests are disabled in settings.json. Skipping quests and quest zones.");
-        }
+        // 5. Custom quests are loaded later by YATMQuestLoader after Tony has been added to the DB.
+        // This prevents WTT quest-assort import from running before trader 66a0f6b2c4d8e90123456789 exists.
 
         YATMLogger.Log("[CustomContentLoader] Finished loading all custom content.");
     }
 
-    private static bool CustomQuestsEnabled(string modPath)
-    {
-        var settingsPath = Path.Combine(modPath, "config", "settings.json");
-
-        // Default true so missing config does not break existing installs.
-        if (!File.Exists(settingsPath))
-        {
-            return true;
-        }
-
-        try
-        {
-            var json = File.ReadAllText(settingsPath);
-
-            using var doc = JsonDocument.Parse(
-                json,
-                new JsonDocumentOptions
-                {
-                    AllowTrailingCommas = true,
-                    CommentHandling = JsonCommentHandling.Skip
-                });
-
-            if (doc.RootElement.TryGetProperty("EnableCustomQuests", out var value)
-                && value.ValueKind is JsonValueKind.True or JsonValueKind.False)
-            {
-                return value.GetBoolean();
-            }
-        }
-        catch (Exception ex)
-        {
-            YATMLogger.Log($"[CustomContentLoader] Failed to read EnableCustomQuests from settings.json. Defaulting to enabled. Error: {ex.Message}");
-        }
-
-        return true;
-    }
-
-    private static bool CustomSideQuestEnabled(string modPath)
-    {
-        var settingsPath = Path.Combine(modPath, "config", "settings.json");
-
-        // Default true so missing config does not break existing installs.
-        if (!File.Exists(settingsPath))
-        {
-            return true;
-        }
-
-        try
-        {
-            var json = File.ReadAllText(settingsPath);
-
-            using var doc = JsonDocument.Parse(
-                json,
-                new JsonDocumentOptions
-                {
-                    AllowTrailingCommas = true,
-                    CommentHandling = JsonCommentHandling.Skip
-                });
-
-            if (doc.RootElement.TryGetProperty("EnableCustomSideQuests", out var value)
-                && value.ValueKind is JsonValueKind.True or JsonValueKind.False)
-            {
-                return value.GetBoolean();
-            }
-        }
-        catch (Exception ex)
-        {
-            YATMLogger.Log($"[CustomContentLoader] Failed to read EnableCustomSideQuests from settings.json. Defaulting to enabled. Error: {ex.Message}");
-        }
-
-        return true;
-    }
 }

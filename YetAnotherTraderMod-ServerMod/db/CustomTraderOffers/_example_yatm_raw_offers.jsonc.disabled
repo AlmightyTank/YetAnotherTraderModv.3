@@ -1,0 +1,43 @@
+{
+  "66a0f6b2c4d8e90123456789": {
+    "items": [
+      {
+        "_id": "ROOT_OFFER_ID_HERE",
+        "_tpl": "ITEM_TPL_HERE",
+        "parentId": "hideout",
+        "slotId": "hideout",
+        "upd": {
+          "UnlimitedCount": false,
+          "StackObjectsCount": 12,
+          "BuyRestrictionMax": 1,
+          "BuyRestrictionCurrent": 0
+        }
+      }
+    ],
+    "barter_scheme": {
+      "ROOT_OFFER_ID_HERE": [
+        [
+          {
+            "count": 25000,
+            "_tpl": "5449016a4bdc2d6f028b456f"
+          }
+        ]
+      ]
+    },
+    "loyal_level_items": {
+      "ROOT_OFFER_ID_HERE": 2
+    },
+    "yatm_settings": {
+      "ROOT_OFFER_ID_HERE": [
+        [
+          {
+            "CashOnly": false,
+            "AlwaysBarter": false,
+            "AlwaysInStock": false,
+            "GeneratedBarterCategoryOverride": "Default"
+          }
+        ]
+      }
+    }
+  }
+}
