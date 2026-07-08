@@ -13,10 +13,11 @@ using System.Text.Json.Serialization;
 using YetAnotherTraderMod.src;
 using Path = System.IO.Path;
 
-namespace YetAnotherTraderMod.Features.CustomConsumables;
+namespace YetAnotherTraderMod.src.Features.CustomConsumables;
 
 /// <summary>
-/// Loads custom stim/med JSON files from db/CustomsComsumables/*.json.
+/// Loads custom stim/med JSON files from Tony's db/CustomConsumables/*.json folder,
+/// plus addon folders that use db/YATM/CustomConsumables/*.json.
 /// This is a C# SPT 4.x port of the old ConsumablesGalore loader pattern.
 /// </summary>
 [Injectable(TypePriority = OnLoadOrder.PostDBModLoader + 5)]
@@ -25,6 +26,8 @@ public sealed class CustomConsumablesLoader(
     CustomItemService customItemService) : IOnLoad
 {
     private const string RoublesTpl = "5449016a4bdc2d6f028b456f";
+    private const string OwnConsumablesRelativePath = "db/CustomConsumables";
+    private const string AddonConsumablesRelativePath = "db/YATM/CustomConsumables";
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -39,28 +42,77 @@ public sealed class CustomConsumablesLoader(
     {
         var assemblyPath = Assembly.GetExecutingAssembly().Location;
         var modPath = Path.GetDirectoryName(assemblyPath) ?? AppContext.BaseDirectory;
-        var consumablesPath = Path.Combine(modPath, "db", "CustomConsumables");
+        var sourceFolders = ResolveConsumableSourceFolders(modPath);
 
-        Load(consumablesPath);
+        LoadMany(sourceFolders);
         await Task.CompletedTask;
+    }
+
+    public Task CreateCustomConsumables(Assembly assembly, string path)
+    {
+        if (assembly is null)
+        {
+            throw new ArgumentNullException(nameof(assembly));
+        }
+
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            throw new ArgumentException("Custom consumable path cannot be empty.", nameof(path));
+        }
+
+        var assemblyPath = assembly.Location;
+        var modPath = Path.GetDirectoryName(assemblyPath) ?? AppContext.BaseDirectory;
+
+        var resolvedPath = Path.IsPathRooted(path)
+            ? path
+            : Path.Combine(modPath, path);
+
+        Load(resolvedPath);
+
+        return Task.CompletedTask;
     }
 
     public void Load(string consumablesPath)
     {
-        if (!Directory.Exists(consumablesPath))
+        LoadMany(new[] { consumablesPath });
+    }
+
+    public void LoadMany(IEnumerable<string> consumablesPaths)
+    {
+        var folders = consumablesPaths
+            .Where(path => !string.IsNullOrWhiteSpace(path))
+            .Select(Path.GetFullPath)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Where(Directory.Exists)
+            .ToList();
+
+        if (folders.Count == 0)
         {
-            YATMLogger.Log($"Custom consumables folder not found: {consumablesPath}");
+            YATMLogger.Log("[Tony] No custom consumable folders found.");
             return;
         }
 
-        var files = Directory.EnumerateFiles(consumablesPath, "*.json", SearchOption.AllDirectories).ToList();
+        var files = folders
+            .SelectMany(folder => Directory.EnumerateFiles(folder, "*.json", SearchOption.AllDirectories)
+                .OrderBy(file => file, StringComparer.OrdinalIgnoreCase))
+            .ToList();
+
         if (files.Count == 0)
         {
             if (YATMLogger.IsDebugEnabled)
             {
-                YATMLogger.LogDebug($"No custom consumables found in {consumablesPath}");
+                YATMLogger.LogDebug("[Tony] No custom consumable JSON files found in Tony/addon folders.");
             }
+
             return;
+        }
+
+        if (YATMLogger.IsDebugEnabled)
+        {
+            foreach (var folder in folders)
+            {
+                YATMLogger.LogDebug($"[Tony] Custom consumable source folder: {folder}");
+            }
         }
 
         var tables = databaseService.GetTables();
@@ -86,10 +138,66 @@ public sealed class CustomConsumablesLoader(
                 YATMLogger.Log($"[Tony] Failed to load custom consumable '{file}': {ex}");
             }
         }
-        if (YATMLogger.IsDebugEnabled)
+
+        YATMLogger.Log($"[Tony] Loaded {loaded}/{files.Count} custom consumable JSON file(s) from {folders.Count} source folder(s).");
+    }
+
+    private static IEnumerable<string> ResolveConsumableSourceFolders(string modPath)
+    {
+        // Tony's built-in consumables. This stays first so addon files load after the base mod.
+        yield return CombineRelativePath(modPath, OwnConsumablesRelativePath);
+
+        var modsRoot = FindModsRoot(modPath);
+        if (modsRoot is null || !Directory.Exists(modsRoot))
         {
-            YATMLogger.LogDebug($"Loaded {loaded}/{files.Count} custom consumable JSON file(s)");
+            yield break;
         }
+
+        IEnumerable<string> modFolders;
+        try
+        {
+            modFolders = Directory.EnumerateDirectories(modsRoot)
+                .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            YATMLogger.Log($"[Tony] Could not scan mods folder for custom consumable addons: {ex.Message}");
+            yield break;
+        }
+
+        foreach (var modFolder in modFolders)
+        {
+            // Addons must use this namespaced folder so Tony does not accidentally load
+            // another mod's unrelated db/CustomConsumables files.
+            yield return CombineRelativePath(modFolder, AddonConsumablesRelativePath);
+        }
+    }
+
+    private static string? FindModsRoot(string modPath)
+    {
+        var current = new DirectoryInfo(Path.GetFullPath(modPath));
+
+        while (current is not null)
+        {
+            if (string.Equals(current.Name, "mods", StringComparison.OrdinalIgnoreCase))
+            {
+                return current.FullName;
+            }
+
+            current = current.Parent;
+        }
+
+        return null;
+    }
+
+    private static string CombineRelativePath(string root, string relativePath)
+    {
+        var parts = relativePath.Split(
+            new[] { '/', '\\' },
+            StringSplitOptions.RemoveEmptyEntries);
+
+        return Path.Combine(new[] { root }.Concat(parts).ToArray());
     }
 
     private void LoadOne(object tables, CustomConsumableDefinition definition, string file)
