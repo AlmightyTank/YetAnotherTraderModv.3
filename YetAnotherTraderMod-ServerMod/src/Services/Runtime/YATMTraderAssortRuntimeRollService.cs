@@ -53,7 +53,7 @@ public sealed class YATMTraderAssortRuntimeRollService(
         // 1) Start from the clean assort object that was just read from assort.json.
         // 2) Roll which offers become barter before generating barter schemes.
         // 3) Generate barter schemes only for those selected barter offers, using the whitelist and balanced usage.
-        // 4) Apply the completed payment roll. Ammo barter offers switch to paired packs.
+        // 4) Apply the completed payment roll. Ammo barter offers keep the same OfferId and swap _tpl to the pack.
         // 5) Only after paymentRollResult.Completed is true, run the stock roll.
         //    Stock reads the payment result; it does not decide barter state.
         var paymentRollResult = RollPayments(assort, config, rollReason);
@@ -457,6 +457,8 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
     private PaymentRollResult RollPayments(TraderAssort assort, YATMConfig config, string rollReason)
     {
+        RemoveStandaloneAmmoPackRootOffers(assort, config);
+
         var rootItems = assort.Items
             .Where(x => x.ParentId == "hideout")
             .ToList();
@@ -758,21 +760,6 @@ public sealed class YATMTraderAssortRuntimeRollService(
     {
         appliedAmmoPackOfferId = null;
 
-        var ammoPackTpl = GetStringMember(priceConfig, "AmmoBarterPackTplId");
-        var packOfferId = GetStringMember(priceConfig, "PackOfferId");
-
-        // PackOfferId is preferred, but the runtime can also infer the pair from the static
-        // pack offer in assort.json. This keeps the feature working even if the config model
-        // has not been updated with a PackOfferId property yet.
-        if (string.IsNullOrWhiteSpace(packOfferId) && !string.IsNullOrWhiteSpace(ammoPackTpl))
-        {
-            packOfferId = FindRootOfferIdByTpl(assort, ammoPackTpl, looseOfferId);
-        }
-
-        var hasPairedAmmoPackOffer =
-            !string.IsNullOrWhiteSpace(packOfferId)
-            && !string.IsNullOrWhiteSpace(ammoPackTpl);
-
         var shouldUseBarter = false;
 
         if (randomizeCashBarter)
@@ -788,19 +775,6 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
         if (shouldUseBarter)
         {
-            if (hasPairedAmmoPackOffer)
-            {
-                if (ApplyPairedAmmoPackBarterOffer(assort, looseOfferId, packOfferId!, priceConfig))
-                {
-                    appliedAmmoPackOfferId = packOfferId;
-                    return true;
-                }
-
-                // Safety fallback: if the pack offer is missing from assort.json, keep the loose offer
-                // as a normal barter instead of crashing or leaving both offers half-mutated.
-                YATMLogger.Log($"[Pricing] Warning: PackOfferId {packOfferId} for {priceConfig.ItemName} was not usable. Falling back to loose-ammo barter offer.");
-            }
-
             if (!assort.BarterScheme.TryGetValue(looseOfferId, out var looseBarterSchemeList))
             {
                 YATMLogger.LogDebug($"[Pricing] Offer {looseOfferId} has no barter_scheme entry.");
@@ -808,13 +782,14 @@ public sealed class YATMTraderAssortRuntimeRollService(
             }
 
             ApplyBarterPaymentToOffer(looseOffer, looseBarterSchemeList, priceConfig);
-            return IsAmmoPackBarterConfig(priceConfig);
-        }
 
-        if (hasPairedAmmoPackOffer)
-        {
-            // Cash wins: keep the loose ammo offer and remove the static pack offer.
-            RemoveOfferAndChildren(assort, packOfferId!);
+            if (IsAmmoPackBarterConfig(priceConfig))
+            {
+                appliedAmmoPackOfferId = looseOfferId;
+                return true;
+            }
+
+            return false;
         }
 
         if (!assort.BarterScheme.TryGetValue(looseOfferId, out var existingSchemeList))
@@ -837,39 +812,52 @@ public sealed class YATMTraderAssortRuntimeRollService(
         return false;
     }
 
-    private static bool ApplyPairedAmmoPackBarterOffer(
-        TraderAssort assort,
-        string looseOfferId,
-        string packOfferId,
-        PriceConfigItem priceConfig)
+    private static void RemoveStandaloneAmmoPackRootOffers(TraderAssort assort, YATMConfig config)
     {
-        var packOffer = FindRootOfferById(assort, packOfferId);
-        if (packOffer == null)
+        var looseOfferIds = config.Prices
+            .Where(x => !string.IsNullOrWhiteSpace(x.OfferId))
+            .Select(x => x.OfferId!)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var ammoPackTplIds = config.Prices
+            .Where(x => !string.IsNullOrWhiteSpace(x.AmmoBarterPackTplId))
+            .Select(x => x.AmmoBarterPackTplId!)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var oldPackOfferIds = config.Prices
+            .Where(x => !string.IsNullOrWhiteSpace(x.PackOfferId))
+            .Select(x => x.PackOfferId!)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        if (ammoPackTplIds.Count == 0 && oldPackOfferIds.Count == 0)
         {
-            return false;
+            return;
         }
 
-        if (!assort.BarterScheme.TryGetValue(packOfferId, out var packBarterSchemeList))
+        var rootOfferIdsToRemove = assort.Items
+            .Where(x => x.ParentId == "hideout")
+            .Select(x => new
+            {
+                OfferId = GetMemberValue(x, "Id")?.ToString(),
+                Tpl = YATMConfig.GetTemplateId(x)
+            })
+            .Where(x => !string.IsNullOrWhiteSpace(x.OfferId))
+            .Where(x => !looseOfferIds.Contains(x.OfferId!))
+            .Where(x => oldPackOfferIds.Contains(x.OfferId!)
+                || (!string.IsNullOrWhiteSpace(x.Tpl) && ammoPackTplIds.Contains(x.Tpl!)))
+            .Select(x => x.OfferId!)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        foreach (var offerId in rootOfferIdsToRemove)
         {
-            YATMLogger.LogDebug($"[Pricing] Pack offer {packOfferId} has no barter_scheme entry.");
-            return false;
+            RemoveOfferAndChildren(assort, offerId);
         }
 
-        // Barter wins: keep the static pack offer and remove the loose ammo offer.
-        RemoveOfferAndChildren(assort, looseOfferId);
-
-        var packTpl = GetStringMember(priceConfig, "AmmoBarterPackTplId");
-        if (!string.IsNullOrWhiteSpace(packTpl))
+        if (rootOfferIdsToRemove.Count > 0)
         {
-            // This is not the old same-offer swap. The pack offer is already a separate static offer.
-            // This write only validates/normalizes the pack offer tpl in case assort.json was edited.
-            SetOfferTemplate(packOffer, packTpl);
+            YATMLogger.LogDebug($"[Pricing] Removed {rootOfferIdsToRemove.Count} standalone ammo-pack helper offer(s); ammo barter now uses the loose offer ID and swaps _tpl in-place.");
         }
-
-        ReplaceOfferPaymentScheme(packBarterSchemeList, priceConfig.BarterScheme!);
-        YATMLogger.LogRealDebug($"[Pricing] Paired ammo pack barter: {priceConfig.ItemName} | LooseOfferId {looseOfferId} removed | PackOfferId {packOfferId} kept.");
-
-        return true;
     }
 
     private static object? FindRootOfferById(TraderAssort assort, string offerId)

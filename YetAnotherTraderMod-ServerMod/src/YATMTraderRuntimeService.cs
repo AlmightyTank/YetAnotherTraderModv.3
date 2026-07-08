@@ -54,10 +54,10 @@ public sealed class YATMTraderRuntimeService(
     // 1) OnLoad and OnUpdate both start from a fresh clean db/CustomTrader/Tony/assort.json read.
     // 2) Offer IDs are never changed.
     // 3) Payment roll finishes first. This is the only place that decides cash/barter.
-    //    Ammo uses paired offers: loose ammo OfferId for cash, PackOfferId for barter.
+    //    Ammo keeps the loose OfferId. Cash sells loose ammo; barter swaps _tpl to the pack.
     // 4) Stock roll starts only after paymentRollResult.Completed is true.
     // 5) Stock roll only changes stock values and ammo pack limits. It never decides payment state.
-    // 6) Offer IDs are never changed. The losing paired ammo offer is removed from the clean assort.
+    // 6) Offer IDs are never changed. Standalone ammo-pack helper offers are removed; the loose offer swaps in-place.
     // 7) If PreventBarterOffersOutOfStock is true, the stock roll excludes offers that became barter.
     // 8) RerollAssortOnRestock controls only the OnUpdate/restock reroll side; startup still rolls normally.
     // 9) The first IOnUpdate call after startup is ignored so the update hook cannot immediately reroll after OnLoad.
@@ -242,9 +242,7 @@ public sealed class YATMTraderRuntimeService(
         // This is intentionally inside the trader runtime instead of a separate IOnLoad so the order is guaranteed.
         await LoadQuestsAfterTraderExists(Assembly.GetExecutingAssembly(), pathToMod);
 
-        // Paired ammo offers need the same quest unlock state as their loose ammo pair.
-        // Do this after quests are imported so the live QuestAssort buckets exist.
-        PatchServerQuestAssortForPairedAmmoOffers(config, assort);
+        // Ammo pack barter uses the same OfferId as the loose ammo offer, so questassort does not need patching.
 
         _lastSeenNextResupply = traderBase.NextResupply;
         _lastRestockPollUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -381,12 +379,9 @@ public sealed class YATMTraderRuntimeService(
 
         ReplaceLiveAssortInPlace(traderData, cleanAssort);
 
-        // Paired ammo offers can be removed/re-added by each restock roll.
-        // After the live assort has been changed, re-apply questassort unlocks in the server DB
-        // so whichever paired offer is currently visible has the same quest unlock as its loose ammo pair.
-        PatchServerQuestAssortForPairedAmmoOffers(config, cleanAssort);
+        // Ammo pack barter uses the same OfferId as the loose ammo offer, so questassort does not need patching.
 
-        YATMLogger.Log("[Restock] Rerolled Tony payment split, stock availability, generated addon offers, and paired ammo questassort unlocks.");
+        YATMLogger.Log("[Restock] Rerolled Tony payment split, stock availability, generated addon offers, and ammo pack in-place swaps.");
         return Task.CompletedTask;
     }
 
@@ -420,179 +415,6 @@ public sealed class YATMTraderRuntimeService(
 
         SyncAssortExtensionData(liveAssort);
         traderData.Assort = liveAssort;
-    }
-
-    private void PatchServerQuestAssortForPairedAmmoOffers(YATMConfig config, TraderAssort currentAssort)
-    {
-        try
-        {
-            if (!_traderAddedToDb)
-            {
-                YATMLogger.LogDebug("[QuestAssort] Tony has not been added to the DB yet. Skipping paired ammo questassort patch.");
-                return;
-            }
-
-            var tables = databaseServer.GetTables();
-            if (!tables.Traders.TryGetValue(_runtimeTraderId, out var traderData))
-            {
-                YATMLogger.LogDebug("[QuestAssort] Tony trader was not found in server DB. Skipping paired ammo questassort patch.");
-                return;
-            }
-
-            var questAssort = GetMemberValue(traderData, "QuestAssort")
-                ?? GetMemberValue(traderData, "questassort");
-
-            if (questAssort == null)
-            {
-                YATMLogger.LogDebug("[QuestAssort] traderData.QuestAssort was not found. Skipping paired ammo questassort patch.");
-                return;
-            }
-
-            var pairs = BuildPairedAmmoOfferPairs(config, currentAssort);
-            if (pairs.Count == 0)
-            {
-                YATMLogger.LogDebug("[QuestAssort] No paired ammo offer IDs were found to patch.");
-                return;
-            }
-
-            var addedCount = 0;
-            foreach (var pair in pairs)
-            {
-                addedCount += CopyQuestAssortUnlock(questAssort, "Started", pair.LooseOfferId, pair.PackOfferId);
-                addedCount += CopyQuestAssortUnlock(questAssort, "Success", pair.LooseOfferId, pair.PackOfferId);
-                addedCount += CopyQuestAssortUnlock(questAssort, "Fail", pair.LooseOfferId, pair.PackOfferId);
-
-                addedCount += CopyQuestAssortUnlock(questAssort, "started", pair.LooseOfferId, pair.PackOfferId);
-                addedCount += CopyQuestAssortUnlock(questAssort, "success", pair.LooseOfferId, pair.PackOfferId);
-                addedCount += CopyQuestAssortUnlock(questAssort, "fail", pair.LooseOfferId, pair.PackOfferId);
-            }
-
-            YATMLogger.Log($"[QuestAssort] Patched paired ammo pack unlocks in server DB: {addedCount} entries added for {pairs.Count} paired ammo offers.");
-        }
-        catch (Exception ex)
-        {
-            YATMLogger.Log($"[QuestAssort] Failed to patch paired ammo questassort unlocks: {ex.Message}");
-        }
-    }
-
-    private sealed record PairedAmmoOfferIds(string LooseOfferId, string PackOfferId);
-
-    private static List<PairedAmmoOfferIds> BuildPairedAmmoOfferPairs(YATMConfig config, TraderAssort cleanAssort)
-    {
-        var pairs = new List<PairedAmmoOfferIds>();
-        var seenPackOfferIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-        foreach (var priceConfig in config.Prices)
-        {
-            var looseOfferId = priceConfig.OfferId;
-            var ammoPackTpl = GetStringMember(priceConfig, "AmmoBarterPackTplId");
-
-            if (string.IsNullOrWhiteSpace(looseOfferId) || string.IsNullOrWhiteSpace(ammoPackTpl))
-            {
-                continue;
-            }
-
-            var packOfferId = GetStringMember(priceConfig, "PackOfferId");
-            if (string.IsNullOrWhiteSpace(packOfferId))
-            {
-                packOfferId = FindRootOfferIdByTpl(cleanAssort, ammoPackTpl, looseOfferId);
-            }
-
-            if (string.IsNullOrWhiteSpace(packOfferId))
-            {
-                YATMLogger.LogDebug($"[QuestAssort] No PackOfferId/static pack offer found for {priceConfig.ItemName} ({looseOfferId}).");
-                continue;
-            }
-
-            if (!seenPackOfferIds.Add(packOfferId))
-            {
-                continue;
-            }
-
-            pairs.Add(new PairedAmmoOfferIds(looseOfferId, packOfferId));
-        }
-
-        return pairs;
-    }
-
-    private static int CopyQuestAssortUnlock(object questAssort, string bucketName, string looseOfferId, string packOfferId)
-    {
-        var bucket = GetQuestAssortBucketDictionary(questAssort, bucketName);
-        if (bucket == null)
-        {
-            return 0;
-        }
-
-        object? looseKey = null;
-        object? packKey = null;
-        object? unlockValue = null;
-
-        foreach (DictionaryEntry entry in bucket)
-        {
-            var keyText = entry.Key?.ToString();
-            if (keyText == null)
-            {
-                continue;
-            }
-
-            if (keyText.Equals(packOfferId, StringComparison.OrdinalIgnoreCase))
-            {
-                packKey = entry.Key;
-            }
-
-            if (keyText.Equals(looseOfferId, StringComparison.OrdinalIgnoreCase))
-            {
-                looseKey = entry.Key;
-                unlockValue = entry.Value;
-            }
-        }
-
-        if (packKey != null || looseKey == null)
-        {
-            return 0;
-        }
-
-        if (!TryConvertValueForMember(packOfferId, looseKey.GetType(), out var convertedPackKey) || convertedPackKey == null)
-        {
-            YATMLogger.LogDebug($"[QuestAssort] Could not convert PackOfferId {packOfferId} to questassort key type {looseKey.GetType().FullName}.");
-            return 0;
-        }
-
-        bucket[convertedPackKey] = unlockValue;
-        return 1;
-    }
-
-    private static IDictionary? GetQuestAssortBucketDictionary(object questAssort, string bucketName)
-    {
-        var directMember = GetMemberValue(questAssort, bucketName) as IDictionary;
-        if (directMember != null)
-        {
-            return directMember;
-        }
-
-        if (questAssort is IDictionary questAssortDictionary)
-        {
-            foreach (DictionaryEntry entry in questAssortDictionary)
-            {
-                if (entry.Key?.ToString()?.Equals(bucketName, StringComparison.OrdinalIgnoreCase) == true
-                    && entry.Value is IDictionary nestedDictionary)
-                {
-                    return nestedDictionary;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private static string? FindRootOfferIdByTpl(TraderAssort assort, string tpl, string excludedOfferId)
-    {
-        var offer = assort.Items.FirstOrDefault(x =>
-            x.ParentId == "hideout"
-            && !string.Equals(x.Id, excludedOfferId, StringComparison.OrdinalIgnoreCase)
-            && string.Equals(YATMConfig.GetTemplateId(x), tpl, StringComparison.OrdinalIgnoreCase));
-
-        return offer?.Id;
     }
 
     private static void CopyDictionaryMemberIfPresent(object target, object source, string memberName)

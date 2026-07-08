@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -129,6 +130,11 @@ public class YATMConfig
         }
 
         LoadOrGeneratePrices(assortJson);
+
+        // Keep config/items.json synced from the clean Tony assort every startup/restock.
+        // This lets the mod generate OfferId/TplId/name/price/currency/ammo-pack metadata
+        // instead of hand-maintaining rows for every ammo offer.
+        SyncPriceConfigsFromAssort(assortJson);
     }
 
     private void LoadOrGenerateSettings(TraderBase baseJson)
@@ -529,6 +535,403 @@ public class YATMConfig
             YATMLogger.Log($"Generated items.json with {generatedCount} entries.");
         }
     }
+    private void SyncPriceConfigsFromAssort(TraderAssort assortJson)
+    {
+        var changed = false;
+        var touched = 0;
+
+        var oldPackOfferIds = Prices
+            .Where(x => !string.IsNullOrWhiteSpace(x.PackOfferId))
+            .Select(x => x.PackOfferId!)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var pricesByOfferId = Prices
+            .Where(x => !string.IsNullOrWhiteSpace(x.OfferId))
+            .GroupBy(x => x.OfferId!, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(x => x.Key, x => x.First(), StringComparer.OrdinalIgnoreCase);
+
+        foreach (var item in assortJson.Items)
+        {
+            if (item.ParentId != "hideout")
+            {
+                continue;
+            }
+
+            var offerId = item.Id;
+            var tpl = GetTemplateId(item);
+
+            if (string.IsNullOrWhiteSpace(offerId) || string.IsNullOrWhiteSpace(tpl))
+            {
+                continue;
+            }
+
+            if (!TryReadAssortCashPrice(assortJson, offerId, out var price, out var currency))
+            {
+                continue;
+            }
+
+            var itemName = GetLocaleName(tpl);
+
+            if (!pricesByOfferId.TryGetValue(offerId, out var priceConfig))
+            {
+                priceConfig = new PriceConfigItem
+                {
+                    OfferId = offerId,
+                    TplId = tpl,
+                    ItemName = itemName,
+                    Price = price,
+                    Currency = currency,
+                    CashOnly = true,
+                    BarterScheme = null,
+                    BarterSchemeValueBasis = "Unit"
+                };
+
+                Prices.Add(priceConfig);
+                pricesByOfferId[offerId] = priceConfig;
+                changed = true;
+            }
+
+            if (!string.Equals(priceConfig.OfferId, offerId, StringComparison.OrdinalIgnoreCase)
+                || !string.Equals(priceConfig.TplId, tpl, StringComparison.OrdinalIgnoreCase)
+                || !string.Equals(priceConfig.ItemName, itemName, StringComparison.Ordinal)
+                || Math.Abs(priceConfig.Price - price) > 0.001
+                || !string.Equals(priceConfig.Currency, currency, StringComparison.OrdinalIgnoreCase))
+            {
+                changed = true;
+            }
+
+            // These are always controlled by the live clean assort.
+            priceConfig.OfferId = offerId;
+            priceConfig.TplId = tpl;
+            priceConfig.ItemName = itemName;
+            priceConfig.Price = price;
+            priceConfig.Currency = currency;
+
+            // New ammo barter system: no separate pack offer id.
+            // The same OfferId is kept and only _tpl swaps to the pack tpl when barter wins.
+            if (!string.IsNullOrWhiteSpace(priceConfig.PackOfferId))
+            {
+                changed = true;
+            }
+            priceConfig.PackOfferId = null;
+
+            if (TryFindBestAmmoPackForLooseAmmo(tpl, out var packTpl, out var packSize, out var packName))
+            {
+                if (!string.Equals(priceConfig.AmmoBarterPackTplId, packTpl, StringComparison.OrdinalIgnoreCase)
+                    || priceConfig.AmmoBarterPackSize != packSize
+                    || !string.Equals(priceConfig.AmmoBarterPackItemName, packName, StringComparison.Ordinal)
+                    || !string.Equals(priceConfig.BarterSchemeValueBasis, "Pack", StringComparison.OrdinalIgnoreCase))
+                {
+                    changed = true;
+                }
+
+                priceConfig.AmmoBarterPackTplId = packTpl;
+                priceConfig.AmmoBarterPackSize = packSize;
+                priceConfig.AmmoBarterPackItemName = packName;
+                priceConfig.BarterSchemeValueBasis = "Pack";
+                priceConfig.GeneratedBarterCategoryOverride ??= "AmmoPack";
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(priceConfig.AmmoBarterPackTplId)
+                    || priceConfig.AmmoBarterPackSize != 0
+                    || !string.IsNullOrWhiteSpace(priceConfig.AmmoBarterPackItemName)
+                    || string.Equals(priceConfig.BarterSchemeValueBasis, "Pack", StringComparison.OrdinalIgnoreCase))
+                {
+                    changed = true;
+                }
+
+                priceConfig.AmmoBarterPackTplId = null;
+                priceConfig.AmmoBarterPackSize = 0;
+                priceConfig.AmmoBarterPackItemName = null;
+
+                if (string.Equals(priceConfig.BarterSchemeValueBasis, "Pack", StringComparison.OrdinalIgnoreCase))
+                {
+                    priceConfig.BarterSchemeValueBasis = "Unit";
+                }
+            }
+
+            touched++;
+        }
+
+        var ammoPackTplIds = Prices
+            .Where(x => !string.IsNullOrWhiteSpace(x.AmmoBarterPackTplId))
+            .Select(x => x.AmmoBarterPackTplId!)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        if (ammoPackTplIds.Count > 0 || oldPackOfferIds.Count > 0)
+        {
+            var removed = Prices.RemoveAll(x =>
+                string.IsNullOrWhiteSpace(x.AmmoBarterPackTplId)
+                && ((!string.IsNullOrWhiteSpace(x.TplId) && ammoPackTplIds.Contains(x.TplId))
+                    || (!string.IsNullOrWhiteSpace(x.OfferId) && oldPackOfferIds.Contains(x.OfferId))));
+
+            if (removed > 0)
+            {
+                changed = true;
+                YATMLogger.LogDebug($"[Config] Removed {removed} standalone ammo-pack price row(s); loose ammo rows now control pack barters by same OfferId.");
+            }
+        }
+
+        if (!changed)
+        {
+            return;
+        }
+
+        Prices = Prices
+            .OrderBy(x => x.ItemName)
+            .ThenBy(x => x.OfferId)
+            .ToList();
+
+        SaveJson(_pricesPath, Prices);
+        YATMLogger.Log($"[Config] Synced {touched} price config row(s) from Tony assort.");
+    }
+
+    private bool TryReadAssortCashPrice(
+        TraderAssort assortJson,
+        string offerId,
+        out double price,
+        out string currency)
+    {
+        price = 0;
+        currency = "RUB";
+
+        if (!assortJson.BarterScheme.TryGetValue(offerId, out var schemeList)
+            || schemeList == null
+            || schemeList.Count == 0)
+        {
+            return false;
+        }
+
+        var firstPayment = schemeList.FirstOrDefault()?.FirstOrDefault();
+        if (firstPayment == null)
+        {
+            return false;
+        }
+
+        var paymentTpl = firstPayment.Template.ToString();
+        if (!IsCurrencyTemplate(paymentTpl))
+        {
+            return false;
+        }
+
+        price = firstPayment.Count ?? 0;
+        currency = TemplateToCurrency(paymentTpl);
+
+        return price > 0;
+    }
+
+    private string GetLocaleName(string tpl)
+    {
+        try
+        {
+            var locales = _databaseServer.GetTables().Locales.Global["en"];
+            if (locales.Value != null && locales.Value.TryGetValue($"{tpl} Name", out var nameVal))
+            {
+                return nameVal?.ToString() ?? tpl;
+            }
+        }
+        catch
+        {
+            // ignored; fall back to tpl
+        }
+
+        return tpl;
+    }
+
+    private bool TryFindBestAmmoPackForLooseAmmo(
+        string looseAmmoTpl,
+        out string packTpl,
+        out int packSize,
+        out string packName)
+    {
+        packTpl = string.Empty;
+        packSize = 0;
+        packName = string.Empty;
+
+        var tables = _databaseServer.GetTables();
+        var templates = GetMemberValue(GetMemberValue(tables, "Templates"), "Items")
+                        ?? GetMemberValue(GetMemberValue(tables, "Templates"), "items");
+
+        if (templates is not IDictionary templateDict)
+        {
+            return false;
+        }
+
+        foreach (DictionaryEntry entry in templateDict)
+        {
+            var candidateTpl = entry.Key?.ToString();
+            var candidateTemplate = entry.Value;
+
+            if (string.IsNullOrWhiteSpace(candidateTpl)
+                || candidateTemplate == null
+                || string.Equals(candidateTpl, looseAmmoTpl, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (!TryReadAmmoPackFilter(candidateTemplate, looseAmmoTpl, out var candidatePackSize))
+            {
+                continue;
+            }
+
+            if (candidatePackSize > packSize)
+            {
+                packTpl = candidateTpl;
+                packSize = candidatePackSize;
+                packName = GetLocaleName(candidateTpl);
+            }
+        }
+
+        return !string.IsNullOrWhiteSpace(packTpl) && packSize > 0;
+    }
+
+    private static bool TryReadAmmoPackFilter(
+        object template,
+        string looseAmmoTpl,
+        out int packSize)
+    {
+        packSize = 0;
+
+        var props = GetMemberValue(template, "_props")
+                    ?? GetMemberValue(template, "Props")
+                    ?? template;
+
+        var stackSlots = GetMemberValue(props, "StackSlots")
+                         ?? GetMemberValue(props, "stackSlots");
+
+        if (stackSlots is not IEnumerable slots)
+        {
+            return false;
+        }
+
+        foreach (var slot in slots)
+        {
+            var maxCount = GetIntMember(slot, "_max_count", 0);
+            if (maxCount <= 0)
+            {
+                maxCount = GetIntMember(slot, "MaxCount", 0);
+            }
+
+            var slotProps = GetMemberValue(slot, "_props")
+                            ?? GetMemberValue(slot, "Props")
+                            ?? slot;
+
+            var filters = GetMemberValue(slotProps, "filters")
+                          ?? GetMemberValue(slotProps, "Filters");
+
+            if (filters is not IEnumerable filterList)
+            {
+                continue;
+            }
+
+            foreach (var filter in filterList)
+            {
+                var allowed = GetMemberValue(filter, "Filter")
+                              ?? GetMemberValue(filter, "filter");
+
+                if (allowed is not IEnumerable allowedList)
+                {
+                    continue;
+                }
+
+                foreach (var allowedTplObj in allowedList)
+                {
+                    var allowedTpl = allowedTplObj?.ToString();
+                    if (string.Equals(allowedTpl, looseAmmoTpl, StringComparison.OrdinalIgnoreCase))
+                    {
+                        packSize = maxCount;
+                        return packSize > 0;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static object? GetMemberValue(object? target, string memberName)
+    {
+        if (target == null)
+        {
+            return null;
+        }
+
+        var type = target.GetType();
+
+        var prop = type.GetProperty(
+            memberName,
+            BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+
+        if (prop != null)
+        {
+            return prop.GetValue(target);
+        }
+
+        var field = type.GetField(
+            memberName,
+            BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+
+        if (field != null)
+        {
+            return field.GetValue(target);
+        }
+
+        if (!memberName.Equals("ExtensionData", StringComparison.OrdinalIgnoreCase))
+        {
+            var extensionData = type.GetProperty(
+                    "ExtensionData",
+                    BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)
+                ?.GetValue(target)
+                ?? type.GetField(
+                    "ExtensionData",
+                    BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)
+                ?.GetValue(target);
+
+            if (extensionData is IDictionary extensionDictionary)
+            {
+                foreach (DictionaryEntry entry in extensionDictionary)
+                {
+                    if (entry.Key?.ToString()?.Equals(memberName, StringComparison.OrdinalIgnoreCase) == true)
+                    {
+                        return entry.Value;
+                    }
+                }
+            }
+        }
+
+        if (target is IDictionary dictionary)
+        {
+            foreach (DictionaryEntry entry in dictionary)
+            {
+                if (entry.Key?.ToString()?.Equals(memberName, StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    return entry.Value;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static int GetIntMember(object? target, string memberName, int defaultValue)
+    {
+        var value = GetMemberValue(target, memberName);
+        if (value == null)
+        {
+            return defaultValue;
+        }
+
+        if (value is int intValue)
+        {
+            return intValue;
+        }
+
+        return int.TryParse(value.ToString(), out var parsed)
+            ? parsed
+            : defaultValue;
+    }
+
     public void SavePrices()
     {
         if (!Directory.Exists(_configDir))
@@ -702,11 +1105,9 @@ public class YATMConfig
             target.AutoGeneratedBarter = true;
         }
 
-        // Preserve old items.json as the source of truth for paired ammo metadata when present.
-        if (string.IsNullOrWhiteSpace(target.PackOfferId))
-        {
-            target.PackOfferId = generatedRow.PackOfferId;
-        }
+        // New ammo barter mode keeps the loose ammo OfferId and swaps _tpl to the pack when barter wins.
+        // Do not merge old PackOfferId metadata from generated barter cache rows.
+        target.PackOfferId = null;
 
         if (string.IsNullOrWhiteSpace(target.AmmoBarterPackTplId))
         {

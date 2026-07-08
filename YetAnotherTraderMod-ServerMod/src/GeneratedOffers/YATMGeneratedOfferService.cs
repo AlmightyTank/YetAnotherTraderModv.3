@@ -212,10 +212,9 @@ public sealed class YATMGeneratedOfferService(
             target.BarterScheme = source.BarterScheme;
         }
 
-        if (string.IsNullOrWhiteSpace(target.PackOfferId))
-        {
-            target.PackOfferId = source.PackOfferId;
-        }
+        // New ammo barter mode does not use a separate PackOfferId.
+        // The loose ammo offer keeps its OfferId and swaps _tpl to the pack when barter wins.
+        target.PackOfferId = null;
 
         if (string.IsNullOrWhiteSpace(target.AmmoBarterPackTplId))
         {
@@ -589,7 +588,9 @@ public sealed class YATMGeneratedOfferService(
         priceConfig.AlwaysBarter = ReadJsonBool(yatmSettings, "AlwaysBarter") ?? priceConfig.AlwaysBarter;
         priceConfig.AlwaysInStock = ReadJsonBool(yatmSettings, "AlwaysInStock") ?? priceConfig.AlwaysInStock;
 
-        priceConfig.PackOfferId = ReadJsonString(yatmSettings, "PackOfferId") ?? priceConfig.PackOfferId;
+        // PackOfferId is accepted in old addon files but intentionally ignored.
+        // Same-offer ammo barter uses AmmoBarterPackTplId only.
+        priceConfig.PackOfferId = null;
         priceConfig.AmmoBarterPackTplId = ReadJsonString(yatmSettings, "AmmoBarterPackTplId") ?? priceConfig.AmmoBarterPackTplId;
         priceConfig.AmmoBarterPackItemName = ReadJsonString(yatmSettings, "AmmoBarterPackItemName") ?? priceConfig.AmmoBarterPackItemName;
         priceConfig.BarterSchemeValueBasis = ReadJsonString(yatmSettings, "BarterSchemeValueBasis") ?? priceConfig.BarterSchemeValueBasis;
