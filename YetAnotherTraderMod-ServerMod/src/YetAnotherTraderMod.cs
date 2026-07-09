@@ -36,7 +36,7 @@ public record ModMetadata : AbstractModMetadata
     public override string License { get; init; } = "MIT";
 }
 
-[Injectable(TypePriority = OnLoadOrder.PostDBModLoader + 50)]
+[Injectable(TypePriority = OnLoadOrder.PostDBModLoader + 4)]
 public sealed class YetAnotherTraderMod(YATMTraderRuntimeService runtimeService) : IOnLoad
 {
     public async Task OnLoad()
