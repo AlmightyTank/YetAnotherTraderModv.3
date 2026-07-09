@@ -119,6 +119,10 @@ public sealed class YATMTraderRuntimeService(
             YATMLogger.LogDebug($"  UnlimitedStock: {config.Settings.UnlimitedStock}");
             YATMLogger.LogDebug($"  RandomizeStock: {config.Settings.RandomizeStockAvailable} (Chance: {config.Settings.OutOfStockChance}%)");
             YATMLogger.LogDebug($"  PriceMultiplier: {config.Settings.PriceMultiplier}");
+            YATMLogger.LogDebug($"  MarketRepriceCashOffers: {config.Settings.MarketRepriceCashOffers}");
+            YATMLogger.LogDebug($"  MarketCashPriceBlendMode: {config.Settings.MarketCashPriceBlendMode}");
+            YATMLogger.LogDebug($"  MarketWeaponCashPricePercent: {config.Settings.MarketWeaponCashPricePercent}%");
+            YATMLogger.LogDebug($"  MarketArmorCashPricePercent: {config.Settings.MarketArmorCashPricePercent}%");
             YATMLogger.LogDebug($"  RandomizeCashBarterOffers: {GetBoolSetting(config.Settings, "RandomizeCashBarterOffers", true)}");
             YATMLogger.LogDebug($"  CashOfferPercent: {GetIntSetting(config.Settings, "CashOfferPercent", 85)}");
             YATMLogger.LogDebug($"  ForceCashOnly: {config.Settings.CashOffersOnly}");

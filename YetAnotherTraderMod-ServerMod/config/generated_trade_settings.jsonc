@@ -13,6 +13,40 @@
   // false = generated offers with missing prices may fall back to low/default values.
   "AutoPriceGeneratedOffers": true,
 
+  // Market repricing before payment/barter generation.
+  // This runs after Tony loads base/custom/addon content, before cash/barter rolls.
+  // Generated barters and final cash offers both use these updated RUB prices.
+  // Weapon/preset bundles are priced from the root item plus all attached child items.
+  // true = configured offer prices are repriced from the market blend below.
+  // false = keep the prices from assort.json/manual_offers/generated addon rows.
+  "MarketRepriceCashOffers": true,
+
+  // Cash market blend mode.
+  // HeavyFlea = 75% flea-style price / 25% trader best price.
+  // AllFlea = 100% flea-style price.
+  // EqualParts = 50% flea-style price / 50% trader best price.
+  // AllTBP = 100% trader best price.
+  // HeavyTBP = 25% flea-style price / 75% trader best price.
+  "MarketCashPriceBlendMode": "EqualParts",
+
+  // Category price cuts after the market blend is resolved.
+  // 100 = full market price. 50 = half market price.
+  // Weapons include the root gun plus all attached child items before this cut is applied.
+  "MarketWeaponCashPricePercent": 50,
+
+  // Armor, armored rigs, plates, and armor-style gear get their own cash price percent.
+  "MarketArmorCashPricePercent": 50,
+
+  // Market price cache.
+  // true = after Tony does the first full pre-barter market pricing pass, save the resolved prices
+  // to MarketCashPriceCachePath. On later loads/restocks Tony spot-checks the configured offer
+  // snapshot. If the snapshot/settings did not change, cached prices are reused.
+  // If the snapshot/settings changed, Tony resolves the market prices again and rewrites the cache.
+  "MarketCashPriceCacheEnabled": true,
+
+  // Generated cache path. Safe to delete; Tony will recreate it.
+  "MarketCashPriceCachePath": "db/Generated/customAssort.json",
+
   // StackObjectsCount cap for generated root offers.
   // This is offer stock stack count, not ammo pack size.
   "GeneratedOfferMaxStackObjectsCount": 30,

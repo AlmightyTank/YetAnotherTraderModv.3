@@ -14,6 +14,16 @@ using Path = System.IO.Path;
 
 namespace YetAnotherTraderMod.src.GeneratedOffers;
 
+public sealed record MarketCashPriceResult(
+    string Mode,
+    double FleaPrice,
+    double TraderBestPrice,
+    double FinalPrice);
+
+public sealed record MarketCashPriceComponent(
+    string TplId,
+    double Count);
+
 /// <summary>
 /// Runtime-facing service for generated/addon Tony offers.
 ///
@@ -2630,6 +2640,18 @@ public sealed class YATMGeneratedOfferService(
             || name.Contains("cigarettes");
     }
 
+    public bool IsWeaponTemplate(string? tpl)
+    {
+        return !string.IsNullOrWhiteSpace(tpl)
+               && IsTplInTemplateTree(tpl, WeaponBaseClassIds);
+    }
+
+    public bool IsArmorTemplate(string? tpl)
+    {
+        return !string.IsNullOrWhiteSpace(tpl)
+               && IsTplInTemplateTree(tpl, ArmorBaseClassIds);
+    }
+
     private bool IsTplInTemplateTree(string tpl, IReadOnlySet<string> baseClassIds)
     {
         if (string.IsNullOrWhiteSpace(tpl))
@@ -4269,6 +4291,126 @@ public sealed class YATMGeneratedOfferService(
         var bytes = SHA1.HashData(Encoding.UTF8.GetBytes($"{seed}:{key}"));
         var value = BitConverter.ToUInt32(bytes, 0);
         return value / (double)uint.MaxValue;
+    }
+
+    public MarketCashPriceResult ResolveMarketCashPrice(string? tpl, SettingsConfig settings)
+    {
+        if (string.IsNullOrWhiteSpace(tpl))
+        {
+            return new MarketCashPriceResult(
+                NormalizeMarketCashPriceBlendMode(settings.MarketCashPriceBlendMode),
+                0,
+                0,
+                0);
+        }
+
+        return ResolveMarketCashPrice(
+            new[] { new MarketCashPriceComponent(tpl, 1) },
+            settings);
+    }
+
+    public MarketCashPriceResult ResolveMarketCashPrice(IEnumerable<MarketCashPriceComponent>? components, SettingsConfig settings)
+    {
+        var normalizedComponents = components?
+            .Where(x => !string.IsNullOrWhiteSpace(x.TplId) && x.Count > 0)
+            .GroupBy(x => x.TplId, StringComparer.OrdinalIgnoreCase)
+            .Select(x => new MarketCashPriceComponent(x.Key, x.Sum(y => y.Count)))
+            .ToList()
+            ?? [];
+
+        var mode = NormalizeMarketCashPriceBlendMode(settings.MarketCashPriceBlendMode);
+        if (normalizedComponents.Count == 0)
+        {
+            return new MarketCashPriceResult(mode, 0, 0, 0);
+        }
+
+        double fleaPrice = 0;
+        double traderBestPrice = 0;
+
+        foreach (var component in normalizedComponents)
+        {
+            var count = Math.Max(0, component.Count);
+            if (count <= 0)
+            {
+                continue;
+            }
+
+            fleaPrice += Math.Max(0, ResolveDatabasePrice(component.TplId, settings)) * count;
+            traderBestPrice += Math.Max(0, ResolveHighestTraderSellPrice(component.TplId)) * count;
+        }
+
+        var finalPrice = mode switch
+        {
+            "AllFlea" => PreferAvailable(fleaPrice, traderBestPrice),
+            "HeavyFlea" => BlendMarketPrices(fleaPrice, traderBestPrice, fleaWeight: 0.75),
+            "AllTBP" => PreferAvailable(traderBestPrice, fleaPrice),
+            "HeavyTBP" => BlendMarketPrices(fleaPrice, traderBestPrice, fleaWeight: 0.25),
+            _ => BlendMarketPrices(fleaPrice, traderBestPrice, fleaWeight: 0.50)
+        };
+
+        finalPrice = Math.Max(1, Math.Round(finalPrice, MidpointRounding.AwayFromZero));
+
+        return new MarketCashPriceResult(
+            mode,
+            Math.Max(0, Math.Round(fleaPrice, MidpointRounding.AwayFromZero)),
+            Math.Max(0, Math.Round(traderBestPrice, MidpointRounding.AwayFromZero)),
+            finalPrice);
+    }
+
+    private static double BlendMarketPrices(double fleaPrice, double traderBestPrice, double fleaWeight)
+    {
+        fleaPrice = Math.Max(0, fleaPrice);
+        traderBestPrice = Math.Max(0, traderBestPrice);
+
+        if (fleaPrice <= 1 && traderBestPrice > 0)
+        {
+            return traderBestPrice;
+        }
+
+        if (traderBestPrice <= 0)
+        {
+            return fleaPrice;
+        }
+
+        if (fleaPrice <= 0)
+        {
+            return traderBestPrice;
+        }
+
+        fleaWeight = Math.Clamp(fleaWeight, 0, 1);
+        return fleaPrice * fleaWeight + traderBestPrice * (1 - fleaWeight);
+    }
+
+    private static double PreferAvailable(double preferred, double fallback)
+    {
+        preferred = Math.Max(0, preferred);
+        fallback = Math.Max(0, fallback);
+
+        if (preferred <= 1 && fallback > 0)
+        {
+            return fallback;
+        }
+
+        return preferred > 0 ? preferred : fallback;
+    }
+
+    private static string NormalizeMarketCashPriceBlendMode(string? mode)
+    {
+        if (string.IsNullOrWhiteSpace(mode))
+        {
+            return "EqualParts";
+        }
+
+        var normalized = mode.Trim().Replace(" ", string.Empty).Replace("_", string.Empty).Replace("-", string.Empty);
+        return normalized.ToLowerInvariant() switch
+        {
+            "allflea" or "flea" or "fleaonly" => "AllFlea",
+            "heavyflea" or "mostlyflea" or "fleabiased" => "HeavyFlea",
+            "equalparts" or "equal" or "average" or "avg" or "halfandhalf" or "fiftyfifty" => "EqualParts",
+            "alltbp" or "tbp" or "alltraderbestprice" or "traderbestprice" or "alltrader" or "trader" => "AllTBP",
+            "heavytbp" or "mostlytbp" or "tbpbiased" or "heavytraderbestprice" or "heavytrader" => "HeavyTBP",
+            _ => "EqualParts"
+        };
     }
 
     private double ResolveGeneratedPrice(string? tpl, SettingsConfig settings)

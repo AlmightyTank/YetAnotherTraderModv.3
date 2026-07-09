@@ -1,20 +1,28 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 using SPTarkov.DI.Annotations;
+using SPTarkov.Server.Core.Helpers;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
 using SPTarkov.Server.Core.Servers;
+using SPTarkov.Server.Core.Utils;
 using YetAnotherTraderMod.config;
 using YetAnotherTraderMod.src.GeneratedOffers;
+using Path = System.IO.Path;
 
 namespace YetAnotherTraderMod.src.Services.Runtime;
 
 [Injectable(InjectionType.Singleton)]
 public sealed class YATMTraderAssortRuntimeRollService(
     DatabaseServer databaseServer,
-    YATMGeneratedOfferService generatedOfferService)
+    YATMGeneratedOfferService generatedOfferService,
+    ModHelper modHelper)
 {
     private static readonly Random _random = new();
 
@@ -24,6 +32,47 @@ public sealed class YATMTraderAssortRuntimeRollService(
     private static readonly HashSet<string> _lastOutOfStockRollKeys = new(StringComparer.OrdinalIgnoreCase);
 
     private sealed record RollCandidate(string OfferId, string RollKey);
+
+    private sealed record CashMarketPriceCandidate(
+        string OfferId,
+        string TplId,
+        IReadOnlyList<MarketCashPriceComponent> PriceComponents,
+        string PriceSnapshotKey,
+        string MarketPriceCategory,
+        int MarketPricePercent,
+        object CashComponent)
+    {
+        public bool IsPresetBundle => PriceComponents.Count > 1
+                                      || PriceComponents.Any(x => Math.Abs(x.Count - 1) > 0.001);
+    }
+
+    private sealed class MarketCashPriceCacheFile
+    {
+        public int SchemaVersion { get; set; } = 4;
+        public string Description { get; set; } = "Generated Tony market price cache used before barter generation. Safe to delete; Tony recreates it when needed.";
+        public string CacheKey { get; set; } = string.Empty;
+        public string BlendMode { get; set; } = string.Empty;
+        public int WeaponCashPricePercent { get; set; } = 50;
+        public int ArmorCashPricePercent { get; set; } = 50;
+        public int OfferCount { get; set; }
+        public DateTime GeneratedAtUtc { get; set; } = DateTime.UtcNow;
+        public Dictionary<string, MarketCashPriceCacheEntry> Offers { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    }
+
+    private sealed class MarketCashPriceCacheEntry
+    {
+        public string OfferId { get; set; } = string.Empty;
+        public string TplId { get; set; } = string.Empty;
+        public string Mode { get; set; } = string.Empty;
+        public string PriceSnapshotKey { get; set; } = string.Empty;
+        public string MarketPriceCategory { get; set; } = "Default";
+        public int MarketPricePercent { get; set; } = 100;
+        public List<MarketCashPriceComponent> Components { get; set; } = [];
+        public double FleaPrice { get; set; }
+        public double TraderBestPrice { get; set; }
+        public double RawFinalPrice { get; set; }
+        public double FinalPrice { get; set; }
+    }
 
     private sealed record AmmoPackBarterOfferLimitsData(
         PriceConfigItem PriceConfig,
@@ -50,12 +99,18 @@ public sealed class YATMTraderAssortRuntimeRollService(
     public void ApplyRuntimeAssortRolls(TraderAssort assort, YATMConfig config, string rollReason)
     {
         // HARD ORDER GUARANTEE:
-        // 1) Start from the clean assort object that was just read from assort.json.
-        // 2) Roll which offers become barter before generating barter schemes.
-        // 3) Generate barter schemes only for those selected barter offers, using the whitelist and balanced usage.
-        // 4) Apply the completed payment roll. Ammo barter offers keep the same OfferId and swap _tpl to the pack.
-        // 5) Only after paymentRollResult.Completed is true, run the stock roll.
+        // 1) Start from the clean assort object after base/custom/addon content has been merged.
+        // 2) Remove standalone ammo-pack helper roots so the visible rollable snapshot is stable.
+        // 3) Market-price Tony's configured offer rows before the payment roll.
+        //    Generated barters then use the same weapon/armor-adjusted price that cash offers will use.
+        // 4) Roll which offers become barter before generating barter schemes.
+        // 5) Generate barter schemes only for those selected barter offers, using the whitelist and balanced usage.
+        // 6) Apply the completed payment roll. Ammo barter offers keep the same OfferId and swap _tpl to the pack.
+        // 7) Only after paymentRollResult.Completed is true, run the stock roll.
         //    Stock reads the payment result; it does not decide barter state.
+        RemoveStandaloneAmmoPackRootOffers(assort, config);
+        var marketPricesPrimedBeforeBarters = PrimeMarketCashPricesForConfiguredOffers(assort, config, rollReason);
+
         var paymentRollResult = RollPayments(assort, config, rollReason);
 
         if (!paymentRollResult.Completed)
@@ -64,6 +119,17 @@ public sealed class YATMTraderAssortRuntimeRollService(
         }
 
         RollStock(assort, config, rollReason, paymentRollResult);
+
+        if (!marketPricesPrimedBeforeBarters)
+        {
+            // Safety fallback for unprimed/legacy setups. Normal runs already wrote market prices
+            // into PriceConfig before barter generation, so ApplyCashPaymentToOffer used the same values.
+            RepriceCashOffersFromMarket(assort, config, rollReason);
+        }
+        else
+        {
+            YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] Final cash reprice skipped; market prices were primed before barter generation.");
+        }
     }
 
     private void RollStock(
@@ -346,6 +412,913 @@ public sealed class YATMTraderAssortRuntimeRollService(
         }
 
         return false;
+    }
+
+    private bool PrimeMarketCashPricesForConfiguredOffers(TraderAssort assort, YATMConfig config, string rollReason)
+    {
+        if (!config.Settings.MarketRepriceCashOffers)
+        {
+            return false;
+        }
+
+        var rootItems = assort.Items
+            .Where(x => x.ParentId == "hideout")
+            .ToList();
+
+        if (rootItems.Count == 0 || config.Prices.Count == 0)
+        {
+            return false;
+        }
+
+        var childrenByParentId = BuildChildrenByParentId(assort);
+        var pairedAmmoPackOfferIds = config.Prices
+            .Where(IsPairedAmmoLooseConfig)
+            .Select(x => x.PackOfferId)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Cast<string>()
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var pairedAmmoPackTplIds = config.Prices
+            .Where(IsPairedAmmoLooseConfig)
+            .Select(x => x.AmmoBarterPackTplId)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Cast<string>()
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var configuredOfferIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var configCandidates = new List<(CashMarketPriceCandidate Candidate, PriceConfigItem PriceConfig)>();
+        var skippedNonRubCount = 0;
+        var skippedMissingTplCount = 0;
+        var skippedCurrencyTplCount = 0;
+        var skippedHelperCount = 0;
+
+        foreach (var priceConfig in config.Prices)
+        {
+            if (priceConfig == null)
+            {
+                continue;
+            }
+
+            var configuredCurrency = string.IsNullOrWhiteSpace(priceConfig.Currency)
+                ? "RUB"
+                : priceConfig.Currency.Trim().ToUpperInvariant();
+
+            if (!string.Equals(configuredCurrency, "RUB", StringComparison.OrdinalIgnoreCase))
+            {
+                skippedNonRubCount++;
+                continue;
+            }
+
+            if (string.IsNullOrWhiteSpace(priceConfig.TplId) && string.IsNullOrWhiteSpace(priceConfig.OfferId))
+            {
+                skippedMissingTplCount++;
+                continue;
+            }
+
+            if (!string.IsNullOrWhiteSpace(priceConfig.TplId) && YATMConfig.IsCurrencyTemplate(priceConfig.TplId))
+            {
+                skippedCurrencyTplCount++;
+                continue;
+            }
+
+            if (IsPairedAmmoPackHelperConfig(priceConfig, pairedAmmoPackOfferIds, pairedAmmoPackTplIds))
+            {
+                skippedHelperCount++;
+                continue;
+            }
+
+            var matchingOffers = rootItems
+                .Where(item => DoesConfigMatchOffer(item, priceConfig))
+                .ToList();
+
+            if (matchingOffers.Count == 0)
+            {
+                continue;
+            }
+
+            if (matchingOffers.Count > 1 && string.IsNullOrWhiteSpace(priceConfig.OfferId))
+            {
+                YATMLogger.LogDebug($"[MarketPricing] Multiple offers matched TplId {priceConfig.TplId}. Add OfferId to manual_offers.jsonc for exact weapon preset market pricing.");
+            }
+
+            foreach (var offer in matchingOffers)
+            {
+                var offerId = GetMemberValue(offer, "Id")?.ToString();
+                if (string.IsNullOrWhiteSpace(offerId))
+                {
+                    continue;
+                }
+
+                if (!configuredOfferIds.Add(offerId))
+                {
+                    continue;
+                }
+
+                var soldTpl = YATMConfig.GetTemplateId(offer);
+                if (string.IsNullOrWhiteSpace(soldTpl))
+                {
+                    skippedMissingTplCount++;
+                    continue;
+                }
+
+                if (YATMConfig.IsCurrencyTemplate(soldTpl))
+                {
+                    skippedCurrencyTplCount++;
+                    continue;
+                }
+
+                var priceComponents = BuildMarketCashPriceComponents(offer, offerId, soldTpl, childrenByParentId);
+                var marketPriceCategory = ResolveMarketCashPriceCategory(soldTpl);
+                var marketPricePercent = ResolveMarketCashPricePercentForCategory(marketPriceCategory, config.Settings);
+                var priceSnapshotKey = BuildMarketCashPriceSnapshotKey(priceComponents, marketPriceCategory, marketPricePercent);
+
+                configCandidates.Add((
+                    new CashMarketPriceCandidate(
+                        offerId,
+                        soldTpl,
+                        priceComponents,
+                        priceSnapshotKey,
+                        marketPriceCategory,
+                        marketPricePercent,
+                        priceConfig),
+                    priceConfig));
+            }
+        }
+
+        if (configCandidates.Count == 0)
+        {
+            YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] No configured RUB offer rows found for pre-barter market pricing.");
+            LogMarketPricingPreRollSkipSummary(rollReason, skippedNonRubCount, skippedMissingTplCount, skippedCurrencyTplCount, skippedHelperCount);
+            return false;
+        }
+
+        var candidates = configCandidates.Select(x => x.Candidate).ToList();
+        var cacheKey = BuildMarketCashPriceCacheKey(candidates, config.Settings);
+
+        if (config.Settings.MarketCashPriceCacheEnabled
+            && TryLoadMatchingMarketCashPriceCache(config.Settings, cacheKey, candidates, out var cachedPrices))
+        {
+            var cachedChangedCount = 0;
+            foreach (var (candidate, priceConfig) in configCandidates)
+            {
+                if (!cachedPrices.TryGetValue(candidate.OfferId, out var cachedEntry) || cachedEntry.FinalPrice <= 0)
+                {
+                    continue;
+                }
+
+                if (ApplyMarketPriceToPriceConfig(priceConfig, cachedEntry.FinalPrice, candidate.OfferId, candidate.TplId, "cached"))
+                {
+                    cachedChangedCount++;
+                }
+            }
+
+            YATMLogger.Log(
+                $"[{rollReason}] [MarketPricing] Reused cached pre-barter market prices for {configCandidates.Count} configured offer row(s) " +
+                $"from {NormalizeGeneratedPath(config.Settings.MarketCashPriceCachePath)}.");
+
+            if (cachedChangedCount > 0)
+            {
+                YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] Applied {cachedChangedCount} cached pre-barter price update(s). Generated barters will use these prices.");
+            }
+
+            LogMarketPricingPreRollSkipSummary(rollReason, skippedNonRubCount, skippedMissingTplCount, skippedCurrencyTplCount, skippedHelperCount);
+            return true;
+        }
+
+        var priceCacheBySnapshot = new Dictionary<string, MarketCashPriceResult>(StringComparer.OrdinalIgnoreCase);
+        var cacheEntriesByOfferId = new Dictionary<string, MarketCashPriceCacheEntry>(StringComparer.OrdinalIgnoreCase);
+        var changedCount = 0;
+
+        foreach (var (candidate, priceConfig) in configCandidates)
+        {
+            if (!priceCacheBySnapshot.TryGetValue(candidate.PriceSnapshotKey, out var marketPrice))
+            {
+                var rawMarketPrice = generatedOfferService.ResolveMarketCashPrice(candidate.PriceComponents, config.Settings);
+                marketPrice = ApplyMarketCashPriceCategoryPercent(rawMarketPrice, candidate);
+                priceCacheBySnapshot[candidate.PriceSnapshotKey] = marketPrice;
+            }
+
+            if (marketPrice.FinalPrice <= 0)
+            {
+                continue;
+            }
+
+            if (ApplyMarketPriceToPriceConfig(priceConfig, marketPrice.FinalPrice, candidate.OfferId, candidate.TplId, marketPrice.Mode))
+            {
+                changedCount++;
+            }
+
+            cacheEntriesByOfferId[candidate.OfferId] = new MarketCashPriceCacheEntry
+            {
+                OfferId = candidate.OfferId,
+                TplId = candidate.TplId,
+                Mode = marketPrice.Mode,
+                PriceSnapshotKey = candidate.PriceSnapshotKey,
+                MarketPriceCategory = candidate.MarketPriceCategory,
+                MarketPricePercent = candidate.MarketPricePercent,
+                Components = candidate.PriceComponents.ToList(),
+                FleaPrice = marketPrice.FleaPrice,
+                TraderBestPrice = marketPrice.TraderBestPrice,
+                RawFinalPrice = ResolveRawMarketFinalPriceForLog(marketPrice, candidate),
+                FinalPrice = marketPrice.FinalPrice
+            };
+        }
+
+        if (config.Settings.MarketCashPriceCacheEnabled)
+        {
+            SaveMarketCashPriceCache(config.Settings, cacheKey, configCandidates.Count, cacheEntriesByOfferId, rollReason);
+        }
+
+        if (changedCount > 0)
+        {
+            YATMLogger.Log(
+                $"[{rollReason}] [MarketPricing] Pre-priced {changedCount} configured offer row(s) before barter generation using {config.Settings.MarketCashPriceBlendMode}. " +
+                "Generated barters and cash offers now share the same market-adjusted values.");
+        }
+        else
+        {
+            YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] Pre-barter market pricing found no configured offer prices that needed changing.");
+        }
+
+        LogMarketPricingPreRollSkipSummary(rollReason, skippedNonRubCount, skippedMissingTplCount, skippedCurrencyTplCount, skippedHelperCount);
+        return true;
+    }
+
+    private static bool ApplyMarketPriceToPriceConfig(
+        PriceConfigItem priceConfig,
+        double marketPrice,
+        string offerId,
+        string tplId,
+        string priceMode)
+    {
+        if (marketPrice <= 0)
+        {
+            return false;
+        }
+
+        var oldPrice = priceConfig.Price;
+        var newPrice = Math.Max(1, Math.Round(marketPrice, 0, MidpointRounding.AwayFromZero));
+        priceConfig.Currency = "RUB";
+
+        if (oldPrice > 0 && Math.Abs(oldPrice - newPrice) <= 0.001)
+        {
+            return false;
+        }
+
+        priceConfig.Price = newPrice;
+        YATMLogger.LogRealDebug(
+            $"[MarketPricing] Pre-barter price {offerId} {tplId}: {oldPrice:0.##} -> {newPrice:0.##} RUB | Mode {priceMode}");
+        return true;
+    }
+
+    private static void LogMarketPricingPreRollSkipSummary(
+        string rollReason,
+        int skippedNonRubCount,
+        int skippedMissingTplCount,
+        int skippedCurrencyTplCount,
+        int skippedHelperCount)
+    {
+        if (skippedNonRubCount == 0
+            && skippedMissingTplCount == 0
+            && skippedCurrencyTplCount == 0
+            && skippedHelperCount == 0)
+        {
+            return;
+        }
+
+        YATMLogger.LogDebug(
+            $"[{rollReason}] [MarketPricing] Pre-barter skipped rows: non-RUB={skippedNonRubCount}, missing tpl/offer={skippedMissingTplCount}, currency tpl={skippedCurrencyTplCount}, ammo-pack helper={skippedHelperCount}.");
+    }
+
+    private void RepriceCashOffersFromMarket(TraderAssort assort, YATMConfig config, string rollReason)
+    {
+        if (!config.Settings.MarketRepriceCashOffers)
+        {
+            return;
+        }
+
+        var itemMap = assort.Items
+            .Where(x => x.ParentId == "hideout" && !string.IsNullOrWhiteSpace(x.Id))
+            .GroupBy<Item, string>(x => x.Id, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(x => x.Key, x => x.First(), StringComparer.OrdinalIgnoreCase);
+
+        var childrenByParentId = BuildChildrenByParentId(assort);
+
+        var cashCandidates = new List<CashMarketPriceCandidate>();
+        var skippedBarterOrMixedCount = 0;
+        var skippedCurrencyCount = 0;
+        var skippedMissingTplCount = 0;
+
+        foreach (var itemSchemePair in assort.BarterScheme)
+        {
+            var offerId = itemSchemePair.Key;
+            var schemeList = itemSchemePair.Value;
+
+            if (!itemMap.TryGetValue(offerId, out var offer))
+            {
+                continue;
+            }
+
+            var soldTpl = YATMConfig.GetTemplateId(offer);
+            if (string.IsNullOrWhiteSpace(soldTpl))
+            {
+                skippedMissingTplCount++;
+                continue;
+            }
+
+            foreach (var schemeSubList in schemeList)
+            {
+                if (!TryGetSingleRubCashComponent(schemeSubList, out var cashComponent, out var skippedBecauseMixed, out var skippedBecauseCurrency))
+                {
+                    if (skippedBecauseCurrency)
+                    {
+                        skippedCurrencyCount++;
+                    }
+                    else if (skippedBecauseMixed)
+                    {
+                        skippedBarterOrMixedCount++;
+                    }
+
+                    continue;
+                }
+
+                var priceComponents = BuildMarketCashPriceComponents(offer, offerId, soldTpl, childrenByParentId);
+                var marketPriceCategory = ResolveMarketCashPriceCategory(soldTpl);
+                var marketPricePercent = ResolveMarketCashPricePercentForCategory(marketPriceCategory, config.Settings);
+                var priceSnapshotKey = BuildMarketCashPriceSnapshotKey(priceComponents, marketPriceCategory, marketPricePercent);
+                cashCandidates.Add(new CashMarketPriceCandidate(
+                    offerId,
+                    soldTpl,
+                    priceComponents,
+                    priceSnapshotKey,
+                    marketPriceCategory,
+                    marketPricePercent,
+                    cashComponent));
+            }
+        }
+
+        if (cashCandidates.Count == 0)
+        {
+            YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] No final pure RUB cash offers found for repricing.");
+            LogMarketPricingSkipSummary(rollReason, skippedBarterOrMixedCount, skippedCurrencyCount, skippedMissingTplCount);
+            return;
+        }
+
+        var cacheKey = BuildMarketCashPriceCacheKey(cashCandidates, config.Settings);
+        if (config.Settings.MarketCashPriceCacheEnabled
+            && TryLoadMatchingMarketCashPriceCache(config.Settings, cacheKey, cashCandidates, out var cachedPrices))
+        {
+            var cachedChangedCount = ApplyCachedMarketCashPrices(cashCandidates, cachedPrices);
+            YATMLogger.Log(
+                $"[{rollReason}] [MarketPricing] Reused cached market cash prices for {cashCandidates.Count} final cash payment option(s) " +
+                $"from {NormalizeGeneratedPath(config.Settings.MarketCashPriceCachePath)}.");
+
+            if (cachedChangedCount > 0)
+            {
+                YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] Applied {cachedChangedCount} cached cash price update(s). Global PriceMultiplier still applies after this step.");
+            }
+
+            LogMarketPricingSkipSummary(rollReason, skippedBarterOrMixedCount, skippedCurrencyCount, skippedMissingTplCount);
+            return;
+        }
+
+        var priceCacheBySnapshot = new Dictionary<string, MarketCashPriceResult>(StringComparer.OrdinalIgnoreCase);
+        var cacheEntriesByOfferId = new Dictionary<string, MarketCashPriceCacheEntry>(StringComparer.OrdinalIgnoreCase);
+        var changedCount = 0;
+
+        foreach (var candidate in cashCandidates)
+        {
+            if (!priceCacheBySnapshot.TryGetValue(candidate.PriceSnapshotKey, out var marketPrice))
+            {
+                var rawMarketPrice = generatedOfferService.ResolveMarketCashPrice(candidate.PriceComponents, config.Settings);
+                marketPrice = ApplyMarketCashPriceCategoryPercent(rawMarketPrice, candidate);
+                priceCacheBySnapshot[candidate.PriceSnapshotKey] = marketPrice;
+            }
+
+            if (marketPrice.FinalPrice <= 0)
+            {
+                continue;
+            }
+
+            var oldPrice = GetDoubleMember(candidate.CashComponent, "Count", 0);
+            var newPrice = marketPrice.FinalPrice;
+
+            if (oldPrice <= 0 || Math.Abs(oldPrice - newPrice) > 0.001)
+            {
+                SetMemberValue(candidate.CashComponent, "Count", newPrice);
+                changedCount++;
+
+                YATMLogger.LogRealDebug(
+                    $"[MarketPricing] {candidate.OfferId} {candidate.TplId}: {oldPrice:0.##} -> {newPrice:0.##} RUB | " +
+                    $"Mode {marketPrice.Mode}, Flea {marketPrice.FleaPrice:0.##}, TBP {marketPrice.TraderBestPrice:0.##}, " +
+                    $"Category {candidate.MarketPriceCategory} {candidate.MarketPricePercent}%, Components {candidate.PriceComponents.Count}");
+            }
+
+            cacheEntriesByOfferId[candidate.OfferId] = new MarketCashPriceCacheEntry
+            {
+                OfferId = candidate.OfferId,
+                TplId = candidate.TplId,
+                Mode = marketPrice.Mode,
+                PriceSnapshotKey = candidate.PriceSnapshotKey,
+                MarketPriceCategory = candidate.MarketPriceCategory,
+                MarketPricePercent = candidate.MarketPricePercent,
+                Components = candidate.PriceComponents.ToList(),
+                FleaPrice = marketPrice.FleaPrice,
+                TraderBestPrice = marketPrice.TraderBestPrice,
+                RawFinalPrice = ResolveRawMarketFinalPriceForLog(marketPrice, candidate),
+                FinalPrice = marketPrice.FinalPrice
+            };
+        }
+
+        if (config.Settings.MarketCashPriceCacheEnabled)
+        {
+            SaveMarketCashPriceCache(config.Settings, cacheKey, cashCandidates.Count, cacheEntriesByOfferId, rollReason);
+        }
+
+        if (changedCount > 0)
+        {
+            YATMLogger.Log(
+                $"[{rollReason}] [MarketPricing] Repriced {changedCount} final cash offer(s) using {config.Settings.MarketCashPriceBlendMode}. " +
+                "Global PriceMultiplier still applies after this step.");
+        }
+        else
+        {
+            YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] No final cash offers needed repricing.");
+        }
+
+        LogMarketPricingSkipSummary(rollReason, skippedBarterOrMixedCount, skippedCurrencyCount, skippedMissingTplCount);
+    }
+
+    private static Dictionary<string, List<object>> BuildChildrenByParentId(TraderAssort assort)
+    {
+        var childrenByParentId = new Dictionary<string, List<object>>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var item in assort.Items)
+        {
+            var itemId = GetMemberValue(item, "Id")?.ToString();
+            var parentId = GetMemberValue(item, "ParentId")?.ToString();
+
+            if (string.IsNullOrWhiteSpace(itemId)
+                || string.IsNullOrWhiteSpace(parentId)
+                || string.Equals(parentId, "hideout", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (!childrenByParentId.TryGetValue(parentId, out var children))
+            {
+                children = [];
+                childrenByParentId[parentId] = children;
+            }
+
+            children.Add(item);
+        }
+
+        return childrenByParentId;
+    }
+
+    private static IReadOnlyList<MarketCashPriceComponent> BuildMarketCashPriceComponents(
+        object rootOffer,
+        string rootOfferId,
+        string rootTpl,
+        IReadOnlyDictionary<string, List<object>> childrenByParentId)
+    {
+        var rawComponents = new List<MarketCashPriceComponent>();
+        var visitedItemIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        void Visit(object item, string itemId, string? knownTpl, bool isRoot)
+        {
+            if (string.IsNullOrWhiteSpace(itemId) || !visitedItemIds.Add(itemId))
+            {
+                return;
+            }
+
+            var tpl = knownTpl ?? YATMConfig.GetTemplateId(item);
+            if (!string.IsNullOrWhiteSpace(tpl) && !YATMConfig.IsCurrencyTemplate(tpl))
+            {
+                rawComponents.Add(new MarketCashPriceComponent(
+                    tpl,
+                    isRoot ? 1 : ResolveChildAssortItemQuantity(item)));
+            }
+
+            if (!childrenByParentId.TryGetValue(itemId, out var children))
+            {
+                return;
+            }
+
+            foreach (var child in children)
+            {
+                var childId = GetMemberValue(child, "Id")?.ToString();
+                if (string.IsNullOrWhiteSpace(childId))
+                {
+                    continue;
+                }
+
+                Visit(child, childId, YATMConfig.GetTemplateId(child), isRoot: false);
+            }
+        }
+
+        Visit(rootOffer, rootOfferId, rootTpl, isRoot: true);
+
+        return rawComponents
+            .Where(x => !string.IsNullOrWhiteSpace(x.TplId) && x.Count > 0)
+            .GroupBy(x => x.TplId, StringComparer.OrdinalIgnoreCase)
+            .Select(x => new MarketCashPriceComponent(x.Key, Math.Round(x.Sum(y => y.Count), 4)))
+            .OrderBy(x => x.TplId, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    private static double ResolveChildAssortItemQuantity(object item)
+    {
+        var quantity = 0.0;
+
+        var upd = GetMemberValue(item, "Upd") ?? GetMemberValue(item, "upd");
+        if (upd != null)
+        {
+            quantity = GetDoubleMember(upd, "StackObjectsCount", 0);
+        }
+
+        if (quantity <= 0)
+        {
+            quantity = GetDoubleMember(item, "StackObjectsCount", 0);
+        }
+
+        return quantity > 0
+            ? Math.Round(quantity, 4)
+            : 1;
+    }
+
+    private string ResolveMarketCashPriceCategory(string tpl)
+    {
+        if (generatedOfferService.IsWeaponTemplate(tpl))
+        {
+            return "Weapon";
+        }
+
+        if (generatedOfferService.IsArmorTemplate(tpl))
+        {
+            return "Armor";
+        }
+
+        return "Default";
+    }
+
+    private static int ResolveMarketCashPricePercentForCategory(string category, SettingsConfig settings)
+    {
+        return category switch
+        {
+            "Weapon" => Math.Clamp(settings.MarketWeaponCashPricePercent, 1, 100),
+            "Armor" => Math.Clamp(settings.MarketArmorCashPricePercent, 1, 100),
+            _ => 100
+        };
+    }
+
+    private static MarketCashPriceResult ApplyMarketCashPriceCategoryPercent(
+        MarketCashPriceResult price,
+        CashMarketPriceCandidate candidate)
+    {
+        var percent = Math.Clamp(candidate.MarketPricePercent, 1, 100);
+        if (price.FinalPrice <= 0 || percent >= 100)
+        {
+            return price;
+        }
+
+        var finalPrice = Math.Max(1, Math.Round(price.FinalPrice * (percent / 100.0), MidpointRounding.AwayFromZero));
+        return price with { FinalPrice = finalPrice };
+    }
+
+    private static double ResolveRawMarketFinalPriceForLog(MarketCashPriceResult price, CashMarketPriceCandidate candidate)
+    {
+        var percent = Math.Clamp(candidate.MarketPricePercent, 1, 100);
+        if (percent >= 100 || price.FinalPrice <= 0)
+        {
+            return price.FinalPrice;
+        }
+
+        return Math.Max(1, Math.Round(price.FinalPrice / (percent / 100.0), MidpointRounding.AwayFromZero));
+    }
+
+    private static string BuildMarketCashPriceSnapshotKey(
+        IEnumerable<MarketCashPriceComponent> components,
+        string marketPriceCategory,
+        int marketPricePercent)
+    {
+        var snapshot = string.Join(
+            "|",
+            components
+                .Where(x => !string.IsNullOrWhiteSpace(x.TplId) && x.Count > 0)
+                .GroupBy(x => x.TplId, StringComparer.OrdinalIgnoreCase)
+                .Select(x => new MarketCashPriceComponent(x.Key, Math.Round(x.Sum(y => y.Count), 4)))
+                .OrderBy(x => x.TplId, StringComparer.OrdinalIgnoreCase)
+                .Select(x => $"{x.TplId}:{x.Count:0.####}"));
+
+        snapshot = $"category={marketPriceCategory}|percent={Math.Clamp(marketPricePercent, 1, 100)}|{snapshot}";
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(snapshot)));
+    }
+
+    private static int ApplyCachedMarketCashPrices(
+        IEnumerable<CashMarketPriceCandidate> cashCandidates,
+        IReadOnlyDictionary<string, MarketCashPriceCacheEntry> cachedPrices)
+    {
+        var changedCount = 0;
+
+        foreach (var candidate in cashCandidates)
+        {
+            if (!cachedPrices.TryGetValue(candidate.OfferId, out var cachedEntry)
+                || cachedEntry.FinalPrice <= 0
+                || !string.Equals(cachedEntry.TplId, candidate.TplId, StringComparison.OrdinalIgnoreCase)
+                || !string.Equals(cachedEntry.PriceSnapshotKey, candidate.PriceSnapshotKey, StringComparison.OrdinalIgnoreCase)
+                || !string.Equals(cachedEntry.MarketPriceCategory, candidate.MarketPriceCategory, StringComparison.OrdinalIgnoreCase)
+                || cachedEntry.MarketPricePercent != candidate.MarketPricePercent)
+            {
+                continue;
+            }
+
+            var oldPrice = GetDoubleMember(candidate.CashComponent, "Count", 0);
+            var newPrice = cachedEntry.FinalPrice;
+
+            if (oldPrice <= 0 || Math.Abs(oldPrice - newPrice) > 0.001)
+            {
+                SetMemberValue(candidate.CashComponent, "Count", newPrice);
+                changedCount++;
+            }
+        }
+
+        return changedCount;
+    }
+
+    private static void LogMarketPricingSkipSummary(
+        string rollReason,
+        int skippedBarterOrMixedCount,
+        int skippedCurrencyCount,
+        int skippedMissingTplCount)
+    {
+        if (skippedBarterOrMixedCount > 0 || skippedCurrencyCount > 0 || skippedMissingTplCount > 0)
+        {
+            YATMLogger.LogDebug(
+                $"[{rollReason}] [MarketPricing] Skipped {skippedBarterOrMixedCount} barter/mixed payment option(s), " +
+                $"{skippedCurrencyCount} non-RUB cash option(s), {skippedMissingTplCount} offer(s) with missing tpl.");
+        }
+    }
+
+    private bool TryLoadMatchingMarketCashPriceCache(
+        SettingsConfig settings,
+        string cacheKey,
+        IReadOnlyCollection<CashMarketPriceCandidate> cashCandidates,
+        out Dictionary<string, MarketCashPriceCacheEntry> cachedPrices)
+    {
+        cachedPrices = new Dictionary<string, MarketCashPriceCacheEntry>(StringComparer.OrdinalIgnoreCase);
+
+        var cachePath = ResolveModRelativePath(settings.MarketCashPriceCachePath);
+        if (string.IsNullOrWhiteSpace(cachePath) || !File.Exists(cachePath))
+        {
+            return false;
+        }
+
+        try
+        {
+            var cache = JsonSerializer.Deserialize<MarketCashPriceCacheFile>(File.ReadAllText(cachePath), MarketCashPriceCacheJsonOptions);
+            if (cache == null
+                || cache.SchemaVersion != 4
+                || !string.Equals(cache.CacheKey, cacheKey, StringComparison.OrdinalIgnoreCase)
+                || cache.OfferCount != cashCandidates.Count
+                || cache.Offers.Count == 0)
+            {
+                return false;
+            }
+
+            foreach (var candidate in cashCandidates)
+            {
+                if (!cache.Offers.TryGetValue(candidate.OfferId, out var entry)
+                    || !string.Equals(entry.TplId, candidate.TplId, StringComparison.OrdinalIgnoreCase)
+                    || !string.Equals(entry.PriceSnapshotKey, candidate.PriceSnapshotKey, StringComparison.OrdinalIgnoreCase)
+                    || !string.Equals(entry.MarketPriceCategory, candidate.MarketPriceCategory, StringComparison.OrdinalIgnoreCase)
+                    || entry.MarketPricePercent != candidate.MarketPricePercent
+                    || entry.FinalPrice <= 0)
+                {
+                    return false;
+                }
+
+                cachedPrices[candidate.OfferId] = entry;
+            }
+
+            if (!MarketCashPriceCacheSpotCheckPassed(settings, cashCandidates, cachedPrices))
+            {
+                return false;
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            YATMLogger.LogDebug($"[MarketPricing] Failed to read generated cash price cache {NormalizeGeneratedPath(settings.MarketCashPriceCachePath)}: {ex.Message}");
+            return false;
+        }
+    }
+
+    private bool MarketCashPriceCacheSpotCheckPassed(
+        SettingsConfig settings,
+        IEnumerable<CashMarketPriceCandidate> cashCandidates,
+        IReadOnlyDictionary<string, MarketCashPriceCacheEntry> cachedPrices)
+    {
+        // Keep this small: the goal is to catch changed flea/TBP data without doing the full expensive pass.
+        const int spotCheckCount = 8;
+
+        var sampledCandidates = cashCandidates
+            .GroupBy(x => x.PriceSnapshotKey, StringComparer.OrdinalIgnoreCase)
+            .Select(x => x.OrderBy(y => y.OfferId, StringComparer.OrdinalIgnoreCase).First())
+            .OrderBy(x => x.OfferId, StringComparer.OrdinalIgnoreCase)
+            .Take(spotCheckCount)
+            .ToList();
+
+        foreach (var candidate in sampledCandidates)
+        {
+            if (!cachedPrices.TryGetValue(candidate.OfferId, out var cachedEntry))
+            {
+                return false;
+            }
+
+            var livePrice = ApplyMarketCashPriceCategoryPercent(
+                generatedOfferService.ResolveMarketCashPrice(candidate.PriceComponents, settings),
+                candidate);
+            if (livePrice.FinalPrice <= 0)
+            {
+                return false;
+            }
+
+            if (!string.Equals(livePrice.Mode, cachedEntry.Mode, StringComparison.OrdinalIgnoreCase)
+                || Math.Abs(livePrice.FinalPrice - cachedEntry.FinalPrice) > 0.001
+                || Math.Abs(livePrice.FleaPrice - cachedEntry.FleaPrice) > 0.001
+                || Math.Abs(livePrice.TraderBestPrice - cachedEntry.TraderBestPrice) > 0.001)
+            {
+                YATMLogger.LogDebug(
+                    $"[MarketPricing] Cache spot-check changed for {candidate.OfferId} {candidate.TplId}: " +
+                    $"cached {cachedEntry.FinalPrice:0.##} RUB, live {livePrice.FinalPrice:0.##} RUB. Rebuilding generated cash price cache.");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void SaveMarketCashPriceCache(
+        SettingsConfig settings,
+        string cacheKey,
+        int cashCandidateCount,
+        Dictionary<string, MarketCashPriceCacheEntry> entriesByOfferId,
+        string rollReason)
+    {
+        if (entriesByOfferId.Count == 0)
+        {
+            return;
+        }
+
+        var cachePath = ResolveModRelativePath(settings.MarketCashPriceCachePath);
+        if (string.IsNullOrWhiteSpace(cachePath))
+        {
+            return;
+        }
+
+        try
+        {
+            var cacheDir = Path.GetDirectoryName(cachePath);
+            if (!string.IsNullOrWhiteSpace(cacheDir))
+            {
+                Directory.CreateDirectory(cacheDir);
+            }
+
+            var cache = new MarketCashPriceCacheFile
+            {
+                CacheKey = cacheKey,
+                BlendMode = NormalizeMarketCashPriceBlendMode(settings.MarketCashPriceBlendMode),
+                WeaponCashPricePercent = Math.Clamp(settings.MarketWeaponCashPricePercent, 1, 100),
+                ArmorCashPricePercent = Math.Clamp(settings.MarketArmorCashPricePercent, 1, 100),
+                OfferCount = cashCandidateCount,
+                GeneratedAtUtc = DateTime.UtcNow,
+                Offers = entriesByOfferId
+                    .OrderBy(x => x.Key, StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase)
+            };
+
+            File.WriteAllText(cachePath, JsonSerializer.Serialize(cache, MarketCashPriceCacheJsonOptions));
+            YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] Saved generated cash price cache to {NormalizeGeneratedPath(settings.MarketCashPriceCachePath)}.");
+        }
+        catch (Exception ex)
+        {
+            YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] Failed to save generated cash price cache {NormalizeGeneratedPath(settings.MarketCashPriceCachePath)}: {ex.Message}");
+        }
+    }
+
+    private string ResolveModRelativePath(string? configuredPath)
+    {
+        configuredPath = NormalizeGeneratedPath(configuredPath);
+        if (Path.IsPathRooted(configuredPath))
+        {
+            return configuredPath;
+        }
+
+        var pathToMod = modHelper.GetAbsolutePathToModFolder(Assembly.GetExecutingAssembly());
+        return Path.Combine(pathToMod, configuredPath.Replace('/', Path.DirectorySeparatorChar));
+    }
+
+    private static string NormalizeGeneratedPath(string? configuredPath)
+    {
+        var normalized = string.IsNullOrWhiteSpace(configuredPath)
+            ? "db/Generated/customAssort.json"
+            : configuredPath.Trim().Replace('\\', '/');
+
+        return normalized;
+    }
+
+    private static string BuildMarketCashPriceCacheKey(
+        IEnumerable<CashMarketPriceCandidate> cashCandidates,
+        SettingsConfig settings)
+    {
+        var snapshotBuilder = new StringBuilder();
+        snapshotBuilder.Append("schema=3|");
+        snapshotBuilder.Append("mode=").Append(NormalizeMarketCashPriceBlendMode(settings.MarketCashPriceBlendMode)).Append('|');
+        snapshotBuilder.Append("weaponPct=").Append(Math.Clamp(settings.MarketWeaponCashPricePercent, 1, 100)).Append('|');
+        snapshotBuilder.Append("armorPct=").Append(Math.Clamp(settings.MarketArmorCashPricePercent, 1, 100)).Append('|');
+        snapshotBuilder.Append("externalFlea=").Append(settings.GeneratedPriceUseExternalFleaPriceFiles).Append('|');
+        snapshotBuilder.Append("externalMode=").Append(settings.GeneratedPriceExternalFleaGameMode ?? string.Empty).Append('|');
+        snapshotBuilder.Append("scanSiblings=").Append(settings.GeneratedPriceScanSiblingModsForFleaPriceFiles).Append('|');
+        snapshotBuilder.Append("preferExternal=").Append(settings.GeneratedPricePreferExternalFleaPrices).Append('|');
+        snapshotBuilder.Append("paths=").Append(string.Join(",", settings.GeneratedPriceExternalFleaPriceFilePaths ?? new List<string>())).Append('|');
+
+        foreach (var candidate in cashCandidates
+                     .OrderBy(x => x.OfferId, StringComparer.OrdinalIgnoreCase)
+                     .ThenBy(x => x.TplId, StringComparer.OrdinalIgnoreCase))
+        {
+            snapshotBuilder.Append(candidate.OfferId)
+                .Append('=')
+                .Append(candidate.TplId)
+                .Append('|')
+                .Append(candidate.PriceSnapshotKey)
+                .Append(';');
+        }
+
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(snapshotBuilder.ToString())));
+    }
+
+    private static string NormalizeMarketCashPriceBlendMode(string? mode)
+    {
+        if (string.IsNullOrWhiteSpace(mode))
+        {
+            return "EqualParts";
+        }
+
+        return mode.Trim() switch
+        {
+            var value when value.Equals("AllFlea", StringComparison.OrdinalIgnoreCase) => "AllFlea",
+            var value when value.Equals("HeavyFlea", StringComparison.OrdinalIgnoreCase) => "HeavyFlea",
+            var value when value.Equals("AllTBP", StringComparison.OrdinalIgnoreCase) => "AllTBP",
+            var value when value.Equals("AllTraderBestPrice", StringComparison.OrdinalIgnoreCase) => "AllTBP",
+            var value when value.Equals("HeavyTBP", StringComparison.OrdinalIgnoreCase) => "HeavyTBP",
+            var value when value.Equals("HeavyTraderBestPrice", StringComparison.OrdinalIgnoreCase) => "HeavyTBP",
+            _ => "EqualParts"
+        };
+    }
+
+    private static readonly JsonSerializerOptions MarketCashPriceCacheJsonOptions = new()
+    {
+        WriteIndented = true,
+        PropertyNameCaseInsensitive = true
+    };
+
+    private static bool TryGetSingleRubCashComponent(
+        IEnumerable paymentOption,
+        out object cashComponent,
+        out bool skippedBecauseMixed,
+        out bool skippedBecauseCurrency)
+    {
+        cashComponent = null!;
+        skippedBecauseMixed = false;
+        skippedBecauseCurrency = false;
+
+        var components = paymentOption?.Cast<object>().Where(x => x != null).ToList() ?? new List<object>();
+        if (components.Count != 1)
+        {
+            skippedBecauseMixed = true;
+            return false;
+        }
+
+        var component = components[0];
+        var tpl = GetMemberValue(component, "Template")?.ToString();
+        if (!YATMConfig.IsCurrencyTemplate(tpl))
+        {
+            skippedBecauseMixed = true;
+            return false;
+        }
+
+        var currency = YATMConfig.TemplateToCurrency(tpl);
+        if (!string.Equals(currency, "RUB", StringComparison.OrdinalIgnoreCase))
+        {
+            skippedBecauseCurrency = true;
+            return false;
+        }
+
+        cashComponent = component;
+        return true;
     }
 
     public void ApplyPriceMultiplierToMoneyComponents(TraderAssort assort, YATMConfig config)
@@ -1871,6 +2844,34 @@ public sealed class YATMTraderAssortRuntimeRollService(
         }
 
         return defaultValue;
+    }
+
+    private static double GetDoubleMember(object target, string memberName, double defaultValue)
+    {
+        var value = GetMemberValue(target, memberName);
+        if (value == null)
+        {
+            return defaultValue;
+        }
+
+        if (value is double doubleValue)
+        {
+            return doubleValue;
+        }
+
+        if (value is float floatValue)
+        {
+            return floatValue;
+        }
+
+        if (value is int intValue)
+        {
+            return intValue;
+        }
+
+        return double.TryParse(value.ToString(), out var parsedDouble)
+            ? parsedDouble
+            : defaultValue;
     }
 
     private static int GetIntSetting(object settings, string settingName, int defaultValue)

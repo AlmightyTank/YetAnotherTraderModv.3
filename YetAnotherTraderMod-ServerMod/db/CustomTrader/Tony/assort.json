@@ -1276,56 +1276,8 @@
             }
         },
         {
-            "_id": "6a2b7f99d2999bc7b9bba8be",
-            "_tpl": "6a3fd8c382d8dd83f87b2013",
-            "parentId": "hideout",
-            "slotId": "hideout",
-            "upd": {
-                "StackObjectsCount": 40,
-                "UnlimitedCount": false,
-                "BuyRestrictionMax": 4,
-                "BuyRestrictionCurrent": 0
-            }
-        },
-        {
-            "_id": "6a2b83fcd2999bc7b9bba8c4",
-            "_tpl": "6a3fd8c382d8dd83f87b2010",
-            "parentId": "hideout",
-            "slotId": "hideout",
-            "upd": {
-                "StackObjectsCount": 40,
-                "UnlimitedCount": false,
-                "BuyRestrictionMax": 4,
-                "BuyRestrictionCurrent": 0
-            }
-        },
-        {
-            "_id": "6a2b8279d2999bc7b9bba8c0",
-            "_tpl": "6a3fd8c382d8dd83f87b2014",
-            "parentId": "hideout",
-            "slotId": "hideout",
-            "upd": {
-                "StackObjectsCount": 40,
-                "UnlimitedCount": false,
-                "BuyRestrictionMax": 4,
-                "BuyRestrictionCurrent": 0
-            }
-        },
-        {
             "_id": "6a3fd8c382d8dd83f87b200d",
             "_tpl": "6a3fd8c382d8dd83f87b2011",
-            "parentId": "hideout",
-            "slotId": "hideout",
-            "upd": {
-                "StackObjectsCount": 40,
-                "UnlimitedCount": false,
-                "BuyRestrictionMax": 4,
-                "BuyRestrictionCurrent": 0
-            }
-        },
-        {
-            "_id": "6a2b82bed2999bc7b9bba8c2",
-            "_tpl": "6a3fd8c382d8dd83f87b200c",
             "parentId": "hideout",
             "slotId": "hideout",
             "upd": {
@@ -4410,43 +4362,11 @@
                 }
             ]
         ],
-        "6a2b83fcd2999bc7b9bba8c4": [
-            [
-                {
-                    "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
-                }
-            ]
-        ],
-        "6a2b82bed2999bc7b9bba8c2": [
-            [
-                {
-                    "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
-                }
-            ]
-        ],
-        "6a2b8279d2999bc7b9bba8c0": [
-            [
-                {
-                    "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
-                }
-            ]
-        ],
         "6a3fd8c382d8dd83f87b200d": [
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 125414
-                }
-            ]
-        ],
-        "6a2b7f99d2999bc7b9bba8be": [
-            [
-                {
-                    "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
                 }
             ]
         ],
@@ -4598,7 +4518,7 @@
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
+                    "count": 74000
                 }
             ]
         ],
@@ -4678,7 +4598,7 @@
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
+                    "count": 42444
                 }
             ]
         ],
@@ -4686,7 +4606,7 @@
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
+                    "count": 102111
                 }
             ]
         ],
@@ -4694,7 +4614,7 @@
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
+                    "count": 125000
                 }
             ]
         ],
@@ -4702,7 +4622,7 @@
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
+                    "count": 450000
                 }
             ]
         ],
@@ -4782,7 +4702,7 @@
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
+                    "count": 65000
                 }
             ]
         ],
@@ -4814,7 +4734,7 @@
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
+                    "count": 135000
                 }
             ]
         ],
@@ -4822,7 +4742,7 @@
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
+                    "count": 135000
                 }
             ]
         ],
@@ -4830,7 +4750,7 @@
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
+                    "count": 250000
                 }
             ]
         ],
@@ -4838,7 +4758,7 @@
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
+                    "count": 335000
                 }
             ]
         ],
@@ -4846,7 +4766,7 @@
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
+                    "count": 1357842
                 }
             ]
         ],
@@ -4886,7 +4806,7 @@
             [
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 1
+                    "count": 540000
                 }
             ]
         ],
@@ -5452,11 +5372,7 @@
         "6a3007dfd2999bc7b9bba96d": 1,
         "6a41373a82d8dd83f87b2048": 2,
         "6a3007dfd2999bc7b9bba96e": 1,
-        "6a2b83fcd2999bc7b9bba8c4": 3,
-        "6a2b82bed2999bc7b9bba8c2": 2,
-        "6a2b8279d2999bc7b9bba8c0": 2,
         "6a3fd8c382d8dd83f87b200d": 2,
-        "6a2b7f99d2999bc7b9bba8be": 3,
         "6a3007dfd2999bc7b9bba96f": 1,
         "6a44f6f738a6d33bffe98317": 3,
         "6a44f6f738a6d33bffe98318": 3,

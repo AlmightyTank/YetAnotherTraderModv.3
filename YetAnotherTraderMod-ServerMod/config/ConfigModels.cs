@@ -41,6 +41,36 @@ public class SettingsConfig
     [JsonIgnore]
     public bool AutoPriceGeneratedOffers { get; set; } = true;
 
+    // Runtime market repricing. Runs after custom content is merged but before
+    // payment/barter generation, so generated barters and cash offers share the same price.
+    [JsonIgnore]
+    public bool MarketRepriceCashOffers { get; set; } = true;
+
+    // How configured RUB prices are blended from flea-style value and trader best price.
+    // Accepted values: HeavyFlea, AllFlea, EqualParts, AllTBP, HeavyTBP.
+    [JsonIgnore]
+    public string MarketCashPriceBlendMode { get; set; } = "EqualParts";
+
+    // Category discounts applied after the market blend is resolved.
+    // 100 = full market price, 50 = half market price.
+    [JsonIgnore]
+    public int MarketWeaponCashPricePercent { get; set; } = 50;
+
+    [JsonIgnore]
+    public int MarketArmorCashPricePercent { get; set; } = 50;
+
+    // Cache market-resolved configured offer prices after the first full pre-barter pass.
+    // The cache is spot-checked by hashing the configured offer snapshot;
+    // if the snapshot/settings match, Tony reuses the saved prices instead of
+    // resolving flea/TBP for every configured offer again.
+    [JsonIgnore]
+    public bool MarketCashPriceCacheEnabled { get; set; } = true;
+
+    // Path relative to the mod folder for the generated market cash price cache.
+    // This file is generated output and is safe to delete.
+    [JsonIgnore]
+    public string MarketCashPriceCachePath { get; set; } = "db/Generated/customAssort.json";
+
     // Caps the generated offer root StackObjectsCount when the offer definition does not
     // intentionally set its own lower amount. 0 = do not cap.
     [JsonIgnore]
@@ -184,6 +214,28 @@ public class GeneratedTradeConfig
     public string Description { get; set; } = "Advanced settings for Tony generated addon offers and auto-generated barter recipes. Most users do not need to edit this.";
 
     public bool AutoPriceGeneratedOffers { get; set; } = true;
+
+    // Runtime market repricing. This updates configured RUB offer prices before
+    // Tony's cash/barter roll so generated barters use the same market values.
+    public bool MarketRepriceCashOffers { get; set; } = true;
+
+    // HeavyFlea = 75% flea / 25% trader best price.
+    // AllFlea = 100% flea.
+    // EqualParts = 50% flea / 50% trader best price.
+    // AllTBP = 100% trader best price.
+    // HeavyTBP = 25% flea / 75% trader best price.
+    public string MarketCashPriceBlendMode { get; set; } = "EqualParts";
+
+    // Category discounts applied after the market blend is resolved.
+    // 100 = full market price, 50 = half market price.
+    public int MarketWeaponCashPricePercent { get; set; } = 50;
+    public int MarketArmorCashPricePercent { get; set; } = 50;
+
+    // Generated cache for pre-barter market prices. Saves expensive full repricing
+    // unless Tony's configured offer snapshot or market pricing settings changed.
+    public bool MarketCashPriceCacheEnabled { get; set; } = true;
+    public string MarketCashPriceCachePath { get; set; } = "db/Generated/customAssort.json";
+
     public int GeneratedOfferMaxStackObjectsCount { get; set; } = 30;
     public int GeneratedOfferMaxBuyRestrictionMax { get; set; } = 5;
     public string GeneratedOfferPriceMode { get; set; } = "Exact";

@@ -152,7 +152,12 @@ public class YATMConfig
                 var settingsFileHasOldGeneratedTradeSettings =
                     json.Contains("AutoPriceGeneratedOffers", StringComparison.OrdinalIgnoreCase)
                     || json.Contains("GeneratedOffer", StringComparison.OrdinalIgnoreCase)
-                    || json.Contains("GeneratedBarter", StringComparison.OrdinalIgnoreCase);
+                    || json.Contains("GeneratedBarter", StringComparison.OrdinalIgnoreCase)
+                    || json.Contains("MarketRepriceCashOffers", StringComparison.OrdinalIgnoreCase)
+                    || json.Contains("MarketCashPriceBlendMode", StringComparison.OrdinalIgnoreCase)
+                    || json.Contains("MarketWeaponCashPricePercent", StringComparison.OrdinalIgnoreCase)
+                    || json.Contains("MarketArmorCashPricePercent", StringComparison.OrdinalIgnoreCase)
+                    || json.Contains("MarketCashPriceCache", StringComparison.OrdinalIgnoreCase);
 
                 if (settingsFileHasOldGeneratedTradeSettings && !File.Exists(_generatedTradeSettingsPath))
                 {
@@ -263,7 +268,12 @@ public class YATMConfig
             var json = File.ReadAllText(_settingsPath);
             if (!json.Contains("GeneratedOffer", StringComparison.OrdinalIgnoreCase)
                 && !json.Contains("GeneratedBarter", StringComparison.OrdinalIgnoreCase)
-                && !json.Contains("AutoPriceGeneratedOffers", StringComparison.OrdinalIgnoreCase))
+                && !json.Contains("AutoPriceGeneratedOffers", StringComparison.OrdinalIgnoreCase)
+                && !json.Contains("MarketRepriceCashOffers", StringComparison.OrdinalIgnoreCase)
+                && !json.Contains("MarketCashPriceBlendMode", StringComparison.OrdinalIgnoreCase)
+                && !json.Contains("MarketWeaponCashPricePercent", StringComparison.OrdinalIgnoreCase)
+                && !json.Contains("MarketArmorCashPricePercent", StringComparison.OrdinalIgnoreCase)
+                && !json.Contains("MarketCashPriceCache", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
@@ -283,6 +293,24 @@ public class YATMConfig
         GeneratedTrade.GeneratedOfferMaxStackObjectsCount = Math.Max(0, GeneratedTrade.GeneratedOfferMaxStackObjectsCount);
         GeneratedTrade.GeneratedOfferMaxBuyRestrictionMax = Math.Max(0, GeneratedTrade.GeneratedOfferMaxBuyRestrictionMax);
         GeneratedTrade.GeneratedOfferPriceOffsetPercent = Math.Clamp(GeneratedTrade.GeneratedOfferPriceOffsetPercent, 0, 100);
+
+        var normalizedMarketCashPriceBlendMode = NormalizeMarketCashPriceBlendMode(GeneratedTrade.MarketCashPriceBlendMode);
+        if (!string.Equals(GeneratedTrade.MarketCashPriceBlendMode, normalizedMarketCashPriceBlendMode, StringComparison.OrdinalIgnoreCase))
+        {
+            GeneratedTrade.MarketCashPriceBlendMode = normalizedMarketCashPriceBlendMode;
+            changed = true;
+        }
+
+        GeneratedTrade.MarketWeaponCashPricePercent = Math.Clamp(GeneratedTrade.MarketWeaponCashPricePercent, 1, 100);
+        GeneratedTrade.MarketArmorCashPricePercent = Math.Clamp(GeneratedTrade.MarketArmorCashPricePercent, 1, 100);
+
+        if (string.IsNullOrWhiteSpace(GeneratedTrade.MarketCashPriceCachePath)
+            || GeneratedTrade.MarketCashPriceCachePath.Equals("config/customAssort.json", StringComparison.OrdinalIgnoreCase))
+        {
+            GeneratedTrade.MarketCashPriceCachePath = "db/Generated/customAssort.json";
+            changed = true;
+        }
+
         GeneratedTrade.GeneratedPriceExternalFleaGameMode = NormalizeExternalFleaGameMode(GeneratedTrade.GeneratedPriceExternalFleaGameMode);
         GeneratedTrade.GeneratedPriceExternalFleaPriceFilePaths ??= [];
         GeneratedTrade.GeneratedBarterPriceOffsetPercent = Math.Clamp(GeneratedTrade.GeneratedBarterPriceOffsetPercent, 0, 100);
@@ -353,6 +381,12 @@ public class YATMConfig
     private void ApplyGeneratedTradeSettingsToRuntimeSettings()
     {
         Settings.AutoPriceGeneratedOffers = GeneratedTrade.AutoPriceGeneratedOffers;
+        Settings.MarketRepriceCashOffers = GeneratedTrade.MarketRepriceCashOffers;
+        Settings.MarketCashPriceBlendMode = GeneratedTrade.MarketCashPriceBlendMode;
+        Settings.MarketWeaponCashPricePercent = GeneratedTrade.MarketWeaponCashPricePercent;
+        Settings.MarketArmorCashPricePercent = GeneratedTrade.MarketArmorCashPricePercent;
+        Settings.MarketCashPriceCacheEnabled = GeneratedTrade.MarketCashPriceCacheEnabled;
+        Settings.MarketCashPriceCachePath = GeneratedTrade.MarketCashPriceCachePath;
         Settings.GeneratedOfferMaxStackObjectsCount = GeneratedTrade.GeneratedOfferMaxStackObjectsCount;
         Settings.GeneratedOfferMaxBuyRestrictionMax = GeneratedTrade.GeneratedOfferMaxBuyRestrictionMax;
         Settings.GeneratedOfferPriceMode = GeneratedTrade.GeneratedOfferPriceMode;
@@ -385,6 +419,25 @@ public class YATMConfig
         Settings.GeneratedBarterUseWhitelist = GeneratedTrade.GeneratedBarterUseWhitelist;
         Settings.GeneratedBarterWhitelistPath = GeneratedTrade.GeneratedBarterWhitelistPath;
         Settings.GeneratedBarterOutputPath = GeneratedTrade.GeneratedBarterOutputPath;
+    }
+
+    private static string NormalizeMarketCashPriceBlendMode(string? mode)
+    {
+        if (string.IsNullOrWhiteSpace(mode))
+        {
+            return "EqualParts";
+        }
+
+        var normalized = mode.Trim().Replace(" ", string.Empty).Replace("_", string.Empty).Replace("-", string.Empty);
+        return normalized.ToLowerInvariant() switch
+        {
+            "allflea" or "flea" or "fleaonly" => "AllFlea",
+            "heavyflea" or "mostlyflea" or "fleabiased" => "HeavyFlea",
+            "equalparts" or "equal" or "average" or "avg" or "halfandhalf" or "fiftyfifty" => "EqualParts",
+            "alltbp" or "tbp" or "alltraderbestprice" or "traderbestprice" or "alltrader" or "trader" => "AllTBP",
+            "heavytbp" or "mostlytbp" or "tbpbiased" or "heavytraderbestprice" or "heavytrader" => "HeavyTBP",
+            _ => "EqualParts"
+        };
     }
 
     private static string NormalizeGeneratedBarterComponentPriceSource(string? source)
@@ -1152,13 +1205,23 @@ public class YATMConfig
         HydrateRuntimeAmmoPackMetadata(target);
     }
 
+    public string ResolvePathFromModRoot(string? relativeOrAbsolutePath, string fallbackRelativePath)
+    {
+        var path = string.IsNullOrWhiteSpace(relativeOrAbsolutePath)
+            ? fallbackRelativePath
+            : relativeOrAbsolutePath.Trim();
+
+        if (Path.IsPathRooted(path))
+        {
+            return path;
+        }
+
+        return Path.Combine(_modPath, path.Replace('/', Path.DirectorySeparatorChar));
+    }
+
     private string ResolveGeneratedBarterOutputPath()
     {
-        var relativePath = string.IsNullOrWhiteSpace(Settings.GeneratedBarterOutputPath)
-            ? "db/Generated/generated_barters.jsonc"
-            : Settings.GeneratedBarterOutputPath;
-
-        return Path.Combine(_modPath, relativePath.Replace('/', Path.DirectorySeparatorChar));
+        return ResolvePathFromModRoot(Settings.GeneratedBarterOutputPath, "db/Generated/generated_barters.jsonc");
     }
 
     private static void SaveJson<T>(string path, T data)
