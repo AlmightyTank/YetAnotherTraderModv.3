@@ -36,8 +36,6 @@
             "HighpassFreq": 200,
             "HighpassResonance": 2.2,
             "LowpassFreq": 22000,
-
-
             "ConflictingItems": [
                 "5c06c6a80db834001b735491",
                 "5645bc214bdc2d363b8b4571",
@@ -89,7 +87,7 @@
             "en": {
                 "name": "Volkov GSSh-2M active headset",
                 "shortName": "V-GSSh-02M",
-                "description": "Tony's rarest GSSh rebuild, hiding ComTac VI internals inside a battered Russian shell. It looks like surplus junk until you hear the man trying to flank you."
+                "description": "Tony's rarest GSSh rebuild does not look rare, and that is the trick. ComTac VI internals hide inside an old Russian shell with enough scars to pass as junk. Wear it, listen close, and let someone else underestimate the plastic."
             }
         },
         "fleaPriceRoubles": 72548,

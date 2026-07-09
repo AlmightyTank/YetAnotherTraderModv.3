@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.45,
     "inheritOriginBuffs": false,
-
     "overrideProperties": {
         "CanSellOnRagfair": true,
         "StackMaxSize": 1,
@@ -15,7 +14,6 @@
         "effects_health": {},
         "effects_damage": {}
     },
-
     "Buffs": [
         {
             "BuffType": "SkillRate",
@@ -76,12 +74,19 @@
             "AbsoluteValue": true
         }
     ],
-
     "locales": {
         "en": {
-            "name": "Volkov COLD-12 Field Stabilizer",
-            "shortName": "COLD-12",
-            "description": "A black-market field stabilizer based on stolen TerraGroup temperature-regulation research. Tony's contacts stripped the formula down for long raids, improving perception and keeping the body cool while slowly restoring energy and hydration. Once the dose burns out, body temperature rebounds hard and the hands may begin to shake."
+            "name": "Volkov FD-12 Field Stabilizer",
+            "shortName": "FD-12",
+            "description": "TerraGroup made fancy lab medicine for clean rooms and locked doors. Tony's people made it useful. FD-12 is a stripped-down field stabilizer built for long raids, hot armor, and bad air. It sharpens the eyes, keeps the head cool, and helps the body hold energy and water while it works. When the dose runs out, the heat comes back with interest. If your hands start shaking, that is the bill coming due."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 2,
+        "price": 51000,
+        "amountForSale": 40,
+        "buyRestrictionMax": 4,
+        "assortmentId": "6a2b8279d2999bc7b9bba8c0"
     }
 }

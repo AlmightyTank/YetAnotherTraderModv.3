@@ -1,8 +1,8 @@
 {
     "cloneOrigin": "5e831507ea0a7c419c2f9bd9",
     "id": "6a43f02538a6d33bffe98335",
-    "fleaPrice": 0.85,
-    "handBookPrice": 0.85,
+    "fleaPrice": 1.50,
+    "handBookPrice": 1.50,
     "includeInSameQuestsAsOrigin": false,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.45,
@@ -31,7 +31,7 @@
         "en": {
             "name": "Hemostatic gauze",
             "shortName": "H-Gauze",
-            "description": "A compressed strip of hemostatic gauze packed in cheap field wrap. Not as clean as a real medical kit, but Tony says clean does not matter if you bleed out first."
+            "description": "Cheap wrap, clotting compound, and enough pressure to keep your blood where it belongs. It is not clean hospital stock, but clean does not matter when the floor is drinking you. Tony says stop the leak first and complain after."
         }
     },
     "trader": {

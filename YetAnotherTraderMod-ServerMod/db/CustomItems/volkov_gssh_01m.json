@@ -36,8 +36,6 @@
             "HighpassFreq": 220,
             "HighpassResonance": 2.3,
             "LowpassFreq": 22000,
-
-
             "ConflictingItems": [
                 "5c06c6a80db834001b735491",
                 "5645bc214bdc2d363b8b4571",
@@ -89,7 +87,7 @@
             "en": {
                 "name": "Volkov GSSh-01M active headset",
                 "shortName": "V-GSSh-01M",
-                "description": "A GSSh-01 headset rebuilt in Tony's back room with ComTac IV Hybrid internals. Russian shell, foreign guts, Volkov warranty."
+                "description": "Russian shell, foreign guts, Volkov warranty. Tony's crew rebuilt this GSSh-01 with ComTac IV Hybrid internals and left the outside looking poor enough to ignore. That is how good gear survives in Tarkov: it dresses like trash."
             }
         },
         "fleaPriceRoubles": 79350,

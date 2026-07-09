@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.35,
     "inheritOriginBuffs": false,
-
     "overrideProperties": {
         "CanSellOnRagfair": true,
         "BackgroundColor": "blue",
@@ -23,7 +22,6 @@
         },
         "effects_damage": {}
     },
-
     "Buffs": [
         {
             "AbsoluteValue": true,
@@ -53,15 +51,13 @@
             "Value": 5
         }
     ],
-
     "locales": {
         "en": {
             "name": "Volkov Zarya energy drink",
             "shortName": "Zarya",
-            "description": "A Russian-market energy drink moved through Tony's backroom supply chain. Sweet, sharp, and probably older than the label says. Good enough to keep your legs moving for one more raid."
+            "description": "Sweet, sharp, and probably older than the label wants to admit. Zarya comes through Tony's supply chain for raids where sleep already lost the vote. Crack it open, keep your legs under you, and do not ask why it tastes like a warning."
         }
     },
-
     "fleaPriceRoubles": 18500,
     "handbookPriceRoubles": 12000,
     "addtoItemBlacklist": false

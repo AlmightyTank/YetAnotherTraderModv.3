@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.12,
     "inheritOriginBuffs": false,
-
     "overrideProperties": {
         "CanSellOnRagfair": true,
         "StackMaxSize": 1,
@@ -26,7 +25,6 @@
         },
         "effects_health": {}
     },
-
     "Buffs": [
         {
             "BuffType": "SkillRate",
@@ -108,16 +106,23 @@
             "Chance": 1,
             "Delay": 100,
             "Duration": 120,
-            "Value": -0.10,
+            "Value": -0.1,
             "AbsoluteValue": false
         }
     ],
-
     "locales": {
         "en": {
             "name": "VOLT-3 Nerve Igniter",
             "shortName": "VOLT-3",
-            "description": "A dirty black-market nerve igniter that forces the body past normal limits. It kills pain, spikes physical output, and keeps the user fighting through shock, but the crash is brutal: shaking hands, tunnel vision, and a deep stamina collapse."
+            "description": "VOLT-3 does not ask the body for permission. It kicks pain down, lights the nerves, and forces tired muscle to keep fighting past common sense. Tony only smiles when he sells it, because the crash is your problem: shakes, tunnel vision, and legs made of wet rope."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 3,
+        "price": 110000,
+        "amountForSale": 40,
+        "buyRestrictionMax": 4,
+        "assortmentId": "6a2b7f99d2999bc7b9bba8be"
     }
 }

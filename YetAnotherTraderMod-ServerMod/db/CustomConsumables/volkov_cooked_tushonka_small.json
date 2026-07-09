@@ -39,10 +39,9 @@
         "en": {
             "name": "Volkov Cooked tushonka (Small)",
             "shortName": "Cooked Tushonka S",
-            "description": "A small can of beef stew heated the way Tony's people do it: sealed, tossed near a burner, and pulled before the fat starts screaming. Salty, greasy, and just enough to keep you moving without asking where it came from."
+            "description": "Small tushonka, warmed fast and pulled before the fat starts screaming. Enough meat and grease to keep you moving without slowing you down. Tony calls it a meal for men who do not have time to sit."
         }
     },
-
     "craft": {
         "_id": "68328f4263bfdf6b03ad838a",
         "areaType": 5,

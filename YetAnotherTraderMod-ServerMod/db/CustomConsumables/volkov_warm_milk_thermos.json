@@ -59,10 +59,9 @@
         "en": {
             "name": "Volkov warm milk thermos",
             "shortName": "Volkov Milk",
-            "description": "A repurposed Aquamari bottle filled with warm milk from Tony's backroom supplies. Nothing fancy, nothing clean, just field comfort in a sealed bottle when Tarkov starts feeling colder than usual."
+            "description": "Nothing fancy, nothing clean, just warm milk in a sealed bottle from Tony's backroom supplies. It settles the stomach and reminds the hands they are still attached to a person. In Tarkov, that counts as luxury."
         }
     },
-
     "craft": {
         "_id": "68328f816c0e4241a492ab55",
         "areaType": 8,

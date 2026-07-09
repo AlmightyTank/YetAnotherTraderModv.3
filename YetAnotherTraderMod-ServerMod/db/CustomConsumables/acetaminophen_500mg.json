@@ -47,14 +47,16 @@
         "en": {
             "name": "Acetaminophen 500 mg tablets",
             "shortName": "APAP",
-            "description": "A common bottle of acetaminophen tablets. Not as strong as Ibuprofen, but it keeps the pain quiet long enough to finish the job. Tony keeps these around for men who limp too loud."
+            "description": "Therapist sells clean bottles. Tony sells the one you can actually afford. Acetaminophen will not make you brave, but it keeps pain quiet long enough to finish the job. Good for men who limp too loud and still owe money."
         }
     },
     "trader": {
         "traderId": "66a0f6b2c4d8e90123456789",
         "loyaltyReq": 1,
         "price": 45500,
-        "amountForSale": 10
+        "amountForSale": 40,
+        "buyRestrictionMax": 5,
+        "assortmentId": "6a4f818d2373cd1c4e9ba911"
     },
     "craft": {
         "_id": "6a43f02438a6d33bffe98334",

@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.45,
     "inheritOriginBuffs": false,
-
     "overrideProperties": {
         "CanSellOnRagfair": true,
         "ExaminedByDefault": false,
@@ -22,7 +21,6 @@
         "effects_damage": {},
         "foodEffectType": "afterUse"
     },
-
     "Buffs": [
         {
             "AbsoluteValue": true,
@@ -61,12 +59,11 @@
             "Value": -1
         }
     ],
-
     "locales": {
         "en": {
             "name": "Tony's Super Iskra ration",
             "shortName": "Super Iskra",
-            "description": "A field ration Tony had packed for people who do not get to stop moving. It looks like a normal Iskra box, but it is heavier, saltier, and loaded with enough calories to drag a half-dead operator through one more fight. Good for stamina. Bad for nerves."
+            "description": "Looks like an Iskra box, feels like Tony bribed the calories inside. Heavier, saltier, and built for people who do not get lunch breaks in firefights. It drags a tired operator through one more fight, then leaves the nerves asking questions."
         }
     }
 }

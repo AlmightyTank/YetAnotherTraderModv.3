@@ -68,10 +68,9 @@
         "en": {
             "name": "Volkov Alyonka cocoa thermos",
             "shortName": "Cocoa Thermos",
-            "description": "A repurposed Aquamari bottle filled with warm milk and melted Alyonka chocolate. Tony's people call it field comfort. Sweet, heavy, and warm enough to make Tarkov feel less dead for a few minutes."
+            "description": "Cold hands make bad decisions. Tony's cocoa is warm milk, melted Alyonka, and just enough sweetness to make a dead city feel human for a minute. It will not save you, but it may keep you from freezing inside your own armor."
         }
     },
-
     "craft": {
         "_id": "68328f4a5af466f4b98466e3",
         "areaType": 8,

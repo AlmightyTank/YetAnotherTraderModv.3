@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.35,
     "inheritOriginBuffs": false,
-
     "overrideProperties": {
         "CanSellOnRagfair": true,
         "StackMaxSize": 1,
@@ -15,7 +14,6 @@
         "effects_health": {},
         "effects_damage": {}
     },
-
     "Buffs": [
         {
             "BuffType": "SkillRate",
@@ -69,12 +67,19 @@
             "AbsoluteValue": true
         }
     ],
-
     "locales": {
         "en": {
             "name": "Volkov RUS Alpha",
             "shortName": "V-Alpha",
-            "description": "A BEAR combat focus ampoule supplied through Tony Volkov's old network. It sharpens weapon handling, steadies the shooter under automatic fire, and keeps the mind locked in during close fighting. The crash comes late, leaving the hands shaking once the compound burns out."
+            "description": "Old BEAR network stock, cleaned up for shooters who still know how to work. RUS Alpha sharpens handling, steadies automatic fire, and keeps the mind locked in when rooms get small. The hands shake later, after the compound burns out and the story catches up."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 1,
+        "price": 89877,
+        "amountForSale": 40,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a2b82bed2999bc7b9bba8c2"
     }
 }

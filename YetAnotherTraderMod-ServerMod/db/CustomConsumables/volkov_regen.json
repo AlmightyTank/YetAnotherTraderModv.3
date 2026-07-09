@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.25,
     "inheritOriginBuffs": false,
-
     "overrideProperties": {
         "CanSellOnRagfair": true,
         "medUseTime": 2,
@@ -16,7 +15,6 @@
         "effects_health": {},
         "effects_damage": {}
     },
-
     "Buffs": [
         {
             "BuffType": "HealthRate",
@@ -109,12 +107,11 @@
             "SkillName": ""
         }
     ],
-
     "locales": {
         "en": {
             "name": "Volkov Regen injector",
             "shortName": "V-Regen",
-            "description": "A black-market regenerative combat injector cooked from military stimulants and stolen medical stock."
+            "description": "Stolen medical stock, military stimulants, and backroom math nobody writes down twice. Regen pushes the body to patch itself while the fight is still arguing. Tony calls it a second chance in a needle; your organs may call it a threat."
         }
     }
 }

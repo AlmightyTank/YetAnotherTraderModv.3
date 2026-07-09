@@ -7,14 +7,12 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.35,
     "inheritOriginBuffs": false,
-
     "overrideProperties": {
         "CanSellOnRagfair": true,
         "StackMaxSize": 1,
         "effects_health": {},
         "effects_damage": {}
     },
-
     "Buffs": [
         {
             "BuffType": "DamageModifier",
@@ -71,12 +69,11 @@
             "Value": -0.1
         }
     ],
-
     "locales": {
         "en": {
             "name": "Volkov Redline injector",
             "shortName": "Redline",
-            "description": "A back-room combat stimulant cut from military-grade Meldonin and whatever Tony's people could still get their hands on. It keeps the legs moving, tightens the body against impact, and buys time when the raid turns ugly. The crash is not gentle."
+            "description": "Redline is what Tony sells when walking away stopped being enough. Cut from military-grade compounds and whatever still had a label, it keeps the legs moving and the body braced when the raid turns ugly. It buys time. It does not forgive the bill."
         }
     }
 }

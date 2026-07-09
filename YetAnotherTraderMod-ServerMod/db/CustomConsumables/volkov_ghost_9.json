@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.18,
     "inheritOriginBuffs": false,
-
     "overrideProperties": {
         "CanSellOnRagfair": true,
         "StackMaxSize": 1,
@@ -15,7 +14,6 @@
         "effects_health": {},
         "effects_damage": {}
     },
-
     "Buffs": [
         {
             "BuffType": "SkillRate",
@@ -69,12 +67,11 @@
             "AbsoluteValue": true
         }
     ],
-
     "locales": {
         "en": {
             "name": "GHOST-9 Neural Dampener",
             "shortName": "GHOST-9",
-            "description": "A quiet-route neural dampener used by scouts, couriers, and people who do not want their footsteps remembered. It steadies nerves and improves covert movement, but dulls awareness and leaves the user with tunnel vision once the dose wears off."
+            "description": "Some jobs need speed. Some need silence. GHOST-9 steadies the nerves and helps your feet forget how to be loud, but it narrows the world while it works. Tony sells it to couriers, scouts, and men who prefer not to be remembered."
         }
     }
 }

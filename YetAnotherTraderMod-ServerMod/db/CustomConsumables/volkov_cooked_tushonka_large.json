@@ -39,10 +39,9 @@
         "en": {
             "name": "Volkov Cooked tushonka (Large)",
             "shortName": "Cooked Tushonka L",
-            "description": "A large can of beef stew heated the way Tony's people do it: sealed, tossed near a burner, and forgotten until the fat starts talking. Heavy, salty, and packed with enough grease to keep a tired operator moving through one more bad decision."
+            "description": "A big can of tushonka heated until the fat starts talking. Heavy, salty, greasy, and exactly what a tired operator needs before one more bad decision. Tony does not sell comfort; he sells fuel with a spoon mark in it."
         }
     },
-
     "craft": {
         "_id": "68328f389cfe86c413573f80",
         "areaType": 5,

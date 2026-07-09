@@ -1,13 +1,12 @@
 {
     "cloneOrigin": "5ed51652f6c34d2cc26336a1",
     "id": "6a3fd8c382d8dd83f87b2010",
-    "fleaPrice": -0.55,
+    "fleaPrice": -0.45,
     "handBookPrice": "asOriginal",
     "includeInSameQuestsAsOrigin": false,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.25,
     "inheritOriginBuffs": false,
-
     "overrideProperties": {
         "CanSellOnRagfair": true,
         "StackMaxSize": 1,
@@ -15,7 +14,6 @@
         "effects_health": {},
         "effects_damage": {}
     },
-
     "Buffs": [
         {
             "AbsoluteValue": false,
@@ -88,12 +86,19 @@
             "Value": -0.08
         }
     ],
-
     "locales": {
         "en": {
             "name": "MULE-Lite Field Carrier",
             "shortName": "MULE-L",
-            "description": "A cut-down field carrier stimulant made for moving heavy gear without the full shock of a military M.U.L.E. dose. It improves load tolerance and physical output for several minutes, but drains the body and leaves endurance weakened after the compound fades."
+            "description": "Full M.U.L.E. hits like a debt collector. MULE-Lite is Tony's softer answer for moving heavy gear without snapping the body in half. It gives you carry strength and output for a few good minutes, then collects payment from your stamina."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 3,
+        "price": 41000,
+        "amountForSale": 40,
+        "buyRestrictionMax": 4,
+        "assortmentId": "6a2b83fcd2999bc7b9bba8c4"
     }
 }

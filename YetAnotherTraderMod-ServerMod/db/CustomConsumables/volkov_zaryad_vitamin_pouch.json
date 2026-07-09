@@ -60,10 +60,9 @@
         "en": {
             "name": "Volkov Zaryad vitamin pouch",
             "shortName": "Zaryad",
-            "description": "A squeezable vitamin drink pouch from Tony's backroom supply crates. Fruit syrup, caffeine, dissolved tablets, and just enough vitamins to make the label sound legal. Drink it fast and keep moving."
+            "description": "Fruit syrup, caffeine, dissolved tablets, and just enough vitamins to make the label sound legal. Zaryad goes down fast and wakes the body up like it owes money. Tony says drink it moving; sitting down wastes the effect."
         }
     },
-
     "craft": {
         "_id": "68328f86829adffa154af8f3",
         "areaType": 8,

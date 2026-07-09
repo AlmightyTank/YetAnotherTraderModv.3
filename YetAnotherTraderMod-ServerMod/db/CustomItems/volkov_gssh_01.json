@@ -36,8 +36,6 @@
             "HighpassFreq": 245,
             "HighpassResonance": 2.47,
             "LowpassFreq": 22000,
-
-
             "ConflictingItems": [
                 "5c06c6a80db834001b735491",
                 "5645bc214bdc2d363b8b4571",
@@ -89,7 +87,7 @@
             "en": {
                 "name": "Volkov GSSh-01 active headset",
                 "shortName": "V-GSSh",
-                "description": "A Russian GSSh-01 shell rebuilt with stripped M32 internals. Tony calls it a field repair. Everyone else calls it stolen parts in old plastic."
+                "description": "Looks like cheap GSSh plastic because that is the point. Tony's people gutted it and slipped in stripped M32 internals, then called it a field repair with a straight face. It will not impress anyone at the stash screen, but it may hear the man who thought he was quiet."
             }
         },
         "fleaPriceRoubles": 28789,

@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.45,
     "inheritOriginBuffs": false,
-
     "overrideProperties": {
         "CanSellOnRagfair": true,
         "StackMaxSize": 1,
@@ -22,7 +21,6 @@
             }
         }
     },
-
     "Buffs": [
         {
             "BuffType": "HealthRate",
@@ -50,12 +48,11 @@
             "AbsoluteValue": false
         }
     ],
-
     "locales": {
         "en": {
             "name": "Volkov Field Bandage",
             "shortName": "V-Field",
-            "description": "A reinforced field bandage from Tony Volkov's private medical stash. Repacked from army surplus and treated with clotting compound, it is meant for quick pressure wraps when a light bleed needs to stop before the next corner."
+            "description": "Army surplus bandage, Volkov repack, clotting compound where it matters. It is made for fast pressure wraps when a light bleed tries to become a problem. Tony says a good bandage is the difference between pushing the next corner and painting it."
         }
     }
 }

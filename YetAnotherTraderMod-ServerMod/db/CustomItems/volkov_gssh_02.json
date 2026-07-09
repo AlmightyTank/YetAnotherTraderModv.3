@@ -36,8 +36,6 @@
             "HighpassFreq": 180,
             "HighpassResonance": 2.2,
             "LowpassFreq": 22000,
-
-
             "ConflictingItems": [
                 "5c06c6a80db834001b735491",
                 "5645bc214bdc2d363b8b4571",
@@ -89,7 +87,7 @@
             "en": {
                 "name": "Volkov GSSh-2 active headset",
                 "shortName": "V-GSSh-02",
-                "description": "Tony's serious rebuild of the GSSh platform, packed with ComTac V internals and dressed down to look like surplus junk. The kind of gear that survives because nobody thinks to steal it."
+                "description": "This is where the joke stops being funny. Tony packed ComTac V internals into a battered GSSh shell and sold it like surplus. The man flanking you still thinks you are wearing junk; you hear him believe it."
             }
         },
         "fleaPriceRoubles": 64535,

@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.35,
     "inheritOriginBuffs": false,
-
     "overrideProperties": {
         "CanSellOnRagfair": true,
         "StackMaxSize": 1,
@@ -20,7 +19,6 @@
             }
         }
     },
-
     "Buffs": [
         {
             "BuffType": "HealthRate",
@@ -86,12 +84,11 @@
             "SkillName": ""
         }
     ],
-
     "locales": {
         "en": {
             "name": "Volkov Hemostat injector",
             "shortName": "V-Hemo",
-            "description": "A back-room injector mixed from Zagustin hemostatics and Propital-style regenerative compounds. It seals bleeding fast, dulls pain, and keeps the body moving long enough to leave the fight. The crash comes after."
+            "description": "Zagustin taught blood to stop. Tony's people added enough backroom chemistry to keep you moving after it listens. This injector seals bleeds, dulls pain, and buys you distance from the fight. The crash comes later, assuming you earned a later."
         }
     }
 }
