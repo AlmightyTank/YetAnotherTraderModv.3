@@ -1,0 +1,97 @@
+{
+    "cloneOrigin": "5af0548586f7743a532b7e99",
+    "id": "6a4e547f2373cd1c4e9ba8ff",
+    "fleaPrice": 0.75,
+    "handBookPrice": 0.75,
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.2,
+    "MaxResource": 10,
+    "BackgroundColor": "yellow",
+    "effects_damage": {
+        "Pain": {
+            "delay": 10,
+            "duration": 240,
+            "fadeOut": 20
+        }
+    },
+    "effects_health": {
+        "Hydration": {
+            "value": -10
+        },
+        "Energy": {
+            "value": -4
+        }
+    },
+    "Buffs": [
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 15,
+            "Duration": 180,
+            "SkillName": "StressResistance",
+            "Value": 5
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 15,
+            "Duration": 180,
+            "SkillName": "Vitality",
+            "Value": 3
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "Acetaminophen 500 mg tablets",
+            "shortName": "APAP",
+            "description": "A common bottle of acetaminophen tablets. Not as strong as Ibuprofen, but it keeps the pain quiet long enough to finish the job. Tony keeps these around for men who limp too loud."
+        }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 1,
+        "price": 45500,
+        "amountForSale": 10
+    },
+    "craft": {
+        "_id": "6a43f02438a6d33bffe98334",
+        "areaType": 7,
+        "requirements": [
+            {
+                "areaType": 7,
+                "requiredLevel": 1,
+                "type": "Area"
+            },
+            {
+                "templateId": "619cc01e0a7c3a1a2731940c",
+                "type": "Tool"
+            },
+            {
+                "templateId": "544fb37f4bdc2dee738b4567",
+                "count": 1,
+                "isFunctional": false,
+                "isEncoded": false,
+                "type": "Item"
+            },
+            {
+                "templateId": "590c695186f7741e566b64a2",
+                "count": 1,
+                "isFunctional": false,
+                "isEncoded": false,
+                "type": "Item"
+            }
+        ],
+        "productionTime": 900,
+        "needFuelForAllProductionTime": false,
+        "locked": false,
+        "endProduct": "6a43f02338a6d33bffe98333",
+        "continuous": false,
+        "count": 1,
+        "productionLimitCount": 0,
+        "isEncoded": false
+    },
+    "addtoItemBlacklist": false
+}

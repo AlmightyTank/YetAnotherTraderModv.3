@@ -1348,30 +1348,6 @@
             }
         },
         {
-            "_id": "6a3007dfd2999bc7b9bba970",
-            "_tpl": "6a43f02038a6d33bffe98330",
-            "parentId": "hideout",
-            "slotId": "hideout",
-            "upd": {
-                "StackObjectsCount": 30,
-                "UnlimitedCount": false,
-                "BuyRestrictionMax": 3,
-                "BuyRestrictionCurrent": 0
-            }
-        },
-        {
-            "_id": "6a44f6f738a6d33bffe98316",
-            "_tpl": "6a43f02138a6d33bffe98331",
-            "parentId": "hideout",
-            "slotId": "hideout",
-            "upd": {
-                "StackObjectsCount": 30,
-                "UnlimitedCount": false,
-                "BuyRestrictionMax": 4,
-                "BuyRestrictionCurrent": 0
-            }
-        },
-        {
             "_id": "6a44f6f738a6d33bffe98317",
             "_tpl": "6a43f02238a6d33bffe98332",
             "parentId": "hideout",
@@ -4149,7 +4125,7 @@
         "6a2f1c3bd2999bc7b9bba8e2": [
             [
                 {
-                    "_tpl": "575062b524597720a31c09a1",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4157,15 +4133,15 @@
         "6a2f1c3bd2999bc7b9bba8e3": [
             [
                 {
-                    "_tpl": "5e2af2bc86f7746d3f3c33fc",
-                    "count": 2
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
         "6a2f1c3bd2999bc7b9bba8e4": [
             [
                 {
-                    "_tpl": "57347b8b24597737dd42e192",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4173,7 +4149,7 @@
         "6a2f2001d2999bc7b9bba8e5": [
             [
                 {
-                    "_tpl": "57347d7224597744596b4e72",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4197,11 +4173,7 @@
         "6a3007dfd2999bc7b9bba9b4": [
             [
                 {
-                    "_tpl": "5d1c819a86f774771b0acd6c",
-                    "count": 1
-                },
-                {
-                    "_tpl": "5734795124597738002c6176",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4209,11 +4181,7 @@
         "6a3007dfd2999bc7b9bba9b5": [
             [
                 {
-                    "_tpl": "5d1c819a86f774771b0acd6c",
-                    "count": 1
-                },
-                {
-                    "_tpl": "590c2d8786f774245b1f03f3",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4221,11 +4189,7 @@
         "6a3007dfd2999bc7b9bba9b6": [
             [
                 {
-                    "_tpl": "5672cb124bdc2d1a0f8b4568",
-                    "count": 1
-                },
-                {
-                    "_tpl": "5e2af29386f7746d4159f077",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4321,7 +4285,7 @@
         "6a300025d2999bc7b9bba959": [
             [
                 {
-                    "_tpl": "5e2aef7986f7746d3f3c33f5",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4361,7 +4325,7 @@
         "6a300025d2999bc7b9bba966": [
             [
                 {
-                    "_tpl": "5d40407c86f774318526545a",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4401,7 +4365,7 @@
         "6a300025d2999bc7b9bba955": [
             [
                 {
-                    "_tpl": "5d40407c86f774318526545a",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4449,7 +4413,7 @@
         "6a2b83fcd2999bc7b9bba8c4": [
             [
                 {
-                    "_tpl": "5c1267ee86f77416ec610f72",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4457,15 +4421,15 @@
         "6a2b82bed2999bc7b9bba8c2": [
             [
                 {
-                    "_tpl": "62a09f32621468534a797acb",
-                    "count": 2
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
         "6a2b8279d2999bc7b9bba8c0": [
             [
                 {
-                    "_tpl": "5d1b32c186f774252167a530",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4473,7 +4437,7 @@
         "6a3fd8c382d8dd83f87b200d": [
             [
                 {
-                    "_tpl": "5d1b32c186f774252167a530",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4481,7 +4445,7 @@
         "6a2b7f99d2999bc7b9bba8be": [
             [
                 {
-                    "_tpl": "590a3d9c86f774385926e510",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4491,22 +4455,6 @@
                 {
                     "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 2600
-                }
-            ]
-        ],
-        "6a3007dfd2999bc7b9bba970": [
-            [
-                {
-                    "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 6500
-                }
-            ]
-        ],
-        "6a44f6f738a6d33bffe98316": [
-            [
-                {
-                    "_tpl": "5449016a4bdc2d6f028b456f",
-                    "count": 14500
                 }
             ]
         ],
@@ -4649,11 +4597,7 @@
         "6a300025d2999bc7b9bba956": [
             [
                 {
-                    "_tpl": "5734758f24597738025ee253",
-                    "count": 1
-                },
-                {
-                    "_tpl": "59faf7ca86f7740dbe19f6c2",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4733,23 +4677,23 @@
         "6a3007dfd2999bc7b9bba97e": [
             [
                 {
-                    "_tpl": "5734770f24597738025ee254",
-                    "count": 2
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
         "6a2abd18d2999bc7b9bba8bc": [
             [
                 {
-                    "_tpl": "5751435d24597720a27126d1",
-                    "count": 3
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
         "6a3007dfd2999bc7b9bba97f": [
             [
                 {
-                    "_tpl": "5d03775b86f774203e7e0c4b",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4757,11 +4701,7 @@
         "6a3007dfd2999bc7b9bba980": [
             [
                 {
-                    "_tpl": "5d03775b86f774203e7e0c4b",
-                    "count": 1
-                },
-                {
-                    "_tpl": "5d1b2fa286f77425227d1674",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4769,7 +4709,7 @@
         "6a3007dfd2999bc7b9bba981": [
             [
                 {
-                    "_tpl": "5672cb124bdc2d1a0f8b4568",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4777,7 +4717,7 @@
         "6a2b75aed2999bc7b9bba8bd": [
             [
                 {
-                    "_tpl": "5672cb124bdc2d1a0f8b4568",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4841,20 +4781,16 @@
         "6a2e2072d2999bc7b9bba8dd": [
             [
                 {
-                    "_tpl": "5e54f62086f774219b0f1937",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
-                },
-                {
-                    "_tpl": "573476d324597737da2adc13",
-                    "count": 2
                 }
             ]
         ],
         "6a3007dfd2999bc7b9bba989": [
             [
                 {
-                    "_tpl": "60b0f561c4449e4cb624c1d7",
-                    "count": 2
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
@@ -4877,15 +4813,15 @@
         "6a3007dfd2999bc7b9bba98c": [
             [
                 {
-                    "_tpl": "5d1c819a86f774771b0acd6c",
-                    "count": 4
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
         "6a2bfc3951ab7898b840fc8c": [
             [
                 {
-                    "_tpl": "5d403f9186f7743cac3f229b",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4893,7 +4829,7 @@
         "6a3007dfd2999bc7b9bba98d": [
             [
                 {
-                    "_tpl": "5e2aedd986f7746d404f3aa4",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4901,11 +4837,7 @@
         "6a3007dfd2999bc7b9bba98e": [
             [
                 {
-                    "_tpl": "5734758f24597738025ee253",
-                    "count": 2
-                },
-                {
-                    "_tpl": "590c651286f7741e566b6461",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4913,8 +4845,8 @@
         "6a3007dfd2999bc7b9bba98f": [
             [
                 {
-                    "_tpl": "5d235a5986f77443f6329bc6",
-                    "count": 2
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
@@ -4953,7 +4885,7 @@
         "6a3007dfd2999bc7b9bba994": [
             [
                 {
-                    "_tpl": "5d1b376e86f774252519444e",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4961,19 +4893,7 @@
         "6a3007dfd2999bc7b9bba995": [
             [
                 {
-                    "_tpl": "5d1c819a86f774771b0acd6c",
-                    "count": 6
-                },
-                {
-                    "_tpl": "5d0375ff86f774186372f685",
-                    "count": 1
-                },
-                {
-                    "_tpl": "5d6fc78386f77449d825f9dc",
-                    "count": 2
-                },
-                {
-                    "_tpl": "590c2e1186f77425357b6124",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -4981,23 +4901,7 @@
         "6a3007dfd2999bc7b9bba996": [
             [
                 {
-                    "_tpl": "5734758f24597738025ee253",
-                    "count": 3
-                },
-                {
-                    "_tpl": "5d235a5986f77443f6329bc6",
-                    "count": 1
-                },
-                {
-                    "_tpl": "5d40407c86f774318526545a",
-                    "count": 2
-                },
-                {
-                    "_tpl": "5d1b376e86f774252519444e",
-                    "count": 1
-                },
-                {
-                    "_tpl": "590de71386f774347051a052",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -5005,39 +4909,23 @@
         "6a3007dfd2999bc7b9bba997": [
             [
                 {
-                    "_tpl": "59faff1d86f7746c51718c9c",
-                    "count": 8
-                },
-                {
-                    "_tpl": "5c12613b86f7743bbe2c3f76",
-                    "count": 4
-                },
-                {
-                    "_tpl": "5d1b376e86f774252519444e",
-                    "count": 6
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
         "6a2c05b4d2999bc7b9bba8c5": [
             [
                 {
-                    "_tpl": "59faff1d86f7746c51718c9c",
-                    "count": 8
-                },
-                {
-                    "_tpl": "5c12613b86f7743bbe2c3f76",
-                    "count": 4
-                },
-                {
-                    "_tpl": "5d1b376e86f774252519444e",
-                    "count": 6
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
         "6a3007dfd2999bc7b9bba998": [
             [
                 {
-                    "_tpl": "5d1b376e86f774252519444e",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -5045,7 +4933,7 @@
         "6a3007dfd2999bc7b9bba999": [
             [
                 {
-                    "_tpl": "5d03775b86f774203e7e0c4b",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -5053,19 +4941,15 @@
         "6a2c15ff0ad81c90c80166df": [
             [
                 {
-                    "_tpl": "66572c82ad599021091c6118",
-                    "count": 2
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
         "6a2c1a18d2999bc7b9bba8d0": [
             [
                 {
-                    "_tpl": "5d235a5986f77443f6329bc6",
-                    "count": 1
-                },
-                {
-                    "_tpl": "5d1b376e86f774252519444e",
+                    "_tpl": "5449016a4bdc2d6f028b456f",
                     "count": 1
                 }
             ]
@@ -5145,52 +5029,24 @@
         "6a3210dbd2999bc7b9bbab44": [
             [
                 {
-                    "count": 1,
-                    "_tpl": "5c0e530286f7747fa1419862"
-                },
-                {
-                    "count": 1,
-                    "_tpl": "5c0e533786f7747fa23f4d47"
-                },
-                {
-                    "count": 2,
-                    "_tpl": "5d1b3a5d86f774252167ba22"
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
         "6a3210dbd2999bc7b9bbab43": [
             [
                 {
-                    "count": 1,
-                    "_tpl": "5ed5160a87bb8443d10680b5"
-                },
-                {
-                    "count": 1,
-                    "_tpl": "5c10c8fd86f7743d7d706df3"
-                },
-                {
-                    "count": 2,
-                    "_tpl": "5d1b3f2d86f774253763b735"
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
         "6a3210dbd2999bc7b9bbab45": [
             [
                 {
-                    "count": 1,
-                    "_tpl": "5c0e534186f7747fa1419867"
-                },
-                {
-                    "count": 1,
-                    "_tpl": "5c0e530286f7747fa1419862"
-                },
-                {
-                    "count": 1,
-                    "_tpl": "5c0e533786f7747fa23f4d47"
-                },
-                {
-                    "count": 2,
-                    "_tpl": "5d1b3f2d86f774253763b735"
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
@@ -5245,8 +5101,8 @@
         "6a41407d82d8dd83f87b206c": [
             [
                 {
-                    "_tpl": "57347d7224597744596b4e72",
-                    "count": 2
+                    "_tpl": "5449016a4bdc2d6f028b456f",
+                    "count": 1
                 }
             ]
         ],
@@ -5602,8 +5458,6 @@
         "6a3fd8c382d8dd83f87b200d": 2,
         "6a2b7f99d2999bc7b9bba8be": 3,
         "6a3007dfd2999bc7b9bba96f": 1,
-        "6a3007dfd2999bc7b9bba970": 1,
-        "6a44f6f738a6d33bffe98316": 2,
         "6a44f6f738a6d33bffe98317": 3,
         "6a44f6f738a6d33bffe98318": 3,
         "6a3007dfd2999bc7b9bba971": 1,
