@@ -1016,12 +1016,6 @@ public class YATMConfig
 
     public void SaveGeneratedBarters()
     {
-        if (Settings.ManualBarters)
-        {
-            // Keep manual mode clean: generated barter cache is not written.
-            return;
-        }
-
         if (!Directory.Exists(_configDir))
         {
             Directory.CreateDirectory(_configDir);
@@ -1059,9 +1053,9 @@ public class YATMConfig
     {
         if (Settings.ManualBarters)
         {
-            // ManualBarters=true means use only hard-written BarterScheme rows from
-            // manual_offers.jsonc/addon price files. Do not merge generated barter cache rows.
-            YATMLogger.LogDebug("[GeneratedBarters] ManualBarters=true: generated barter cache merge skipped.");
+            // Keep manual recipe priority clean. Runtime fallback generation still runs
+            // after the payment roll for selected offers that do not have manual recipes.
+            YATMLogger.LogDebug("[GeneratedBarters] ManualBarters=true: generated barter cache pre-merge skipped; selected fallback rows can still be generated at runtime.");
             return;
         }
 

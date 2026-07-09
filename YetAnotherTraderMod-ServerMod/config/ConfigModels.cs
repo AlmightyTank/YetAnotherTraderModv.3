@@ -32,7 +32,8 @@ public class SettingsConfig
 
     // If false, Tony ignores hard-written BarterScheme rows from manual_offers.jsonc/addon price rules
     // and uses generated barter recipes instead. Paired ammo metadata is still kept.
-    // If true, Tony uses hard-written BarterScheme rows from manual_offers.jsonc / offer files.
+    // If true, Tony prefers hard-written BarterScheme rows when a selected barter offer has one;
+    // selected offers without manual recipes can still receive generated barter recipes.
     public bool ManualBarters { get; set; } = false;
 
     // Generated/addon offer pricing. If an addon offer has no hard-written PriceConfig

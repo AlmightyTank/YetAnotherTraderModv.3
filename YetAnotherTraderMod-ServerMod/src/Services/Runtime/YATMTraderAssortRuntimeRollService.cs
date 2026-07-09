@@ -516,7 +516,10 @@ public sealed class YATMTraderAssortRuntimeRollService(
         var selectedBarterOfferIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var orderedBarterCandidateOfferIds = new List<string>();
         var targetGeneratedBarterCount = 0;
-        var canGenerateBarters = !CashOffersOnly && !config.Settings.ManualBarters;
+        // ManualBarters now means "prefer hard-written manual recipes when present",
+        // not "disable generated barters." This keeps the normal barter roll working
+        // while allowing manual_offers.jsonc/addon recipes to win for selected rows.
+        var canGenerateBarters = !CashOffersOnly;
 
         var pairedAmmoPackOfferIds = config.Prices
             .Where(IsPairedAmmoLooseConfig)
