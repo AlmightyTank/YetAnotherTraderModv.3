@@ -53,8 +53,22 @@ public sealed class CustomConsumableDefinition
     [JsonPropertyName("trader")]
     public CustomConsumableTrader? Trader { get; set; }
 
+    /// <summary>
+    /// Optional multiple trader offers for the same custom consumable.
+    /// Keep using trader for the common one-off case.
+    /// </summary>
+    [JsonPropertyName("traders")]
+    public List<CustomConsumableTrader>? Traders { get; set; }
+
     [JsonPropertyName("craft")]
     public JsonElement? Craft { get; set; }
+
+    /// <summary>
+    /// Optional multiple hideout recipes for the same custom consumable.
+    /// Keep using craft for the common one-off case.
+    /// </summary>
+    [JsonPropertyName("crafts")]
+    public List<JsonElement>? Crafts { get; set; }
 
     /// <summary>
     /// Optional explicit item property overrides. Keys should match TemplateItemProperties names, usually PascalCase.
@@ -126,4 +140,26 @@ public sealed class CustomConsumableTrader
     /// </summary>
     [JsonPropertyName("barter_scheme")]
     public JsonElement? BarterSchemeSnake { get; set; }
+
+    /// <summary>
+    /// Optional Tony runtime control. By default Tony CustomConsumables are rollable,
+    /// so the cash/barter system may convert the offer and the stock system may zero it out.
+    /// Set cashOnly true to opt out of barter rolling.
+    /// </summary>
+    [JsonPropertyName("cashOnly")]
+    public bool? CashOnly { get; set; }
+
+    /// <summary>
+    /// Optional Tony runtime control. Set true to force this Tony offer to barter when a usable
+    /// hard-written or generated barter scheme exists.
+    /// </summary>
+    [JsonPropertyName("alwaysBarter")]
+    public bool? AlwaysBarter { get; set; }
+
+    /// <summary>
+    /// Optional Tony runtime control. Set true to keep this offer out of the random out-of-stock pool.
+    /// </summary>
+    [JsonPropertyName("alwaysInStock")]
+    public bool? AlwaysInStock { get; set; }
+
 }

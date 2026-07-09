@@ -33,7 +33,7 @@ public class YATMConfig
         _databaseServer = databaseServer;
         _configDir = Path.Combine(_modPath, "config");
         _settingsPath = Path.Combine(_configDir, "settings.json");
-        _pricesPath = Path.Combine(_configDir, "items.json");
+        _pricesPath = Path.Combine(_configDir, "manual_offers.jsonc");
         _generatedTradeSettingsPath = Path.Combine(_configDir, "generated_trade_settings.jsonc");
     }
 
@@ -117,6 +117,10 @@ public class YATMConfig
         }
 
         LoadOrGenerateSettings(baseJson);
+
+        // Generated trade/barter tuning is user-facing again. Keep generated_trade_settings.jsonc
+        // separate from manual_offers.jsonc so players can tune the generated system without
+        // hand-maintaining every offer row.
         LoadOrGenerateGeneratedTradeSettings();
         ApplyGeneratedTradeSettingsToRuntimeSettings();
         YATMRuntimeConfig.Set(Settings);
@@ -129,12 +133,9 @@ public class YATMConfig
             Directory.CreateDirectory(_configDir);
         }
 
+        // config/manual_offers.jsonc is now manual-only. Runtime price rows are rebuilt from
+        // Tony's live assort every startup/restock, then optional manual rows are merged on top.
         LoadOrGeneratePrices(assortJson);
-
-        // Keep config/items.json synced from the clean Tony assort every startup/restock.
-        // This lets the mod generate OfferId/TplId/name/price/currency/ammo-pack metadata
-        // instead of hand-maintaining rows for every ammo offer.
-        SyncPriceConfigsFromAssort(assortJson);
     }
 
     private void LoadOrGenerateSettings(TraderBase baseJson)
@@ -203,7 +204,7 @@ public class YATMConfig
 
                 PriceMultiplier = 1.0,
 
-                // false = allow custom barter recipes in items.json.
+                // false = allow custom barter recipes in manual_offers.jsonc.
                 // true = force every configured offer to use Price + Currency only.
                 CashOffersOnly = false,
 
@@ -293,6 +294,9 @@ public class YATMConfig
         GeneratedTrade.GeneratedBarterArmorMaxDifferentItems = Math.Clamp(GeneratedTrade.GeneratedBarterArmorMaxDifferentItems, 1, 6);
         GeneratedTrade.GeneratedBarterCaseValuableMaxDifferentItems = Math.Clamp(GeneratedTrade.GeneratedBarterCaseValuableMaxDifferentItems, 1, 6);
         GeneratedTrade.GeneratedBarterDefaultMaxDifferentItems = Math.Clamp(GeneratedTrade.GeneratedBarterDefaultMaxDifferentItems, 1, 6);
+        GeneratedTrade.GeneratedBarterDefaultItemWeight = Math.Max(0.01, GeneratedTrade.GeneratedBarterDefaultItemWeight);
+        GeneratedTrade.GeneratedBarterDefaultItemMaxUsesPerRestock = Math.Max(0, GeneratedTrade.GeneratedBarterDefaultItemMaxUsesPerRestock);
+        GeneratedTrade.GeneratedBarterDefaultOverusePenalty = Math.Clamp(GeneratedTrade.GeneratedBarterDefaultOverusePenalty, 0, 10);
         GeneratedTrade.GeneratedBarterMaxItemCount = Math.Clamp(GeneratedTrade.GeneratedBarterMaxItemCount, 1, 99);
         GeneratedTrade.GeneratedBarterMinItemPrice = Math.Max(1, GeneratedTrade.GeneratedBarterMinItemPrice);
 
@@ -371,6 +375,10 @@ public class YATMConfig
         Settings.GeneratedBarterCaseValuableMaxDifferentItems = GeneratedTrade.GeneratedBarterCaseValuableMaxDifferentItems;
         Settings.GeneratedBarterDefaultMaxDifferentItems = GeneratedTrade.GeneratedBarterDefaultMaxDifferentItems;
         Settings.GeneratedBarterBalanceItemUsage = GeneratedTrade.GeneratedBarterBalanceItemUsage;
+        Settings.GeneratedBarterUseWeightedCategories = GeneratedTrade.GeneratedBarterUseWeightedCategories;
+        Settings.GeneratedBarterDefaultItemWeight = GeneratedTrade.GeneratedBarterDefaultItemWeight;
+        Settings.GeneratedBarterDefaultItemMaxUsesPerRestock = GeneratedTrade.GeneratedBarterDefaultItemMaxUsesPerRestock;
+        Settings.GeneratedBarterDefaultOverusePenalty = GeneratedTrade.GeneratedBarterDefaultOverusePenalty;
         Settings.GeneratedBarterComponentPriceSource = GeneratedTrade.GeneratedBarterComponentPriceSource;
         Settings.GeneratedBarterMaxItemCount = GeneratedTrade.GeneratedBarterMaxItemCount;
         Settings.GeneratedBarterMinItemPrice = GeneratedTrade.GeneratedBarterMinItemPrice;
@@ -425,130 +433,36 @@ public class YATMConfig
 
     private void LoadOrGeneratePrices(TraderAssort assortJson)
     {
-        if (File.Exists(_pricesPath))
-        {
-            try
-            {
-                var json = File.ReadAllText(_pricesPath);
+        var manualRows = LoadManualOfferRows();
+        Prices = BuildRuntimePriceConfigsFromAssort(assortJson);
+        MergeManualOfferRows(manualRows);
 
-                Prices = JsonSerializer.Deserialize<List<PriceConfigItem>>(json, CachedReadOptions) ?? new List<PriceConfigItem>();
-                YATMLogger.LogDebug($"Loaded {Prices.Count} custom price entries from items.json");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[Tony] Error loading items.json: {ex.Message}");
-                YATMLogger.Log($"Error loading items.json: {ex.Message}");
-            }
+        YATMLogger.LogDebug($"[Config] Built {Prices.Count} runtime price config row(s) from Tony assort; merged {manualRows.Count} manual offer row(s) from manual_offers.jsonc.");
+    }
+
+    private List<PriceConfigItem> LoadManualOfferRows()
+    {
+        if (!File.Exists(_pricesPath))
+        {
+            return [];
         }
-        else
+
+        try
         {
-            YATMLogger.LogDebug("items.json not found. Generating default prices from assort...");
-
-            Prices = new List<PriceConfigItem>();
-            var locales = _databaseServer.GetTables().Locales.Global["en"];
-            int generatedCount = 0;
-
-            foreach (var item in assortJson.Items)
-            {
-                if (item.ParentId != "hideout")
-                {
-                    continue;
-                }
-
-                if (!assortJson.BarterScheme.ContainsKey(item.Id))
-                {
-                    continue;
-                }
-
-                var schemeList = assortJson.BarterScheme[item.Id];
-                if (schemeList == null || schemeList.Count == 0)
-                {
-                    continue;
-                }
-
-                var tpl = GetTemplateId(item);
-                if (string.IsNullOrEmpty(tpl))
-                {
-                    continue;
-                }
-
-                var itemName = tpl;
-                if (locales.Value != null && locales.Value.TryGetValue($"{tpl} Name", out var nameVal))
-                {
-                    itemName = nameVal?.ToString() ?? tpl;
-                }
-
-                var copiedBarterScheme = new List<List<PaymentConfigItem>>();
-
-                foreach (var schemeOption in schemeList)
-                {
-                    var copiedOption = new List<PaymentConfigItem>();
-
-                    foreach (var component in schemeOption)
-                    {
-                        var componentTpl = component.Template.ToString();
-                        var componentName = componentTpl;
-
-                        if (locales.Value != null && locales.Value.TryGetValue($"{componentTpl} Name", out var componentNameVal))
-                        {
-                            componentName = componentNameVal?.ToString() ?? componentTpl;
-                        }
-
-                        copiedOption.Add(new PaymentConfigItem
-                        {
-                            TplId = componentTpl,
-                            ItemName = componentName,
-                            Count = component.Count ?? 0
-                        });
-                    }
-
-                    copiedBarterScheme.Add(copiedOption);
-                }
-
-                var firstPayment = copiedBarterScheme.FirstOrDefault()?.FirstOrDefault();
-                var firstPaymentIsCash = firstPayment != null && IsCurrencyTemplate(firstPayment.TplId);
-
-                var priceEntry = new PriceConfigItem
-                {
-                    OfferId = item.Id,
-                    TplId = tpl,
-                    ItemName = itemName,
-
-                    Price = firstPaymentIsCash ? firstPayment!.Count : 0,
-                    Currency = firstPaymentIsCash ? TemplateToCurrency(firstPayment!.TplId) : "RUB",
-
-                    CashOnly = firstPaymentIsCash,
-                    BarterScheme = copiedBarterScheme
-                };
-
-                Prices.Add(priceEntry);
-
-                generatedCount++;
-            }
-
-            Prices = Prices
-                .OrderBy(x => x.ItemName)
-                .ThenBy(x => x.OfferId)
-                .ToList();
-
-            SaveJson(_pricesPath, Prices);
-            YATMLogger.Log($"Generated items.json with {generatedCount} entries.");
+            var json = File.ReadAllText(_pricesPath);
+            return JsonSerializer.Deserialize<List<PriceConfigItem>>(json, CachedReadOptions) ?? [];
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Tony] Error loading manual_offers.jsonc: {ex.Message}");
+            YATMLogger.Log($"[Config] Error loading manual_offers.jsonc: {ex.Message}");
+            return [];
         }
     }
-    private void SyncPriceConfigsFromAssort(TraderAssort assortJson)
+
+    private List<PriceConfigItem> BuildRuntimePriceConfigsFromAssort(TraderAssort assortJson)
     {
-        var changed = false;
-        var touched = 0;
-
-        var oldPackOfferIds = Prices
-            .Where(x => !string.IsNullOrWhiteSpace(x.PackOfferId))
-            .Select(x => x.PackOfferId!)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-        var pricesByOfferId = Prices
-            .Where(x => !string.IsNullOrWhiteSpace(x.OfferId))
-            .GroupBy(x => x.OfferId!, StringComparer.OrdinalIgnoreCase)
-            .ToDictionary(x => x.Key, x => x.First(), StringComparer.OrdinalIgnoreCase);
+        var rows = new List<PriceConfigItem>();
 
         foreach (var item in assortJson.Items)
         {
@@ -570,112 +484,76 @@ public class YATMConfig
                 continue;
             }
 
-            var itemName = GetLocaleName(tpl);
-
-            if (!pricesByOfferId.TryGetValue(offerId, out var priceConfig))
+            var row = new PriceConfigItem
             {
-                priceConfig = new PriceConfigItem
-                {
-                    OfferId = offerId,
-                    TplId = tpl,
-                    ItemName = itemName,
-                    Price = price,
-                    Currency = currency,
-                    CashOnly = true,
-                    BarterScheme = null,
-                    BarterSchemeValueBasis = "Unit"
-                };
+                OfferId = offerId,
+                TplId = tpl,
+                ItemName = GetLocaleName(tpl),
+                Price = price,
+                Currency = currency,
+                CashOnly = true,
+                AlwaysBarter = false,
+                AlwaysInStock = false,
+                BarterScheme = null,
+                BarterSchemeValueBasis = "Unit",
+                AutoGeneratedBarter = false
+            };
 
-                Prices.Add(priceConfig);
-                pricesByOfferId[offerId] = priceConfig;
-                changed = true;
-            }
-
-            if (!string.Equals(priceConfig.OfferId, offerId, StringComparison.OrdinalIgnoreCase)
-                || !string.Equals(priceConfig.TplId, tpl, StringComparison.OrdinalIgnoreCase)
-                || !string.Equals(priceConfig.ItemName, itemName, StringComparison.Ordinal)
-                || Math.Abs(priceConfig.Price - price) > 0.001
-                || !string.Equals(priceConfig.Currency, currency, StringComparison.OrdinalIgnoreCase))
-            {
-                changed = true;
-            }
-
-            // These are always controlled by the live clean assort.
-            priceConfig.OfferId = offerId;
-            priceConfig.TplId = tpl;
-            priceConfig.ItemName = itemName;
-            priceConfig.Price = price;
-            priceConfig.Currency = currency;
-
-            // New ammo barter system: no separate pack offer id.
-            // The same OfferId is kept and only _tpl swaps to the pack tpl when barter wins.
-            if (!string.IsNullOrWhiteSpace(priceConfig.PackOfferId))
-            {
-                changed = true;
-            }
-            priceConfig.PackOfferId = null;
-
-            if (TryFindBestAmmoPackForLooseAmmo(tpl, out var packTpl, out var packSize, out var packName))
-            {
-                if (!string.Equals(priceConfig.AmmoBarterPackTplId, packTpl, StringComparison.OrdinalIgnoreCase)
-                    || priceConfig.AmmoBarterPackSize != packSize
-                    || !string.Equals(priceConfig.AmmoBarterPackItemName, packName, StringComparison.Ordinal)
-                    || !string.Equals(priceConfig.BarterSchemeValueBasis, "Pack", StringComparison.OrdinalIgnoreCase))
-                {
-                    changed = true;
-                }
-
-                priceConfig.AmmoBarterPackTplId = packTpl;
-                priceConfig.AmmoBarterPackSize = packSize;
-                priceConfig.AmmoBarterPackItemName = packName;
-                priceConfig.BarterSchemeValueBasis = "Pack";
-                priceConfig.GeneratedBarterCategoryOverride ??= "AmmoPack";
-            }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(priceConfig.AmmoBarterPackTplId)
-                    || priceConfig.AmmoBarterPackSize != 0
-                    || !string.IsNullOrWhiteSpace(priceConfig.AmmoBarterPackItemName)
-                    || string.Equals(priceConfig.BarterSchemeValueBasis, "Pack", StringComparison.OrdinalIgnoreCase))
-                {
-                    changed = true;
-                }
-
-                priceConfig.AmmoBarterPackTplId = null;
-                priceConfig.AmmoBarterPackSize = 0;
-                priceConfig.AmmoBarterPackItemName = null;
-
-                if (string.Equals(priceConfig.BarterSchemeValueBasis, "Pack", StringComparison.OrdinalIgnoreCase))
-                {
-                    priceConfig.BarterSchemeValueBasis = "Unit";
-                }
-            }
-
-            touched++;
+            HydrateRuntimeAmmoPackMetadata(row);
+            rows.Add(row);
         }
 
-        var ammoPackTplIds = Prices
-            .Where(x => !string.IsNullOrWhiteSpace(x.AmmoBarterPackTplId))
-            .Select(x => x.AmmoBarterPackTplId!)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        return rows
+            .OrderBy(x => x.ItemName)
+            .ThenBy(x => x.OfferId)
+            .ToList();
+    }
 
-        if (ammoPackTplIds.Count > 0 || oldPackOfferIds.Count > 0)
-        {
-            var removed = Prices.RemoveAll(x =>
-                string.IsNullOrWhiteSpace(x.AmmoBarterPackTplId)
-                && ((!string.IsNullOrWhiteSpace(x.TplId) && ammoPackTplIds.Contains(x.TplId))
-                    || (!string.IsNullOrWhiteSpace(x.OfferId) && oldPackOfferIds.Contains(x.OfferId))));
-
-            if (removed > 0)
-            {
-                changed = true;
-                YATMLogger.LogDebug($"[Config] Removed {removed} standalone ammo-pack price row(s); loose ammo rows now control pack barters by same OfferId.");
-            }
-        }
-
-        if (!changed)
+    private void MergeManualOfferRows(IReadOnlyList<PriceConfigItem> manualRows)
+    {
+        if (manualRows.Count == 0)
         {
             return;
+        }
+
+        var byOfferId = Prices
+            .Where(x => !string.IsNullOrWhiteSpace(x.OfferId))
+            .GroupBy(x => x.OfferId!, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(x => x.Key, x => x.First(), StringComparer.OrdinalIgnoreCase);
+
+        var byTpl = Prices
+            .Where(x => !string.IsNullOrWhiteSpace(x.TplId))
+            .GroupBy(x => x.TplId, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(x => x.Key, x => x.First(), StringComparer.OrdinalIgnoreCase);
+
+        var added = 0;
+        var merged = 0;
+
+        foreach (var manual in manualRows.Where(x => x != null))
+        {
+            PriceConfigItem? target = null;
+
+            if (!string.IsNullOrWhiteSpace(manual.OfferId))
+            {
+                byOfferId.TryGetValue(manual.OfferId!, out target);
+            }
+
+            if (target == null && !string.IsNullOrWhiteSpace(manual.TplId))
+            {
+                byTpl.TryGetValue(manual.TplId, out target);
+            }
+
+            if (target == null)
+            {
+                manual.AutoGeneratedBarter = false;
+                HydrateRuntimeAmmoPackMetadata(manual);
+                Prices.Add(manual);
+                added++;
+                continue;
+            }
+
+            MergeManualOfferRow(target, manual);
+            merged++;
         }
 
         Prices = Prices
@@ -683,8 +561,89 @@ public class YATMConfig
             .ThenBy(x => x.OfferId)
             .ToList();
 
-        SaveJson(_pricesPath, Prices);
-        YATMLogger.Log($"[Config] Synced {touched} price config row(s) from Tony assort.");
+        if (merged > 0 || added > 0)
+        {
+            YATMLogger.LogDebug($"[Config] manual_offers.jsonc rows applied: {merged} merged, {added} added.");
+        }
+    }
+
+    private void MergeManualOfferRow(PriceConfigItem target, PriceConfigItem manual)
+    {
+        if (!string.IsNullOrWhiteSpace(manual.OfferId))
+        {
+            target.OfferId = manual.OfferId;
+        }
+
+        if (!string.IsNullOrWhiteSpace(manual.TplId))
+        {
+            target.TplId = manual.TplId;
+        }
+
+        if (!string.IsNullOrWhiteSpace(manual.ItemName))
+        {
+            target.ItemName = manual.ItemName;
+        }
+
+        if (manual.Price > 0)
+        {
+            target.Price = manual.Price;
+        }
+
+        if (!string.IsNullOrWhiteSpace(manual.Currency))
+        {
+            target.Currency = manual.Currency;
+        }
+
+        target.CashOnly = manual.CashOnly;
+        target.AlwaysBarter = manual.AlwaysBarter;
+        target.AlwaysInStock = manual.AlwaysInStock;
+
+        if (manual.BarterScheme != null && manual.BarterScheme.Count > 0)
+        {
+            target.BarterScheme = manual.BarterScheme;
+        }
+
+        target.AutoGeneratedBarter = false;
+        HydrateRuntimeAmmoPackMetadata(target);
+    }
+
+    private void HydrateRuntimeAmmoPackMetadata(PriceConfigItem priceConfig)
+    {
+        priceConfig.PackOfferId = null;
+
+        // First try the live item database. This catches vanilla packs and custom packs
+        // after WTT/custom-item loaders have added them to the DB.
+        if (TryFindBestAmmoPackForLooseAmmo(priceConfig.TplId, out var packTpl, out var packSize, out var packName)
+            || TryFindBuiltInAmmoPackForLooseAmmo(priceConfig.TplId, out packTpl, out packSize, out packName))
+        {
+            priceConfig.AmmoBarterPackTplId = packTpl;
+            priceConfig.AmmoBarterPackSize = packSize;
+            priceConfig.AmmoBarterPackItemName = packName;
+            priceConfig.BarterSchemeValueBasis = "Pack";
+            priceConfig.GeneratedBarterCategoryOverride = "AmmoPack";
+            return;
+        }
+
+        priceConfig.AmmoBarterPackTplId = null;
+        priceConfig.AmmoBarterPackSize = 0;
+        priceConfig.AmmoBarterPackItemName = null;
+
+        if (string.Equals(priceConfig.BarterSchemeValueBasis, "Pack", StringComparison.OrdinalIgnoreCase))
+        {
+            priceConfig.BarterSchemeValueBasis = "Unit";
+        }
+
+        if (string.Equals(priceConfig.GeneratedBarterCategoryOverride, "AmmoPack", StringComparison.OrdinalIgnoreCase))
+        {
+            priceConfig.GeneratedBarterCategoryOverride = null;
+        }
+    }
+
+    private void SyncPriceConfigsFromAssort(TraderAssort assortJson)
+    {
+        // No-op by design. Price rows are rebuilt in memory from the live assort, and
+        // config/manual_offers.jsonc is reserved only for intentional manual overrides.
+        YATMLogger.LogDebug("[Config] SyncPriceConfigsFromAssort skipped; runtime prices are code-generated and manual_offers.jsonc is not auto-written.");
     }
 
     private bool TryReadAssortCashPrice(
@@ -737,6 +696,28 @@ public class YATMConfig
         }
 
         return tpl;
+    }
+
+    private static bool TryFindBuiltInAmmoPackForLooseAmmo(
+        string looseAmmoTpl,
+        out string packTpl,
+        out int packSize,
+        out string packName)
+    {
+        packTpl = string.Empty;
+        packSize = 0;
+        packName = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(looseAmmoTpl)
+            || !BuiltInAmmoPackByLooseTpl.TryGetValue(looseAmmoTpl, out var knownPack))
+        {
+            return false;
+        }
+
+        packTpl = knownPack.PackTpl;
+        packSize = knownPack.PackSize;
+        packName = knownPack.PackName;
+        return !string.IsNullOrWhiteSpace(packTpl) && packSize > 0;
     }
 
     private bool TryFindBestAmmoPackForLooseAmmo(
@@ -850,6 +831,58 @@ public class YATMConfig
         return false;
     }
 
+    private sealed record BuiltInAmmoPack(string PackTpl, int PackSize, string PackName);
+
+    // Code fallback for ammo rows that were rebuilt from Tony's live assort before the
+    // pack template can be discovered from the DB. Users do not maintain this in config.
+    // generated_barter_whitelist.jsonc only controls barter ingredients, not ammo pack pairing.
+    private static readonly Dictionary<string, BuiltInAmmoPack> BuiltInAmmoPackByLooseTpl = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["5f0596629e22f464da6bbdd9"] = new("657023f81419851aef03e6f1", 20, ".366 TKM AP-M ammo pack (20 pcs)"),
+        ["59e655cb86f77411dc52a77b"] = new("657024011419851aef03e6f4", 20, ".366 TKM EKO ammo pack (20 pcs)"),
+        ["6a4933e1fb1eff152bd649ac"] = new("6a4933e1fb1eff152bd649bb", 20, ".366 TKM AP-S ammo pack (20 pcs)"),
+        ["560d5e524bdc2d25448b4571"] = new("657024361419851aef03e6fa", 25, "12/70 7mm buckshot ammo pack (25 pcs)"),
+        ["5d6e68a8a4b9360b6c0d54e2"] = new("64898838d5b4df6140000a20", 25, "12/70 AP-20 ammo pack (25 pcs)"),
+        ["5d6e6911a4b9361bd5780d52"] = new("65702474bfc87b3a34093226", 25, "12/70 flechette ammo pack (25 pcs)"),
+        ["6a4933e1fb1eff152bd649aa"] = new("6a4933e1fb1eff152bd649b6", 25, "12/70 handmade slug ammo pack (25 pcs)"),
+        ["56dfef82d2720bbd668b4567"] = new("5737292724597765e5728562", 120, "5.45x39mm BP gs ammo pack (120 pcs)"),
+        ["56dff026d2720bb8668b4567"] = new("57372b832459776701014e41", 120, "5.45x39mm BS gs ammo pack (120 pcs)"),
+        ["56dff061d2720bb5668b4567"] = new("57372c21245977670937c6c2", 120, "5.45x39mm BT gs ammo pack (120 pcs)"),
+        ["56dff2ced2720bb4668b4567"] = new("57372d1b2459776862260581", 120, "5.45x39mm PP gs ammo pack (120 pcs)"),
+        ["5c0d5e4486f77478390952fe"] = new("657025ebc5d7d4cb4d078588", 120, "5.45x39mm PPBS gs Igolnik ammo pack (120 pcs)"),
+        ["56dff3afd2720bba668b4567"] = new("57372e73245977685d4159b4", 120, "5.45x39mm PS gs ammo pack (120 pcs)"),
+        ["6a4933e1fb1eff152bd649ad"] = new("6a493587fb1eff152bd649be", 30, "5.45x39mm BP-M gs ammo pack (30 pcs)"),
+        ["6a4933e1fb1eff152bd649ae"] = new("6a493587fb1eff152bd649c0", 30, "5.45x39mm BT-R gs ammo pack (30 pcs)"),
+        ["6a4933e1fb1eff152bd649af"] = new("6a493587fb1eff152bd649c2", 30, "5.45x39mm PP-M gs ammo pack (30 pcs)"),
+        ["6a4933e1fb1eff152bd649b0"] = new("6a493587fb1eff152bd649c5", 30, "5.45x39mm PS-R gs ammo pack (30 pcs)"),
+        ["59e0d99486f7744a32234762"] = new("64acea16c4eda9354b0226b0", 20, "7.62x39mm BP gzh ammo pack (20 pcs)"),
+        ["601aa3d2b2bcb34913271e6d"] = new("6489851fc827d4637f01791b", 20, "7.62x39mm MAI AP ammo pack (20 pcs)"),
+        ["64b7af434b75259c590fa893"] = new("64ace9f9c4eda9354b0226aa", 20, "7.62x39mm PP gzh ammo pack (20 pcs)"),
+        ["5656d7c34bdc2d9d198b4587"] = new("5649ed104bdc2d3d1c8b458b", 20, "7.62x39mm PS gzh ammo pack (20 pcs)"),
+        ["5887431f2459777e1612938f"] = new("65702577cfc010a0f5006a2c", 20, "7.62x54mm R LPS gzh ammo pack (20 pcs)"),
+        ["5e023d48186a883be655e551"] = new("648984b8d5b4df6140000a1a", 20, "7.62x54mm R BS gs ammo pack (20 pcs)"),
+        ["560d61e84bdc2da74d8b4571"] = new("560d75f54bdc2da74d8b4573", 20, "7.62x54mm R SNB gzh ammo pack (20 pcs)"),
+        ["6a4933e1fb1eff152bd649b1"] = new("6a493587fb1eff152bd649c7", 20, "7.62x39mm PP+ gzh ammo pack (20 pcs)"),
+        ["6a4933e1fb1eff152bd649b2"] = new("6a493587fb1eff152bd649c9", 20, "7.62x39mm PS-H gzh ammo pack (20 pcs)"),
+        ["6a427a2e38a6d33bffe9829b"] = new("65702577cfc010a0f5006a2c", 20, "7.62x54mm R LPS gzh ammo pack (20 pcs)"),
+        ["6a427a2e38a6d33bffe98292"] = new("648984b8d5b4df6140000a1a", 20, "7.62x54mm R BS gs ammo pack (20 pcs)"),
+        ["6a427a2e38a6d33bffe9829d"] = new("560d75f54bdc2da74d8b4573", 20, "7.62x54mm R SNB gzh ammo pack (20 pcs)"),
+        ["6a4933e1fb1eff152bd649b3"] = new("6a493587fb1eff152bd649cb", 20, "7.62x54mm R LPS-M ammo pack (20 pcs)"),
+        ["57372140245977611f70ee91"] = new("657026341419851aef03e730", 50, "9x18mm PM SP7 gzh ammo pack (50 pcs)"),
+        ["5c925fa22e221601da359b7b"] = new("65702591c5d7d4cb4d07857c", 50, "9x19mm AP 6.3 ammo pack (50 pcs)"),
+        ["5efb0da7a29a85116f6ea05f"] = new("648987d673c462723909a151", 50, "9x19mm PBP ammo pack (50 pcs)"),
+        ["56d59d3ad2720bdb418b4577"] = new("657025a81419851aef03e724", 50, "9x19mm Pst gzh ammo pack (50 pcs)"),
+        ["5c0d56a986f774449d5de529"] = new("5c1127bdd174af44217ab8b9", 20, "9x19mm RIP ammo pack (20 pcs)"),
+        ["5c0d688c86f77413ae3407b2"] = new("6489854673c462723909a14e", 20, "9x39mm BP ammo pack (20 pcs)"),
+        ["61962d879bb3d20b0946d385"] = new("657025cfbfc87b3a34093253", 20, "9x39mm PAB-9 gs ammo pack (20 pcs)"),
+        ["57a0dfb82459774d3078b56c"] = new("657025d4c5d7d4cb4d078585", 20, "9x39mm SP-5 gs ammo pack (20 pcs)"),
+        ["57a0e5022459774d1673f889"] = new("657025dabfc87b3a34093256", 20, "9x39mm SP-6 gs ammo pack (20 pcs)"),
+        ["5c0d668f86f7747ccb7f13b2"] = new("657025dfcfc010a0f5006a3b", 20, "9x39mm SPP gs ammo pack (20 pcs)"),
+        ["6a4933e1fb1eff152bd649b4"] = new("6a493587fb1eff152bd649cd", 20, "9x39mm SP-5M gs ammo pack (20 pcs)"),
+        ["6a4933e1fb1eff152bd649b5"] = new("6a493587fb1eff152bd649cf", 20, "9x39mm SP-6U gs ammo pack (20 pcs)"),
+        ["6a4933e1fb1eff152bd649ab"] = new("6a4933e1fb1eff152bd649b9", 10, "12.7x55mm PS12V ammo pack (10 pcs)")
+    };
+
     private static object? GetMemberValue(object? target, string memberName)
     {
         if (target == null)
@@ -934,12 +967,9 @@ public class YATMConfig
 
     public void SavePrices()
     {
-        if (!Directory.Exists(_configDir))
-        {
-            Directory.CreateDirectory(_configDir);
-        }
-
-        SaveJson(_pricesPath, Prices);
+        // Runtime price rows are code/generated now. config/manual_offers.jsonc is manual-only,
+        // so the mod must not overwrite it with synced assort rows.
+        YATMLogger.LogDebug("[Config] SavePrices skipped; config/manual_offers.jsonc is manual-only.");
     }
 
     public void StripManualBarterSchemesForAutoGeneratedMode()
@@ -958,8 +988,8 @@ public class YATMConfig
                 continue;
             }
 
-            // ManualBarters=false means items.json and addon price rows are metadata/rules only.
-            // Keep identity, stock flags, force-barter flags, prices, and paired ammo pack metadata,
+            // ManualBarters=false means manual_offers.jsonc and addon price rows are metadata/rules only.
+            // Keep identity, stock flags, force-barter flags, prices, and runtime ammo pack metadata,
             // but do not let any hard-written BarterScheme become a live payment recipe.
             if (priceConfig.BarterScheme != null && priceConfig.BarterScheme.Count > 0)
             {
@@ -980,7 +1010,7 @@ public class YATMConfig
 
         if (stripped > 0)
         {
-            YATMLogger.LogDebug($"[GeneratedBarters] ManualBarters=false: ignored {stripped} hard-written BarterScheme row(s) from items.json/addon price rules. Generated barter recipes will be used instead.");
+            YATMLogger.LogDebug($"[GeneratedBarters] ManualBarters=false: ignored {stripped} hard-written BarterScheme row(s) from manual_offers.jsonc/addon price rules. Generated barter recipes will be used instead.");
         }
     }
 
@@ -1022,7 +1052,7 @@ public class YATMConfig
         }
 
         SaveJson(generatedBarterPath, generatedBarterRows);
-        YATMLogger.Log($"[GeneratedBarters] Saved {generatedBarterRows.Count} auto-generated barter row(s) to {Settings.GeneratedBarterOutputPath}. items.json was not overwritten.");
+        YATMLogger.Log($"[GeneratedBarters] Saved {generatedBarterRows.Count} auto-generated barter row(s) to {Settings.GeneratedBarterOutputPath}. manual_offers.jsonc was not overwritten.");
     }
 
     public void LoadGeneratedBartersAndMerge()
@@ -1030,7 +1060,7 @@ public class YATMConfig
         if (Settings.ManualBarters)
         {
             // ManualBarters=true means use only hard-written BarterScheme rows from
-            // items.json/addon price files. Do not merge generated barter cache rows.
+            // manual_offers.jsonc/addon price files. Do not merge generated barter cache rows.
             YATMLogger.LogDebug("[GeneratedBarters] ManualBarters=true: generated barter cache merge skipped.");
             return;
         }
@@ -1061,6 +1091,7 @@ public class YATMConfig
                 }
 
                 generatedRow.AutoGeneratedBarter = true;
+                HydrateRuntimeAmmoPackMetadata(generatedRow);
 
                 if (existingIndexByOfferId.TryGetValue(generatedRow.OfferId, out var existingIndex))
                 {
@@ -1085,7 +1116,7 @@ public class YATMConfig
         }
     }
 
-    private static void MergeGeneratedBarterRow(PriceConfigItem target, PriceConfigItem generatedRow)
+    private void MergeGeneratedBarterRow(PriceConfigItem target, PriceConfigItem generatedRow)
     {
         if (generatedRow.Price > 0)
         {
@@ -1123,6 +1154,8 @@ public class YATMConfig
         {
             target.AmmoBarterPackSize = generatedRow.AmmoBarterPackSize;
         }
+
+        HydrateRuntimeAmmoPackMetadata(target);
     }
 
     private string ResolveGeneratedBarterOutputPath()

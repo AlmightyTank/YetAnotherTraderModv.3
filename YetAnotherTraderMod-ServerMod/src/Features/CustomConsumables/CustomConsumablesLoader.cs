@@ -9,8 +9,11 @@ using SPTarkov.Server.Core.Services.Mod;
 using System.Collections;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using YetAnotherTraderMod.config;
 using YetAnotherTraderMod.src;
+using YetAnotherTraderMod.src.Services;
 using Path = System.IO.Path;
 
 namespace YetAnotherTraderMod.src.Features.CustomConsumables;
@@ -20,14 +23,17 @@ namespace YetAnotherTraderMod.src.Features.CustomConsumables;
 /// plus addon folders that use db/YATM/CustomConsumables/*.json.
 /// This is a C# SPT 4.x port of the old ConsumablesGalore loader pattern.
 /// </summary>
-[Injectable(TypePriority = OnLoadOrder.PostDBModLoader + 5)]
+[Injectable(InjectionType.Singleton, TypePriority = OnLoadOrder.PostDBModLoader + 3)]
 public sealed class CustomConsumablesLoader(
     DatabaseService databaseService,
-    CustomItemService customItemService) : IOnLoad
+    CustomItemService customItemService,
+    YATMTraderOfferFeedService traderOfferFeedService) : IOnLoad
 {
     private const string RoublesTpl = "5449016a4bdc2d6f028b456f";
     private const string OwnConsumablesRelativePath = "db/CustomConsumables";
     private const string AddonConsumablesRelativePath = "db/YATM/CustomConsumables";
+
+    private readonly HashSet<string> _loadedFiles = new(StringComparer.OrdinalIgnoreCase);
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -48,26 +54,56 @@ public sealed class CustomConsumablesLoader(
         await Task.CompletedTask;
     }
 
-    public Task CreateCustomConsumables(Assembly assembly, string path)
+    /// <summary>
+    /// CommonLib-style addon entry point.
+    ///
+    /// Example:
+    /// await yatmCommon.CustomConsumablesServiceExtended.CreateCustomConsumables(
+    ///     Assembly.GetExecutingAssembly(),
+    ///     Path.Join("db", "YATM", "CustomConsumables"));
+    ///
+    /// The path can be a folder or a single .json/.jsonc file. If omitted, it uses
+    /// db/CustomConsumables under the calling addon assembly.
+    /// </summary>
+    public Task CreateCustomConsumables(Assembly assembly, string? path = null)
     {
         if (assembly is null)
         {
             throw new ArgumentNullException(nameof(assembly));
         }
 
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            throw new ArgumentException("Custom consumable path cannot be empty.", nameof(path));
-        }
-
         var assemblyPath = assembly.Location;
         var modPath = Path.GetDirectoryName(assemblyPath) ?? AppContext.BaseDirectory;
-
-        var resolvedPath = Path.IsPathRooted(path)
-            ? path
-            : Path.Combine(modPath, path);
+        var resolvedPath = ResolvePath(modPath, path ?? OwnConsumablesRelativePath);
 
         Load(resolvedPath);
+
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// CommonLib-style path entry point for addons that already resolved the file/folder path.
+    /// </summary>
+    public Task CreateCustomConsumablesFromPath(string path)
+    {
+        Load(path);
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Auto-discovers addon consumables from every installed mod using db/YATM/CustomConsumables.
+    /// Addons can either call CreateCustomConsumables directly or just ship files in that folder.
+    /// </summary>
+    public Task CreateAddonCustomConsumables(Assembly hostAssembly, string? relativePath = null)
+    {
+        if (hostAssembly is null)
+        {
+            throw new ArgumentNullException(nameof(hostAssembly));
+        }
+
+        var assemblyPath = hostAssembly.Location;
+        var hostModPath = Path.GetDirectoryName(assemblyPath) ?? AppContext.BaseDirectory;
+        LoadMany(ResolveAddonSourcePaths(hostModPath, relativePath ?? AddonConsumablesRelativePath));
 
         return Task.CompletedTask;
     }
@@ -79,29 +115,30 @@ public sealed class CustomConsumablesLoader(
 
     public void LoadMany(IEnumerable<string> consumablesPaths)
     {
-        var folders = consumablesPaths
+        var sourcePaths = consumablesPaths
             .Where(path => !string.IsNullOrWhiteSpace(path))
             .Select(Path.GetFullPath)
             .Distinct(StringComparer.OrdinalIgnoreCase)
-            .Where(Directory.Exists)
             .ToList();
 
-        if (folders.Count == 0)
+        if (sourcePaths.Count == 0)
         {
-            YATMLogger.Log("[Tony] No custom consumable folders found.");
+            YATMLogger.Log("[Tony] No custom consumable source paths were provided.");
             return;
         }
 
-        var files = folders
-            .SelectMany(folder => Directory.EnumerateFiles(folder, "*.json", SearchOption.AllDirectories)
-                .OrderBy(file => file, StringComparer.OrdinalIgnoreCase))
+        var files = sourcePaths
+            .SelectMany(GetJsonAndJsoncFilesFromPath)
+            .Select(Path.GetFullPath)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(file => file, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
         if (files.Count == 0)
         {
             if (YATMLogger.IsDebugEnabled)
             {
-                YATMLogger.LogDebug("[Tony] No custom consumable JSON files found in Tony/addon folders.");
+                YATMLogger.LogDebug("[Tony] No custom consumable .json/.jsonc files found in Tony/addon paths.");
             }
 
             return;
@@ -109,17 +146,25 @@ public sealed class CustomConsumablesLoader(
 
         if (YATMLogger.IsDebugEnabled)
         {
-            foreach (var folder in folders)
+            foreach (var sourcePath in sourcePaths)
             {
-                YATMLogger.LogDebug($"[Tony] Custom consumable source folder: {folder}");
+                YATMLogger.LogDebug($"[Tony] Custom consumable source path: {sourcePath}");
             }
         }
 
         var tables = databaseService.GetTables();
         var loaded = 0;
+        var skippedDuplicates = 0;
 
         foreach (var file in files)
         {
+            if (!_loadedFiles.Add(file))
+            {
+                skippedDuplicates++;
+                YATMLogger.LogDebug($"[Tony] Custom consumable file already loaded, skipping duplicate read: {file}");
+                continue;
+            }
+
             try
             {
                 var definition = JsonSerializer.Deserialize<CustomConsumableDefinition>(File.ReadAllText(file), JsonOptions);
@@ -139,15 +184,23 @@ public sealed class CustomConsumablesLoader(
             }
         }
 
-        YATMLogger.Log($"[Tony] Loaded {loaded}/{files.Count} custom consumable JSON file(s) from {folders.Count} source folder(s).");
+        YATMLogger.Log($"[Tony] Loaded {loaded}/{files.Count} custom consumable file(s) from {sourcePaths.Count} source path(s). Skipped duplicates: {skippedDuplicates}.");
     }
 
     private static IEnumerable<string> ResolveConsumableSourceFolders(string modPath)
     {
         // Tony's built-in consumables. This stays first so addon files load after the base mod.
-        yield return CombineRelativePath(modPath, OwnConsumablesRelativePath);
+        yield return ResolvePath(modPath, OwnConsumablesRelativePath);
 
-        var modsRoot = FindModsRoot(modPath);
+        foreach (var addonPath in ResolveAddonSourcePaths(modPath, AddonConsumablesRelativePath))
+        {
+            yield return addonPath;
+        }
+    }
+
+    private static IEnumerable<string> ResolveAddonSourcePaths(string hostModPath, string relativePath)
+    {
+        var modsRoot = FindModsRoot(hostModPath);
         if (modsRoot is null || !Directory.Exists(modsRoot))
         {
             yield break;
@@ -170,7 +223,11 @@ public sealed class CustomConsumablesLoader(
         {
             // Addons must use this namespaced folder so Tony does not accidentally load
             // another mod's unrelated db/CustomConsumables files.
-            yield return CombineRelativePath(modFolder, AddonConsumablesRelativePath);
+            var resolved = ResolvePath(modFolder, relativePath);
+            if (Directory.Exists(resolved) || File.Exists(resolved))
+            {
+                yield return resolved;
+            }
         }
     }
 
@@ -191,13 +248,45 @@ public sealed class CustomConsumablesLoader(
         return null;
     }
 
-    private static string CombineRelativePath(string root, string relativePath)
+    private static string ResolvePath(string root, string relativePath)
     {
+        if (Path.IsPathRooted(relativePath))
+        {
+            return relativePath;
+        }
+
         var parts = relativePath.Split(
             new[] { '/', '\\' },
             StringSplitOptions.RemoveEmptyEntries);
 
         return Path.Combine(new[] { root }.Concat(parts).ToArray());
+    }
+
+    private static IEnumerable<string> GetJsonAndJsoncFilesFromPath(string path)
+    {
+        if (File.Exists(path))
+        {
+            var extension = Path.GetExtension(path);
+            if (string.Equals(extension, ".json", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(extension, ".jsonc", StringComparison.OrdinalIgnoreCase))
+            {
+                yield return path;
+            }
+
+            yield break;
+        }
+
+        if (!Directory.Exists(path))
+        {
+            yield break;
+        }
+
+        foreach (var file in Directory.EnumerateFiles(path, "*.json", SearchOption.AllDirectories)
+                     .Concat(Directory.EnumerateFiles(path, "*.jsonc", SearchOption.AllDirectories))
+                     .OrderBy(file => file, StringComparer.OrdinalIgnoreCase))
+        {
+            yield return file;
+        }
     }
 
     private void LoadOne(object tables, CustomConsumableDefinition definition, string file)
@@ -270,12 +359,28 @@ public sealed class CustomConsumablesLoader(
 
         if (definition.Trader is not null)
         {
-            AddToTrader(tables, definition);
+            AddToTrader(tables, definition, definition.Trader);
+        }
+
+        if (definition.Traders is not null)
+        {
+            foreach (var traderDefinition in definition.Traders)
+            {
+                AddToTrader(tables, definition, traderDefinition);
+            }
         }
 
         if (definition.Craft.HasValue)
         {
             AddCraft(tables, definition.Craft.Value);
+        }
+
+        if (definition.Crafts is not null)
+        {
+            foreach (var craft in definition.Crafts)
+            {
+                AddCraft(tables, craft);
+            }
         }
 
         if (YATMLogger.IsRealDebugEnabled)
@@ -309,7 +414,7 @@ public sealed class CustomConsumablesLoader(
         {
             "cloneOrigin", "id", "fleaPrice", "handBookPrice", "includeInSameQuestsAsOrigin",
             "addSpawnsInSamePlacesAsOrigin", "spawnWeightComparedToOrigin", "inheritOriginBuffs",
-            "Buffs", "locales", "trader", "craft", "overrideProperties"
+            "Buffs", "locales", "trader", "traders", "craft", "crafts", "overrideProperties"
         };
 
         if (definition.ExtraProperties is not null)
@@ -395,9 +500,135 @@ public sealed class CustomConsumablesLoader(
         SetDictionaryValue(buffDictionary, definition.Id, mergedList);
     }
 
-    private void AddToTrader(object tables, CustomConsumableDefinition definition)
+
+    private void RegisterTonyConsumableOffer(CustomConsumableDefinition definition, CustomConsumableTrader traderDefinition)
     {
-        var traderDefinition = definition.Trader!;
+        var assortmentId = ResolveAssortmentId(definition, traderDefinition);
+        var upd = new JsonObject
+        {
+            ["UnlimitedCount"] = traderDefinition.UnlimitedCount,
+            ["StackObjectsCount"] = traderDefinition.AmountForSale,
+            ["BuyRestrictionCurrent"] = 0
+        };
+
+        if (traderDefinition.BuyRestrictionMax.HasValue)
+        {
+            upd["BuyRestrictionMax"] = traderDefinition.BuyRestrictionMax.Value;
+        }
+
+        var itemRow = new JsonObject
+        {
+            ["_id"] = assortmentId,
+            ["_tpl"] = definition.Id,
+            ["parentId"] = "hideout",
+            ["slotId"] = "hideout",
+            ["upd"] = upd
+        };
+
+        var scheme = BuildTraderBarterSchemeJson(traderDefinition);
+
+        var items = new JsonArray { itemRow };
+        var barterScheme = new JsonObject { [assortmentId] = scheme.DeepClone() };
+        var loyalLevelItems = new JsonObject { [assortmentId] = traderDefinition.LoyaltyReq };
+        var offerSettings = new JsonObject
+        {
+            // Tony offers added by CustomConsumables should behave like normal Tony offers:
+            // - money offers can be selected by the generated barter roll
+            // - hard-written barter schemes can be selected by the payment roll
+            // - cash results are rebuilt from price/currencyTpl
+            // - stock/out-of-stock rolls can affect the offer unless AlwaysInStock is set
+            ["CashOnly"] = traderDefinition.CashOnly ?? false,
+            ["AlwaysBarter"] = traderDefinition.AlwaysBarter ?? false,
+            ["AlwaysInStock"] = traderDefinition.AlwaysInStock ?? false
+        };
+
+        var yatmSettings = new JsonObject
+        {
+            [assortmentId] = offerSettings
+        };
+
+        traderOfferFeedService.RegisterRawTonyTraderOffer(
+            $"CustomConsumable:{definition.Id}:{assortmentId}",
+            items,
+            barterScheme,
+            loyalLevelItems,
+            yatmSettings);
+    }
+
+    private static string ResolveAssortmentId(CustomConsumableDefinition definition, CustomConsumableTrader traderDefinition)
+    {
+        return string.IsNullOrWhiteSpace(traderDefinition.AssortmentId)
+            ? definition.Id
+            : traderDefinition.AssortmentId.Trim();
+    }
+
+    private static JsonArray BuildTraderBarterSchemeJson(CustomConsumableTrader traderDefinition)
+    {
+        var barterSchemeJson = traderDefinition.BarterScheme ?? traderDefinition.BarterSchemeSnake;
+        if (barterSchemeJson.HasValue)
+        {
+            var parsed = JsonNode.Parse(barterSchemeJson.Value.GetRawText());
+            if (parsed is JsonArray parsedArray)
+            {
+                return parsedArray;
+            }
+
+            YATMLogger.Log("[Tony] Custom consumable barterScheme was not an array. Falling back to money price.");
+        }
+
+        var currency = string.IsNullOrWhiteSpace(traderDefinition.CurrencyTpl) ? RoublesTpl : traderDefinition.CurrencyTpl;
+        return new JsonArray
+        {
+            new JsonArray
+            {
+                new JsonObject
+                {
+                    ["count"] = traderDefinition.Price,
+                    ["_tpl"] = currency
+                }
+            }
+        };
+    }
+
+    private static bool HasNonCurrencyPayment(JsonArray barterScheme)
+    {
+        foreach (var optionNode in barterScheme)
+        {
+            if (optionNode is not JsonArray optionArray)
+            {
+                continue;
+            }
+
+            foreach (var componentNode in optionArray)
+            {
+                if (componentNode is not JsonObject componentObject)
+                {
+                    continue;
+                }
+
+                var tpl = ReadJsonNodeString(componentObject, "_tpl") ?? ReadJsonNodeString(componentObject, "TplId");
+                if (!YATMConfig.IsCurrencyTemplate(tpl))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static string? ReadJsonNodeString(JsonObject obj, string key)
+    {
+        return obj.TryGetPropertyValue(key, out var node) && node is not null ? node.ToString() : null;
+    }
+
+    private void AddToTrader(object tables, CustomConsumableDefinition definition, CustomConsumableTrader traderDefinition)
+    {
+        if (string.Equals(traderDefinition.TraderId, YATMTraderOfferFeedService.TonyTraderId, StringComparison.OrdinalIgnoreCase))
+        {
+            RegisterTonyConsumableOffer(definition, traderDefinition);
+        }
+
         var traders = GetMember(tables, "Traders") ?? GetMember(tables, "traders");
         var trader = GetDictionaryValue(traders, traderDefinition.TraderId);
 
@@ -436,9 +667,7 @@ public sealed class CustomConsumablesLoader(
             upd["BuyRestrictionMax"] = traderDefinition.BuyRestrictionMax.Value;
         }
 
-        var assortmentId = string.IsNullOrWhiteSpace(traderDefinition.AssortmentId)
-            ? definition.Id
-            : traderDefinition.AssortmentId.Trim();
+        var assortmentId = ResolveAssortmentId(definition, traderDefinition);
 
         var itemData = new Dictionary<string, object?>
         {
@@ -695,8 +924,40 @@ public sealed class CustomConsumablesLoader(
             return;
         }
 
+        var craftId = ReadJsonElementString(craft, "id")
+            ?? ReadJsonElementString(craft, "Id")
+            ?? ReadJsonElementString(craft, "_id");
+
+        if (!string.IsNullOrWhiteSpace(craftId)
+            && recipeList.Cast<object>().Any(recipe =>
+                string.Equals(ReadString(recipe, "Id") ?? ReadString(recipe, "id") ?? ReadString(recipe, "_id"), craftId, StringComparison.OrdinalIgnoreCase)))
+        {
+            YATMLogger.Log($"[Tony] Hideout craft '{craftId}' already exists. Skipping duplicate craft.");
+            return;
+        }
+
         var craftObject = JsonSerializer.Deserialize<object>(craft.GetRawText(), JsonOptions)!;
         AddObjectToList(recipeList, craftObject);
+    }
+
+    private static string? ReadJsonElementString(JsonElement element, string propertyName)
+    {
+        if (element.ValueKind != JsonValueKind.Object)
+        {
+            return null;
+        }
+
+        foreach (var property in element.EnumerateObject())
+        {
+            if (string.Equals(property.Name, propertyName, StringComparison.OrdinalIgnoreCase))
+            {
+                return property.Value.ValueKind == JsonValueKind.String
+                    ? property.Value.GetString()
+                    : property.Value.ToString();
+            }
+        }
+
+        return null;
     }
 
     private static void ValidateDefinition(CustomConsumableDefinition definition, string file)

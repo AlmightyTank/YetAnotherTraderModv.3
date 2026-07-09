@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <RootNamespace>YetAnotherTraderMod</RootNamespace>
@@ -24,13 +24,14 @@
 	<PackageReference Include="WTT-ServerCommonLib" Version="2.0.20" />
   </ItemGroup>
       <ItemGroup>
-	    <None Include="config\items.json">
-		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </None>
 
 	    <None Include="config\settings.json">
 		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </None>
+
+		<None Include="config\manual_offers.jsonc">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 
 	    <None Include="config\generated_trade_settings.jsonc">
 		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -45,10 +46,8 @@
 	    </None>
     </ItemGroup>
   <ItemGroup>
-    <Content Remove="db\CustomConsumables\dolmet_f_field_tablets.json" />
     <Content Remove="db\CustomConsumables\medvedol_650mg_tablets.json" />
     <Content Remove="db\CustomConsumables\noctapyrin_focus_tablets.json" />
-    <Content Remove="db\CustomConsumables\volkarin_500mg_tablets.json" />
     <Content Remove="db\CustomConsumables\volkov_cocoa_thermos.json" />
     <Content Remove="db\CustomConsumables\volkov_cooked_green_peas.json" />
     <Content Remove="db\CustomConsumables\volkov_cooked_herring.json" />
@@ -268,8 +267,8 @@
 		<ItemGroup>
 			<TonyDeployFiles Include="$(TargetDir)**\*.*" Exclude="$(TargetDir)tools\**\*.*;&#xD;&#xA;                            $(TargetDir)**\*.pdb;&#xD;&#xA;                            $(TargetDir)config\**\*.*;&#xD;&#xA;                            $(TargetDir)db\Generated\generated_barters.jsonc;&#xD;&#xA;                            $(TargetDir)db\Generated\generated_tony_*.json" />
 
-			<TonyDeployConfigFiles Include="$(TargetDir)config\items.json" />
 			<TonyDeployConfigFiles Include="$(TargetDir)config\settings.json" />
+			<TonyDeployConfigFiles Include="$(TargetDir)config\manual_offers.jsonc" />
 			<TonyDeployConfigFiles Include="$(TargetDir)config\generated_trade_settings.jsonc" />
 			<TonyDeployConfigFiles Include="$(TargetDir)config\generated_barter_whitelist.jsonc" />
 		</ItemGroup>
@@ -294,8 +293,8 @@
 		<ItemGroup>
 			<TonyPackageFiles Include="$(TargetDir)**\*.*" Exclude="$(TargetDir)tools\**\*.*;&#xD;&#xA;                             $(TargetDir)**\*.pdb;&#xD;&#xA;                             $(TargetDir)config\**\*.*;&#xD;&#xA;                             $(TargetDir)db\Generated\generated_barters.jsonc;&#xD;&#xA;                             $(TargetDir)db\Generated\generated_tony_*.json" />
 
-			<TonyPackageConfigFiles Include="$(TargetDir)config\items.json" />
 			<TonyPackageConfigFiles Include="$(TargetDir)config\settings.json" />
+			<TonyPackageConfigFiles Include="$(TargetDir)config\manual_offers.jsonc" />
 			<TonyPackageConfigFiles Include="$(TargetDir)config\generated_trade_settings.jsonc" />
 			<TonyPackageConfigFiles Include="$(TargetDir)config\generated_barter_whitelist.jsonc" />
 		</ItemGroup>

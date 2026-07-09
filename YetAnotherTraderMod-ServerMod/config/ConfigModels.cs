@@ -30,9 +30,9 @@ public class SettingsConfig
     public bool RandomizeCashBarterOffers { get; set; } = true;
     public int CashOfferPercent { get; set; } = 85;
 
-    // If false, Tony ignores hard-written BarterScheme rows from items.json/addon price rules
+    // If false, Tony ignores hard-written BarterScheme rows from manual_offers.jsonc/addon price rules
     // and uses generated barter recipes instead. Paired ammo metadata is still kept.
-    // If true, Tony uses hard-written BarterScheme rows from items.json / offer files.
+    // If true, Tony uses hard-written BarterScheme rows from manual_offers.jsonc / offer files.
     public bool ManualBarters { get; set; } = false;
 
     // Generated/addon offer pricing. If an addon offer has no hard-written PriceConfig
@@ -128,6 +128,23 @@ public class SettingsConfig
     [JsonIgnore]
     public bool GeneratedBarterBalanceItemUsage { get; set; } = true;
 
+    // If true, generated barter components are picked from weighted category pools.
+    // Example: an Electronics offer can mostly use Electronics barter items, with some Tools/Valuables mixed in.
+    [JsonIgnore]
+    public bool GeneratedBarterUseWeightedCategories { get; set; } = true;
+
+    // Default weight for whitelist items that do not define their own Weight. Higher = more likely.
+    [JsonIgnore]
+    public double GeneratedBarterDefaultItemWeight { get; set; } = 10;
+
+    // Default hard cap per generated-barter run/restock. 0 = unlimited.
+    [JsonIgnore]
+    public int GeneratedBarterDefaultItemMaxUsesPerRestock { get; set; } = 0;
+
+    // Soft anti-spam curve. Effective weight = weight / (1 + uses * penalty).
+    [JsonIgnore]
+    public double GeneratedBarterDefaultOverusePenalty { get; set; } = 0.45;
+
     // How Tony values barter component items. Default uses the middle ground between
     // flea-style price and the best trader sell price so generated barters are not inflated.
     // Accepted values: FleaTraderAverage, Flea, Trader.
@@ -140,19 +157,18 @@ public class SettingsConfig
 
     // Minimum database/flea-style price for an item to be used as an auto-generated barter component.
     [JsonIgnore]
-    public int GeneratedBarterMinItemPrice { get; set; } = 1000;
+    public int GeneratedBarterMinItemPrice { get; set; } = 250;
 
-    // If true, generated barters can only use items listed in GeneratedBarterWhitelistPath.
-    // This keeps auto-barters to valuables instead of weapons, armor, ammo, rigs, plates, or attachments.
+    // If true, generated barters only use tpl IDs from generated_barter_whitelist.jsonc.
     [JsonIgnore]
     public bool GeneratedBarterUseWhitelist { get; set; } = true;
 
-    // Path relative to the mod folder. This file is generated with a valuables-only default list.
+    // Path relative to the mod folder for the user-editable generated barter ingredient pool.
     [JsonIgnore]
     public string GeneratedBarterWhitelistPath { get; set; } = "config/generated_barter_whitelist.jsonc";
 
     // Path relative to the mod folder. Auto-generated barter recipes are saved here.
-    // This keeps config/items.json as the OG/manual YATM price file.
+    // This keeps config/manual_offers.jsonc as the OG/manual YATM price file.
     [JsonIgnore]
     public string GeneratedBarterOutputPath { get; set; } = "db/Generated/generated_barters.jsonc";
 
@@ -193,10 +209,14 @@ public class GeneratedTradeConfig
     public int GeneratedBarterCaseValuableMaxDifferentItems { get; set; } = 4;
     public int GeneratedBarterDefaultMaxDifferentItems { get; set; } = 3;
     public bool GeneratedBarterBalanceItemUsage { get; set; } = true;
+    public bool GeneratedBarterUseWeightedCategories { get; set; } = true;
+    public double GeneratedBarterDefaultItemWeight { get; set; } = 10;
+    public int GeneratedBarterDefaultItemMaxUsesPerRestock { get; set; } = 0;
+    public double GeneratedBarterDefaultOverusePenalty { get; set; } = 0.45;
     public string GeneratedBarterComponentPriceSource { get; set; } = "FleaTraderAverage";
 
     public int GeneratedBarterMaxItemCount { get; set; } = 5;
-    public int GeneratedBarterMinItemPrice { get; set; } = 1000;
+    public int GeneratedBarterMinItemPrice { get; set; } = 250;
 
     public bool GeneratedBarterUseWhitelist { get; set; } = true;
     public string GeneratedBarterWhitelistPath { get; set; } = "config/generated_barter_whitelist.jsonc";
@@ -206,6 +226,7 @@ public class GeneratedTradeConfig
 public class PriceConfigItem
 {
     public string? OfferId { get; set; }
+    [JsonIgnore]
     public string? PackOfferId { get; set; }
     public string TplId { get; set; } = string.Empty;
     public string ItemName { get; set; } = string.Empty;
@@ -215,19 +236,26 @@ public class PriceConfigItem
     public bool AlwaysBarter { get; set; } = false;
     public bool AlwaysInStock { get; set; } = false;
     public List<List<PaymentConfigItem>>? BarterScheme { get; set; }
+    [JsonIgnore]
     public string? AmmoBarterPackTplId { get; set; }
+    [JsonIgnore]
     public string? AmmoBarterPackItemName { get; set; }
+    [JsonIgnore]
     public int AmmoBarterPackSize { get; set; } = 0;
+    [JsonIgnore]
     public string BarterSchemeValueBasis { get; set; } = "Unit";
 
 
-    // Optional per-row override for generated barter item-type limit.
-    // Accepted values: AmmoPack, Weapon, Medical, Headwear, Armor, CaseOrValuable, Default.
-    // Leave empty to let Tony infer the category from the sold item template.
+    // Optional per-row override for generated barter offer category/profile.
+    // Accepted values include AmmoPack, Weapon, Medical, Headwear, Armor, CaseOrValuable,
+    // Electronics, Tools, FoodDrink, WeaponParts, Valuables, Junk, and Default.
+    // Leave empty to let Tony infer the category from the sold item template/name.
+    [JsonIgnore]
     public string? GeneratedBarterCategoryOverride { get; set; }
 
     // True when this row's barter recipe came from the auto-barter generator.
-    // Auto-generated rows are saved to db/Generated/generated_barters.jsonc, not config/items.json.
+    // Auto-generated rows are saved to db/Generated/generated_barters.jsonc, not config/manual_offers.jsonc.
+    [JsonIgnore]
     public bool AutoGeneratedBarter { get; set; } = false;
 }
 
@@ -240,9 +268,41 @@ public class PaymentConfigItem
 
 public class GeneratedBarterWhitelistConfig
 {
-    public int SchemaVersion { get; set; } = 1;
+    public int SchemaVersion { get; set; } = 2;
     public string Description { get; set; } = "Only these tpl IDs can be used by Tony auto-generated barters when GeneratedBarterUseWhitelist is true.";
+
+    // Optional ingredient category settings. These control hard caps and anti-spam per restock.
+    // Keys are normalized names like Electronics, Tools, FoodDrink, Medical, Valuables, Junk.
+    public Dictionary<string, GeneratedBarterCategoryConfig> Categories { get; set; } = [];
+
+    // Optional sold-offer category/profile settings. Example: Electronics offers can pull mostly
+    // Electronics ingredients, with a smaller chance of Tools or Valuables.
+    public Dictionary<string, GeneratedBarterOfferCategoryProfile> OfferCategoryProfiles { get; set; } = [];
+
     public List<GeneratedBarterWhitelistItem> Items { get; set; } = [];
+}
+
+public class GeneratedBarterCategoryConfig
+{
+    public bool Enabled { get; set; } = true;
+
+    // 0 = unlimited. Counts total component quantity used across generated barter recipes this run/restock.
+    public int MaxUsesPerRestock { get; set; } = 0;
+
+    // Soft anti-spam curve for items in this category. Effective weight = weight / (1 + uses * penalty).
+    public double OverusePenalty { get; set; } = 0.45;
+}
+
+public class GeneratedBarterOfferCategoryProfile
+{
+    public bool Enabled { get; set; } = true;
+
+    // Category weights for barter components used when this offer category becomes barter.
+    // Example: { "Electronics": 70, "Tools": 20, "Valuables": 10 }
+    public Dictionary<string, double> IngredientCategoryWeights { get; set; } = [];
+
+    // Optional override for max different barter item types. 0/null = use generated_trade_settings.jsonc category limit.
+    public int? MaxDifferentItems { get; set; }
 }
 
 public class GeneratedBarterWhitelistItem
@@ -250,5 +310,19 @@ public class GeneratedBarterWhitelistItem
     public bool Enabled { get; set; } = true;
     public string TplId { get; set; } = string.Empty;
     public string ItemName { get; set; } = string.Empty;
+
+    // Ingredient category used by the weighted category system. If empty/Default, Tony infers it from Notes/name.
+    public string Category { get; set; } = "Default";
+
+    // Higher = picked more often inside the category. Use caps/penalties to prevent spam.
+    public double Weight { get; set; } = 10;
+
+    // 0 = use generated_trade_settings.jsonc default. Counts total component quantity used this run/restock.
+    public int MaxUsesPerRestock { get; set; } = 0;
+
+    // Quantity clamps for this component when it is selected. MaxQty 0 = use global GeneratedBarterMaxItemCount.
+    public int MinQty { get; set; } = 1;
+    public int MaxQty { get; set; } = 0;
+
     public string Notes { get; set; } = string.Empty;
 }

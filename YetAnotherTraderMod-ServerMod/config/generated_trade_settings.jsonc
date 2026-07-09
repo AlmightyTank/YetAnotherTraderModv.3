@@ -1,31 +1,130 @@
 {
-    "SchemaVersion": 1,
-    "Description": "Advanced Tony generated offer / auto-barter settings. Leave this alone unless you are tuning addon offers or generated barters.",
+  // SchemaVersion is for future migrations. Do not change unless a future Tony update says to.
+  "SchemaVersion": 1,
 
-    "AutoPriceGeneratedOffers": true, //[Generated Offers] Price addon/generated offers from loaded SPT prices when no price is provided.
+  // This file controls the generated offer / generated barter system.
+  // Manual hand-made offers belong in config/manual_offers.jsonc.
+  // Barter ingredient pools live in config/generated_barter_whitelist.jsonc.
+  // Ammo pack pairing is resolved in code: loose ammo that rolls barter sells the matching ammo pack.
+  "Description": "Advanced settings for Tony generated addon offers and auto-generated barter recipes. Edit this to tune the generated system. Manual hard-written offers belong in config/manual_offers.jsonc.",
 
-    "GeneratedPriceUseExternalFleaPriceFiles": true, //[Prices] true = Tony can read local LiveFleaPrices-style prices-regular.json/prices-pve.json files.
-    "GeneratedPriceExternalFleaGameMode": "regular", //[Prices] regular = prices-regular.json, pve = prices-pve.json.
-    "GeneratedPriceExternalFleaPriceFilePaths": [], //[Prices] Optional explicit price file paths. Usually leave empty.
-    "GeneratedPriceLogExternalFleaPriceSource": false, //[Prices] true = log which external price file was loaded.
+  // Auto-price generated/addon offers that did not provide a price.
+  // true = Tony looks up a price from external flea files / server DB / handbook fallback.
+  // false = generated offers with missing prices may fall back to low/default values.
+  "AutoPriceGeneratedOffers": true,
 
-    "GeneratedBarterPriceMode": "Exact", //[Generated Barters] Exact/Under never exceed the target value. Over is the only mode allowed to exceed it.
-    "GeneratedBarterPriceOffsetPercent": 0, //[Generated Barters] Percent used by Under/Over. Example: Under 10 = target 90%, Over 10 = target 110%.
-    "GeneratedBarterSelectionMode": "Stable", //[Generated Barters] Stable = consistent recipes. Random = reroll recipes on startup/restock.
-    "GeneratedBarterBalanceItemUsage": true, //[Generated Barters] Spread recipes across whitelist items instead of overusing one item.
-    "GeneratedBarterComponentPriceSource": "FleaTraderAverage", //[Generated Barters] FleaTraderAverage = value barter items from the middle between flea price and best trader sell price. Other values: Flea, Trader.
+  // StackObjectsCount cap for generated root offers.
+  // This is offer stock stack count, not ammo pack size.
+  "GeneratedOfferMaxStackObjectsCount": 30,
 
-    "GeneratedBarterAmmoPackMaxDifferentItems": 1, //[Generated Barters] Ammo pack barter offers use up to this many different barter item types.
-    "GeneratedBarterWeaponMaxDifferentItems": 2, //[Generated Barters] Weapon offers use up to this many different barter item types.
-    "GeneratedBarterMedicalMaxDifferentItems": 2, //[Generated Barters] Medical offers use up to this many different barter item types.
-    "GeneratedBarterHeadwearMaxDifferentItems": 2, //[Generated Barters] Headwear/headset offers use up to this many different barter item types.
-    "GeneratedBarterArmorMaxDifferentItems": 3, //[Generated Barters] Armor/gear offers use up to this many different barter item types.
-    "GeneratedBarterCaseValuableMaxDifferentItems": 4, //[Generated Barters] Cases and valuable offers use up to this many different barter item types.
-    "GeneratedBarterDefaultMaxDifferentItems": 3, //[Generated Barters] Everything else uses up to this many different barter item types.
+  // BuyRestrictionMax cap for generated root offers.
+  // Example: 5 means the player can buy up to 5 of that offer per restock.
+  "GeneratedOfferMaxBuyRestrictionMax": 5,
 
-    "GeneratedBarterMaxItemCount": 5, //[Generated Barters] Max stack count for each barter component.
-    "GeneratedBarterMinItemPrice": 1000, //[Generated Barters] Minimum price for whitelist items used in generated barters.
-    "GeneratedBarterUseWhitelist": true, //[Generated Barters] true = only use items from the whitelist file.
-    "GeneratedBarterWhitelistPath": "config/generated_barter_whitelist.jsonc", //[Generated Barters] Editable whitelist.
-    "GeneratedBarterOutputPath": "db/Generated/generated_barters.jsonc" //[Generated Barters] Generated recipes cache. items.json stays manual/base metadata.
+  // Price mode for generated/addon cash offers.
+  // Exact = use the resolved price as-is.
+  // Under = reduce by GeneratedOfferPriceOffsetPercent.
+  // Over = increase by GeneratedOfferPriceOffsetPercent.
+  "GeneratedOfferPriceMode": "Exact",
+  "GeneratedOfferPriceOffsetPercent": 0,
+
+  // External flea price support.
+  // Keep these on if you want generated prices to follow external flea-price cache files when present.
+  "GeneratedPriceUseExternalFleaPriceFiles": true,
+  "GeneratedPriceExternalFleaGameMode": "regular",
+
+  // true = scan sibling mods for known flea price files.
+  // This helps Tony price addon items without hard-coding every value.
+  "GeneratedPriceScanSiblingModsForFleaPriceFiles": true,
+
+  // Optional explicit file paths to external flea price JSON files.
+  // Leave empty unless you know exactly which price file you want Tony to read.
+  "GeneratedPriceExternalFleaPriceFilePaths": [],
+
+  // true = external flea prices win over weaker fallback prices.
+  "GeneratedPricePreferExternalFleaPrices": true,
+
+  // true = log which external file supplied a price. Useful for debugging, noisy for normal play.
+  "GeneratedPriceLogExternalFleaPriceSource": false,
+
+  // Generated barter value mode.
+  // Exact = generated barter total should not intentionally go over target value.
+  // Under = slightly cheaper barter than the cash value.
+  // Over = allows barter to be a little more expensive; useful if cheap offers are skipping.
+  "GeneratedBarterPriceMode": "Over",
+
+  // Stable = deterministic picks from offer id / tpl seed. Good for consistent restocks.
+  // Random = more variety each generation run.
+  "GeneratedBarterSelectionMode": "Stable",
+
+  // Used with GeneratedBarterPriceMode Under/Over.
+  // Example: Over + 10 means target value is about 10% higher.
+  "GeneratedBarterPriceOffsetPercent": 0,
+
+  // Max number of different barter ingredients per generated recipe.
+  // Category-specific values below override this default.
+  "GeneratedBarterMaxDifferentItems": 3,
+
+  // Ammo barter recipes should stay simple.
+  // Ammo is automatically valued as pack value, not single-round value.
+  // Example: 32 RUB buckshot x 25 = 800 RUB target.
+  "GeneratedBarterAmmoPackMaxDifferentItems": 1,
+
+  // Category-specific recipe complexity.
+  // Higher values create more mixed barters; lower values create cleaner/simple barters.
+  "GeneratedBarterWeaponMaxDifferentItems": 2,
+  "GeneratedBarterMedicalMaxDifferentItems": 1,
+  "GeneratedBarterHeadwearMaxDifferentItems": 1,
+  "GeneratedBarterArmorMaxDifferentItems": 3,
+  "GeneratedBarterCaseValuableMaxDifferentItems": 3,
+  "GeneratedBarterDefaultMaxDifferentItems": 1,
+
+  // true = avoid overusing the same barter item repeatedly in one generation/restock run.
+  // This works with MaxUsesPerRestock and OverusePenalty in generated_barter_whitelist.jsonc.
+  "GeneratedBarterBalanceItemUsage": true,
+
+  // true = use category profiles from generated_barter_whitelist.jsonc.
+  // Example: AmmoPack mostly uses AmmoSupplies/Junk; Medical mostly uses Medical/FoodDrink.
+  // false = use the whitelist more like one flat pool.
+  "GeneratedBarterUseWeightedCategories": true,
+
+  // Default item weight when an item in generated_barter_whitelist.jsonc has no Weight field.
+  // Higher weight = more likely to be selected.
+  "GeneratedBarterDefaultItemWeight": 10,
+
+  // Default hard item cap per generation/restock when a whitelist item has no MaxUsesPerRestock.
+  // 0 = unlimited. Per-item values in generated_barter_whitelist.jsonc are preferred.
+  "GeneratedBarterDefaultItemMaxUsesPerRestock": 0,
+
+  // Soft anti-spam penalty when an item/category is used multiple times.
+  // Effective weight is roughly: Weight / (1 + Uses * Penalty).
+  // Higher = repeated items become unlikely faster.
+  "GeneratedBarterDefaultOverusePenalty": 0.45,
+
+  // How barter ingredient values are calculated.
+  // FleaTraderAverage = balanced default between flea-style price and trader sell price.
+  // Flea = use flea-style value.
+  // Trader = use best trader sell value.
+  "GeneratedBarterComponentPriceSource": "FleaTraderAverage",
+
+  // Max quantity of one barter ingredient in one recipe.
+  // Example: 5 means a recipe can ask for up to 5 bolts, 5 drinks, etc.
+  "GeneratedBarterMaxItemCount": 5,
+
+  // Minimum price for an item to be used as a barter ingredient.
+  // Lower this if cheap ammo/medical offers skip too often.
+  // Raise it if generated barters use too many tiny junk items.
+  "GeneratedBarterMinItemPrice": 250,
+
+  // true = generated barter ingredients must come from generated_barter_whitelist.jsonc.
+  // Recommended true so Tony does not pick weird quest items, currencies, or bad templates.
+  "GeneratedBarterUseWhitelist": true,
+
+  // User-editable weighted barter ingredient pool.
+  // Add/remove items, change categories, weights, min/max quantities, and use caps there.
+  "GeneratedBarterWhitelistPath": "config/generated_barter_whitelist.jsonc",
+
+  // Runtime output for generated recipes.
+  // Safe to delete when testing; Tony will recreate it next startup/restock.
+  "GeneratedBarterOutputPath": "db/Generated/generated_barters.jsonc"
 }

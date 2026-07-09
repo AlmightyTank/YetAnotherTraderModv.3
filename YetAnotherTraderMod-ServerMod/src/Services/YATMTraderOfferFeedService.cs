@@ -14,13 +14,15 @@ namespace YetAnotherTraderMod.src.Services;
 /// <summary>
 /// Public addon-facing service for feeding Tony offers.
 ///
-/// Current supported addon data:
-/// - db/CustomTraderOffers/*.json/jsonc
+/// Supported addon data:
+/// - db/CustomTraderOffers/*.json/jsonc inside Tony itself
+/// - db/YATM/CustomTraderOffers/*.json/jsonc inside addon mods
 ///   Shape: { TonyTraderId: { items, barter_scheme, loyal_level_items, yatm_settings } }
-/// - db/CustomWeaponPresets/*.json/jsonc
-///   Optional preset registration for other systems/addons.
+/// - db/CustomWeaponPresets/*.json/jsonc inside Tony itself
+/// - db/YATM/CustomWeaponPresets/*.json/jsonc inside addon mods
 ///
-/// No alternate offer schemas are read here. Keep the feed simple and explicit.
+/// Addons may either call this service directly from an early loader, or simply ship files in
+/// the db/YATM folders and let Tony auto-discover them before the runtime assort is built.
 /// </summary>
 [Injectable(InjectionType.Singleton)]
 public sealed class YATMTraderOfferFeedService(
@@ -32,9 +34,13 @@ public sealed class YATMTraderOfferFeedService(
 
     private const string DefaultOfferDir = "db/CustomTraderOffers";
     private const string DefaultPresetDir = "db/CustomWeaponPresets";
+    private const string DefaultAddonOfferDir = "db/YATM/CustomTraderOffers";
+    private const string DefaultAddonPresetDir = "db/YATM/CustomWeaponPresets";
 
     private readonly List<YATMRawTraderOfferFile> _rawOfferFiles = [];
     private readonly HashSet<string> _rootOfferIds = new(StringComparer.OrdinalIgnoreCase);
+    private readonly HashSet<string> _loadedOfferFiles = new(StringComparer.OrdinalIgnoreCase);
+    private readonly HashSet<string> _loadedPresetFiles = new(StringComparer.OrdinalIgnoreCase);
 
     public IReadOnlyList<YATMRawTraderOfferFile> GetRegisteredTonyTraderOffers()
     {
@@ -45,16 +51,185 @@ public sealed class YATMTraderOfferFeedService(
     {
         _rawOfferFiles.Clear();
         _rootOfferIds.Clear();
+        _loadedOfferFiles.Clear();
     }
 
     /// <summary>
-    /// Loads Tony raw offer files. Default path: db/CustomTraderOffers
+    /// Registers an in-memory Tony offer built by another YATM service, such as
+    /// CustomConsumablesLoader. This uses the same pipeline as addon
+    /// db/YATM/CustomTraderOffers files, so the offer survives Tony startup
+    /// generation and restock rerolls.
+    /// </summary>
+    public bool RegisterRawTonyTraderOffer(
+        string source,
+        JsonArray items,
+        JsonObject barterScheme,
+        JsonObject loyalLevelItems,
+        JsonObject? yatmSettings = null)
+    {
+        if (items.Count == 0)
+        {
+            logger.Warning($"[YATM Offer Feed] Skipped in-memory offer {source}: no item rows.");
+            return false;
+        }
+
+        var rootIds = GetRootOfferIds(items);
+        if (rootIds.Count == 0)
+        {
+            logger.Warning($"[YATM Offer Feed] Skipped in-memory offer {source}: no root hideout offer row.");
+            return false;
+        }
+
+        var duplicateRootIds = rootIds.Where(x => !_rootOfferIds.Add(x)).ToList();
+        if (duplicateRootIds.Count > 0)
+        {
+            logger.Warning($"[YATM Offer Feed] Skipped in-memory offer {source}: duplicate root offer id(s): {string.Join(", ", duplicateRootIds)}.");
+            foreach (var id in rootIds.Except(duplicateRootIds, StringComparer.OrdinalIgnoreCase))
+            {
+                _rootOfferIds.Remove(id);
+            }
+
+            return false;
+        }
+
+        _rawOfferFiles.Add(new YATMRawTraderOfferFile
+        {
+            SourceFile = source,
+            Items = CloneArray(items),
+            BarterScheme = CloneObject(barterScheme),
+            LoyalLevelItems = CloneObject(loyalLevelItems),
+            YatmSettings = CloneObject(yatmSettings)
+        });
+
+        logger.Info($"[YATM Offer Feed] Registered in-memory Tony offer {source}: {items.Count} item row(s), {rootIds.Count} root offer(s).");
+        return true;
+    }
+
+    /// <summary>
+    /// CommonLib-style addon entry point.
+    ///
+    /// Addons should call this before YetAnotherTraderMod runs its runtime loader at
+    /// OnLoadOrder.PostDBModLoader + 4.
+    ///
+    /// Example:
+    /// await yatmCommon.CustomTraderOfferServiceExtended.CreateCustomTraderOffers(
+    ///     Assembly.GetExecutingAssembly(),
+    ///     Path.Join("db", "CustomTraderOffers"));
+    /// </summary>
+    public Task CreateCustomTraderOffers(Assembly assembly, string? relativePath = null)
+    {
+        return CreateTonyTraderOffers(assembly, relativePath);
+    }
+
+    /// <summary>
+    /// Loads Tony raw offer files from the supplied assembly.
+    /// Default path: db/CustomTraderOffers
     /// </summary>
     public async Task CreateTonyTraderOffers(Assembly assembly, string? relativePath = null)
     {
+        if (assembly is null)
+        {
+            throw new ArgumentNullException(nameof(assembly));
+        }
+
         var assemblyLocation = GetModPath(assembly);
-        var finalPath = GetOfferPath(assemblyLocation, relativePath);
-        var jsonFiles = GetJsonAndJsoncFilesFromPath(finalPath);
+        var finalPath = ResolvePath(assemblyLocation, relativePath ?? DefaultOfferDir);
+
+        await RegisterTonyTraderOffersFromPath(finalPath);
+    }
+
+    /// <summary>
+    /// CommonLib-style path entry point for addons that already resolved a file/folder path.
+    /// </summary>
+    public Task CreateCustomTraderOffersFromPath(string path)
+    {
+        return RegisterTonyTraderOffersFromPath(path);
+    }
+
+    /// <summary>
+    /// Loads a specific Tony raw offer file/folder. Useful for addon loaders that already resolved a path.
+    /// </summary>
+    public async Task RegisterTonyTraderOffersFromPath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            throw new ArgumentException("Tony trader offer path cannot be empty.", nameof(path));
+        }
+
+        await RegisterTonyTraderOfferFilesFromPath(Path.GetFullPath(path));
+    }
+
+    /// <summary>
+    /// Auto-discovers addon offer files from every installed mod using db/YATM/CustomTraderOffers.
+    /// This is what lets addons still work when Tony runtime is moved earlier in PostDBModLoader.
+    /// </summary>
+    public async Task CreateAddonTonyTraderOffers(Assembly hostAssembly, string? relativePath = null)
+    {
+        if (hostAssembly is null)
+        {
+            throw new ArgumentNullException(nameof(hostAssembly));
+        }
+
+        var hostModPath = GetModPath(hostAssembly);
+        var addonPaths = ResolveAddonSourceFolders(hostModPath, relativePath ?? DefaultAddonOfferDir).ToList();
+
+        if (addonPaths.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var path in addonPaths)
+        {
+            await RegisterTonyTraderOfferFilesFromPath(path);
+        }
+    }
+
+    /// <summary>
+    /// Loads weapon preset files from Tony/addon mods into Globals.ItemPresets.
+    /// Default path: db/CustomWeaponPresets
+    /// </summary>
+    public async Task CreateCustomWeaponPresets(Assembly assembly, string? relativePath = null)
+    {
+        if (assembly is null)
+        {
+            throw new ArgumentNullException(nameof(assembly));
+        }
+
+        var assemblyLocation = GetModPath(assembly);
+        var finalPath = ResolvePath(assemblyLocation, relativePath ?? DefaultPresetDir);
+
+        await RegisterCustomWeaponPresetsFromPath(finalPath);
+    }
+
+    /// <summary>
+    /// Auto-discovers addon weapon presets from every installed mod using db/YATM/CustomWeaponPresets.
+    /// </summary>
+    public async Task CreateAddonCustomWeaponPresets(Assembly hostAssembly, string? relativePath = null)
+    {
+        if (hostAssembly is null)
+        {
+            throw new ArgumentNullException(nameof(hostAssembly));
+        }
+
+        var hostModPath = GetModPath(hostAssembly);
+        var addonPaths = ResolveAddonSourceFolders(hostModPath, relativePath ?? DefaultAddonPresetDir).ToList();
+
+        if (addonPaths.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var path in addonPaths)
+        {
+            await RegisterCustomWeaponPresetsFromPath(path);
+        }
+    }
+
+    private async Task RegisterTonyTraderOfferFilesFromPath(string finalPath)
+    {
+        var jsonFiles = GetJsonAndJsoncFilesFromPath(finalPath)
+            .Select(Path.GetFullPath)
+            .ToArray();
 
         if (jsonFiles.Length == 0)
         {
@@ -66,6 +241,12 @@ public sealed class YATMTraderOfferFeedService(
 
         foreach (var file in jsonFiles)
         {
+            if (!_loadedOfferFiles.Add(file))
+            {
+                YATMLogger.LogDebug($"[YATM Offer Feed] Offer file already registered, skipping duplicate read: {file}");
+                continue;
+            }
+
             try
             {
                 var json = await File.ReadAllTextAsync(file);
@@ -107,16 +288,12 @@ public sealed class YATMTraderOfferFeedService(
         }
     }
 
-    /// <summary>
-    /// Loads weapon preset files from Tony/addon mods into Globals.ItemPresets.
-    /// Default path: db/CustomWeaponPresets
-    /// </summary>
-    public async Task CreateCustomWeaponPresets(Assembly assembly, string? relativePath = null)
+    private async Task RegisterCustomWeaponPresetsFromPath(string finalPath)
     {
-        var assemblyLocation = GetModPath(assembly);
-        var finalPath = GetPresetPath(assemblyLocation, relativePath);
+        var jsonFiles = GetJsonAndJsoncFilesFromPath(finalPath)
+            .Select(Path.GetFullPath)
+            .ToArray();
 
-        var jsonFiles = GetJsonAndJsoncFilesFromPath(finalPath);
         if (jsonFiles.Length == 0)
         {
             return;
@@ -127,6 +304,12 @@ public sealed class YATMTraderOfferFeedService(
 
         foreach (var file in jsonFiles)
         {
+            if (!_loadedPresetFiles.Add(file))
+            {
+                YATMLogger.LogDebug($"[YATM Offer Feed] Preset file already loaded, skipping duplicate read: {file}");
+                continue;
+            }
+
             try
             {
                 var json = await File.ReadAllTextAsync(file);
@@ -245,14 +428,62 @@ public sealed class YATMTraderOfferFeedService(
         return modHelper.GetAbsolutePathToModFolder(assembly);
     }
 
-    private static string GetOfferPath(string assemblyLocation, string? relativePath)
+    private static string ResolvePath(string rootPath, string path)
     {
-        return Path.Combine(assemblyLocation, relativePath ?? DefaultOfferDir);
+        return Path.IsPathRooted(path)
+            ? path
+            : Path.Combine(rootPath, path);
     }
 
-    private static string GetPresetPath(string assemblyLocation, string? relativePath)
+    private static List<string> ResolveAddonSourceFolders(string hostModPath, string relativePath)
     {
-        return Path.Combine(assemblyLocation, relativePath ?? DefaultPresetDir);
+        var results = new List<string>();
+        var modsRoot = FindModsRoot(hostModPath);
+        if (modsRoot is null || !Directory.Exists(modsRoot))
+        {
+            return results;
+        }
+
+        List<string> modFolders;
+        try
+        {
+            modFolders = Directory.EnumerateDirectories(modsRoot)
+                .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            YATMLogger.Log($"[YATM Offer Feed] Could not scan mods folder for addon offer folders: {ex.Message}");
+            return results;
+        }
+
+        foreach (var modFolder in modFolders)
+        {
+            var resolved = ResolvePath(modFolder, relativePath);
+            if (Directory.Exists(resolved) || File.Exists(resolved))
+            {
+                results.Add(Path.GetFullPath(resolved));
+            }
+        }
+
+        return results;
+    }
+
+    private static string? FindModsRoot(string modPath)
+    {
+        var current = new DirectoryInfo(Path.GetFullPath(modPath));
+
+        while (current is not null)
+        {
+            if (string.Equals(current.Name, "mods", StringComparison.OrdinalIgnoreCase))
+            {
+                return current.FullName;
+            }
+
+            current = current.Parent;
+        }
+
+        return null;
     }
 
     private static string[] GetJsonAndJsoncFilesFromPath(string path)
@@ -269,7 +500,7 @@ public sealed class YATMTraderOfferFeedService(
 
         return Directory.GetFiles(path, "*.json")
             .Concat(Directory.GetFiles(path, "*.jsonc"))
-            .OrderBy(x => x)
+            .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
             .ToArray();
     }
 

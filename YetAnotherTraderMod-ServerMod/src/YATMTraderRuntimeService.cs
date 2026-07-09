@@ -74,14 +74,17 @@ public sealed class YATMTraderRuntimeService(
         var assort = modHelper.GetJsonDataFromFile<TraderAssort>(pathToMod, "db/CustomTrader/Tony/assort.json");
         var traderImagePath = Path.Combine(pathToMod, "db/CustomTrader/Tony/Tony.jpg");
 
-        // Load Tony's own feed files.
-        // Addon mods can call these same YATMTraderOfferFeedService methods with their own assembly
-        // before Tony runtime executes, and those registered rows will already be included here.
-        await yatmTraderOfferFeedService.CreateTonyTraderOffers(Assembly.GetExecutingAssembly());
+        // Load Tony's own feed files, then auto-discover addon feed files before the runtime assort is built.
+        // Addons can call YATMCommonLib.CustomTraderOfferServiceExtended before this runtime runs,
+        // or simply ship files under db/YATM/CustomTraderOffers and db/YATM/CustomWeaponPresets.
+        await yatmTraderOfferFeedService.CreateCustomTraderOffers(Assembly.GetExecutingAssembly());
+        await yatmTraderOfferFeedService.CreateAddonTonyTraderOffers(Assembly.GetExecutingAssembly());
+        await yatmTraderOfferFeedService.CreateAddonCustomWeaponPresets(Assembly.GetExecutingAssembly());
 
-        // Tony/addons use one offer-feed schema: db/CustomTraderOffers/*.json/jsonc.
+        // Tony/addons use one offer-feed schema: db/CustomTraderOffers/*.json/jsonc for Tony,
+        // or db/YATM/CustomTraderOffers/*.json/jsonc for addons.
         // Shape: { TonyTraderId: { items, barter_scheme, loyal_level_items, yatm_settings } }.
-        // Tony's own config/items.json is loaded directly by YATMConfig as base metadata/prices/pack data.
+        // Optional config/manual_offers.jsonc rows are loaded by YATMConfig as manual overrides only.
         var generatedOfferDefinitions = yatmTraderOfferFeedService
             .GetRegisteredTonyTraderOffers()
             .ToList();

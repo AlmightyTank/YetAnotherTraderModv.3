@@ -22,7 +22,7 @@
     "CashOffersOnly": false, //[Pricing] If true, Tony only uses cash offers.
     "RandomizeCashBarterOffers": true, //[Pricing] If true, eligible offers can roll cash or barter.
     "CashOfferPercent": 85, //[Pricing] Percent of configured offers that should stay cash.
-    "ManualBarters": false, //[Barter] If false, Tony can auto-generate barter recipes. Advanced options are in config/generated_trade_settings.jsonc.
+    "ManualBarters": false, //[Barter] If false, Tony can auto-generate barter recipes. Generated barter tuning is in generated_trade_settings.jsonc and generated_barter_whitelist.jsonc.
 
     "DebugLogging": false, //[Debug] Enables detailed logs.
     "RealDebugLogging": false //[Debug] Enables very detailed logs.

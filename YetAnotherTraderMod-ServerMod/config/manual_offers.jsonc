@@ -1,0 +1,939 @@
+// Manual Tony offer overrides.
+// This file is intentionally a raw array of PriceConfigItem rows.
+// Do not wrap it in { "Barters": [...] } because YATMConfig loads it as List<PriceConfigItem>.
+// Hard-written BarterScheme rows are only used when settings.json ManualBarters is true.
+// With ManualBarters false, these rows still provide manual cash/metadata overrides while generated barters can roll normally.
+// Optional per row when ManualBarters=false and Tony auto-generates the barter recipe:
+//   "GeneratedBarterCategoryOverride": "Medical"
+// Valid examples: AmmoPack, Weapon, Medical, Headwear, Armor, CaseOrValuable,
+// Electronics, Tools, FoodDrink, WeaponParts, Valuables, Junk, Default.
+[
+    {
+        "OfferId": "6a300025d2999bc7b9bba966",
+        "TplId": "54491c4f4bdc2db1078b4568",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d40407c86f774318526545a",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba9b5",
+        "TplId": "57ffb0e42459777d047111c5",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d1c819a86f774771b0acd6c",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "590c2d8786f774245b1f03f3",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba98e",
+        "TplId": "590c60fc86f77412b13fddcf",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5734758f24597738025ee253",
+                    "ItemName": "",
+                    "Count": 2
+                },
+                {
+                    "TplId": "590c651286f7741e566b6461",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba980",
+        "TplId": "591094e086f7747caa7bb2ef",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d03775b86f774203e7e0c4b",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5d1b2fa286f77425227d1674",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba97f",
+        "TplId": "5910968f86f77425cf569c32",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d03775b86f774203e7e0c4b",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba981",
+        "TplId": "5991b51486f77447b112d44f",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5672cb124bdc2d1a0f8b4568",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba9b6",
+        "TplId": "59bfc5c886f7743bf6794e62",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5672cb124bdc2d1a0f8b4568",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5e2af29386f7746d4159f077",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba98f",
+        "TplId": "59fafd4b86f7745ca07e1232",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d235a5986f77443f6329bc6",
+                    "ItemName": "",
+                    "Count": 2
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba995",
+        "TplId": "59fb023c86f7746d0d4b423c",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d1c819a86f774771b0acd6c",
+                    "ItemName": "",
+                    "Count": 6
+                },
+                {
+                    "TplId": "5d0375ff86f774186372f685",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5d6fc78386f77449d825f9dc",
+                    "ItemName": "",
+                    "Count": 2
+                },
+                {
+                    "TplId": "590c2e1186f77425357b6124",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba996",
+        "TplId": "59fb042886f7746c5005a7b2",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5734758f24597738025ee253",
+                    "ItemName": "",
+                    "Count": 3
+                },
+                {
+                    "TplId": "5d235a5986f77443f6329bc6",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5d40407c86f774318526545a",
+                    "ItemName": "",
+                    "Count": 2
+                },
+                {
+                    "TplId": "5d1b376e86f774252519444e",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "590de71386f774347051a052",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2f1c3bd2999bc7b9bba8e3",
+        "TplId": "59fb375986f7741b681b81a6",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5e2af2bc86f7746d3f3c33fc",
+                    "ItemName": "",
+                    "Count": 2
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2f1c3bd2999bc7b9bba8e2",
+        "TplId": "5a01ad4786f77450561fda02",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "575062b524597720a31c09a1",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2f2001d2999bc7b9bba8e5",
+        "TplId": "5a0c59791526d8dba737bba7",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "57347d7224597744596b4e72",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba9b4",
+        "TplId": "5a0d63621526d8dba31fe3bf",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d1c819a86f774771b0acd6c",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5734795124597738002c6176",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba998",
+        "TplId": "5a1eaa87fcdbcb001865f75e",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d1b376e86f774252519444e",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba98d",
+        "TplId": "5aafbde786f774389d0cbc0f",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5e2aedd986f7746d404f3aa4",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2bfc3951ab7898b840fc8c",
+        "TplId": "5ab8e79e86f7742d8b372e78",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d403f9186f7743cac3f229b",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2b75aed2999bc7b9bba8bd",
+        "TplId": "5b4391a586f7745321235ab2",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5672cb124bdc2d1a0f8b4568",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2c05b4d2999bc7b9bba8c5",
+        "TplId": "5b6d9ce188a4501afc1b2b25",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "59faff1d86f7746c51718c9c",
+                    "ItemName": "",
+                    "Count": 8
+                },
+                {
+                    "TplId": "5c12613b86f7743bbe2c3f76",
+                    "ItemName": "",
+                    "Count": 4
+                },
+                {
+                    "TplId": "5d1b376e86f774252519444e",
+                    "ItemName": "",
+                    "Count": 6
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba989",
+        "TplId": "5beed0f50db834001c062b12",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "60b0f561c4449e4cb624c1d7",
+                    "ItemName": "",
+                    "Count": 2
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba997",
+        "TplId": "5c0a840b86f7742ffa4f2482",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "59faff1d86f7746c51718c9c",
+                    "ItemName": "",
+                    "Count": 8
+                },
+                {
+                    "TplId": "5c12613b86f7743bbe2c3f76",
+                    "ItemName": "",
+                    "Count": 4
+                },
+                {
+                    "TplId": "5d1b376e86f774252519444e",
+                    "ItemName": "",
+                    "Count": 6
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2c15ff0ad81c90c80166df",
+        "TplId": "5c0e541586f7747fa54205c9",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "66572c82ad599021091c6118",
+                    "ItemName": "",
+                    "Count": 2
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a300025d2999bc7b9bba955",
+        "TplId": "5c0e57ba86f7747fa141986d",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d40407c86f774318526545a",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba994",
+        "TplId": "5c0e625a86f7742d77340f62",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d1b376e86f774252519444e",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a41407d82d8dd83f87b206c",
+        "TplId": "5ca20abf86f77418567a43f2",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "57347d7224597744596b4e72",
+                    "ItemName": "",
+                    "Count": 2
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba97e",
+        "TplId": "5d02778e86f774203e7dedbe",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5734770f24597738025ee254",
+                    "ItemName": "",
+                    "Count": 2
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2abd18d2999bc7b9bba8bc",
+        "TplId": "5d02797c86f774203f38e30a",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5751435d24597720a27126d1",
+                    "ItemName": "",
+                    "Count": 3
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba999",
+        "TplId": "5d1b5e94d7ad1a2b865a96b0",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d03775b86f774203e7e0c4b",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a300025d2999bc7b9bba956",
+        "TplId": "5d5d646386f7742797261fd9",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5734758f24597738025ee253",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "59faf7ca86f7740dbe19f6c2",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a300025d2999bc7b9bba959",
+        "TplId": "5de652c31b7e3716273428be",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5e2aef7986f7746d3f3c33f5",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2f1c3bd2999bc7b9bba8e4",
+        "TplId": "5e21ca18e4d47f0da15e77dd",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "57347b8b24597737dd42e192",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2c1a18d2999bc7b9bba8d0",
+        "TplId": "5f60c74e3b85f6263c145586",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d235a5986f77443f6329bc6",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5d1b376e86f774252519444e",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2e2072d2999bc7b9bba8dd",
+        "TplId": "6570aead4d84f81fd002a033",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5e54f62086f774219b0f1937",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "573476d324597737da2adc13",
+                    "ItemName": "",
+                    "Count": 2
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3210dbd2999bc7b9bbab43",
+        "TplId": "683288ecdf6daf7c654cdb06",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5ed5160a87bb8443d10680b5",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5c10c8fd86f7743d7d706df3",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5d1b3f2d86f774253763b735",
+                    "ItemName": "",
+                    "Count": 2
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3210dbd2999bc7b9bbab45",
+        "TplId": "6832890f4951707edabbe776",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5c0e534186f7747fa1419867",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5c0e530286f7747fa1419862",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5c0e533786f7747fa23f4d47",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5d1b3f2d86f774253763b735",
+                    "ItemName": "",
+                    "Count": 2
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba98c",
+        "TplId": "69b3eecb340e9925c26e1852",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d1c819a86f774771b0acd6c",
+                    "ItemName": "",
+                    "Count": 4
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3210dbd2999bc7b9bbab44",
+        "TplId": "6a300025d2999bc7b9bba950",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5c0e530286f7747fa1419862",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5c0e533786f7747fa23f4d47",
+                    "ItemName": "",
+                    "Count": 1
+                },
+                {
+                    "TplId": "5d1b3a5d86f774252167ba22",
+                    "ItemName": "",
+                    "Count": 2
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2b82bed2999bc7b9bba8c2",
+        "TplId": "6a3fd8c382d8dd83f87b200c",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "62a09f32621468534a797acb",
+                    "ItemName": "",
+                    "Count": 2
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2b83fcd2999bc7b9bba8c4",
+        "TplId": "6a3fd8c382d8dd83f87b2010",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5c1267ee86f77416ec610f72",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3fd8c382d8dd83f87b200d",
+        "TplId": "6a3fd8c382d8dd83f87b2011",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d1b32c186f774252167a530",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2b7f99d2999bc7b9bba8be",
+        "TplId": "6a3fd8c382d8dd83f87b2013",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "590a3d9c86f774385926e510",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a2b8279d2999bc7b9bba8c0",
+        "TplId": "6a3fd8c382d8dd83f87b2014",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": false,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d1b32c186f774252167a530",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    }
+]

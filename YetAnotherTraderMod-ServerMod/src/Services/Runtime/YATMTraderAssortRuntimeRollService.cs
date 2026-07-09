@@ -481,7 +481,7 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
             if (matchingOffers.Count > 1 && string.IsNullOrWhiteSpace(priceConfig.OfferId))
             {
-                YATMLogger.LogDebug($"[Pricing] Multiple offers matched TplId {priceConfig.TplId}. Add OfferId to items.json for exact control.");
+                YATMLogger.LogDebug($"[Pricing] Multiple offers matched TplId {priceConfig.TplId}. Add OfferId to manual_offers.jsonc for exact control.");
             }
 
             foreach (var offer in matchingOffers)
@@ -493,7 +493,7 @@ public sealed class YATMTraderAssortRuntimeRollService(
                     continue;
                 }
 
-                // Avoid applying the same offer more than once if items.json has duplicate tpl matches.
+                // Avoid applying the same offer more than once if manual_offers.jsonc has duplicate tpl matches.
                 if (!configuredOfferIds.Add(offerId))
                 {
                     YATMLogger.LogDebug($"[Pricing] Duplicate configured offer skipped: {priceConfig.ItemName} ({offerId})");
@@ -514,6 +514,8 @@ public sealed class YATMTraderAssortRuntimeRollService(
         var CashOffersOnly = config.Settings.CashOffersOnly;
         var randomizeCashBarter = GetBoolSetting(config.Settings, "RandomizeCashBarterOffers", true) && !CashOffersOnly;
         var selectedBarterOfferIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var orderedBarterCandidateOfferIds = new List<string>();
+        var targetGeneratedBarterCount = 0;
         var canGenerateBarters = !CashOffersOnly && !config.Settings.ManualBarters;
 
         var pairedAmmoPackOfferIds = config.Prices
@@ -534,9 +536,6 @@ public sealed class YATMTraderAssortRuntimeRollService(
         {
             var cashPercent = Math.Clamp(GetIntSetting(config.Settings, "CashOfferPercent", 85), 0, 100);
             var barterPercent = 100 - cashPercent;
-            var requestedBarterCount = (int)Math.Round(
-                configuredOffers.Count * (barterPercent / 100.0),
-                MidpointRounding.AwayFromZero);
 
             var forcedBarterOfferIds = configuredOffers
                 .Where(x => IsAlwaysBarter(x.PriceConfig) && CanOfferBecomeBarter(x.PriceConfig, canGenerateBarters, pairedAmmoPackOfferIds, pairedAmmoPackTplIds))
@@ -574,9 +573,18 @@ public sealed class YATMTraderAssortRuntimeRollService(
                 .Select(x => x.OrderBy(_ => random.Next()).First())
                 .ToList();
 
+            // CashOfferPercent applies to offers that can actually participate in the cash/barter roll.
+            // Do not count fixed-cash rows or helper rows in the barter target, otherwise 85% cash can
+            // still produce too many barter offers when the assort contains ammo-pack helpers or other
+            // non-rollable rows.
+            var rollablePaymentOfferCount = forcedBarterOfferIds.Count + eligibleRandomBarterCandidates.Count;
+            var requestedBarterCount = (int)Math.Round(
+                rollablePaymentOfferCount * (barterPercent / 100.0),
+                MidpointRounding.AwayFromZero);
+
             // AlwaysBarter offers are guaranteed barter and still count against the target barter percent.
             // Example: 15 target barter offers and 2 AlwaysBarter rows means only 13 more are randomly selected.
-            var targetBarterCount = Math.Clamp(requestedBarterCount, 0, forcedBarterOfferIds.Count + eligibleRandomBarterCandidates.Count);
+            var targetBarterCount = Math.Clamp(requestedBarterCount, 0, rollablePaymentOfferCount);
             var randomBarterSlots = Math.Max(0, targetBarterCount - forcedBarterOfferIds.Count);
 
             var freshRandomBarterCandidates = eligibleRandomBarterCandidates
@@ -589,9 +597,15 @@ public sealed class YATMTraderAssortRuntimeRollService(
                 .OrderBy(_ => random.Next())
                 .ToList();
 
-            var randomlySelectedBarterCandidates = freshRandomBarterCandidates
+            // Full ordered candidate list. The generator consumes from this list until the requested
+            // number of successful barter schemes is reached. If an early candidate fails, the next
+            // candidate is tried instead of lowering the final barter count.
+            var orderedRandomBarterCandidates = freshRandomBarterCandidates
+                .Concat(repeatRandomBarterCandidates)
+                .ToList();
+
+            var randomlySelectedBarterCandidates = orderedRandomBarterCandidates
                 .Take(randomBarterSlots)
-                .Concat(repeatRandomBarterCandidates.Take(Math.Max(0, randomBarterSlots - freshRandomBarterCandidates.Count)))
                 .ToList();
 
             var randomlySelectedBarterOfferIds = randomlySelectedBarterCandidates
@@ -602,11 +616,18 @@ public sealed class YATMTraderAssortRuntimeRollService(
                 .Concat(randomlySelectedBarterOfferIds)
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
+            targetGeneratedBarterCount = targetBarterCount;
+            orderedBarterCandidateOfferIds = forcedBarterOfferIds
+                .Concat(orderedRandomBarterCandidates.Select(x => x.OfferId))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
             var freshSelectedBarterCount = randomlySelectedBarterCandidates.Count(x => !_lastRandomBarterRollKeys.Contains(x.RollKey));
             ReplaceHashSetContents(_lastRandomBarterRollKeys, randomlySelectedBarterCandidates.Select(x => x.RollKey));
 
-            var targetCashCount = configuredOffers.Count - selectedBarterOfferIds.Count;
-            YATMLogger.Log($"[Pricing] Random payment split enabled: {targetCashCount} cash offers / {selectedBarterOfferIds.Count} barter offers ({forcedBarterOfferIds.Count} forced barter).");
+            var rollableCashCount = Math.Max(0, rollablePaymentOfferCount - selectedBarterOfferIds.Count);
+            var fixedCashOnlyCount = Math.Max(0, configuredOffers.Count - rollablePaymentOfferCount);
+            YATMLogger.Log($"[Pricing] Random payment split enabled: {rollableCashCount} cash offers / {selectedBarterOfferIds.Count} barter offers from {rollablePaymentOfferCount} rollable offers ({fixedCashOnlyCount} fixed cash/helper offers, {forcedBarterOfferIds.Count} forced barter).");
             YATMLogger.LogDebug($"[Pricing] Non-repeat barter selection: selected {randomlySelectedBarterCandidates.Count} random barter offers ({freshSelectedBarterCount} fresh, {randomlySelectedBarterCandidates.Count - freshSelectedBarterCount} reused). AlwaysBarter rows are forced and can repeat.");
 
             if (repeatRandomBarterCandidates.Count > 0 && randomBarterSlots > freshRandomBarterCandidates.Count)
@@ -619,9 +640,9 @@ public sealed class YATMTraderAssortRuntimeRollService(
                 YATMLogger.Log($"[Pricing] Warning: AlwaysBarter rows ({forcedBarterOfferIds.Count}) exceed requested barter count ({requestedBarterCount}). All AlwaysBarter rows were kept as barter and no random barter offers were added.");
             }
 
-            if ((forcedBarterOfferIds.Count + eligibleRandomBarterCandidates.Count) < requestedBarterCount)
+            if (rollablePaymentOfferCount < requestedBarterCount)
             {
-                YATMLogger.Log($"[Pricing] Warning: requested {requestedBarterCount} barter offers, but only {forcedBarterOfferIds.Count + eligibleRandomBarterCandidates.Count} offers can use manual or generated barter schemes.");
+                YATMLogger.Log($"[Pricing] Warning: requested {requestedBarterCount} barter offers, but only {rollablePaymentOfferCount} offers can use manual or generated barter schemes.");
             }
         }
         else
@@ -637,23 +658,79 @@ public sealed class YATMTraderAssortRuntimeRollService(
                     .Where(x => !string.IsNullOrWhiteSpace(x))
                     .Cast<string>()
                     .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                targetGeneratedBarterCount = selectedBarterOfferIds.Count;
+                orderedBarterCandidateOfferIds = selectedBarterOfferIds.ToList();
             }
         }
 
         if (selectedBarterOfferIds.Count > 0 && canGenerateBarters)
         {
-            var selectedPriceConfigs = configuredOffers
-                .Where(x =>
+            if (targetGeneratedBarterCount <= 0)
+            {
+                targetGeneratedBarterCount = selectedBarterOfferIds.Count;
+            }
+
+            if (orderedBarterCandidateOfferIds.Count == 0)
+            {
+                orderedBarterCandidateOfferIds = selectedBarterOfferIds.ToList();
+            }
+
+            var configuredOffersByOfferId = configuredOffers
+                .Select(x => new
                 {
-                    var offerId = GetMemberValue(x.Offer, "Id")?.ToString();
-                    return !string.IsNullOrWhiteSpace(offerId) && selectedBarterOfferIds.Contains(offerId);
+                    OfferId = GetMemberValue(x.Offer, "Id")?.ToString(),
+                    x.Offer,
+                    x.PriceConfig
                 })
-                .Select(x => x.PriceConfig)
+                .Where(x => !string.IsNullOrWhiteSpace(x.OfferId))
+                .GroupBy(x => x.OfferId!, StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(x => x.Key, x => x.First(), StringComparer.OrdinalIgnoreCase);
+
+            var orderedSelectedPriceConfigs = orderedBarterCandidateOfferIds
+                .Where(configuredOffersByOfferId.ContainsKey)
+                .Select(x => configuredOffersByOfferId[x].PriceConfig)
                 .ToList();
 
-            if (generatedOfferService.ApplyAutoGeneratedBartersToSelectedConfig(config, assort, selectedPriceConfigs))
+            var generationResult = generatedOfferService.ApplyAutoGeneratedBartersToSelectedConfigWithResult(
+                config,
+                assort,
+                orderedSelectedPriceConfigs,
+                targetGeneratedBarterCount);
+
+            if (generationResult.Changed)
             {
                 config.SaveGeneratedBarters();
+            }
+
+            selectedBarterOfferIds = configuredOffersByOfferId
+                .Where(x => generationResult.SuccessfulOfferIds.Contains(x.Key)
+                    || (!string.IsNullOrWhiteSpace(x.Value.PriceConfig.TplId)
+                        && generationResult.SuccessfulOfferIds.Contains(x.Value.PriceConfig.TplId)))
+                .Select(x => x.Key)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            var attemptedRandomRollKeys = configuredOffersByOfferId
+                .Where(x => generationResult.AttemptedOfferIds.Contains(x.Key)
+                    || (!string.IsNullOrWhiteSpace(x.Value.PriceConfig.TplId)
+                        && generationResult.AttemptedOfferIds.Contains(x.Value.PriceConfig.TplId)))
+                .Where(x => !IsAlwaysBarter(x.Value.PriceConfig))
+                .Select(x => GetPaymentRollKey(x.Value.Offer, x.Value.PriceConfig))
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToList();
+
+            if (attemptedRandomRollKeys.Count > 0)
+            {
+                ReplaceHashSetContents(_lastRandomBarterRollKeys, attemptedRandomRollKeys);
+            }
+
+            if (generationResult.SuccessfulCount < targetGeneratedBarterCount)
+            {
+                YATMLogger.Log($"[Pricing] Generated barter retry filled {generationResult.SuccessfulCount}/{targetGeneratedBarterCount} barter slot(s). {targetGeneratedBarterCount - generationResult.SuccessfulCount} slot(s) stayed cash because no more candidates could generate valid barter schemes.");
+            }
+            else if (generationResult.SkippedCount > 0)
+            {
+                YATMLogger.Log($"[Pricing] Generated barter retry replaced {generationResult.SkippedCount} skipped candidate(s) and still filled {generationResult.SuccessfulCount}/{targetGeneratedBarterCount} barter slot(s).");
             }
         }
 
@@ -693,7 +770,16 @@ public sealed class YATMTraderAssortRuntimeRollService(
             }
         }
 
+        EnsureAmmoPackBarterOffersSellPacks(assort, paymentRollResult);
+
         paymentRollResult.MarkCompleted();
+
+        if (randomizeCashBarter)
+        {
+            var appliedCashCount = Math.Max(0, configuredOffers.Count - paymentRollResult.BarterOfferIds.Count);
+            YATMLogger.Log($"[Pricing] Applied payment split: {appliedCashCount} cash offers / {paymentRollResult.BarterOfferIds.Count} barter offers ({selectedBarterOfferIds.Count} selected before generation).");
+        }
+
         YATMLogger.LogDebug($"[{rollReason}] Payment roll completed before stock roll. Barter offers: {paymentRollResult.BarterOfferIds.Count}. Ammo pack barter offers: {paymentRollResult.AmmoPackBarterOffersById.Count}.");
         return paymentRollResult;
     }
@@ -746,6 +832,52 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
         var tpl = YATMConfig.GetTemplateId(item);
         return !string.IsNullOrEmpty(tpl) && tpl == priceConfig.TplId;
+    }
+
+    private static void EnsureAmmoPackBarterOffersSellPacks(
+        TraderAssort assort,
+        PaymentRollResult paymentRollResult)
+    {
+        if (paymentRollResult.AmmoPackBarterOffersById.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var entry in paymentRollResult.AmmoPackBarterOffersById)
+        {
+            var offerId = entry.Key;
+            var priceConfig = entry.Value.PriceConfig;
+            var packTpl = GetStringMember(priceConfig, "AmmoBarterPackTplId");
+
+            if (string.IsNullOrWhiteSpace(packTpl))
+            {
+                continue;
+            }
+
+            var offer = FindRootOfferById(assort, offerId);
+            if (offer == null)
+            {
+                YATMLogger.LogDebug($"[Pricing] Warning: ammo barter pack verification could not find offer {offerId} for {priceConfig.ItemName ?? "Unknown ammo"}.");
+                continue;
+            }
+
+            var currentTpl = YATMConfig.GetTemplateId(offer);
+            if (!string.Equals(currentTpl, packTpl, StringComparison.OrdinalIgnoreCase))
+            {
+                YATMLogger.Log($"[Pricing] Warning: ammo barter offer {priceConfig.ItemName ?? offerId} was selected as barter but still pointed at {currentTpl ?? "null"}. Forcing pack tpl {packTpl}.");
+                SetOfferTemplate(offer, packTpl);
+            }
+
+            var verifiedTpl = YATMConfig.GetTemplateId(offer);
+            if (string.Equals(verifiedTpl, packTpl, StringComparison.OrdinalIgnoreCase))
+            {
+                YATMLogger.LogRealDebug($"[Pricing] Ammo barter verified as pack: {priceConfig.ItemName ?? offerId} | Offer {offerId} | _tpl = {packTpl}");
+            }
+            else
+            {
+                YATMLogger.Log($"[Pricing] Warning: ammo barter offer {priceConfig.ItemName ?? offerId} could not be verified as pack after write. Expected {packTpl}, read {verifiedTpl ?? "null"}.");
+            }
+        }
     }
 
     private static bool ApplyPaymentToOffer(
@@ -1076,9 +1208,59 @@ public sealed class YATMTraderAssortRuntimeRollService(
             ? GetIntMember(packUpd, "StackObjectsCount", 0)
             : 0;
 
-        return staticPackStackCount > 0
-            ? staticPackStackCount
-            : 0;
+        if (staticPackStackCount > 0)
+        {
+            return staticPackStackCount;
+        }
+
+        var inferredPackSize = InferAmmoPackSizeFromLooseAmmoName(priceConfig.ItemName);
+        return inferredPackSize > 1 ? inferredPackSize : 0;
+    }
+
+    private static int InferAmmoPackSizeFromLooseAmmoName(string? itemName)
+    {
+        if (string.IsNullOrWhiteSpace(itemName))
+        {
+            return 1;
+        }
+
+        var name = itemName.Trim().ToLowerInvariant();
+
+        if (name.StartsWith("12.7x55mm", StringComparison.OrdinalIgnoreCase))
+        {
+            return 10;
+        }
+
+        if (name.StartsWith("12/70", StringComparison.OrdinalIgnoreCase)
+            || name.StartsWith("20/70", StringComparison.OrdinalIgnoreCase))
+        {
+            return 25;
+        }
+
+        if (name.StartsWith("5.45x39mm", StringComparison.OrdinalIgnoreCase))
+        {
+            return 120;
+        }
+
+        if (name.StartsWith("9x18mm", StringComparison.OrdinalIgnoreCase))
+        {
+            return 50;
+        }
+
+        if (name.StartsWith("9x19mm", StringComparison.OrdinalIgnoreCase))
+        {
+            return name.Contains("rip") ? 20 : 50;
+        }
+
+        if (name.StartsWith(".366", StringComparison.OrdinalIgnoreCase)
+            || name.StartsWith("7.62x39mm", StringComparison.OrdinalIgnoreCase)
+            || name.StartsWith("7.62x54mm", StringComparison.OrdinalIgnoreCase)
+            || name.StartsWith("9x39mm", StringComparison.OrdinalIgnoreCase))
+        {
+            return 20;
+        }
+
+        return 1;
     }
 
     private static int GetKnownAmmoPackSize(string packTpl)
@@ -1090,7 +1272,9 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
         if (IsTplMatch(packTpl,
             // 12.7x55mm PS12B ammo pack
-            "648983d6b5a2df1c815a04ec"))
+            "648983d6b5a2df1c815a04ec",
+            // Tony custom 12.7x55mm PS12V ammo pack
+            "6a4933e1fb1eff152bd649b9"))
         {
             return 10;
         }
@@ -1098,6 +1282,10 @@ public sealed class YATMTraderAssortRuntimeRollService(
         if (IsTplMatch(packTpl,
             // .366 TKM AP-M ammo pack
             "657023f81419851aef03e6f1",
+            // .366 TKM EKO ammo pack
+            "657024011419851aef03e6f4",
+            // .366 TKM AP-S ammo pack
+            "6a4933e1fb1eff152bd649bb",
 
             // 7.62x39mm MAI AP ammo pack
             "6489851fc827d4637f01791b",
@@ -1110,6 +1298,15 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
             // 9x19mm RIP ammo pack
             "5c1127bdd174af44217ab8b9",
+
+            // 7.62x54mm R LPS gzh ammo pack
+            "65702577cfc010a0f5006a2c",
+
+            // 7.62x54mm R BS gs ammo pack
+            "648984b8d5b4df6140000a1a",
+
+            // 7.62x54mm R SNB ammo pack
+            "560d75f54bdc2da74d8b4573",
 
             // 9x39mm BP ammo pack
             "6489854673c462723909a14e",
@@ -1131,9 +1328,27 @@ public sealed class YATMTraderAssortRuntimeRollService(
             "64898838d5b4df6140000a20",
 
             // 12/70 flechette ammo pack
-            "65702474bfc87b3a34093226"))
+            "65702474bfc87b3a34093226",
+
+            // 12/70 7mm buckshot ammo pack
+            "657024361419851aef03e6fa",
+            // 12/70 handmade slug ammo pack
+            "6a4933e1fb1eff152bd649b6"))
         {
             return 25;
+        }
+
+        if (IsTplMatch(packTpl,
+            // Tony custom 5.45x39mm BP-M ammo pack
+            "6a493587fb1eff152bd649be",
+            // Tony custom 5.45x39mm BT-R ammo pack
+            "6a493587fb1eff152bd649c0",
+            // Tony custom 5.45x39mm PP-M ammo pack
+            "6a493587fb1eff152bd649c2",
+            // Tony custom 5.45x39mm PS-R ammo pack
+            "6a493587fb1eff152bd649c5"))
+        {
+            return 30;
         }
 
         if (IsTplMatch(packTpl,
@@ -1141,7 +1356,11 @@ public sealed class YATMTraderAssortRuntimeRollService(
             "648987d673c462723909a151",
 
             // 9x19mm AP 6.3 ammo pack
-            "65702591c5d7d4cb4d07857c"))
+            "65702591c5d7d4cb4d07857c",
+            // 9x18mm PM SP7 ammo pack
+            "657026341419851aef03e730",
+            // 9x19mm Pst ammo pack
+            "657025a81419851aef03e724"))
         {
             return 50;
         }
@@ -1160,7 +1379,9 @@ public sealed class YATMTraderAssortRuntimeRollService(
             "57372c21245977670937c6c2",
 
             // 5.45x39mm PP gs ammo pack
-            "57372d1b2459776862260581"))
+            "57372d1b2459776862260581",
+            // 5.45x39mm PS gs ammo pack
+            "57372e73245977685d4159b4"))
         {
             return 120;
         }
@@ -1230,8 +1451,7 @@ public sealed class YATMTraderAssortRuntimeRollService(
         }
 
         // This should now be rare. It only happens when both the loose ammo limit
-        // and/or the pack size cannot be resolved from the live offer, items.json,
-        // known pack tpl table, or explicit config fallback.
+        // and/or the pack size cannot be resolved from the live offer or known pack tpl table.
         YATMLogger.LogDebug(
             $"[Pricing] Ammo pack BuyRestrictionMax legacy fallback for {priceConfig.ItemName ?? "Unknown item"} | " +
             $"LooseBuyRestrictionMax {looseBuyRestrictionMax} | PackSize {packSize}");
@@ -1241,8 +1461,8 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
     private static int GetLegacyAmmoPackBuyRestrictionMax(PriceConfigItem priceConfig)
     {
-        // Use the actual ammo pack tpl from items.json.
-        // This is the tpl that the live assort root item is changed to when ammo rolls barter.
+        // Use the runtime-resolved ammo pack tpl. This is the tpl that the live assort
+        // root item is changed to when ammo rolls barter.
         var packTpl = GetStringMember(priceConfig, "AmmoBarterPackTplId") ?? string.Empty;
 
         if (IsHighTierAmmoPack(packTpl))
