@@ -4,7 +4,6 @@ using System.Text.Json.Nodes;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Helpers;
 using SPTarkov.Server.Core.Models.Eft.Common;
-using SPTarkov.Server.Core.Models.Utils;
 using SPTarkov.Server.Core.Servers;
 using YetAnotherTraderMod.src.GeneratedOffers;
 using Path = System.IO.Path;
@@ -27,8 +26,7 @@ namespace YetAnotherTraderMod.src.Services;
 [Injectable(InjectionType.Singleton)]
 public sealed class YATMTraderOfferFeedService(
     ModHelper modHelper,
-    DatabaseServer databaseServer,
-    ISptLogger<YATMTraderOfferFeedService> logger)
+    DatabaseServer databaseServer)
 {
     public const string TonyTraderId = "66a0f6b2c4d8e90123456789";
 
@@ -69,21 +67,22 @@ public sealed class YATMTraderOfferFeedService(
     {
         if (items.Count == 0)
         {
-            logger.Warning($"[YATM Offer Feed] Skipped in-memory offer {source}: no item rows.");
+            Warning($"[YATM Offer Feed] Skipped in-memory offer {source}: no item rows.");
             return false;
         }
 
         var rootIds = GetRootOfferIds(items);
         if (rootIds.Count == 0)
         {
-            logger.Warning($"[YATM Offer Feed] Skipped in-memory offer {source}: no root hideout offer row.");
+            Warning($"[YATM Offer Feed] Skipped in-memory offer {source}: no root hideout offer row.");
             return false;
         }
 
         var duplicateRootIds = rootIds.Where(x => !_rootOfferIds.Add(x)).ToList();
         if (duplicateRootIds.Count > 0)
         {
-            logger.Warning($"[YATM Offer Feed] Skipped in-memory offer {source}: duplicate root offer id(s): {string.Join(", ", duplicateRootIds)}.");
+            Warning($"[YATM Offer Feed] Skipped in-memory offer {source}: duplicate root offer id(s): {string.Join(", ", duplicateRootIds)}.");
+
             foreach (var id in rootIds.Except(duplicateRootIds, StringComparer.OrdinalIgnoreCase))
             {
                 _rootOfferIds.Remove(id);
@@ -101,7 +100,7 @@ public sealed class YATMTraderOfferFeedService(
             YatmSettings = CloneObject(yatmSettings)
         });
 
-        logger.Info($"[YATM Offer Feed] Registered in-memory Tony offer {source}: {items.Count} item row(s), {rootIds.Count} root offer(s).");
+        Info($"[YATM Offer Feed] Registered in-memory Tony offer {source}: {items.Count} item row(s), {rootIds.Count} root offer(s).");
         return true;
     }
 
@@ -175,6 +174,7 @@ public sealed class YATMTraderOfferFeedService(
 
         if (addonPaths.Count == 0)
         {
+            YATMLogger.LogDebug("[YATM Offer Feed] No addon Tony trader offer folders found.");
             return;
         }
 
@@ -216,6 +216,7 @@ public sealed class YATMTraderOfferFeedService(
 
         if (addonPaths.Count == 0)
         {
+            YATMLogger.LogDebug("[YATM Offer Feed] No addon custom weapon preset folders found.");
             return;
         }
 
@@ -233,6 +234,7 @@ public sealed class YATMTraderOfferFeedService(
 
         if (jsonFiles.Length == 0)
         {
+            YATMLogger.LogDebug($"[YATM Offer Feed] No offer files found in {finalPath}");
             return;
         }
 
@@ -254,19 +256,22 @@ public sealed class YATMTraderOfferFeedService(
 
                 if (rawFile == null)
                 {
-                    logger.Warning($"[YATM Offer Feed] Skipped {file}: expected {{ '{TonyTraderId}': {{ items, barter_scheme, loyal_level_items, yatm_settings }} }}.");
+                    Warning($"[YATM Offer Feed] Skipped {file}: expected {{ '{TonyTraderId}': {{ items, barter_scheme, loyal_level_items, yatm_settings }} }}.");
                     continue;
                 }
 
                 var rootIds = GetRootOfferIds(rawFile.Items);
                 var duplicateRootIds = rootIds.Where(x => !_rootOfferIds.Add(x)).ToList();
+
                 if (duplicateRootIds.Count > 0)
                 {
-                    logger.Warning($"[YATM Offer Feed] Skipped {file}: duplicate root offer id(s): {string.Join(", ", duplicateRootIds)}.");
+                    Warning($"[YATM Offer Feed] Skipped {file}: duplicate root offer id(s): {string.Join(", ", duplicateRootIds)}.");
+
                     foreach (var id in rootIds.Except(duplicateRootIds, StringComparer.OrdinalIgnoreCase))
                     {
                         _rootOfferIds.Remove(id);
                     }
+
                     continue;
                 }
 
@@ -274,17 +279,17 @@ public sealed class YATMTraderOfferFeedService(
                 registeredFileCount++;
                 registeredRootCount += rootIds.Count;
 
-                logger.Info($"[YATM Offer Feed] Registered raw YATM offer file {file}: {rawFile.Items.Count} item row(s), {rootIds.Count} root offer(s).");
+                Info($"[YATM Offer Feed] Registered raw YATM offer file {file}: {rawFile.Items.Count} item row(s), {rootIds.Count} root offer(s).");
             }
             catch (Exception ex)
             {
-                logger.Error($"[YATM Offer Feed] Failed to load raw offer file {file}: {ex.Message}");
+                Error($"[YATM Offer Feed] Failed to load raw offer file {file}: {ex.Message}");
             }
         }
 
         if (registeredFileCount > 0)
         {
-            logger.Info($"[YATM Offer Feed] Registered {registeredRootCount} Tony root offer(s) from {registeredFileCount} file(s) in {finalPath}.");
+            Info($"[YATM Offer Feed] Registered {registeredRootCount} Tony root offer(s) from {registeredFileCount} file(s) in {finalPath}.");
         }
     }
 
@@ -296,6 +301,7 @@ public sealed class YATMTraderOfferFeedService(
 
         if (jsonFiles.Length == 0)
         {
+            YATMLogger.LogDebug($"[YATM Offer Feed] No custom weapon preset files found in {finalPath}");
             return;
         }
 
@@ -317,7 +323,7 @@ public sealed class YATMTraderOfferFeedService(
 
                 if (presets == null || presets.Count == 0)
                 {
-                    logger.Warning($"[YATM Offer Feed] No presets found in {file}");
+                    Warning($"[YATM Offer Feed] No presets found in {file}");
                     continue;
                 }
 
@@ -331,7 +337,7 @@ public sealed class YATMTraderOfferFeedService(
 
                     if (preset.Items == null || preset.Items.Count == 0)
                     {
-                        logger.Warning($"[YATM Offer Feed] Preset {kvp.Key} has no items. Skipping.");
+                        Warning($"[YATM Offer Feed] Preset {kvp.Key} has no items. Skipping.");
                         continue;
                     }
 
@@ -343,13 +349,13 @@ public sealed class YATMTraderOfferFeedService(
             }
             catch (Exception ex)
             {
-                logger.Error($"[YATM Offer Feed] Failed to load preset file {file}: {ex.Message}");
+                Error($"[YATM Offer Feed] Failed to load preset file {file}: {ex.Message}");
             }
         }
 
         if (loadedCount > 0)
         {
-            logger.Info($"[YATM Offer Feed] Loaded {loadedCount} custom weapon preset(s) from {finalPath}");
+            Info($"[YATM Offer Feed] Loaded {loadedCount} custom weapon preset(s) from {finalPath}");
         }
     }
 
@@ -401,6 +407,7 @@ public sealed class YATMTraderOfferFeedService(
     private static List<string> GetRootOfferIds(JsonArray items)
     {
         var rootIds = new List<string>();
+
         foreach (var item in items)
         {
             if (item is not JsonObject itemObj)
@@ -439,8 +446,10 @@ public sealed class YATMTraderOfferFeedService(
     {
         var results = new List<string>();
         var modsRoot = FindModsRoot(hostModPath);
+
         if (modsRoot is null || !Directory.Exists(modsRoot))
         {
+            YATMLogger.LogDebug($"[YATM Offer Feed] Could not resolve mods root from host path: {hostModPath}");
             return results;
         }
 
@@ -453,16 +462,18 @@ public sealed class YATMTraderOfferFeedService(
         }
         catch (Exception ex)
         {
-            YATMLogger.Log($"[YATM Offer Feed] Could not scan mods folder for addon offer folders: {ex.Message}");
+            Error($"[YATM Offer Feed] Could not scan mods folder for addon offer folders: {ex.Message}");
             return results;
         }
 
         foreach (var modFolder in modFolders)
         {
             var resolved = ResolvePath(modFolder, relativePath);
+
             if (Directory.Exists(resolved) || File.Exists(resolved))
             {
                 results.Add(Path.GetFullPath(resolved));
+                YATMLogger.LogDebug($"[YATM Offer Feed] Found addon source folder: {resolved}");
             }
         }
 
@@ -522,6 +533,7 @@ public sealed class YATMTraderOfferFeedService(
     private static JsonArray CloneArray(JsonArray? source)
     {
         var clone = new JsonArray();
+
         if (source == null)
         {
             return clone;
@@ -538,6 +550,7 @@ public sealed class YATMTraderOfferFeedService(
     private static JsonObject CloneObject(JsonObject? source)
     {
         var clone = new JsonObject();
+
         if (source == null)
         {
             return clone;
@@ -554,6 +567,23 @@ public sealed class YATMTraderOfferFeedService(
     private static string? ReadJsonString(JsonObject obj, string key)
     {
         return obj.TryGetPropertyValue(key, out var node) && node != null ? node.ToString() : null;
+    }
+
+    private static void Info(string message)
+    {
+        YATMLogger.Log(message);
+    }
+
+    private static void Warning(string message)
+    {
+        YATMLogger.Log($"[WARNING] {message}");
+        Console.WriteLine($"[Tony-WARNING] {message}");
+    }
+
+    private static void Error(string message)
+    {
+        YATMLogger.Log($"[ERROR] {message}");
+        Console.WriteLine($"[Tony-ERROR] {message}");
     }
 
     private static readonly JsonSerializerOptions JsonOptions = new()

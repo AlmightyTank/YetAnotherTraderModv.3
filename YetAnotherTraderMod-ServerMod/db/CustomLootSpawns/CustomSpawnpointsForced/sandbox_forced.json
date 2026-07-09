@@ -1,7 +1,7 @@
 {
     "sandbox": [
         {
-            "locationId": "(100.966, 13.347, 49.843)",
+            "locationId": "tony_ledger_spawn_group",
             "probability": 1,
             "template": {
                 "Id": "tony_ledger_spawn",
@@ -18,8 +18,93 @@
                     "y": 0,
                     "z": 0
                 },
-                "IsGroupPosition": false,
-                "GroupPositions": [],
+                "IsGroupPosition": true,
+                "GroupPositions": [
+                    {
+                        "Name": "tony_ledger_spawn_01",
+                        "Weight": 1,
+                        "Position": {
+                            "x": 100.966,
+                            "y": 13.347,
+                            "z": 49.843
+                        },
+                        "Rotation": {
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "Name": "tony_ledger_spawn_02",
+                        "Weight": 1,
+                        "Position": {
+                            "x": 101.540688,
+                            "y": 13.5196838,
+                            "z": 50.0899124
+                        },
+                        "Rotation": {
+                            "x": 0.0,
+                            "y": 302.771332,
+                            "z": 0.0
+                        }
+                    },
+                    {
+                        "Name": "tony_ledger_spawn_03",
+                        "Weight": 1,
+                        "Position": {
+                            "x": 101.317619,
+                            "y": 14.9633961,
+                            "z": 50.9652367
+                        },
+                        "Rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        }
+                    },
+                    {
+                        "Name": "tony_ledger_spawn_04",
+                        "Weight": 1,
+                        "Position": {
+                            "x": 104.654144,
+                            "y": 12.5862808,
+                            "z": 43.7623634
+                        },
+                        "Rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        }
+                    },
+                    {
+                        "Name": "tony_ledger_spawn_05",
+                        "Weight": 1,
+                        "Position": {
+                            "x": 100.694542,
+                            "y": 13.371316,
+                            "z": 45.1181564
+                        },
+                        "Rotation": {
+                            "x": 0.0,
+                            "y": 19.0665379,
+                            "z": 0.0
+                        }
+                    },
+                    {
+                        "Name": "tony_ledger_spawn_06",
+                        "Weight": 1,
+                        "Position": {
+                            "x": 101.499588,
+                            "y": 13.371316,
+                            "z": 45.13676
+                        },
+                        "Rotation": {
+                            "x": 0.0,
+                            "y": 330.486176,
+                            "z": 0.0
+                        }
+                    }
+                ],
                 "IsAlwaysSpawn": true,
                 "Root": "6a3007dfd2999bc7b9bba9ae",
                 "Items": [
@@ -45,7 +130,7 @@
     ],
     "sandbox_high": [
         {
-            "locationId": "(100.966, 13.347, 49.843)",
+            "locationId": "tony_ledger_spawn_high_group",
             "probability": 1,
             "template": {
                 "Id": "tony_ledger_spawn_high",
@@ -62,13 +147,98 @@
                     "y": 0,
                     "z": 0
                 },
-                "IsGroupPosition": false,
-                "GroupPositions": [],
+                "IsGroupPosition": true,
+                "GroupPositions": [
+                    {
+                        "Name": "tony_ledger_spawn_high_01",
+                        "Weight": 1,
+                        "Position": {
+                            "x": 100.966,
+                            "y": 13.347,
+                            "z": 49.843
+                        },
+                        "Rotation": {
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "Name": "tony_ledger_spawn_high_02",
+                        "Weight": 1,
+                        "Position": {
+                            "x": 101.540688,
+                            "y": 13.5196838,
+                            "z": 50.0899124
+                        },
+                        "Rotation": {
+                            "x": 0.0,
+                            "y": 302.771332,
+                            "z": 0.0
+                        }
+                    },
+                    {
+                        "Name": "tony_ledger_spawn_high_03",
+                        "Weight": 1,
+                        "Position": {
+                            "x": 101.317619,
+                            "y": 14.9633961,
+                            "z": 50.9652367
+                        },
+                        "Rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        }
+                    },
+                    {
+                        "Name": "tony_ledger_spawn_high_04",
+                        "Weight": 1,
+                        "Position": {
+                            "x": 104.654144,
+                            "y": 12.5862808,
+                            "z": 43.7623634
+                        },
+                        "Rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        }
+                    },
+                    {
+                        "Name": "tony_ledger_spawn_high_05",
+                        "Weight": 1,
+                        "Position": {
+                            "x": 100.694542,
+                            "y": 13.371316,
+                            "z": 45.1181564
+                        },
+                        "Rotation": {
+                            "x": 0.0,
+                            "y": 19.0665379,
+                            "z": 0.0
+                        }
+                    },
+                    {
+                        "Name": "tony_ledger_spawn_high_06",
+                        "Weight": 1,
+                        "Position": {
+                            "x": 101.499588,
+                            "y": 13.371316,
+                            "z": 45.13676
+                        },
+                        "Rotation": {
+                            "x": 0.0,
+                            "y": 330.486176,
+                            "z": 0.0
+                        }
+                    }
+                ],
                 "IsAlwaysSpawn": true,
-                "Root": "6a3007dfd2999bc7b9bba9ae",
+                "Root": "6a4f06282373cd1c4e9ba907",
                 "Items": [
                     {
-                        "_id": "6a3007dfd2999bc7b9bba9ae",
+                        "_id": "6a4f06282373cd1c4e9ba907",
                         "_tpl": "6a300025d2999bc7b9bba952",
                         "upd": {
                             "StackObjectsCount": 1,

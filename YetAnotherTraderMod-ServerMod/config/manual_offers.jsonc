@@ -1,9 +1,10 @@
 // Manual Tony offer overrides.
 // This file is intentionally a raw array of PriceConfigItem rows.
 // Do not wrap it in { "Barters": [...] } because YATMConfig loads it as List<PriceConfigItem>.
-// Hard-written BarterScheme rows are only used when settings.json ManualBarters is true.
+// When settings.json ManualBarters is true, these hard-written BarterScheme rows are preferred for matching selected barter offers.
+// Selected offers without a manual recipe can still use Tony's generated barter system.
 // With ManualBarters false, these rows still provide manual cash/metadata overrides while generated barters can roll normally.
-// Optional per row when ManualBarters=false and Tony auto-generates the barter recipe:
+// Optional per row for Tony auto-generated fallback barter recipes:
 //   "GeneratedBarterCategoryOverride": "Medical"
 // Valid examples: AmmoPack, Weapon, Medical, Headwear, Armor, CaseOrValuable,
 // Electronics, Tools, FoodDrink, WeaponParts, Valuables, Junk, Default.
@@ -21,6 +22,25 @@
             [
                 {
                     "TplId": "5d40407c86f774318526545a",
+                    "ItemName": "",
+                    "Count": 1
+                }
+            ]
+        ]
+    },
+    {
+        "OfferId": "6a3007dfd2999bc7b9bba971",
+        "TplId": "590c2e1186f77425357b6124",
+        "ItemName": "",
+        "Price": 0,
+        "Currency": "RUB",
+        "CashOnly": false,
+        "AlwaysBarter": true,
+        "AlwaysInStock": false,
+        "BarterScheme": [
+            [
+                {
+                    "TplId": "5d0375ff86f774186372f685",
                     "ItemName": "",
                     "Count": 1
                 }

@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 namespace YetAnotherTraderMod.src;
 
 /// <summary>
-/// Service to check and unlock trader based on player level.
-/// Uses a timer to actively check profiles for "Live" unlock.
+/// Optional profile unlock helper.
+/// Normal Tony progression is quest-gated through Fence's TraderUnlock reward.
+/// This service is only used when a config path explicitly force-unlocks Tony.
 /// </summary>
 [Injectable(TypePriority = OnLoadOrder.PostDBModLoader + 2)]
 public class YATMUnlockService : IOnLoad, IDisposable
@@ -106,7 +107,7 @@ public class YATMUnlockService : IOnLoad, IDisposable
 
     public void CheckAndUnlockTrader(string sessionId, object profile)
     {
-        if (!EnableLevelLock || profile == null) return;
+        if ((!EnableLevelLock && !ForceUnlock) || profile == null) return;
         
         try
         {
@@ -165,10 +166,12 @@ public class YATMUnlockService : IOnLoad, IDisposable
                         // Logging every 10s for every user is too much IO.
                         // I will log ONLY if it CHANGES state.
                         
-                        if (playerLevel >= MinLevelRequired && !isUnlocked)
+                        if ((ForceUnlock || playerLevel >= MinLevelRequired) && !isUnlocked)
                         {
                             SetUnlocked(traderInfo, true);
-                            var msg = $"LIVE UNLOCK: Session {sessionId} reached Level {playerLevel}. UNLOCKED!";
+                            var msg = ForceUnlock
+                                ? $"FORCE UNLOCK: Session {sessionId}. Tony unlocked by config."
+                                : $"LIVE UNLOCK: Session {sessionId} reached Level {playerLevel}. UNLOCKED!";
                             _logger.Info($"[Tony] {msg}"); // Keep console for critical event
                             YATMLogger.Log(msg);
                         }

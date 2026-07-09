@@ -1,0 +1,48 @@
+{
+    "_id": "6a300025d2999bc7b9bba955",
+    "areaType": 11,
+    "requirements": [
+        {
+            "areaType": 11,
+            "requiredLevel": 2,
+            "type": "Area"
+        },
+        {
+            "templateId": "5c94bbff86f7747ee735c08f", // TerraGroup Labs access keycard
+            "count": 1,
+            "isFunctional": false,
+            "isEncoded": false,
+            "type": "Item"
+        },
+        {
+            "templateId": "62a09ee4cf4a99369e262453", // Military flash drive
+            "count": 1,
+            "isFunctional": false,
+            "isEncoded": false,
+            "type": "Item"
+        },
+        {
+            "templateId": "590c621186f774138d11ea29", // Secure Flash drive
+            "count": 1,
+            "isFunctional": false,
+            "isEncoded": false,
+            "type": "Item"
+        },
+        {
+            "templateId": "5c052fb986f7746b2101e909", // UHF RFID Reader
+            "count": 1,
+            "isFunctional": false,
+            "isEncoded": false,
+            "type": "Tool"
+        }
+    ],
+    "productionTime": 1800,
+    "boosters": null,
+    "endProduct": "6a300025d2999bc7b9bba954",
+    "continuous": false,
+    "count": 1,
+    "productionLimitCount": 0,
+    "isEncoded": false,
+    "locked": false,
+    "needFuelForAllProductionTime": false
+}

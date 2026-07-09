@@ -24,7 +24,7 @@ public record ModMetadata : AbstractModMetadata
     public override string Name { get; init; } = "YetAnotherTraderMod";
     public override string Author { get; init; } = "AMightyTank | Based on PrisciluOrigins by Reis/Anigx";
     public override List<string>? Contributors { get; init; } = ["Reis", "Anigx"];
-    public override SemanticVersioning.Version Version { get; init; } = new("0.1.1");
+    public override SemanticVersioning.Version Version { get; init; } = new("0.2.0");
     public override SemanticVersioning.Range SptVersion { get; init; } = new("~4.0.13");
     public override List<string>? Incompatibilities { get; init; } = [];
     public override Dictionary<string, SemanticVersioning.Range>? ModDependencies { get; init; } = new()

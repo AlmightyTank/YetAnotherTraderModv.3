@@ -1,6 +1,6 @@
 {
-    "MinLevel": 1, //[Level Requirement] Minimum player level required to access Tony LL1.
-    "UnlockedByDefault": false, //[Unlock] If true, Tony is unlocked immediately regardless of level.
+    "MinLevel": 1, //[Loyalty] Minimum player level required for Tony LL1 after he has been unlocked. This does not unlock Tony by itself.
+    "UnlockedByDefault": false, //[Unlock] false = Tony stays locked until Fence's intro quest gives the TraderUnlock reward. true = Tony is unlocked immediately.
 
     "TraderRefreshMin": 1800, //[Restock Timer] Minimum refresh time in seconds. 1800 = 30 min.
     "TraderRefreshMax": 3600, //[Restock Timer] Maximum refresh time in seconds. 3600 = 60 min.
@@ -22,7 +22,7 @@
     "CashOffersOnly": false, //[Pricing] If true, Tony only uses cash offers.
     "RandomizeCashBarterOffers": true, //[Pricing] If true, eligible offers can roll cash or barter.
     "CashOfferPercent": 85, //[Pricing] Percent of configured offers that should stay cash.
-    "ManualBarters": false, //[Barter] If false, Tony can auto-generate barter recipes. Generated barter tuning is in generated_trade_settings.jsonc and generated_barter_whitelist.jsonc.
+    "ManualBarters": true, //[Barter] If true, hard-written recipes in manual_offers.jsonc are preferred when their item rolls barter. Offers without manual recipes can still auto-generate barters.
 
     "DebugLogging": false, //[Debug] Enables detailed logs.
     "RealDebugLogging": false //[Debug] Enables very detailed logs.
