@@ -187,15 +187,20 @@ public sealed class YATMTraderRuntimeService(
 
         if (!config.Settings.UnlockedByDefault)
         {
-            YATMUnlockService.EnableLevelLock = true;
+            // Quest-gated unlock mode.
+            // Tony's Fence intro quest already awards a TraderUnlock reward for Tony,
+            // so do NOT run the old level-based unlock timer here.
+            // MinLevel still controls Tony LL1 once the quest reward unlocks him.
+            YATMUnlockService.EnableLevelLock = false;
+            YATMUnlockService.ForceUnlock = false;
             YATMUnlockService.MinLevelRequired = config.Settings.MinLevel;
-            await yatmUnlockService.OnLoad();
-            YATMLogger.Log($"Level-based unlock enabled. Required level: {config.Settings.MinLevel}");
+            YATMLogger.Log($"Quest-gated unlock active. Tony stays locked until Fence quest TraderUnlock reward. LL1 MinLevel: {config.Settings.MinLevel}");
         }
         else
         {
             YATMUnlockService.EnableLevelLock = false;
             YATMUnlockService.ForceUnlock = true;
+            await yatmUnlockService.OnLoad();
             YATMLogger.Log("Trader unlocked by default (ForceUnlock active).");
         }
 

@@ -11,7 +11,7 @@
             "StackMaxSize": 1,
             "DiscardingBlock": true,
             "CanSellOnRagfair": false,
-            "QuestItem": true
+            "QuestItem": false
         },
         "locales": {
             "en": {

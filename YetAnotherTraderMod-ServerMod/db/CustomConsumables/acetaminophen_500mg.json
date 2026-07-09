@@ -7,7 +7,7 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.2,
     "MaxResource": 10,
-    "BackgroundColor": "yellow",
+    "BackgroundColor": "red",
     "effects_damage": {
         "Pain": {
             "delay": 10,
