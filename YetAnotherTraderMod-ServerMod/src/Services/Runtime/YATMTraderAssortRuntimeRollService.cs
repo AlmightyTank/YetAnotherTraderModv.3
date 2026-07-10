@@ -8,13 +8,14 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using SPTarkov.DI.Annotations;
-using SPTarkov.Server.Core.Helpers;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
+using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Servers;
 using SPTarkov.Server.Core.Utils;
 using YetAnotherTraderMod.config;
 using YetAnotherTraderMod.src.GeneratedOffers;
 using Path = System.IO.Path;
+using SPTarkov.Server.Core.Helpers;
 
 namespace YetAnotherTraderMod.src.Services.Runtime;
 
@@ -96,20 +97,42 @@ public sealed class YATMTraderAssortRuntimeRollService(
         }
     }
 
-    public void ApplyRuntimeAssortRolls(TraderAssort assort, YATMConfig config, string rollReason)
+    public void ApplyRuntimeAssortRolls(
+        TraderAssort assort,
+        YATMConfig config,
+        string rollReason,
+        bool refreshMarketPrices = true,
+        bool applyConfiguredPriceMultiplier = true)
     {
         // HARD ORDER GUARANTEE:
         // 1) Start from the clean assort object after base/custom/addon content has been merged.
         // 2) Remove standalone ammo-pack helper roots so the visible rollable snapshot is stable.
-        // 3) Market-price Tony's configured offer rows before the payment roll.
+        // 3) On startup, market-price Tony's configured offer rows before the payment roll.
         //    Generated barters then use the same weapon/armor-adjusted price that cash offers will use.
-        // 4) Roll which offers become barter before generating barter schemes.
-        // 5) Generate barter schemes only for those selected barter offers, using the whitelist and balanced usage.
-        // 6) Apply the completed payment roll. Ammo barter offers keep the same OfferId and swap _tpl to the pack.
-        // 7) Only after paymentRollResult.Completed is true, run the stock roll.
+        // 4) Apply the global PriceMultiplier to configured prices before generated barters are built.
+        //    This prevents restock-side double-multiplication and makes barters/cash share one value.
+        // 5) On restock, reuse the already market-priced config snapshot from startup and skip price work.
+        // 6) Roll which offers become barter before generating barter schemes.
+        // 7) Generate barter schemes only for those selected barter offers, using the whitelist and balanced usage.
+        // 8) Apply the completed payment roll. Ammo cash keeps the loose OfferId; ammo barter creates/shows a separate pack OfferId.
+        // 9) Only after paymentRollResult.Completed is true, run the stock roll.
         //    Stock reads the payment result; it does not decide barter state.
-        RemoveStandaloneAmmoPackRootOffers(assort, config);
-        var marketPricesPrimedBeforeBarters = PrimeMarketCashPricesForConfiguredOffers(assort, config, rollReason);
+        RemoveInactiveAmmoPackRootOffers(assort, config);
+
+        var marketPricesPrimedBeforeBarters = false;
+        if (refreshMarketPrices)
+        {
+            marketPricesPrimedBeforeBarters = PrimeMarketCashPricesForConfiguredOffers(assort, config, rollReason);
+        }
+        else
+        {
+            YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] Skipped market lookup; using startup market-priced config snapshot.");
+        }
+
+        if (applyConfiguredPriceMultiplier)
+        {
+            ApplyPriceMultiplierToConfiguredOfferPrices(config, rollReason);
+        }
 
         var paymentRollResult = RollPayments(assort, config, rollReason);
 
@@ -120,15 +143,19 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
         RollStock(assort, config, rollReason, paymentRollResult);
 
-        if (!marketPricesPrimedBeforeBarters)
+        if (refreshMarketPrices && !marketPricesPrimedBeforeBarters)
         {
             // Safety fallback for unprimed/legacy setups. Normal runs already wrote market prices
             // into PriceConfig before barter generation, so ApplyCashPaymentToOffer used the same values.
             RepriceCashOffersFromMarket(assort, config, rollReason);
         }
-        else
+        else if (refreshMarketPrices)
         {
             YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] Final cash reprice skipped; market prices were primed before barter generation.");
+        }
+        else
+        {
+            YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] Restock completed with no market lookup and no price multiplier pass.");
         }
     }
 
@@ -189,9 +216,8 @@ public sealed class YATMTraderAssortRuntimeRollService(
                     continue;
                 }
 
-                // Ammo pack barter offers keep special stock limits and are not part of the random OOS pool.
-                // Check by OfferId first because the _tpl swap can fail readback on some SPT model wrappers
-                // even after the serialized value has been updated.
+                // Ammo pack barter offers use their own pack OfferId and special stock limits.
+                // They are not part of the random OOS pool.
                 if (paymentRollResult.AmmoPackBarterOffersById.ContainsKey(candidateItem.Id))
                 {
                     continue;
@@ -293,8 +319,8 @@ public sealed class YATMTraderAssortRuntimeRollService(
                 priceConfigsByOfferId,
                 priceConfigsByTplId);
 
-            // Ammo offers that rolled into barter were already switched to the pack tpl
-            // during the completed payment pass. The stock pass only applies pack stock limits.
+            // Ammo offers that rolled into barter are separate pack-root offers.
+            // The stock pass only applies pack stock limits to those pack OfferIds.
             if (paymentRollResult.AmmoPackBarterOffersById.TryGetValue(item.Id, out var selectedAmmoPackLimitsData))
             {
                 ApplyAmmoPackBarterOfferLimits(item, selectedAmmoPackLimitsData);
@@ -1321,6 +1347,46 @@ public sealed class YATMTraderAssortRuntimeRollService(
         return true;
     }
 
+    private static void ApplyPriceMultiplierToConfiguredOfferPrices(YATMConfig config, string rollReason)
+    {
+        // This is intentionally applied to PriceConfig before payment/barter generation.
+        // Restocks reuse the startup-priced PriceConfig snapshot, so the multiplier is never
+        // applied a second time to already-priced live assort money components.
+        if (Math.Abs(config.Settings.PriceMultiplier - 1.0) <= 0.001)
+        {
+            return;
+        }
+
+        var changedCount = 0;
+
+        foreach (var priceConfig in config.Prices)
+        {
+            if (priceConfig == null || priceConfig.Price <= 0)
+            {
+                continue;
+            }
+
+            var oldPrice = priceConfig.Price;
+            var newPrice = Math.Round(oldPrice * config.Settings.PriceMultiplier);
+
+            if (newPrice <= 0 || Math.Abs(oldPrice - newPrice) <= 0.001)
+            {
+                continue;
+            }
+
+            priceConfig.Price = newPrice;
+            changedCount++;
+
+            YATMLogger.LogRealDebug(
+                $"[{rollReason}] [Pricing] Config price multiplier: {oldPrice:0.##} -> {newPrice:0.##} | {priceConfig.ItemName ?? priceConfig.TplId} ({priceConfig.OfferId ?? priceConfig.TplId})");
+        }
+
+        if (changedCount > 0)
+        {
+            YATMLogger.Log($"[{rollReason}] [Pricing] Applied global PriceMultiplier {config.Settings.PriceMultiplier} to {changedCount} configured offer price(s) before barter generation.");
+        }
+    }
+
     public void ApplyPriceMultiplierToMoneyComponents(TraderAssort assort, YATMConfig config)
     {
         // Price multiplier only affects money components, not barter item counts.
@@ -1430,7 +1496,7 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
     private PaymentRollResult RollPayments(TraderAssort assort, YATMConfig config, string rollReason)
     {
-        RemoveStandaloneAmmoPackRootOffers(assort, config);
+        RemoveInactiveAmmoPackRootOffers(assort, config);
 
         var rootItems = assort.Items
             .Where(x => x.ParentId == "hideout")
@@ -1746,7 +1812,7 @@ public sealed class YATMTraderAssortRuntimeRollService(
             }
         }
 
-        EnsureAmmoPackBarterOffersSellPacks(assort, paymentRollResult);
+        EnsureAmmoPackBarterOffersExist(assort, paymentRollResult);
 
         paymentRollResult.MarkCompleted();
 
@@ -1810,7 +1876,7 @@ public sealed class YATMTraderAssortRuntimeRollService(
         return !string.IsNullOrEmpty(tpl) && tpl == priceConfig.TplId;
     }
 
-    private static void EnsureAmmoPackBarterOffersSellPacks(
+    private static void EnsureAmmoPackBarterOffersExist(
         TraderAssort assort,
         PaymentRollResult paymentRollResult)
     {
@@ -1821,7 +1887,7 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
         foreach (var entry in paymentRollResult.AmmoPackBarterOffersById)
         {
-            var offerId = entry.Key;
+            var packOfferId = entry.Key;
             var priceConfig = entry.Value.PriceConfig;
             var packTpl = GetStringMember(priceConfig, "AmmoBarterPackTplId");
 
@@ -1830,28 +1896,21 @@ public sealed class YATMTraderAssortRuntimeRollService(
                 continue;
             }
 
-            var offer = FindRootOfferById(assort, offerId);
-            if (offer == null)
+            var packOffer = FindRootOfferById(assort, packOfferId);
+            if (packOffer == null)
             {
-                YATMLogger.LogDebug($"[Pricing] Warning: ammo barter pack verification could not find offer {offerId} for {priceConfig.ItemName ?? "Unknown ammo"}.");
+                YATMLogger.Log($"[Pricing] Warning: ammo barter pack offer {priceConfig.ItemName ?? packOfferId} was selected but the separate pack OfferId {packOfferId} was not found.");
                 continue;
             }
 
-            var currentTpl = YATMConfig.GetTemplateId(offer);
-            if (!string.Equals(currentTpl, packTpl, StringComparison.OrdinalIgnoreCase))
-            {
-                YATMLogger.Log($"[Pricing] Warning: ammo barter offer {priceConfig.ItemName ?? offerId} was selected as barter but still pointed at {currentTpl ?? "null"}. Forcing pack tpl {packTpl}.");
-                SetOfferTemplate(offer, packTpl);
-            }
-
-            var verifiedTpl = YATMConfig.GetTemplateId(offer);
+            var verifiedTpl = YATMConfig.GetTemplateId(packOffer);
             if (string.Equals(verifiedTpl, packTpl, StringComparison.OrdinalIgnoreCase))
             {
-                YATMLogger.LogRealDebug($"[Pricing] Ammo barter verified as pack: {priceConfig.ItemName ?? offerId} | Offer {offerId} | _tpl = {packTpl}");
+                YATMLogger.LogRealDebug($"[Pricing] Ammo barter verified as separate pack offer: {priceConfig.ItemName ?? packOfferId} | Offer {packOfferId} | _tpl = {packTpl}");
             }
             else
             {
-                YATMLogger.Log($"[Pricing] Warning: ammo barter offer {priceConfig.ItemName ?? offerId} could not be verified as pack after write. Expected {packTpl}, read {verifiedTpl ?? "null"}.");
+                YATMLogger.Log($"[Pricing] Warning: ammo barter pack offer {priceConfig.ItemName ?? packOfferId} has wrong tpl. Expected {packTpl}, read {verifiedTpl ?? "null"}.");
             }
         }
     }
@@ -1883,6 +1942,21 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
         if (shouldUseBarter)
         {
+            if (IsAmmoPackBarterConfig(priceConfig))
+            {
+                if (!TryApplyAmmoPackBarterPaymentToSeparateOffer(
+                        assort,
+                        looseOffer,
+                        looseOfferId,
+                        priceConfig,
+                        out appliedAmmoPackOfferId))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
             if (!assort.BarterScheme.TryGetValue(looseOfferId, out var looseBarterSchemeList))
             {
                 YATMLogger.LogDebug($"[Pricing] Offer {looseOfferId} has no barter_scheme entry.");
@@ -1890,15 +1964,10 @@ public sealed class YATMTraderAssortRuntimeRollService(
             }
 
             ApplyBarterPaymentToOffer(looseOffer, looseBarterSchemeList, priceConfig);
-
-            if (IsAmmoPackBarterConfig(priceConfig))
-            {
-                appliedAmmoPackOfferId = looseOfferId;
-                return true;
-            }
-
             return false;
         }
+
+        RemoveInactiveAmmoPackRootOffer(assort, priceConfig.PackOfferId);
 
         if (!assort.BarterScheme.TryGetValue(looseOfferId, out var existingSchemeList))
         {
@@ -1920,11 +1989,11 @@ public sealed class YATMTraderAssortRuntimeRollService(
         return false;
     }
 
-    private static void RemoveStandaloneAmmoPackRootOffers(TraderAssort assort, YATMConfig config)
+    private static void RemoveInactiveAmmoPackRootOffers(TraderAssort assort, YATMConfig config)
     {
-        var looseOfferIds = config.Prices
-            .Where(x => !string.IsNullOrWhiteSpace(x.OfferId))
-            .Select(x => x.OfferId!)
+        var packOfferIds = config.Prices
+            .Where(x => !string.IsNullOrWhiteSpace(x.PackOfferId))
+            .Select(x => x.PackOfferId!)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var ammoPackTplIds = config.Prices
@@ -1932,12 +2001,7 @@ public sealed class YATMTraderAssortRuntimeRollService(
             .Select(x => x.AmmoBarterPackTplId!)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        var oldPackOfferIds = config.Prices
-            .Where(x => !string.IsNullOrWhiteSpace(x.PackOfferId))
-            .Select(x => x.PackOfferId!)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-        if (ammoPackTplIds.Count == 0 && oldPackOfferIds.Count == 0)
+        if (packOfferIds.Count == 0 && ammoPackTplIds.Count == 0)
         {
             return;
         }
@@ -1950,8 +2014,7 @@ public sealed class YATMTraderAssortRuntimeRollService(
                 Tpl = YATMConfig.GetTemplateId(x)
             })
             .Where(x => !string.IsNullOrWhiteSpace(x.OfferId))
-            .Where(x => !looseOfferIds.Contains(x.OfferId!))
-            .Where(x => oldPackOfferIds.Contains(x.OfferId!)
+            .Where(x => packOfferIds.Contains(x.OfferId!)
                 || (!string.IsNullOrWhiteSpace(x.Tpl) && ammoPackTplIds.Contains(x.Tpl!)))
             .Select(x => x.OfferId!)
             .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -1964,8 +2027,18 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
         if (rootOfferIdsToRemove.Count > 0)
         {
-            YATMLogger.LogDebug($"[Pricing] Removed {rootOfferIdsToRemove.Count} standalone ammo-pack helper offer(s); ammo barter now uses the loose offer ID and swaps _tpl in-place.");
+            YATMLogger.LogDebug($"[Pricing] Removed {rootOfferIdsToRemove.Count} inactive ammo-pack offer(s); ammo barter now uses separate loose/pack OfferIds.");
         }
+    }
+
+    private static void RemoveInactiveAmmoPackRootOffer(TraderAssort assort, string? packOfferId)
+    {
+        if (string.IsNullOrWhiteSpace(packOfferId))
+        {
+            return;
+        }
+
+        RemoveOfferAndChildren(assort, packOfferId!);
     }
 
     private static object? FindRootOfferById(TraderAssort assort, string offerId)
@@ -2064,6 +2137,262 @@ public sealed class YATMTraderAssortRuntimeRollService(
         }
     }
 
+    private static bool TryApplyAmmoPackBarterPaymentToSeparateOffer(
+        TraderAssort assort,
+        object looseOffer,
+        string looseOfferId,
+        PriceConfigItem priceConfig,
+        out string? packOfferId)
+    {
+        packOfferId = null;
+
+        var ammoPackTpl = GetStringMember(priceConfig, "AmmoBarterPackTplId");
+        if (string.IsNullOrWhiteSpace(ammoPackTpl))
+        {
+            return false;
+        }
+
+        packOfferId = priceConfig.PackOfferId;
+        if (string.IsNullOrWhiteSpace(packOfferId))
+        {
+            packOfferId = BuildFallbackAmmoPackOfferId(looseOfferId, ammoPackTpl);
+            priceConfig.PackOfferId = packOfferId;
+        }
+
+        if (!assort.BarterScheme.TryGetValue(looseOfferId, out var looseBarterSchemeList))
+        {
+            YATMLogger.LogDebug($"[Pricing] Ammo loose offer {looseOfferId} has no barter_scheme entry.");
+            return false;
+        }
+
+        RemoveInactiveAmmoPackRootOffer(assort, packOfferId);
+
+        var packOffer = CloneRootOfferForSeparateAmmoPack(looseOffer, packOfferId, ammoPackTpl);
+        if (packOffer == null)
+        {
+            YATMLogger.Log($"[Pricing] Warning: failed to create separate ammo pack offer for {priceConfig.ItemName ?? looseOfferId}.");
+            return false;
+        }
+
+        assort.Items.Add(packOffer);
+        assort.BarterScheme[packOfferId] = looseBarterSchemeList;
+        CopyLoyalLevelUnlock(assort, looseOfferId, packOfferId);
+
+        ApplyBarterPaymentToOffer(packOffer, looseBarterSchemeList, priceConfig);
+
+        // Hide the loose ammo root while the pack barter is active. The separate pack offer
+        // has its own OfferId, so the client icon cache sees a new root item instead of an in-place _tpl swap.
+        RemoveOfferAndChildren(assort, looseOfferId);
+
+        YATMLogger.LogRealDebug($"[Pricing] Ammo pack barter separate offer: {priceConfig.ItemName} | Loose {looseOfferId} hidden | Pack {packOfferId} _tpl = {ammoPackTpl}");
+        return true;
+    }
+
+    private static Item? CloneRootOfferForSeparateAmmoPack(object looseOffer, string packOfferId, string packTpl)
+    {
+        try
+        {
+            var json = JsonSerializer.Serialize(looseOffer, looseOffer.GetType());
+            var cloned = JsonSerializer.Deserialize<Item>(json);
+            if (cloned == null)
+            {
+                return null;
+            }
+
+            SetMemberValue(cloned, "Id", packOfferId);
+            SetMemberValue(cloned, "_id", packOfferId);
+            SetMemberValue(cloned, "ParentId", "hideout");
+            SetMemberValue(cloned, "parentId", "hideout");
+            SetMemberValue(cloned, "SlotId", "hideout");
+            SetMemberValue(cloned, "slotId", "hideout");
+            SetOfferTemplate(cloned, packTpl);
+            SetExtensionDataValue(cloned, "_id", packOfferId);
+            SetExtensionDataValue(cloned, "id", packOfferId);
+            SetExtensionDataValue(cloned, "parentId", "hideout");
+            SetExtensionDataValue(cloned, "slotId", "hideout");
+            return cloned;
+        }
+        catch (Exception ex)
+        {
+            YATMLogger.Log($"[Pricing] Failed to clone ammo pack root offer {packOfferId}: {ex.Message}");
+            return null;
+        }
+    }
+
+    private static void CopyLoyalLevelUnlock(TraderAssort assort, string sourceOfferId, string targetOfferId)
+    {
+        CopyDictionaryEntryByStringKey(GetMemberValue(assort, "LoyalLevelItems"), sourceOfferId, targetOfferId);
+        CopyDictionaryEntryByStringKey(GetMemberValue(assort, "loyal_level_items"), sourceOfferId, targetOfferId);
+    }
+
+    private static void CopyDictionaryEntryByStringKey(object? dictionaryObject, string sourceKey, string targetKey)
+    {
+        if (dictionaryObject is not IDictionary dictionary)
+        {
+            return;
+        }
+
+        object? valueToCopy = null;
+        object? sourceRuntimeKey = null;
+        object? existingTargetRuntimeKey = null;
+        var foundSource = false;
+
+        foreach (DictionaryEntry entry in dictionary)
+        {
+            var entryKeyText = entry.Key?.ToString();
+
+            if (entryKeyText?.Equals(sourceKey, StringComparison.OrdinalIgnoreCase) == true)
+            {
+                valueToCopy = entry.Value;
+                sourceRuntimeKey = entry.Key;
+                foundSource = true;
+            }
+
+            if (entryKeyText?.Equals(targetKey, StringComparison.OrdinalIgnoreCase) == true)
+            {
+                existingTargetRuntimeKey = entry.Key;
+            }
+        }
+
+        if (!foundSource)
+        {
+            return;
+        }
+
+        var targetRuntimeKey = existingTargetRuntimeKey
+            ?? CreateDictionaryKeyForString(dictionaryObject, dictionary, targetKey, sourceRuntimeKey);
+
+        if (targetRuntimeKey == null)
+        {
+            YATMLogger.Log($"[Pricing] Warning: could not convert loyal_level_items key '{targetKey}' to dictionary key type. Ammo pack unlock copy skipped.");
+            return;
+        }
+
+        try
+        {
+            dictionary[targetRuntimeKey] = valueToCopy;
+        }
+        catch (Exception ex)
+        {
+            YATMLogger.Log($"[Pricing] Warning: failed to copy loyal_level_items unlock '{sourceKey}' -> '{targetKey}' using key type {targetRuntimeKey.GetType().FullName}: {ex.Message}");
+        }
+    }
+
+    private static object? CreateDictionaryKeyForString(
+        object dictionaryObject,
+        IDictionary dictionary,
+        string key,
+        object? sampleRuntimeKey = null)
+    {
+        // Prefer the live source key type first. SPT can expose these maps through
+        // non-generic IDictionary, but the runtime entries are still MongoId keys.
+        var keyType = ResolveRuntimeDictionaryKeyType(dictionaryObject, dictionary, sampleRuntimeKey);
+
+        if (keyType == typeof(string))
+        {
+            return key;
+        }
+
+        if (keyType == null || keyType == typeof(object))
+        {
+            return TryCreateMongoIdLikeValue(typeof(MongoId), key, out var mongoIdKey)
+                ? mongoIdKey
+                : key;
+        }
+
+        if (keyType.IsInstanceOfType(key))
+        {
+            return key;
+        }
+
+        if (IsMongoIdLikeType(keyType) && TryCreateMongoIdLikeValue(keyType, key, out var mongoIdLikeKey))
+        {
+            return mongoIdLikeKey;
+        }
+
+        if (TryConvertValueForMember(key, keyType, out var convertedKey) && convertedKey != null)
+        {
+            return convertedKey;
+        }
+
+        try
+        {
+            return Activator.CreateInstance(keyType, new object[] { key });
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static Type? ResolveRuntimeDictionaryKeyType(
+        object dictionaryObject,
+        IDictionary dictionary,
+        object? sampleRuntimeKey = null)
+    {
+        var sampleType = sampleRuntimeKey?.GetType();
+        if (sampleType != null && sampleType != typeof(object) && sampleType != typeof(string))
+        {
+            return sampleType;
+        }
+
+        var entryType = GetFirstDictionaryKeyType(dictionary);
+        if (entryType != null && entryType != typeof(object) && entryType != typeof(string))
+        {
+            return entryType;
+        }
+
+        var declaredType = GetDictionaryKeyType(dictionaryObject);
+        if (declaredType != null)
+        {
+            return declaredType;
+        }
+
+        return null;
+    }
+
+    private static Type? GetFirstDictionaryKeyType(IDictionary dictionary)
+    {
+        foreach (DictionaryEntry entry in dictionary)
+        {
+            if (entry.Key != null)
+            {
+                return entry.Key.GetType();
+            }
+        }
+
+        return null;
+    }
+
+    private static Type? GetDictionaryKeyType(object dictionaryObject)
+    {
+        var type = dictionaryObject.GetType();
+
+        if (type.IsGenericType)
+        {
+            var genericArgs = type.GetGenericArguments();
+            if (genericArgs.Length == 2 && typeof(IDictionary).IsAssignableFrom(type))
+            {
+                return genericArgs[0];
+            }
+        }
+
+        return type
+            .GetInterfaces()
+            .Concat(new[] { type })
+            .Where(x => x.IsGenericType)
+            .FirstOrDefault(x => x.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+            ?.GetGenericArguments()[0];
+    }
+
+    private static string BuildFallbackAmmoPackOfferId(string looseOfferId, string packTpl)
+    {
+        var input = $"yatm-pack-offer:{looseOfferId}:{packTpl}";
+        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(input));
+        var hex = Convert.ToHexString(bytes).ToLowerInvariant();
+        return hex[..24];
+    }
+
     private static bool IsAmmoPackBarterConfig(PriceConfigItem priceConfig)
     {
         return HasUsableBarterScheme(priceConfig)
@@ -2072,8 +2401,8 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
     private static void ApplyBarterPaymentToOffer(object offer, object existingSchemeList, PriceConfigItem priceConfig)
     {
-        // Keep the same OfferId, but allow the sold tpl to change for ammo barter offers.
-        // Normal barter offers sell priceConfig.TplId. Ammo barter offers sell the configured pack tpl.
+        // Normal barter offers keep their OfferId and sell priceConfig.TplId.
+        // Ammo barter calls this on the separate pack OfferId and sells the configured pack tpl.
         var ammoPackTpl = GetStringMember(priceConfig, "AmmoBarterPackTplId");
         var targetTpl = !string.IsNullOrWhiteSpace(ammoPackTpl)
             ? ammoPackTpl
@@ -2083,7 +2412,7 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
         if (!string.IsNullOrWhiteSpace(ammoPackTpl))
         {
-            YATMLogger.LogRealDebug($"[Pricing] Ammo pack barter payment: {priceConfig.ItemName} | OfferId kept | _tpl = {targetTpl}");
+            YATMLogger.LogRealDebug($"[Pricing] Ammo pack barter payment: {priceConfig.ItemName} | separate pack OfferId | _tpl = {targetTpl}");
         }
         else
         {
@@ -2575,6 +2904,11 @@ public sealed class YATMTraderAssortRuntimeRollService(
         SetMemberValue(offer, "Template", templateId);
         SetMemberValue(offer, "Tpl", templateId);
         SetMemberValue(offer, "TemplateId", templateId);
+        SetExtensionDataValue(offer, "_tpl", templateId);
+        SetExtensionDataValue(offer, "tpl", templateId);
+        SetExtensionDataValue(offer, "Template", templateId);
+        SetExtensionDataValue(offer, "Tpl", templateId);
+        SetExtensionDataValue(offer, "TemplateId", templateId);
 
         var rawTpl = GetMemberValue(offer, "_tpl")?.ToString();
         var resolvedTpl = YATMConfig.GetTemplateId(offer);
@@ -2634,8 +2968,46 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
         if (extensionData is IDictionary dictionary)
         {
-            dictionary[key] = value;
+            dictionary[key] = ConvertJsonLikeIdValue(key, value);
         }
+    }
+
+    private static object? ConvertJsonLikeIdValue(string memberName, object? value)
+    {
+        if (value is not string text || string.IsNullOrWhiteSpace(text))
+        {
+            return value;
+        }
+
+        // Root/offer ids and template ids should be MongoId in SPT runtime objects.
+        // Non-Mongo values like parentId="hideout" and slotId="hideout" stay strings because
+        // TryCreateMongoIdLikeValue rejects non-24-hex values.
+        if (!IsJsonLikeIdMember(memberName))
+        {
+            return value;
+        }
+
+        return TryCreateMongoIdLikeValue(typeof(MongoId), text, out var mongoIdValue)
+            ? mongoIdValue
+            : value;
+    }
+
+    private static bool IsJsonLikeIdMember(string memberName)
+    {
+        return memberName.Equals("_id", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("id", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("Id", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("_tpl", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("tpl", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("Tpl", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("Template", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("TemplateId", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("parentId", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("ParentId", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("target", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("Target", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("traderId", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("TraderId", StringComparison.OrdinalIgnoreCase);
     }
 
     private static string? GetStringMember(object target, string memberName)
@@ -3047,13 +3419,32 @@ public sealed class YATMTraderAssortRuntimeRollService(
     {
         convertedValue = null;
 
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        if (targetType == typeof(MongoId))
+        {
+            try
+            {
+                convertedValue = new MongoId(value);
+                return true;
+            }
+            catch
+            {
+                convertedValue = null;
+                return false;
+            }
+        }
+
         var ctor = targetType.GetConstructor(new[] { typeof(string) });
         if (ctor != null)
         {
             try
             {
                 convertedValue = ctor.Invoke(new object[] { value });
-                return true;
+                return convertedValue != null;
             }
             catch
             {

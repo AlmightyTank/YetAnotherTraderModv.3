@@ -225,8 +225,8 @@ public sealed class YATMGeneratedOfferService(
             target.BarterScheme = source.BarterScheme;
         }
 
-        // New ammo barter mode does not use a separate PackOfferId.
-        // The loose ammo offer keeps its OfferId and swaps _tpl to the pack when barter wins.
+        // Separate ammo barter mode derives PackOfferId from the hydrated runtime config.
+        // Do not trust stale PackOfferId values from generated price config cache rows.
         target.PackOfferId = null;
 
         if (string.IsNullOrWhiteSpace(target.AmmoBarterPackTplId))
