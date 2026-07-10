@@ -1,6 +1,6 @@
 {
-    "cloneOrigin": "57347d7224597744596b4e72",
-    "id": "683288c1457f12f7239c9349",
+    "cloneOrigin": "57347d8724597744596b4e76",
+    "id": "6a43f00238a6d33bffe98311",
     "fleaPrice": 1.1,
     "handBookPrice": 1.1,
     "includeInSameQuestsAsOrigin": true,
@@ -9,10 +9,10 @@
     "BackgroundColor": "blue",
     "effects_health": {
         "Hydration": {
-            "value": -3
+            "value": -2
         },
         "Energy": {
-            "value": 35
+            "value": 44
         }
     },
     "Buffs": [
@@ -23,27 +23,27 @@
             "Delay": 0,
             "Duration": 60,
             "SkillName": "",
-            "Value": 0.15
+            "Value": 0.1
         },
         {
             "AbsoluteValue": true,
             "BuffType": "SkillRate",
             "Chance": 1,
             "Delay": 0,
-            "Duration": 120,
-            "SkillName": "Strength",
+            "Duration": 90,
+            "SkillName": "Metabolism",
             "Value": 2
         }
     ],
     "locales": {
         "en": {
-            "name": "Volkov Cooked tushonka (Small)",
-            "shortName": "Cooked Tushonka S",
-            "description": "Small tushonka, warmed fast and pulled before the fat starts screaming. Enough meat and grease to keep you moving without slowing you down. Tony calls it a meal for men who do not have time to sit."
+            "name": "Cooked squash spread",
+            "shortName": "Cooked Squash",
+            "description": "Squash spread warmed until the lid sweats and the oil remembers it is food. Not fancy, not pretty, but soft enough to go down fast between bad corners. Fine dining for people being hunted."
         }
     },
     "craft": {
-        "_id": "68328f4263bfdf6b03ad838a",
+        "_id": "6a43f01238a6d33bffe98321",
         "areaType": 5,
         "requirements": [
             {
@@ -60,17 +60,17 @@
                 "type": "Tool"
             },
             {
-                "templateId": "57347d7224597744596b4e72",
+                "templateId": "57347d8724597744596b4e76",
                 "count": 1,
                 "isFunctional": false,
                 "isEncoded": false,
                 "type": "Item"
             }
         ],
-        "productionTime": 2700,
+        "productionTime": 2400,
         "needFuelForAllProductionTime": false,
         "locked": false,
-        "endProduct": "683288c1457f12f7239c9349",
+        "endProduct": "6a43f00238a6d33bffe98311",
         "continuous": false,
         "count": 1,
         "productionLimitCount": 0,

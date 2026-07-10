@@ -8,7 +8,7 @@
     "spawnWeightComparedToOrigin": 0.25,
     "MaxResource": 1,
     "hpResourceRate": 0,
-    "BackgroundColor": "blue",
+    "BackgroundColor": "orange",
     "effects_damage": {},
     "effects_health": {
         "Hydration": {
@@ -58,9 +58,9 @@
     ],
     "locales": {
         "en": {
-            "name": "Volkov Zaryad vitamin pouch",
+            "name": "Zaryad vitamin pouch",
             "shortName": "Zaryad",
-            "description": "Fruit syrup, caffeine, dissolved tablets, and just enough vitamins to make the label sound legal. Zaryad goes down fast and wakes the body up like it owes money. Tony says drink it moving; sitting down wastes the effect."
+            "description": "Fruit syrup, caffeine, dissolved tablets, and just enough vitamins to make the label sound legal. Zaryad goes down fast and wakes the body up like it owes money. Drink it moving; sitting down wastes the effect."
         }
     },
     "craft": {

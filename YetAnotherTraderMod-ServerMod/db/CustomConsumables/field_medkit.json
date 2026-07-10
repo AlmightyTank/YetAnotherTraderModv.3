@@ -53,9 +53,9 @@
     ],
     "locales": {
         "en": {
-            "name": "Volkov field medkit",
-            "shortName": "VFM",
-            "description": "Salewa bones, Volkov tape, and quality control done by men who were in a hurry. The supplies are good, the labels are ugly, and the blood will not care either way. Tony says clean is nice; working is better."
+            "name": "Field medkit",
+            "shortName": "Field Kit",
+            "description": "Salewa bones, rough tape, and quality control done by men who were in a hurry. The supplies are good, the labels are ugly, and the blood will not care either way. Clean is nice; working is better."
         }
     },
     "trader": {

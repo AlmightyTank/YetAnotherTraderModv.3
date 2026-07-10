@@ -86,9 +86,9 @@
     ],
     "locales": {
         "en": {
-            "name": "Volkov Hemostat injector",
-            "shortName": "V-Hemo",
-            "description": "Zagustin taught blood to stop. Tony's people added enough backroom chemistry to keep you moving after it listens. This injector seals bleeds, dulls pain, and buys you distance from the fight. The crash comes later, assuming you earned a later."
+            "name": "Hemostat injector",
+            "shortName": "Hemostat",
+            "description": "Zagustin taught blood to stop. This backroom mix adds enough pressure to keep you moving after the body listens. It seals bleeds, dulls pain, and buys distance from the fight. The crash comes later, assuming you earned a later."
         }
     }
 }

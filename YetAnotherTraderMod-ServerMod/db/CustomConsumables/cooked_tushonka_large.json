@@ -1,6 +1,6 @@
 {
-    "cloneOrigin": "57347d8724597744596b4e76",
-    "id": "6a43f00238a6d33bffe98311",
+    "cloneOrigin": "57347da92459774491567cf5",
+    "id": "68328e0027e77b2d75065406",
     "fleaPrice": 1.1,
     "handBookPrice": 1.1,
     "includeInSameQuestsAsOrigin": true,
@@ -9,10 +9,10 @@
     "BackgroundColor": "blue",
     "effects_health": {
         "Hydration": {
-            "value": -2
+            "value": -4
         },
         "Energy": {
-            "value": 44
+            "value": 45
         }
     },
     "Buffs": [
@@ -21,29 +21,29 @@
             "BuffType": "EnergyRate",
             "Chance": 1,
             "Delay": 0,
-            "Duration": 60,
+            "Duration": 75,
             "SkillName": "",
-            "Value": 0.1
+            "Value": 0.2
         },
         {
             "AbsoluteValue": true,
             "BuffType": "SkillRate",
             "Chance": 1,
             "Delay": 0,
-            "Duration": 90,
-            "SkillName": "Metabolism",
-            "Value": 2
+            "Duration": 120,
+            "SkillName": "Strength",
+            "Value": 3
         }
     ],
     "locales": {
         "en": {
-            "name": "Volkov Cooked squash spread",
-            "shortName": "Cooked Squash",
-            "description": "Squash spread warmed until the lid sweats and the oil remembers it is food. Not fancy, not pretty, but soft enough to go down fast between bad corners. Tony calls that fine dining for people being hunted."
+            "name": "Cooked tushonka (Large)",
+            "shortName": "Tushonka L",
+            "description": "A big can of tushonka heated until the fat starts talking. Heavy, salty, greasy, and exactly what a tired operator needs before one more bad decision. Not comfort; fuel with a spoon mark in it."
         }
     },
     "craft": {
-        "_id": "6a43f01238a6d33bffe98321",
+        "_id": "68328f389cfe86c413573f80",
         "areaType": 5,
         "requirements": [
             {
@@ -60,17 +60,17 @@
                 "type": "Tool"
             },
             {
-                "templateId": "57347d8724597744596b4e76",
+                "templateId": "57347da92459774491567cf5",
                 "count": 1,
                 "isFunctional": false,
                 "isEncoded": false,
                 "type": "Item"
             }
         ],
-        "productionTime": 2400,
+        "productionTime": 3600,
         "needFuelForAllProductionTime": false,
         "locked": false,
-        "endProduct": "6a43f00238a6d33bffe98311",
+        "endProduct": "68328e0027e77b2d75065406",
         "continuous": false,
         "count": 1,
         "productionLimitCount": 0,

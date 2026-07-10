@@ -9,7 +9,7 @@
     "inheritOriginBuffs": false,
     "overrideProperties": {
         "CanSellOnRagfair": true,
-        "BackgroundColor": "blue",
+        "BackgroundColor": "orange",
         "StackMaxSize": 1,
         "ExaminedByDefault": false,
         "effects_health": {
@@ -53,9 +53,9 @@
     ],
     "locales": {
         "en": {
-            "name": "Volkov Zarya energy drink",
+            "name": "Zarya energy drink",
             "shortName": "Zarya",
-            "description": "Sweet, sharp, and probably older than the label wants to admit. Zarya comes through Tony's supply chain for raids where sleep already lost the vote. Crack it open, keep your legs under you, and do not ask why it tastes like a warning."
+            "description": "Sweet, sharp, and probably older than the label wants to admit. Zarya is built for raids where sleep already lost the vote. Crack it open, keep your legs under you, and do not ask why it tastes like a warning."
         }
     },
     "fleaPriceRoubles": 18500,

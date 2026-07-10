@@ -37,9 +37,9 @@
     ],
     "locales": {
         "en": {
-            "name": "Volkov Cooked Sprats",
+            "name": "Cooked sprats",
             "shortName": "Cooked Sprats",
-            "description": "Sprats in hot oil, warmed until the smell starts making threats. Tony says it builds character; mostly it builds thirst. Still, a man with food in his stomach shoots steadier than a man arguing with hunger."
+            "description": "Sprats in hot oil, warmed until the smell starts making threats. It builds character; mostly it builds thirst. Still, a man with food in his stomach shoots steadier than a man arguing with hunger."
         }
     },
     "craft": {

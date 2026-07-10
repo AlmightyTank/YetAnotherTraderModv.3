@@ -1,8 +1,8 @@
 {
     "cloneOrigin": "5e831507ea0a7c419c2f9bd9",
     "id": "6a43f02538a6d33bffe98335",
-    "fleaPrice": 1.50,
-    "handBookPrice": 1.50,
+    "fleaPrice": 1.5,
+    "handBookPrice": 1.5,
     "includeInSameQuestsAsOrigin": false,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.45,
@@ -31,7 +31,7 @@
         "en": {
             "name": "Hemostatic gauze",
             "shortName": "H-Gauze",
-            "description": "Cheap wrap, clotting compound, and enough pressure to keep your blood where it belongs. It is not clean hospital stock, but clean does not matter when the floor is drinking you. Tony says stop the leak first and complain after."
+            "description": "Cheap wrap, clotting compound, and enough pressure to keep your blood where it belongs. It is not clean hospital stock, but clean does not matter when the floor is drinking you. Stop the leak first and complain after."
         }
     },
     "trader": {

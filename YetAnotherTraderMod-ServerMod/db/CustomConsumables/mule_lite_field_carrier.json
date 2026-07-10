@@ -88,9 +88,9 @@
     ],
     "locales": {
         "en": {
-            "name": "MULE-Lite Field Carrier",
+            "name": "MULE-Lite field carrier",
             "shortName": "MULE-L",
-            "description": "Full M.U.L.E. hits like a debt collector. MULE-Lite is Tony's softer answer for moving heavy gear without snapping the body in half. It gives you carry strength and output for a few good minutes, then collects payment from your stamina."
+            "description": "Full M.U.L.E. hits like a debt collector. MULE-Lite is the softer answer for moving heavy gear without snapping the body in half. It gives you carry strength and output for a few good minutes, then collects payment from your stamina."
         }
     },
     "trader": {

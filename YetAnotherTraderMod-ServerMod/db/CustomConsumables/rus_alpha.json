@@ -69,8 +69,8 @@
     ],
     "locales": {
         "en": {
-            "name": "Volkov RUS Alpha",
-            "shortName": "V-Alpha",
+            "name": "RUS Alpha",
+            "shortName": "RUS-A",
             "description": "Old BEAR network stock, cleaned up for shooters who still know how to work. RUS Alpha sharpens handling, steadies automatic fire, and keeps the mind locked in when rooms get small. The hands shake later, after the compound burns out and the story catches up."
         }
     },

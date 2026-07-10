@@ -76,9 +76,9 @@
     ],
     "locales": {
         "en": {
-            "name": "Volkov FD-12 Field Stabilizer",
+            "name": "FD-12 Field Stabilizer",
             "shortName": "FD-12",
-            "description": "TerraGroup made fancy lab medicine for clean rooms and locked doors. Tony's people made it useful. FD-12 is a stripped-down field stabilizer built for long raids, hot armor, and bad air. It sharpens the eyes, keeps the head cool, and helps the body hold energy and water while it works. When the dose runs out, the heat comes back with interest. If your hands start shaking, that is the bill coming due."
+            "description": "TerraGroup made fancy lab medicine for clean rooms and locked doors. This stripped-down field stabilizer is built for long raids, hot armor, and bad air. It sharpens the eyes, keeps the head cool, and helps the body hold energy and water while it works. When the dose runs out, the heat comes back with interest."
         }
     },
     "trader": {

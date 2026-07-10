@@ -1,6 +1,6 @@
 {
-    "cloneOrigin": "57347da92459774491567cf5",
-    "id": "68328e0027e77b2d75065406",
+    "cloneOrigin": "57347d7224597744596b4e72",
+    "id": "683288c1457f12f7239c9349",
     "fleaPrice": 1.1,
     "handBookPrice": 1.1,
     "includeInSameQuestsAsOrigin": true,
@@ -9,10 +9,10 @@
     "BackgroundColor": "blue",
     "effects_health": {
         "Hydration": {
-            "value": -4
+            "value": -3
         },
         "Energy": {
-            "value": 45
+            "value": 35
         }
     },
     "Buffs": [
@@ -21,9 +21,9 @@
             "BuffType": "EnergyRate",
             "Chance": 1,
             "Delay": 0,
-            "Duration": 75,
+            "Duration": 60,
             "SkillName": "",
-            "Value": 0.2
+            "Value": 0.15
         },
         {
             "AbsoluteValue": true,
@@ -32,18 +32,18 @@
             "Delay": 0,
             "Duration": 120,
             "SkillName": "Strength",
-            "Value": 3
+            "Value": 2
         }
     ],
     "locales": {
         "en": {
-            "name": "Volkov Cooked tushonka (Large)",
-            "shortName": "Cooked Tushonka L",
-            "description": "A big can of tushonka heated until the fat starts talking. Heavy, salty, greasy, and exactly what a tired operator needs before one more bad decision. Tony does not sell comfort; he sells fuel with a spoon mark in it."
+            "name": "Cooked tushonka (Small)",
+            "shortName": "Tushonka S",
+            "description": "Small tushonka, warmed fast and pulled before the fat starts screaming. Enough meat and grease to keep you moving without slowing you down. A meal for men who do not have time to sit."
         }
     },
     "craft": {
-        "_id": "68328f389cfe86c413573f80",
+        "_id": "68328f4263bfdf6b03ad838a",
         "areaType": 5,
         "requirements": [
             {
@@ -60,17 +60,17 @@
                 "type": "Tool"
             },
             {
-                "templateId": "57347da92459774491567cf5",
+                "templateId": "57347d7224597744596b4e72",
                 "count": 1,
                 "isFunctional": false,
                 "isEncoded": false,
                 "type": "Item"
             }
         ],
-        "productionTime": 3600,
+        "productionTime": 2700,
         "needFuelForAllProductionTime": false,
         "locked": false,
-        "endProduct": "68328e0027e77b2d75065406",
+        "endProduct": "683288c1457f12f7239c9349",
         "continuous": false,
         "count": 1,
         "productionLimitCount": 0,

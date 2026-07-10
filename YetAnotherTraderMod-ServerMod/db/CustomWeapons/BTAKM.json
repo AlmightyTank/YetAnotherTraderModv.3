@@ -1,35 +1,35 @@
 {
-  "6a38124b82d8dd83f87b1f55": {
-    "itemTplToClone": "59d6088586f774275f37482f",
-    "parentId": "5447b5f14bdc2d61278b4567",
-    "handbookParentId": "5b5f78fc86f77409407a7f90",
-    "overrideProperties": {
-        "ExaminedByDefault": true,
-        "Ergonomics": 26,
-        "bEffDist": 400,
-        "CenterOfImpact": 0.067,
-        "AimPlane": 0.19,
-        "RecoilCamera": 0.05,
-        "RecoilForceBack": 338,
-        "RecoilForceUp": 109,
-        "RecolDispersion": 9,
-        "RecoilReturnPathDampingHandRotation": 0.48,
-        "DurabilityBurnRatio": 1.05,
-        "HeatFactorGun": 0.9606,
-        "CoolFactorGun": 3.368,
-        "CoolFactorGunMods": 1,
-        "HeatFactorByShot": 0.9503,
-        "MaxRepairKitDegradation": 0.035,
-        "CanSellOnRagfair": false
-    },
-    "fleaPriceRoubles": 17500,
-    "handbookPriceRoubles": 12500,
-    "locales": {
-      "en": {
-        "name": "AKM \"Red Debt\"",
-        "shortName": "AKM RD",
-        "description": "Red Debt is not a gimmick conversion — it is Tony's better-tuned AKM, built for people who need the old rifle to hit harder, handle cleaner, and keep working when everything around it gets cheap and dirty. The action has been smoothed, the recoil behavior tightened, and the heat and wear tolerances cleaned up without sanding away the Kalashnikov soul. It is still rough, loud, and stubborn as hell. It just collects what people owe with less wasted movement."
-      }
+    "6a38124b82d8dd83f87b1f55": {
+        "itemTplToClone": "59d6088586f774275f37482f",
+        "parentId": "5447b5f14bdc2d61278b4567",
+        "handbookParentId": "5b5f78fc86f77409407a7f90",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Ergonomics": 26,
+            "bEffDist": 400,
+            "CenterOfImpact": 0.067,
+            "AimPlane": 0.19,
+            "RecoilCamera": 0.05,
+            "RecoilForceBack": 338,
+            "RecoilForceUp": 109,
+            "RecolDispersion": 9,
+            "RecoilReturnPathDampingHandRotation": 0.48,
+            "DurabilityBurnRatio": 1.05,
+            "HeatFactorGun": 0.9606,
+            "CoolFactorGun": 3.368,
+            "CoolFactorGunMods": 1,
+            "HeatFactorByShot": 0.9503,
+            "MaxRepairKitDegradation": 0.035,
+            "CanSellOnRagfair": false
+        },
+        "fleaPriceRoubles": 17500,
+        "handbookPriceRoubles": 12500,
+        "locales": {
+            "en": {
+                "name": "AKM \"Red Debt\"",
+                "shortName": "AKM RD",
+                "description": "Red Debt is not a gimmick conversion. It is a better-tuned AKM for people who need the old rifle to hit harder, handle cleaner, and keep working when everything around it gets cheap and dirty. The action has been smoothed, recoil behavior tightened, and heat and wear tolerances cleaned up without sanding away the Kalashnikov soul. It still collects what people owe with less wasted movement."
+            }
+        }
     }
-  }
 }

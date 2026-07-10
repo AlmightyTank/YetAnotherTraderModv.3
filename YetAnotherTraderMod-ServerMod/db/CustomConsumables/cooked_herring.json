@@ -37,9 +37,9 @@
     ],
     "locales": {
         "en": {
-            "name": "Volkov Cooked herring",
+            "name": "Cooked herring",
             "shortName": "Cooked Herring",
-            "description": "Herring heated in a sealed can is not cuisine; it is survival with a smell attached. Sharp, salty, and strong enough to clear a room before you do. Tony says the thirst is part of the flavor."
+            "description": "Herring heated in a sealed can is not cuisine; it is survival with a smell attached. Sharp, salty, and strong enough to clear a room before you do. The thirst is part of the flavor."
         }
     },
     "craft": {

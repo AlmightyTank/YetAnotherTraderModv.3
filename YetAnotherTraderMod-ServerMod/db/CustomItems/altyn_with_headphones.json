@@ -6,7 +6,7 @@
         "overrideProperties": {
             "ExaminedByDefault": true,
             "CanSellOnRagfair": false,
-            "BackgroundColor": "violet",
+            "BackgroundColor": "orange",
             "mousePenalty": -2,
             "speedPenaltyPercent": 0,
             "weaponErgonomicPenalty": -1,
@@ -125,7 +125,7 @@
             "en": {
                 "name": "Altyn bulletproof helmet with premounted RAC headset (Olive Drab)",
                 "shortName": "Altyn RAC",
-                "description": "Old Altyn shell, new ears. Tony had his people bolt RAC comms onto an olive-drab helmet that was already too stubborn to die. It is heavy, loud, and not winning any beauty contest, but it keeps your skull covered and lets you hear the problem before it steps around the corner."
+                "description": "Old Altyn shell, new ears. RAC comms are bolted onto an olive-drab helmet that was already too stubborn to die. Heavy, loud, and ugly, but it keeps your skull covered and lets you hear the problem before it steps around the corner."
             }
         },
         "fleaPriceRoubles": 84000,

@@ -37,9 +37,9 @@
     ],
     "locales": {
         "en": {
-            "name": "Volkov Cooked pacific saury",
+            "name": "Cooked Pacific saury",
             "shortName": "Cooked Saury",
-            "description": "Pacific saury, warmed until the oil starts moving and the label stops mattering. Tony's people sell it for long raids where pride already died. Salty, fishy, and warm enough to make a backroom crate feel like dinner."
+            "description": "Pacific saury, warmed until the oil starts moving and the label stops mattering. Built for long raids where pride already died. Salty, fishy, and warm enough to make a backroom crate feel like dinner."
         }
     },
     "craft": {

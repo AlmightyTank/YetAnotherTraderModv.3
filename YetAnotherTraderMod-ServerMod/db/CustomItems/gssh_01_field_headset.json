@@ -6,7 +6,7 @@
         "overrideProperties": {
             "ExaminedByDefault": true,
             "CanSellOnRagfair": false,
-            "BackgroundColor": "blue",
+            "BackgroundColor": "orange",
             "Weight": 0.5,
             "AmbientCompressorSendLevel": -13,
             "AmbientVolume": -50,
@@ -85,13 +85,13 @@
         },
         "locales": {
             "en": {
-                "name": "Volkov GSSh-01 active headset",
-                "shortName": "V-GSSh",
-                "description": "Looks like cheap GSSh plastic because that is the point. Tony's people gutted it and slipped in stripped M32 internals, then called it a field repair with a straight face. It will not impress anyone at the stash screen, but it may hear the man who thought he was quiet."
+                "name": "GSSh-01 field headset",
+                "shortName": "GSSh-01F",
+                "description": "Looks like cheap GSSh plastic because that is the point. The shell was gutted and rebuilt with stripped M32 internals, then left ugly enough to be ignored. It will not impress anyone at the stash screen, but it may hear the man who thought he was quiet."
             }
         },
-        "fleaPriceRoubles": 28789,
-        "handbookPriceRoubles": 21056,
+        "fleaPriceRoubles": 35789,
+        "handbookPriceRoubles": 24567,
         "addtoInventorySlots": [
             "Earpiece"
         ]

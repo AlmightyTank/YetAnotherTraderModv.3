@@ -71,9 +71,9 @@
     ],
     "locales": {
         "en": {
-            "name": "Volkov Redline injector",
+            "name": "Redline injector",
             "shortName": "Redline",
-            "description": "Redline is what Tony sells when walking away stopped being enough. Cut from military-grade compounds and whatever still had a label, it keeps the legs moving and the body braced when the raid turns ugly. It buys time. It does not forgive the bill."
+            "description": "Redline is for when walking away stopped being enough. Cut from military-grade compounds and whatever still had a label, it keeps the legs moving and the body braced when the raid turns ugly. It buys time. It does not forgive the bill."
         }
     }
 }

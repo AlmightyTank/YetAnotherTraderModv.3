@@ -50,9 +50,9 @@
     ],
     "locales": {
         "en": {
-            "name": "Volkov Field Bandage",
-            "shortName": "V-Field",
-            "description": "Army surplus bandage, Volkov repack, clotting compound where it matters. It is made for fast pressure wraps when a light bleed tries to become a problem. Tony says a good bandage is the difference between pushing the next corner and painting it."
+            "name": "Field bandage",
+            "shortName": "F-Bandage",
+            "description": "Army surplus bandage, rough repack, clotting compound where it matters. Made for fast pressure wraps when a light bleed tries to become a problem. A good bandage is the difference between pushing the next corner and painting it."
         }
     }
 }

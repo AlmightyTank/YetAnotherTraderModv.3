@@ -6,7 +6,7 @@
         "overrideProperties": {
             "ExaminedByDefault": true,
             "CanSellOnRagfair": false,
-            "BackgroundColor": "yellow",
+            "BackgroundColor": "orange",
             "Weight": 0.5,
             "AmbientCompressorSendLevel": -14,
             "AmbientVolume": -50,
@@ -85,9 +85,9 @@
         },
         "locales": {
             "en": {
-                "name": "Volkov GSSh-01M active headset",
-                "shortName": "V-GSSh-01M",
-                "description": "Russian shell, foreign guts, Volkov warranty. Tony's crew rebuilt this GSSh-01 with ComTac IV Hybrid internals and left the outside looking poor enough to ignore. That is how good gear survives in Tarkov: it dresses like trash."
+                "name": "GSSh-01M field headset",
+                "shortName": "GSSh-01M",
+                "description": "Russian shell, foreign guts, no clean warranty. This GSSh-01M hides ComTac IV Hybrid internals behind a poor-looking exterior. That is how good gear survives in Tarkov: it dresses like trash."
             }
         },
         "fleaPriceRoubles": 79350,

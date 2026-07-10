@@ -109,9 +109,9 @@
     ],
     "locales": {
         "en": {
-            "name": "Volkov Regen injector",
-            "shortName": "V-Regen",
-            "description": "Stolen medical stock, military stimulants, and backroom math nobody writes down twice. Regen pushes the body to patch itself while the fight is still arguing. Tony calls it a second chance in a needle; your organs may call it a threat."
+            "name": "Regen injector",
+            "shortName": "Regen",
+            "description": "Stolen medical stock, military stimulants, and backroom math nobody writes down twice. Regen pushes the body to patch itself while the fight is still arguing. A second chance in a needle; your organs may call it a threat."
         }
     }
 }

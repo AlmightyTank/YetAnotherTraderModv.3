@@ -1,32 +1,23 @@
 {
     "cloneOrigin": "5c0fa877d174af02a012e1cf",
-    "id": "683288b7a174cfedb52ab42e",
-    "fleaPrice": 1.5,
-    "handBookPrice": 1.5,
+    "id": "683288f27004ec43ac8ab4c2",
+    "fleaPrice": 1.3,
+    "handBookPrice": 1.3,
     "includeInSameQuestsAsOrigin": false,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.1,
     "MaxResource": 1,
-    "BackgroundColor": "blue",
+    "BackgroundColor": "orange",
     "effects_damage": {},
     "effects_health": {
         "Hydration": {
-            "value": 75
+            "value": 70
         },
         "Energy": {
-            "value": 40
+            "value": 15
         }
     },
     "Buffs": [
-        {
-            "AbsoluteValue": true,
-            "BuffType": "SkillRate",
-            "Chance": 1,
-            "Delay": 3,
-            "Duration": 300,
-            "SkillName": "Strength",
-            "Value": 3
-        },
         {
             "AbsoluteValue": true,
             "BuffType": "SkillRate",
@@ -43,7 +34,7 @@
             "Delay": 3,
             "Duration": 300,
             "SkillName": "Metabolism",
-            "Value": 4
+            "Value": 3
         },
         {
             "AbsoluteValue": true,
@@ -52,7 +43,7 @@
             "Delay": 3,
             "Duration": 180,
             "SkillName": "",
-            "Value": 0.35
+            "Value": 0.25
         },
         {
             "AbsoluteValue": true,
@@ -61,18 +52,18 @@
             "Delay": 3,
             "Duration": 180,
             "SkillName": "",
-            "Value": 0.35
+            "Value": 0.3
         }
     ],
     "locales": {
         "en": {
-            "name": "Volkov Alyonka cocoa thermos",
-            "shortName": "Cocoa Thermos",
-            "description": "Cold hands make bad decisions. Tony's cocoa is warm milk, melted Alyonka, and just enough sweetness to make a dead city feel human for a minute. It will not save you, but it may keep you from freezing inside your own armor."
+            "name": "Warm milk thermos",
+            "shortName": "Warm Milk",
+            "description": "Nothing fancy, nothing clean, just warm milk in a sealed bottle from backroom supplies. It settles the stomach and reminds the hands they are still attached to a person. In Tarkov, that counts as luxury."
         }
     },
     "craft": {
-        "_id": "68328f4a5af466f4b98466e3",
+        "_id": "68328f816c0e4241a492ab55",
         "areaType": 8,
         "requirements": [
             {
@@ -97,19 +88,12 @@
                 "isFunctional": false,
                 "isEncoded": false,
                 "type": "Item"
-            },
-            {
-                "templateId": "57505f6224597709a92585a9",
-                "count": 1,
-                "isFunctional": false,
-                "isEncoded": false,
-                "type": "Item"
             }
         ],
-        "productionTime": 1200,
+        "productionTime": 900,
         "needFuelForAllProductionTime": false,
         "locked": false,
-        "endProduct": "683288b7a174cfedb52ab42e",
+        "endProduct": "683288f27004ec43ac8ab4c2",
         "continuous": false,
         "count": 1,
         "productionLimitCount": 0,

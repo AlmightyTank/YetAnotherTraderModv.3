@@ -6,6 +6,7 @@
     "includeInSameQuestsAsOrigin": true,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.45,
+    "BackgroundColor": "orange",
     "inheritOriginBuffs": false,
     "overrideProperties": {
         "CanSellOnRagfair": true,
@@ -61,9 +62,9 @@
     ],
     "locales": {
         "en": {
-            "name": "Tony's Super Iskra ration",
+            "name": "Super Iskra ration",
             "shortName": "Super Iskra",
-            "description": "Looks like an Iskra box, feels like Tony bribed the calories inside. Heavier, saltier, and built for people who do not get lunch breaks in firefights. It drags a tired operator through one more fight, then leaves the nerves asking questions."
+            "description": "Looks like an Iskra box, feels like somebody bribed the calories inside. Heavier, saltier, and built for people who do not get lunch breaks in firefights. It drags a tired operator through one more fight, then leaves the nerves asking questions."
         }
     }
 }
