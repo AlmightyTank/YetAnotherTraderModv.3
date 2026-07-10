@@ -7,26 +7,16 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.18,
     "MaxResource": 600,
-    "effects_health": {
-        "Health": {
-            "value": 600
-        },
-        "Hydration": {
-            "value": -0.1
-        },
-        "Energy": {
-            "value": -0.1
-        }
-    },
+    "effects_health": {},
     "effects_damage": {
         "LightBleeding": {
             "delay": 0,
-            "duration": 0,
+            "duration": 60,
             "fadeOut": 0
         },
         "HeavyBleeding": {
             "delay": 0,
-            "duration": 0,
+            "duration": 60,
             "fadeOut": 0
         }
     },
@@ -38,7 +28,7 @@
             "Delay": 0,
             "Duration": 240,
             "SkillName": "Health",
-            "Value": 5
+            "Value": 1
         },
         {
             "AbsoluteValue": true,
@@ -47,7 +37,7 @@
             "Delay": 0,
             "Duration": 240,
             "SkillName": "Vitality",
-            "Value": 4
+            "Value": 1
         }
     ],
     "locales": {
