@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.1,
     "MaxResource": 1,
-    "BackgroundColor": "orange",
     "effects_damage": {},
     "effects_health": {
         "Hydration": {
@@ -61,6 +60,14 @@
             "shortName": "Warm Milk",
             "description": "Nothing fancy, nothing clean, just warm milk in a sealed bottle from backroom supplies. It settles the stomach and reminds the hands they are still attached to a person. In Tarkov, that counts as luxury."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 2,
+        "price": 54500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a447e1638a6d33bffe98306"
     },
     "craft": {
         "_id": "68328f816c0e4241a492ab55",

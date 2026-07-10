@@ -6,7 +6,6 @@
     "includeInSameQuestsAsOrigin": true,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.1,
-    "BackgroundColor": "blue",
     "effects_health": {
         "Hydration": {
             "value": -4
@@ -37,10 +36,18 @@
     ],
     "locales": {
         "en": {
-            "name": "Cooked tushonka (Large)",
+            "name": "Can of Cooked tushonka (Large)",
             "shortName": "Tushonka L",
             "description": "A big can of tushonka heated until the fat starts talking. Heavy, salty, greasy, and exactly what a tired operator needs before one more bad decision. Not comfort; fuel with a spoon mark in it."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 2,
+        "price": 35500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a44635138a6d33bffe982f5"
     },
     "craft": {
         "_id": "68328f389cfe86c413573f80",

@@ -9,7 +9,6 @@
     "inheritOriginBuffs": false,
     "overrideProperties": {
         "CanSellOnRagfair": true,
-        "BackgroundColor": "orange",
         "StackMaxSize": 1,
         "ExaminedByDefault": false,
         "effects_health": {
@@ -57,6 +56,14 @@
             "shortName": "Zarya",
             "description": "Sweet, sharp, and probably older than the label wants to admit. Zarya is built for raids where sleep already lost the vote. Crack it open, keep your legs under you, and do not ask why it tastes like a warning."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 2,
+        "price": 18500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a44635138a6d33bffe982f4"
     },
     "fleaPriceRoubles": 18500,
     "handbookPriceRoubles": 12000,

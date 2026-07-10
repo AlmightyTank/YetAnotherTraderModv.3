@@ -6,7 +6,6 @@
         "overrideProperties": {
             "ExaminedByDefault": true,
             "CanSellOnRagfair": false,
-            "BackgroundColor": "orange",
             "Weight": 0.5,
             "AmbientCompressorSendLevel": -14,
             "AmbientVolume": -50,

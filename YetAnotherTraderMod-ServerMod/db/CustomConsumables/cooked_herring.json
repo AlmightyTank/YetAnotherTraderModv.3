@@ -6,7 +6,6 @@
     "includeInSameQuestsAsOrigin": true,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.1,
-    "BackgroundColor": "blue",
     "effects_health": {
         "Hydration": {
             "value": -5
@@ -37,10 +36,18 @@
     ],
     "locales": {
         "en": {
-            "name": "Cooked herring",
+            "name": "Can of Cooked herring",
             "shortName": "Cooked Herring",
             "description": "Herring heated in a sealed can is not cuisine; it is survival with a smell attached. Sharp, salty, and strong enough to clear a room before you do. The thirst is part of the flavor."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 2,
+        "price": 18500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a447e1638a6d33bffe98305"
     },
     "craft": {
         "_id": "6a43f01438a6d33bffe98323",

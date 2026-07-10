@@ -6,7 +6,6 @@
     "includeInSameQuestsAsOrigin": true,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.1,
-    "BackgroundColor": "blue",
     "effects_health": {
         "Hydration": {
             "value": 3
@@ -37,10 +36,18 @@
     ],
     "locales": {
         "en": {
-            "name": "Cooked green peas",
+            "name": "Can of Cooked green peas",
             "shortName": "Cooked Peas",
             "description": "You want a chef, leave Tarkov. You want warm food that keeps the legs moving, this is peas in a can and a burner that mostly works. Soft, salty, suspiciously useful, and better than chewing cold misery in a stairwell."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 1,
+        "price": 58500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a447e1638a6d33bffe98302"
     },
     "craft": {
         "_id": "6a43f01338a6d33bffe98322",

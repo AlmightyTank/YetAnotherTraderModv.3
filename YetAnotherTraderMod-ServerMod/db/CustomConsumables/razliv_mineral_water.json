@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.25,
     "MaxResource": 1,
-    "BackgroundColor": "blue",
     "effects_damage": {},
     "effects_health": {
         "Hydration": {
@@ -52,5 +51,13 @@
             "shortName": "Razliv",
             "description": "The label promises springs, minerals, and clean recovery. The cap is sealed, the water has mineral bite, and that is more proof than most bottles in Tarkov can offer."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 1,
+        "price": 11000,
+        "amountForSale": 12,
+        "buyRestrictionMax": 6,
+        "assortmentId": "6a300025d2999bc7b9bba95e"
     }
 }

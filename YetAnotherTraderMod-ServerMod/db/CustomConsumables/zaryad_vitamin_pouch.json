@@ -8,7 +8,6 @@
     "spawnWeightComparedToOrigin": 0.25,
     "MaxResource": 1,
     "hpResourceRate": 0,
-    "BackgroundColor": "orange",
     "effects_damage": {},
     "effects_health": {
         "Hydration": {
@@ -62,6 +61,14 @@
             "shortName": "Zaryad",
             "description": "Fruit syrup, caffeine, dissolved tablets, and just enough vitamins to make the label sound legal. Zaryad goes down fast and wakes the body up like it owes money. Drink it moving; sitting down wastes the effect."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 2,
+        "price": 18500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a5044aa2373cd1c4e9ba91c"
     },
     "craft": {
         "_id": "68328f86829adffa154af8f3",

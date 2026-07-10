@@ -6,7 +6,6 @@
     "includeInSameQuestsAsOrigin": true,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.1,
-    "BackgroundColor": "blue",
     "effects_health": {
         "Hydration": {
             "value": -3
@@ -37,10 +36,18 @@
     ],
     "locales": {
         "en": {
-            "name": "Cooked tushonka (Small)",
+            "name": "Can of Cooked tushonka (Small)",
             "shortName": "Tushonka S",
             "description": "Small tushonka, warmed fast and pulled before the fat starts screaming. Enough meat and grease to keep you moving without slowing you down. A meal for men who do not have time to sit."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 1,
+        "price": 22500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a44635138a6d33bffe982f6"
     },
     "craft": {
         "_id": "68328f4263bfdf6b03ad838a",

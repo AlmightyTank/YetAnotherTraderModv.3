@@ -6,7 +6,6 @@
     "includeInSameQuestsAsOrigin": true,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.1,
-    "BackgroundColor": "blue",
     "effects_health": {
         "Hydration": {
             "value": -7
@@ -37,10 +36,18 @@
     ],
     "locales": {
         "en": {
-            "name": "Cooked sprats",
+            "name": "Can of Cooked sprats",
             "shortName": "Cooked Sprats",
             "description": "Sprats in hot oil, warmed until the smell starts making threats. It builds character; mostly it builds thirst. Still, a man with food in his stomach shoots steadier than a man arguing with hunger."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 3,
+        "price": 18500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a447e1638a6d33bffe98307"
     },
     "craft": {
         "_id": "6a43f01538a6d33bffe98324",

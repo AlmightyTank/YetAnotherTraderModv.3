@@ -75,5 +75,13 @@
             "shortName": "Redline",
             "description": "Redline is for when walking away stopped being enough. Cut from military-grade compounds and whatever still had a label, it keeps the legs moving and the body braced when the raid turns ugly. It buys time. It does not forgive the bill."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 3,
+        "price": 89000,
+        "amountForSale": 40,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a3210dbd2999bc7b9bbab43"
     }
 }

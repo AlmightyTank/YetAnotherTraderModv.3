@@ -49,5 +49,13 @@
             "description": "No pharmacy label, too many warnings, and a foil pack that looks like it came out of an old BEAR crate. Medvedol knocks pain down hard, but it pulls water out of you while it works. Fair trade if the shooting has already started."
         }
     },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 3,
+        "price": 28500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 6,
+        "assortmentId": "6a44f6f738a6d33bffe98317"
+    },
     "addtoItemBlacklist": false
 }

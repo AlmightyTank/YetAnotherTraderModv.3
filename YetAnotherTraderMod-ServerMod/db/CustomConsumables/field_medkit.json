@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.18,
     "MaxResource": 600,
-    "BackgroundColor": "red",
     "effects_health": {
         "Health": {
             "value": 600
@@ -62,15 +61,9 @@
         "traderId": "66a0f6b2c4d8e90123456789",
         "loyaltyReq": 2,
         "price": 38500,
-        "currency": "RUB",
-        "amountForSale": 5,
+        "amountForSale": 30,
         "buyRestrictionMax": 2,
-        "unlimitedStock": false,
-        "useBarterRoll": true,
-        "useOutOfStockRoll": true,
-        "alwaysInStock": false,
-        "alwaysBarter": false,
-        "cashOnly": false
+        "assortmentId": "6a5044aa2373cd1c4e9ba91d"
     },
     "craft": {
         "_id": "6a43f02838a6d33bffe98338",

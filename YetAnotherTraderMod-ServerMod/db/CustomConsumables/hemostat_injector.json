@@ -90,5 +90,13 @@
             "shortName": "Hemostat",
             "description": "Zagustin taught blood to stop. This backroom mix adds enough pressure to keep you moving after the body listens. It seals bleeds, dulls pain, and buys distance from the fight. The crash comes later, assuming you earned a later."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 3,
+        "price": 110125,
+        "amountForSale": 40,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a3210dbd2999bc7b9bbab44"
     }
 }

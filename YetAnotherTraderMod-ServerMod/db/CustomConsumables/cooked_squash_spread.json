@@ -6,7 +6,6 @@
     "includeInSameQuestsAsOrigin": true,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.1,
-    "BackgroundColor": "blue",
     "effects_health": {
         "Hydration": {
             "value": -2
@@ -37,10 +36,18 @@
     ],
     "locales": {
         "en": {
-            "name": "Cooked squash spread",
+            "name": "Can of Cooked squash spread",
             "shortName": "Cooked Squash",
             "description": "Squash spread warmed until the lid sweats and the oil remembers it is food. Not fancy, not pretty, but soft enough to go down fast between bad corners. Fine dining for people being hunted."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 1,
+        "price": 62500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a447e1638a6d33bffe98303"
     },
     "craft": {
         "_id": "6a43f01238a6d33bffe98321",

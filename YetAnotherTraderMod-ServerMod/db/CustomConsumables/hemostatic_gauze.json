@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.45,
     "MaxResource": 1,
-    "BackgroundColor": "red",
     "effects_health": {},
     "effects_damage": {
         "HeavyBleeding": {
@@ -38,15 +37,9 @@
         "traderId": "66a0f6b2c4d8e90123456789",
         "loyaltyReq": 1,
         "price": 4200,
-        "currency": "RUB",
         "amountForSale": 12,
         "buyRestrictionMax": 4,
-        "unlimitedStock": false,
-        "useBarterRoll": true,
-        "useOutOfStockRoll": true,
-        "alwaysInStock": false,
-        "alwaysBarter": false,
-        "cashOnly": false
+        "assortmentId": "6a5044aa2373cd1c4e9ba91b"
     },
     "craft": {
         "_id": "6a43f02638a6d33bffe98336",

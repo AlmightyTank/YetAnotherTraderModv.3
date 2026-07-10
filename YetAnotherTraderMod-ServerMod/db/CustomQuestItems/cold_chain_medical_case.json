@@ -12,7 +12,6 @@
             "DiscardingBlock": true,
             "CanSellOnRagfair": false,
             "QuestItem": true,
-            "BackgroundColor": "blue",
             "Grid": []
         },
         "locales": {

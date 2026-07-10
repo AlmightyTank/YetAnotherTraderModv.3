@@ -6,7 +6,6 @@
     "includeInSameQuestsAsOrigin": false,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.06,
-    "BackgroundColor": "red",
     "effects_damage": {
         "Pain": {
             "delay": 25,
@@ -48,6 +47,14 @@
             "shortName": "Noctapyrin",
             "description": "Night crews like bitter tablets because sleep is for people with locked doors. Noctapyrin brings pain down slow and keeps the eyes working when the raid drags on. It is not gentle medicine, but gentle medicine does not run couriers through Tarkov."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 3,
+        "price": 32000,
+        "amountForSale": 30,
+        "buyRestrictionMax": 5,
+        "assortmentId": "6a44f6f738a6d33bffe98318"
     },
     "addtoItemBlacklist": false
 }

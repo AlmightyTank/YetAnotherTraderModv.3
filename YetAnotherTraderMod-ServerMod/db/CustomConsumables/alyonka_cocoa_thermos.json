@@ -7,7 +7,6 @@
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.1,
     "MaxResource": 1,
-    "BackgroundColor": "blue",
     "effects_damage": {},
     "effects_health": {
         "Hydration": {
@@ -70,6 +69,14 @@
             "shortName": "Cocoa Thermos",
             "description": "Cold hands make bad decisions. Warm milk, melted Alyonka, and just enough sweetness to make a dead city feel human for a minute. It will not save you, but it may keep you from freezing inside your own armor."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 3,
+        "price": 55500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a447e1638a6d33bffe98308"
     },
     "craft": {
         "_id": "68328f4a5af466f4b98466e3",

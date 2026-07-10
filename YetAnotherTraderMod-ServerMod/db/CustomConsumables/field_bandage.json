@@ -54,5 +54,13 @@
             "shortName": "F-Bandage",
             "description": "Army surplus bandage, rough repack, clotting compound where it matters. Made for fast pressure wraps when a light bleed tries to become a problem. A good bandage is the difference between pushing the next corner and painting it."
         }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 1,
+        "price": 9600,
+        "amountForSale": 40,
+        "buyRestrictionMax": 3,
+        "assortmentId": "6a41373a82d8dd83f87b2048"
     }
 }

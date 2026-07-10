@@ -6,7 +6,6 @@
         "overrideProperties": {
             "ExaminedByDefault": true,
             "CanSellOnRagfair": false,
-            "BackgroundColor": "orange",
             "Durability": 55,
             "MaxDurability": 55,
             "armorClass": "5",

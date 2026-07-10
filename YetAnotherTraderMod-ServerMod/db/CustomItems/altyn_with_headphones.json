@@ -6,7 +6,6 @@
         "overrideProperties": {
             "ExaminedByDefault": true,
             "CanSellOnRagfair": false,
-            "BackgroundColor": "orange",
             "mousePenalty": -2,
             "speedPenaltyPercent": 0,
             "weaponErgonomicPenalty": -1,
