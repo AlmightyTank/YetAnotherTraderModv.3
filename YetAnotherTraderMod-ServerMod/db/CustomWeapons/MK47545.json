@@ -1,0 +1,149 @@
+{
+    "69d045f6098455a254446df6": {
+        "itemTplToClone": "606587252535c57a13424cfd",
+        "parentId": "5447b5f14bdc2d61278b4567",
+        "handbookParentId": "5b5f78fc86f77409407a7f90",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Ergonomics": 54,
+            "RecoilCamera": 0.035,
+            "RecoilForceBack": 326,
+            "RecoilForceUp": 104,
+            "RecolDispersion": 9,
+            "RecoilReturnPathDampingHandRotation": 0.48,
+            "DurabilityBurnRatio": 1.05,
+            "HeatFactorGun": 0.98,
+            "CoolFactorGun": 3.168,
+            "CoolFactorGunMods": 1.015,
+            "HeatFactorByShot": 1.02,
+            "MaxRepairKitDegradation": 0.025,
+            "defAmmo": "56dff3afd2720bba668b4567",
+            "defMagType": "55d480c04bdc2d1d4e8b456a",
+            "CanRequireOnRagfair": false,
+            "CanSellOnRagfair": true,
+            "ammoCaliber": "Caliber545x39",
+            "Slots": [
+                {
+                    "_id": "69d14a525f8c31b7640a9e14",
+                    "_mergeSlotWithChildren": false,
+                    "_name": "mod_reciever",
+                    "_parent": "69d045f6098455a254446df6",
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "69d14a2e5f8c31b7640a9e11"
+                                ],
+                                "Shift": 0
+                            }
+                        ]
+                    },
+                    "_proto": "55d30c4c4bdc2db4468b457e",
+                    "_required": true
+                }
+            ],
+            "Chambers": [
+                {
+                    "_name": "patron_in_weapon",
+                    "_id": "69d0470f5a5c1507397ece51",
+                    "_parent": "69d045f6098455a254446df6",
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "56dff216d2720bbd668b4568",
+                                    "56dff338d2720bbd668b4569",
+                                    "56dff421d2720b5f5a8b4567",
+                                    "56dff4ecd2720b5f5a8b4568",
+                                    "56dff4a2d2720bbd668b456a",
+                                    "56dff0bed2720bb0668b4567",
+                                    "56dff3afd2720bba668b4567",
+                                    "56dff2ced2720bb4668b4567",
+                                    "56dfef82d2720bbd668b4567",
+                                    "56dff061d2720bb5668b4567",
+                                    "56dff026d2720bb8668b4567",
+                                    "5c0d5e4486f77478390952fe",
+                                    "61962b617c6c7b169525f168"
+                                ],
+                                "Shift": 0
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "copySlot": true,
+        "fleaPriceRoubles": 90000,
+        "handbookPriceRoubles": 90000,
+        "locales": {
+            "en": {
+                "name": "CMMG Mk54 Mongrel 5.45x39 assault rifle",
+                "shortName": "Mk54",
+                "description": "American frame, Russian appetite. Tony rebuilt a CMMG Mk54 around a dedicated 5.45x39 upper, matching barrels, and an AK-pattern magazine system. The conversion accepts standard 5.45 AK magazines, but the receiver and barrels are a closed set so nobody can mix the new chamber with the original 7.62 hardware. It runs flatter than the parent rifle, keeps the Mk54 controls and furniture, and still looks like something that should not work until it starts firing."
+            }
+        },
+        "copySlotsInfo": [
+            {
+                "id": "606587252535c57a13424cfd",
+                "newSlotName": "mod_pistol_grip"
+            },
+            {
+                "id": "5644bd2b4bdc2d3b4c8b4572",
+                "newSlotName": "mod_magazine"
+            },
+            {
+                "id": "606587252535c57a13424cfd",
+                "newSlotName": "mod_stock_001"
+            },
+            {
+                "id": "606587252535c57a13424cfd",
+                "newSlotName": "mod_charge"
+            },
+            {
+                "id": "606587252535c57a13424cfd",
+                "newSlotName": "mod_sight_rear"
+            },
+            {
+                "id": "606587252535c57a13424cfd",
+                "newSlotName": "mod_sight_front"
+            }
+        ],
+        "addToTraders": true,
+        "presetTraders": {
+            "tony": {
+                "69d0ae38e19e61619791cd3c": {
+                    "presetId": "69ac22f9c0d45abeb93140bd",
+                    "barterSettings": {
+                        "loyalLevel": 1,
+                        "unlimitedCount": true,
+                        "stackObjectsCount": 999999,
+                        "buyRestrictionMax": 100
+                    },
+                    "barters": [
+                        {
+                            "_tpl": "5449016a4bdc2d6f028b456f",
+                            "count": 75698
+                        }
+                    ]
+                }
+            }
+        },
+        "addToQuestAssorts": true,
+        "questAssorts": [
+            {
+                "traderId": "698f904cd0fa772942d237c7",
+                "questId": "684edc10a8af5086d3e6557b",
+                "assortId": "69d0ae38e19e61619791cd3c",
+                "status": "Success"
+            }
+        ],
+        "addToQuestRewards": false,
+        "questRewards": [
+            {
+                "questId": "684edc10a8af5086d3e6557b",
+                "rewardType": "WeaponPreset",
+                "presetId": "69ac22f9c0d45abeb93140bd"
+            }
+        ]
+    }
+}
