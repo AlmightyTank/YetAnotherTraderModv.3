@@ -1,0 +1,85 @@
+{
+    "cloneOrigin": "637b6179104668754b72f8f5",
+    "id": "6a3fd8c382d8dd83f87b200c",
+    "fleaPrice": 1.8,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": true,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.35,
+    "inheritOriginBuffs": false,
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "ExaminedByDefault": false,
+        "effects_health": {},
+        "effects_damage": {}
+    },
+    "Buffs": [
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Assault",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 180,
+            "Value": 10,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "AimDrills",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 180,
+            "Value": 10,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "StressResistance",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 180,
+            "Value": 10,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 180,
+            "Value": -0.08,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 180,
+            "Value": -0.06,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HandsTremor",
+            "Chance": 1,
+            "Delay": 190,
+            "Duration": 45,
+            "Value": 0,
+            "AbsoluteValue": true
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "RUS Alpha",
+            "shortName": "RUS-A",
+            "description": "Old BEAR network stock, cleaned up for shooters who still know how to work. RUS Alpha sharpens handling, steadies automatic fire, and keeps the mind locked in when rooms get small. The hands shake later, after the compound burns out and the story catches up."
+        }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 1,
+        "price": 89877,
+        "amountForSale": 40,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a2b82bed2999bc7b9bba8c2"
+    }
+}

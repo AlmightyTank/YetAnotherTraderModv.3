@@ -1,0 +1,87 @@
+{
+    "cloneOrigin": "5ed5160a87bb8443d10680b5",
+    "id": "683288ecdf6daf7c654cdb06",
+    "fleaPrice": 145000,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": true,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.35,
+    "inheritOriginBuffs": false,
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "effects_health": {},
+        "effects_damage": {}
+    },
+    "Buffs": [
+        {
+            "BuffType": "DamageModifier",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 900,
+            "Value": -0.1,
+            "AbsoluteValue": false,
+            "SkillName": ""
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 900,
+            "SkillName": "Strength",
+            "Value": 10
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 900,
+            "SkillName": "Endurance",
+            "Value": 20
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "StaminaRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 900,
+            "SkillName": "",
+            "Value": 0.5
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 30,
+            "Duration": 900,
+            "SkillName": "",
+            "Value": -0.1
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 30,
+            "Duration": 900,
+            "SkillName": "",
+            "Value": -0.1
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "Redline injector",
+            "shortName": "Redline",
+            "description": "Redline is for when walking away stopped being enough. Cut from military-grade compounds and whatever still had a label, it keeps the legs moving and the body braced when the raid turns ugly. It buys time. It does not forgive the bill."
+        }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 3,
+        "price": 89000,
+        "amountForSale": 40,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a3210dbd2999bc7b9bbab43"
+    }
+}

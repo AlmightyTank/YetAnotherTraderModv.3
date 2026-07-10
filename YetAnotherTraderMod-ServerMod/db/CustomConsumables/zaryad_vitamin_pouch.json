@@ -1,0 +1,124 @@
+{
+    "cloneOrigin": "60098b1705871270cd5352a1",
+    "id": "683288f7ce990770ae25d0e6",
+    "fleaPrice": 1.6,
+    "handBookPrice": 1.6,
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.25,
+    "MaxResource": 1,
+    "hpResourceRate": 0,
+    "effects_damage": {},
+    "effects_health": {
+        "Hydration": {
+            "value": 55
+        },
+        "Energy": {
+            "value": 10
+        }
+    },
+    "Buffs": [
+        {
+            "AbsoluteValue": true,
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 300,
+            "SkillName": "",
+            "Value": 0.15
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 120,
+            "SkillName": "",
+            "Value": 0.25
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "MaxStamina",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 420,
+            "SkillName": "",
+            "Value": 5
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 420,
+            "SkillName": "Metabolism",
+            "Value": 3
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "Zaryad vitamin pouch",
+            "shortName": "Zaryad",
+            "description": "Fruit syrup, caffeine, dissolved tablets, and just enough vitamins to make the label sound legal. Zaryad goes down fast and wakes the body up like it owes money. Drink it moving; sitting down wastes the effect."
+        }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 2,
+        "price": 18500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a5044aa2373cd1c4e9ba91c"
+    },
+    "craft": {
+        "_id": "68328f86829adffa154af8f3",
+        "areaType": 8,
+        "requirements": [
+            {
+                "areaType": 8,
+                "requiredLevel": 2,
+                "type": "Area"
+            },
+            {
+                "templateId": "5d1b39a386f774252339976f",
+                "type": "Tool"
+            },
+            {
+                "templateId": "5448fee04bdc2dbc018b4567",
+                "count": 2,
+                "isFunctional": false,
+                "isEncoded": false,
+                "type": "Item"
+            },
+            {
+                "templateId": "57513fcc24597720a31c09a6",
+                "count": 2,
+                "isFunctional": false,
+                "isEncoded": false,
+                "type": "Item"
+            },
+            {
+                "templateId": "5af0484c86f7740f02001f7f",
+                "count": 1,
+                "isFunctional": false,
+                "isEncoded": false,
+                "type": "Item"
+            },
+            {
+                "templateId": "5e2af29386f7746d4159f077",
+                "count": 1,
+                "isFunctional": false,
+                "isEncoded": false,
+                "type": "Item"
+            }
+        ],
+        "productionTime": 1800,
+        "needFuelForAllProductionTime": false,
+        "locked": false,
+        "endProduct": "683288f7ce990770ae25d0e6",
+        "continuous": false,
+        "count": 2,
+        "productionLimitCount": 0,
+        "isEncoded": false
+    }
+}

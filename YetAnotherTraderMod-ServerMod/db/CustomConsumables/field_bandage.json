@@ -1,0 +1,66 @@
+{
+    "cloneOrigin": "5751a25924597722c463c472",
+    "id": "6a41373a82d8dd83f87b2045",
+    "fleaPrice": 1.45,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.45,
+    "inheritOriginBuffs": false,
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "MaxHpResource": 8,
+        "ExaminedByDefault": false,
+        "effects_health": {},
+        "effects_damage": {
+            "LightBleeding": {
+                "delay": 0,
+                "duration": 0,
+                "fadeOut": 0
+            }
+        }
+    },
+    "Buffs": [
+        {
+            "BuffType": "HealthRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 20,
+            "Value": 1.0,
+            "AbsoluteValue": true,
+            "SkillName": ""
+        },
+        {
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 20,
+            "Value": -0.01,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 20,
+            "Value": -0.01,
+            "AbsoluteValue": false
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "Field bandage",
+            "shortName": "F-Bandage",
+            "description": "Army surplus bandage, rough repack, clotting compound where it matters. Made for fast pressure wraps when a light bleed tries to become a problem. A good bandage is the difference between pushing the next corner and painting it."
+        }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 1,
+        "price": 9600,
+        "amountForSale": 40,
+        "buyRestrictionMax": 3,
+        "assortmentId": "6a41373a82d8dd83f87b2048"
+    }
+}

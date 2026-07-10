@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
 using SPTarkov.Server.Core.Servers;
@@ -44,25 +46,13 @@ public class YATMConfig
         {
             var type = item.GetType();
 
-            // Try properties.
-            var props = new[] { "Template", "Tpl", "_tpl", "TemplateId" };
-            foreach (var propName in props)
+            // Prefer the canonical serialized key first. This is the value the client sees.
+            foreach (var memberName in new[] { "_tpl", "Tpl", "Template", "TemplateId" })
             {
-                var prop = type.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-                if (prop != null)
+                var value = GetDirectOrExtensionValue(item, type, memberName)?.ToString();
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    return prop.GetValue(item)?.ToString();
-                }
-            }
-
-            // Try fields.
-            var fields = new[] { "Template", "Tpl", "_tpl", "TemplateId" };
-            foreach (var fieldName in fields)
-            {
-                var field = type.GetField(fieldName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-                if (field != null)
-                {
-                    return field.GetValue(item)?.ToString();
+                    return value;
                 }
             }
 
@@ -72,6 +62,45 @@ public class YATMConfig
         {
             return null;
         }
+    }
+
+    private static object? GetDirectOrExtensionValue(object item, Type type, string memberName)
+    {
+        var prop = type.GetProperty(memberName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+        if (prop != null)
+        {
+            var value = prop.GetValue(item);
+            if (value != null)
+            {
+                return value;
+            }
+        }
+
+        var field = type.GetField(memberName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+        if (field != null)
+        {
+            var value = field.GetValue(item);
+            if (value != null)
+            {
+                return value;
+            }
+        }
+
+        var extensionData = type.GetProperty("ExtensionData", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)?.GetValue(item)
+            ?? type.GetField("ExtensionData", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)?.GetValue(item);
+
+        if (extensionData is IDictionary dictionary)
+        {
+            foreach (DictionaryEntry entry in dictionary)
+            {
+                if (entry.Key?.ToString()?.Equals(memberName, StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    return entry.Value;
+                }
+            }
+        }
+
+        return null;
     }
 
     public static string CurrencyToTemplate(string? currency)
@@ -152,7 +181,12 @@ public class YATMConfig
                 var settingsFileHasOldGeneratedTradeSettings =
                     json.Contains("AutoPriceGeneratedOffers", StringComparison.OrdinalIgnoreCase)
                     || json.Contains("GeneratedOffer", StringComparison.OrdinalIgnoreCase)
-                    || json.Contains("GeneratedBarter", StringComparison.OrdinalIgnoreCase);
+                    || json.Contains("GeneratedBarter", StringComparison.OrdinalIgnoreCase)
+                    || json.Contains("MarketRepriceCashOffers", StringComparison.OrdinalIgnoreCase)
+                    || json.Contains("MarketCashPriceBlendMode", StringComparison.OrdinalIgnoreCase)
+                    || json.Contains("MarketWeaponCashPricePercent", StringComparison.OrdinalIgnoreCase)
+                    || json.Contains("MarketArmorCashPricePercent", StringComparison.OrdinalIgnoreCase)
+                    || json.Contains("MarketCashPriceCache", StringComparison.OrdinalIgnoreCase);
 
                 if (settingsFileHasOldGeneratedTradeSettings && !File.Exists(_generatedTradeSettingsPath))
                 {
@@ -263,7 +297,12 @@ public class YATMConfig
             var json = File.ReadAllText(_settingsPath);
             if (!json.Contains("GeneratedOffer", StringComparison.OrdinalIgnoreCase)
                 && !json.Contains("GeneratedBarter", StringComparison.OrdinalIgnoreCase)
-                && !json.Contains("AutoPriceGeneratedOffers", StringComparison.OrdinalIgnoreCase))
+                && !json.Contains("AutoPriceGeneratedOffers", StringComparison.OrdinalIgnoreCase)
+                && !json.Contains("MarketRepriceCashOffers", StringComparison.OrdinalIgnoreCase)
+                && !json.Contains("MarketCashPriceBlendMode", StringComparison.OrdinalIgnoreCase)
+                && !json.Contains("MarketWeaponCashPricePercent", StringComparison.OrdinalIgnoreCase)
+                && !json.Contains("MarketArmorCashPricePercent", StringComparison.OrdinalIgnoreCase)
+                && !json.Contains("MarketCashPriceCache", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
@@ -283,6 +322,24 @@ public class YATMConfig
         GeneratedTrade.GeneratedOfferMaxStackObjectsCount = Math.Max(0, GeneratedTrade.GeneratedOfferMaxStackObjectsCount);
         GeneratedTrade.GeneratedOfferMaxBuyRestrictionMax = Math.Max(0, GeneratedTrade.GeneratedOfferMaxBuyRestrictionMax);
         GeneratedTrade.GeneratedOfferPriceOffsetPercent = Math.Clamp(GeneratedTrade.GeneratedOfferPriceOffsetPercent, 0, 100);
+
+        var normalizedMarketCashPriceBlendMode = NormalizeMarketCashPriceBlendMode(GeneratedTrade.MarketCashPriceBlendMode);
+        if (!string.Equals(GeneratedTrade.MarketCashPriceBlendMode, normalizedMarketCashPriceBlendMode, StringComparison.OrdinalIgnoreCase))
+        {
+            GeneratedTrade.MarketCashPriceBlendMode = normalizedMarketCashPriceBlendMode;
+            changed = true;
+        }
+
+        GeneratedTrade.MarketWeaponCashPricePercent = Math.Clamp(GeneratedTrade.MarketWeaponCashPricePercent, 1, 100);
+        GeneratedTrade.MarketArmorCashPricePercent = Math.Clamp(GeneratedTrade.MarketArmorCashPricePercent, 1, 100);
+
+        if (string.IsNullOrWhiteSpace(GeneratedTrade.MarketCashPriceCachePath)
+            || GeneratedTrade.MarketCashPriceCachePath.Equals("config/customAssort.json", StringComparison.OrdinalIgnoreCase))
+        {
+            GeneratedTrade.MarketCashPriceCachePath = "db/Generated/customAssort.json";
+            changed = true;
+        }
+
         GeneratedTrade.GeneratedPriceExternalFleaGameMode = NormalizeExternalFleaGameMode(GeneratedTrade.GeneratedPriceExternalFleaGameMode);
         GeneratedTrade.GeneratedPriceExternalFleaPriceFilePaths ??= [];
         GeneratedTrade.GeneratedBarterPriceOffsetPercent = Math.Clamp(GeneratedTrade.GeneratedBarterPriceOffsetPercent, 0, 100);
@@ -353,6 +410,12 @@ public class YATMConfig
     private void ApplyGeneratedTradeSettingsToRuntimeSettings()
     {
         Settings.AutoPriceGeneratedOffers = GeneratedTrade.AutoPriceGeneratedOffers;
+        Settings.MarketRepriceCashOffers = GeneratedTrade.MarketRepriceCashOffers;
+        Settings.MarketCashPriceBlendMode = GeneratedTrade.MarketCashPriceBlendMode;
+        Settings.MarketWeaponCashPricePercent = GeneratedTrade.MarketWeaponCashPricePercent;
+        Settings.MarketArmorCashPricePercent = GeneratedTrade.MarketArmorCashPricePercent;
+        Settings.MarketCashPriceCacheEnabled = GeneratedTrade.MarketCashPriceCacheEnabled;
+        Settings.MarketCashPriceCachePath = GeneratedTrade.MarketCashPriceCachePath;
         Settings.GeneratedOfferMaxStackObjectsCount = GeneratedTrade.GeneratedOfferMaxStackObjectsCount;
         Settings.GeneratedOfferMaxBuyRestrictionMax = GeneratedTrade.GeneratedOfferMaxBuyRestrictionMax;
         Settings.GeneratedOfferPriceMode = GeneratedTrade.GeneratedOfferPriceMode;
@@ -385,6 +448,25 @@ public class YATMConfig
         Settings.GeneratedBarterUseWhitelist = GeneratedTrade.GeneratedBarterUseWhitelist;
         Settings.GeneratedBarterWhitelistPath = GeneratedTrade.GeneratedBarterWhitelistPath;
         Settings.GeneratedBarterOutputPath = GeneratedTrade.GeneratedBarterOutputPath;
+    }
+
+    private static string NormalizeMarketCashPriceBlendMode(string? mode)
+    {
+        if (string.IsNullOrWhiteSpace(mode))
+        {
+            return "EqualParts";
+        }
+
+        var normalized = mode.Trim().Replace(" ", string.Empty).Replace("_", string.Empty).Replace("-", string.Empty);
+        return normalized.ToLowerInvariant() switch
+        {
+            "allflea" or "flea" or "fleaonly" => "AllFlea",
+            "heavyflea" or "mostlyflea" or "fleabiased" => "HeavyFlea",
+            "equalparts" or "equal" or "average" or "avg" or "halfandhalf" or "fiftyfifty" => "EqualParts",
+            "alltbp" or "tbp" or "alltraderbestprice" or "traderbestprice" or "alltrader" or "trader" => "AllTBP",
+            "heavytbp" or "mostlytbp" or "tbpbiased" or "heavytraderbestprice" or "heavytrader" => "HeavyTBP",
+            _ => "EqualParts"
+        };
     }
 
     private static string NormalizeGeneratedBarterComponentPriceSource(string? source)
@@ -619,6 +701,7 @@ public class YATMConfig
             priceConfig.AmmoBarterPackTplId = packTpl;
             priceConfig.AmmoBarterPackSize = packSize;
             priceConfig.AmmoBarterPackItemName = packName;
+            priceConfig.PackOfferId = BuildDeterministicAmmoPackOfferId(priceConfig.OfferId, priceConfig.TplId, packTpl);
             priceConfig.BarterSchemeValueBasis = "Pack";
             priceConfig.GeneratedBarterCategoryOverride = "AmmoPack";
             return;
@@ -637,6 +720,19 @@ public class YATMConfig
         {
             priceConfig.GeneratedBarterCategoryOverride = null;
         }
+    }
+
+    private static string? BuildDeterministicAmmoPackOfferId(string? looseOfferId, string? looseTpl, string packTpl)
+    {
+        if (string.IsNullOrWhiteSpace(packTpl))
+        {
+            return null;
+        }
+
+        var input = $"yatm-pack-offer:{looseOfferId ?? string.Empty}:{looseTpl ?? string.Empty}:{packTpl}";
+        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(input));
+        var hex = Convert.ToHexString(bytes).ToLowerInvariant();
+        return hex[..24];
     }
 
     private void SyncPriceConfigsFromAssort(TraderAssort assortJson)
@@ -880,7 +976,8 @@ public class YATMConfig
         ["5c0d668f86f7747ccb7f13b2"] = new("657025dfcfc010a0f5006a3b", 20, "9x39mm SPP gs ammo pack (20 pcs)"),
         ["6a4933e1fb1eff152bd649b4"] = new("6a493587fb1eff152bd649cd", 20, "9x39mm SP-5M gs ammo pack (20 pcs)"),
         ["6a4933e1fb1eff152bd649b5"] = new("6a493587fb1eff152bd649cf", 20, "9x39mm SP-6U gs ammo pack (20 pcs)"),
-        ["6a4933e1fb1eff152bd649ab"] = new("6a4933e1fb1eff152bd649b9", 10, "12.7x55mm PS12V ammo pack (10 pcs)")
+        ["6a4933e1fb1eff152bd649ab"] = new("6a4933e1fb1eff152bd649b9", 10, "12.7x55mm PS12V ammo pack (10 pcs)"),
+        ["5cadf6eeae921500134b2799"] = new("648983d6b5a2df1c815a04ec", 10, "12.7x55mm PS12B ammo pack (10 pcs)")
     };
 
     private static object? GetMemberValue(object? target, string memberName)
@@ -1130,8 +1227,8 @@ public class YATMConfig
             target.AutoGeneratedBarter = true;
         }
 
-        // New ammo barter mode keeps the loose ammo OfferId and swaps _tpl to the pack when barter wins.
-        // Do not merge old PackOfferId metadata from generated barter cache rows.
+        // Separate ammo barter mode derives PackOfferId at runtime from the loose offer + pack tpl.
+        // Do not trust old saved PackOfferId metadata from generated barter cache rows.
         target.PackOfferId = null;
 
         if (string.IsNullOrWhiteSpace(target.AmmoBarterPackTplId))
@@ -1152,13 +1249,23 @@ public class YATMConfig
         HydrateRuntimeAmmoPackMetadata(target);
     }
 
+    public string ResolvePathFromModRoot(string? relativeOrAbsolutePath, string fallbackRelativePath)
+    {
+        var path = string.IsNullOrWhiteSpace(relativeOrAbsolutePath)
+            ? fallbackRelativePath
+            : relativeOrAbsolutePath.Trim();
+
+        if (Path.IsPathRooted(path))
+        {
+            return path;
+        }
+
+        return Path.Combine(_modPath, path.Replace('/', Path.DirectorySeparatorChar));
+    }
+
     private string ResolveGeneratedBarterOutputPath()
     {
-        var relativePath = string.IsNullOrWhiteSpace(Settings.GeneratedBarterOutputPath)
-            ? "db/Generated/generated_barters.jsonc"
-            : Settings.GeneratedBarterOutputPath;
-
-        return Path.Combine(_modPath, relativePath.Replace('/', Path.DirectorySeparatorChar));
+        return ResolvePathFromModRoot(Settings.GeneratedBarterOutputPath, "db/Generated/generated_barters.jsonc");
     }
 
     private static void SaveJson<T>(string path, T data)

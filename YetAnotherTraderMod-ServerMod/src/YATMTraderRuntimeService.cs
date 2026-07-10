@@ -1,6 +1,7 @@
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Helpers;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
+using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Spt.Config;
 using SPTarkov.Server.Core.Routers;
 using SPTarkov.Server.Core.Servers;
@@ -49,18 +50,22 @@ public sealed class YATMTraderRuntimeService(
     private static bool _loggedUpdateHookActive;
     private static bool _traderAddedToDb;
     private static bool _questsLoaded;
+    private static List<PriceConfigItem> _startupMarketPricedPrices = [];
+    private static bool _startupMarketPricedPricesReady;
 
     // Simple restock pipeline:
-    // 1) OnLoad and OnUpdate both start from a fresh clean db/CustomTrader/Tony/assort.json read.
-    // 2) Offer IDs are never changed.
-    // 3) Payment roll finishes first. This is the only place that decides cash/barter.
-    //    Ammo keeps the loose OfferId. Cash sells loose ammo; barter swaps _tpl to the pack.
-    // 4) Stock roll starts only after paymentRollResult.Completed is true.
-    // 5) Stock roll only changes stock values and ammo pack limits. It never decides payment state.
-    // 6) Offer IDs are never changed. Standalone ammo-pack helper offers are removed; the loose offer swaps in-place.
-    // 7) If PreventBarterOffersOutOfStock is true, the stock roll excludes offers that became barter.
-    // 8) RerollAssortOnRestock controls only the OnUpdate/restock reroll side; startup still rolls normally.
-    // 9) The first IOnUpdate call after startup is ignored so the update hook cannot immediately reroll after OnLoad.
+    // 1) OnLoad builds the final market-priced PriceConfig table once after custom/addon content is merged.
+    // 2) OnUpdate/restock starts from a fresh clean db/CustomTrader/Tony/assort.json read plus generated addon offers.
+    // 3) Restock reuses the startup market-priced PriceConfig snapshot; it does not market-price or multiply again.
+    // 4) Offer IDs are never changed.
+    // 5) Payment roll finishes first. This is the only place that decides cash/barter.
+    //    Ammo cash uses the loose OfferId. Ammo barter uses a separate deterministic pack OfferId.
+    // 6) Stock roll starts only after paymentRollResult.Completed is true.
+    // 7) Stock roll only changes stock values and ammo pack limits. It never decides payment state.
+    // 8) Loose/pack ammo offer IDs are stable. Only the active one is visible in the current assort.
+    // 9) If PreventBarterOffersOutOfStock is true, the stock roll excludes offers that became barter.
+    // 10) RerollAssortOnRestock controls only the OnUpdate/restock reroll side; startup still rolls normally.
+    // 11) The first IOnUpdate call after startup is ignored so the update hook cannot immediately reroll after OnLoad.
 
     public async Task OnLoad()
     {
@@ -119,6 +124,10 @@ public sealed class YATMTraderRuntimeService(
             YATMLogger.LogDebug($"  UnlimitedStock: {config.Settings.UnlimitedStock}");
             YATMLogger.LogDebug($"  RandomizeStock: {config.Settings.RandomizeStockAvailable} (Chance: {config.Settings.OutOfStockChance}%)");
             YATMLogger.LogDebug($"  PriceMultiplier: {config.Settings.PriceMultiplier}");
+            YATMLogger.LogDebug($"  MarketRepriceCashOffers: {config.Settings.MarketRepriceCashOffers}");
+            YATMLogger.LogDebug($"  MarketCashPriceBlendMode: {config.Settings.MarketCashPriceBlendMode}");
+            YATMLogger.LogDebug($"  MarketWeaponCashPricePercent: {config.Settings.MarketWeaponCashPricePercent}%");
+            YATMLogger.LogDebug($"  MarketArmorCashPricePercent: {config.Settings.MarketArmorCashPricePercent}%");
             YATMLogger.LogDebug($"  RandomizeCashBarterOffers: {GetBoolSetting(config.Settings, "RandomizeCashBarterOffers", true)}");
             YATMLogger.LogDebug($"  CashOfferPercent: {GetIntSetting(config.Settings, "CashOfferPercent", 85)}");
             YATMLogger.LogDebug($"  ForceCashOnly: {config.Settings.CashOffersOnly}");
@@ -216,8 +225,14 @@ public sealed class YATMTraderRuntimeService(
         traderBase.ItemsBuyProhibited ??= new() { Category = [], IdList = [] };
         traderBase.ItemsSell ??= [];
 
-        assortRuntimeRollService.ApplyRuntimeAssortRolls(assort, config, "Startup");
-        assortRuntimeRollService.ApplyPriceMultiplierToMoneyComponents(assort, config);
+        assortRuntimeRollService.ApplyRuntimeAssortRolls(
+            assort,
+            config,
+            "Startup",
+            refreshMarketPrices: true,
+            applyConfiguredPriceMultiplier: true);
+
+        CaptureStartupMarketPricedPrices(config);
 
         var avatarRoute = traderBase.Avatar ?? string.Empty;
         avatarRoute = avatarRoute.Replace(".png", "").Replace(".jpg", "").Replace(".jpeg", "");
@@ -250,7 +265,7 @@ public sealed class YATMTraderRuntimeService(
         // This is intentionally inside the trader runtime instead of a separate IOnLoad so the order is guaranteed.
         await LoadQuestsAfterTraderExists(Assembly.GetExecutingAssembly(), pathToMod);
 
-        // Ammo pack barter uses the same OfferId as the loose ammo offer, so questassort does not need patching.
+        PatchAmmoPackQuestAssortAndVisibleRewards(config, assort, "Startup");
 
         _lastSeenNextResupply = traderBase.NextResupply;
         _lastRestockPollUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -356,6 +371,80 @@ public sealed class YATMTraderRuntimeService(
         }
     }
 
+    private static void CaptureStartupMarketPricedPrices(YATMConfig config)
+    {
+        _startupMarketPricedPrices = ClonePriceConfigItems(config.Prices, stripAutoGeneratedBarters: true);
+        _startupMarketPricedPricesReady = _startupMarketPricedPrices.Count > 0;
+
+        if (_startupMarketPricedPricesReady)
+        {
+            YATMLogger.Log($"[Pricing] Captured startup market-priced config snapshot for {_startupMarketPricedPrices.Count} offer row(s). Restocks will reuse this and only reroll barter/stock.");
+        }
+    }
+
+    private static void RestoreStartupMarketPricedPrices(YATMConfig config)
+    {
+        config.Prices.Clear();
+        config.Prices.AddRange(ClonePriceConfigItems(_startupMarketPricedPrices));
+
+        YATMLogger.LogDebug($"[Restock] Restored startup market-priced config snapshot for {config.Prices.Count} offer row(s). Skipping market pricing and PriceMultiplier.");
+    }
+
+    private static List<PriceConfigItem> ClonePriceConfigItems(
+        IEnumerable<PriceConfigItem> source,
+        bool stripAutoGeneratedBarters = false)
+    {
+        return source
+            .Where(x => x != null)
+            .Select(x => ClonePriceConfigItem(x, stripAutoGeneratedBarters))
+            .ToList();
+    }
+
+    private static PriceConfigItem ClonePriceConfigItem(PriceConfigItem source, bool stripAutoGeneratedBarters = false)
+    {
+        var keepBarterScheme = !(stripAutoGeneratedBarters && source.AutoGeneratedBarter);
+
+        return new PriceConfigItem
+        {
+            OfferId = source.OfferId,
+            PackOfferId = source.PackOfferId,
+            TplId = source.TplId,
+            ItemName = source.ItemName,
+            Price = source.Price,
+            Currency = source.Currency,
+            CashOnly = source.CashOnly,
+            AlwaysBarter = source.AlwaysBarter,
+            AlwaysInStock = source.AlwaysInStock,
+            BarterScheme = keepBarterScheme ? ClonePaymentScheme(source.BarterScheme) : null,
+            AmmoBarterPackTplId = source.AmmoBarterPackTplId,
+            AmmoBarterPackItemName = source.AmmoBarterPackItemName,
+            AmmoBarterPackSize = source.AmmoBarterPackSize,
+            BarterSchemeValueBasis = source.BarterSchemeValueBasis,
+            GeneratedBarterCategoryOverride = source.GeneratedBarterCategoryOverride,
+            AutoGeneratedBarter = keepBarterScheme && source.AutoGeneratedBarter
+        };
+    }
+
+    private static List<List<PaymentConfigItem>>? ClonePaymentScheme(List<List<PaymentConfigItem>>? source)
+    {
+        if (source == null)
+        {
+            return null;
+        }
+
+        return source
+            .Select(option => option
+                .Where(x => x != null)
+                .Select(x => new PaymentConfigItem
+                {
+                    TplId = x.TplId,
+                    ItemName = x.ItemName,
+                    Count = x.Count
+                })
+                .ToList())
+            .ToList();
+    }
+
     private Task RerollTraderAssortFromDisk(Trader traderData)
     {
         var cleanBase = modHelper.GetJsonDataFromFile<TraderBase>(_pathToMod, "db/CustomTrader/Tony/base.json");
@@ -382,14 +471,33 @@ public sealed class YATMTraderRuntimeService(
 
         YATMLogger.IsDebugEnabled = config.Settings.DebugLogging;
 
-        assortRuntimeRollService.ApplyRuntimeAssortRolls(cleanAssort, config, "Restock");
-        assortRuntimeRollService.ApplyPriceMultiplierToMoneyComponents(cleanAssort, config);
+        if (_startupMarketPricedPricesReady)
+        {
+            RestoreStartupMarketPricedPrices(config);
+        }
+        else
+        {
+            // Defensive fallback. This should only happen if the restock hook fires before startup
+            // completed the price snapshot. In normal use, restock does no market lookup.
+            YATMLogger.Log("[Restock] Startup market-priced config snapshot was not ready; running one fallback market-pricing pass.");
+        }
+
+        assortRuntimeRollService.ApplyRuntimeAssortRolls(
+            cleanAssort,
+            config,
+            "Restock",
+            refreshMarketPrices: !_startupMarketPricedPricesReady,
+            applyConfiguredPriceMultiplier: !_startupMarketPricedPricesReady);
+
+        if (!_startupMarketPricedPricesReady)
+        {
+            CaptureStartupMarketPricedPrices(config);
+        }
 
         ReplaceLiveAssortInPlace(traderData, cleanAssort);
+        PatchAmmoPackQuestAssortAndVisibleRewards(config, cleanAssort, "Restock");
 
-        // Ammo pack barter uses the same OfferId as the loose ammo offer, so questassort does not need patching.
-
-        YATMLogger.Log("[Restock] Rerolled Tony payment split, stock availability, generated addon offers, and ammo pack in-place swaps.");
+        YATMLogger.Log("[Restock] Rerolled Tony payment split, stock availability, generated addon offers, and separate loose/pack ammo offers.");
         return Task.CompletedTask;
     }
 
@@ -545,16 +653,56 @@ public sealed class YATMTraderRuntimeService(
     private static void SetExtensionDataValue(object target, string key, object? value)
     {
         var extensionData = GetMemberValue(target, "ExtensionData");
+        var convertedValue = ConvertJsonLikeIdValue(key, value);
+
         if (extensionData is IDictionary<string, object?> stringObjectDictionary)
         {
-            stringObjectDictionary[key] = value;
+            stringObjectDictionary[key] = convertedValue;
             return;
         }
 
         if (extensionData is IDictionary dictionary)
         {
-            dictionary[key] = value;
+            dictionary[key] = convertedValue;
         }
+    }
+
+    private static object? ConvertJsonLikeIdValue(string memberName, object? value)
+    {
+        if (value is not string text || string.IsNullOrWhiteSpace(text))
+        {
+            return value;
+        }
+
+        // Root/quest/reward ids and template ids should be MongoId in SPT runtime objects.
+        // Non-Mongo values like parentId="hideout" and slotId="hideout" stay strings because
+        // TryCreateMongoIdLikeValue rejects non-24-hex values.
+        if (!IsJsonLikeIdMember(memberName))
+        {
+            return value;
+        }
+
+        return TryCreateMongoIdLikeValue(typeof(MongoId), text, out var mongoIdValue)
+            ? mongoIdValue
+            : value;
+    }
+
+    private static bool IsJsonLikeIdMember(string memberName)
+    {
+        return memberName.Equals("_id", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("id", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("Id", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("_tpl", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("tpl", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("Tpl", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("Template", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("TemplateId", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("parentId", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("ParentId", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("target", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("Target", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("traderId", StringComparison.OrdinalIgnoreCase)
+            || memberName.Equals("TraderId", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool TryConvertValueForMember(object? value, Type memberType, out object? convertedValue)
@@ -671,6 +819,25 @@ public sealed class YATMTraderRuntimeService(
     {
         convertedValue = null;
 
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        if (targetType == typeof(MongoId))
+        {
+            try
+            {
+                convertedValue = new MongoId(value);
+                return true;
+            }
+            catch
+            {
+                convertedValue = null;
+                return false;
+            }
+        }
+
         try
         {
             convertedValue = Activator.CreateInstance(targetType, value);
@@ -710,6 +877,599 @@ public sealed class YATMTraderRuntimeService(
         return false;
     }
 
+
+    private sealed record AmmoPackQuestDisplayMapping(
+        string LooseOfferId,
+        string PackOfferId,
+        string LooseTpl,
+        string PackTpl,
+        string ActiveOfferId,
+        string ActiveTpl);
+
+    private void PatchAmmoPackQuestAssortAndVisibleRewards(YATMConfig config, TraderAssort activeAssort, string reason)
+    {
+        var mappings = BuildAmmoPackQuestDisplayMappings(config, activeAssort);
+        if (mappings.Count == 0)
+        {
+            return;
+        }
+
+        var patchedQuestAssortEntries = PatchTraderQuestAssortForAmmoPacks(mappings);
+        var patchedVisibleRewards = PatchVisibleAmmoPackAssortmentUnlockRewards(mappings);
+
+        if (patchedQuestAssortEntries > 0 || patchedVisibleRewards > 0)
+        {
+            YATMLogger.LogDebug($"[{reason}] [QuestAssort] Patched ammo loose/pack unlock data: {patchedQuestAssortEntries} questAssort entrie(s), {patchedVisibleRewards} visible reward item(s).");
+        }
+    }
+
+    private static List<AmmoPackQuestDisplayMapping> BuildAmmoPackQuestDisplayMappings(YATMConfig config, TraderAssort activeAssort)
+    {
+        var activeRootOfferIds = activeAssort.Items
+            .Where(x => x.ParentId == "hideout" && !string.IsNullOrWhiteSpace(x.Id.ToString()))
+            .Select(x => x.Id!.ToString())
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var mappings = new List<AmmoPackQuestDisplayMapping>();
+
+        foreach (var priceConfig in config.Prices)
+        {
+            if (string.IsNullOrWhiteSpace(priceConfig.OfferId)
+                || string.IsNullOrWhiteSpace(priceConfig.PackOfferId)
+                || string.IsNullOrWhiteSpace(priceConfig.TplId)
+                || string.IsNullOrWhiteSpace(priceConfig.AmmoBarterPackTplId))
+            {
+                continue;
+            }
+
+            var packIsActive = activeRootOfferIds.Contains(priceConfig.PackOfferId!);
+            var activeOfferId = packIsActive ? priceConfig.PackOfferId! : priceConfig.OfferId!;
+            var activeTpl = packIsActive ? priceConfig.AmmoBarterPackTplId! : priceConfig.TplId;
+
+            mappings.Add(new AmmoPackQuestDisplayMapping(
+                priceConfig.OfferId!,
+                priceConfig.PackOfferId!,
+                priceConfig.TplId,
+                priceConfig.AmmoBarterPackTplId!,
+                activeOfferId,
+                activeTpl));
+        }
+
+        return mappings;
+    }
+
+    private int PatchTraderQuestAssortForAmmoPacks(IReadOnlyList<AmmoPackQuestDisplayMapping> mappings)
+    {
+        var tables = databaseServer.GetTables();
+        if (!tables.Traders.TryGetValue(_runtimeTraderId, out var traderData) || traderData.QuestAssort == null)
+        {
+            return 0;
+        }
+
+        var patched = 0;
+        foreach (var phaseName in new[] { "Started", "Success", "Fail", "started", "success", "fail" })
+        {
+            var phaseDictionary = GetMemberValue(traderData.QuestAssort, phaseName);
+            if (phaseDictionary is not IDictionary dictionary)
+            {
+                continue;
+            }
+
+            foreach (var mapping in mappings)
+            {
+                var questId = TryGetDictionaryStringValue(dictionary, mapping.LooseOfferId)
+                    ?? TryGetDictionaryStringValue(dictionary, mapping.PackOfferId);
+
+                if (string.IsNullOrWhiteSpace(questId))
+                {
+                    continue;
+                }
+
+                if (SetDictionaryStringValueIfChanged(dictionary, mapping.LooseOfferId, questId!))
+                {
+                    patched++;
+                }
+
+                if (SetDictionaryStringValueIfChanged(dictionary, mapping.PackOfferId, questId!))
+                {
+                    patched++;
+                }
+            }
+        }
+
+        return patched;
+    }
+
+    private int PatchVisibleAmmoPackAssortmentUnlockRewards(IReadOnlyList<AmmoPackQuestDisplayMapping> mappings)
+    {
+        var tables = databaseServer.GetTables();
+        var quests = GetPath(tables, "Templates.Quests")
+            ?? GetMemberValue(tables, "Quests")
+            ?? GetMemberValue(tables, "quests");
+
+        if (quests == null)
+        {
+            return 0;
+        }
+
+        var mappingByOfferId = mappings
+            .SelectMany(x => new[]
+            {
+                new KeyValuePair<string, AmmoPackQuestDisplayMapping>(x.LooseOfferId, x),
+                new KeyValuePair<string, AmmoPackQuestDisplayMapping>(x.PackOfferId, x)
+            })
+            .GroupBy(x => x.Key, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(x => x.Key, x => x.First().Value, StringComparer.OrdinalIgnoreCase);
+
+        var patched = 0;
+        foreach (var quest in EnumerateDictionaryValuesOrEnumerable(quests))
+        {
+            var rewards = GetMemberValue(quest, "Rewards") ?? GetMemberValue(quest, "rewards");
+            if (rewards == null)
+            {
+                continue;
+            }
+
+            foreach (var reward in EnumerateRewardObjects(rewards))
+            {
+                if (!IsTonyAssortmentUnlockReward(reward))
+                {
+                    continue;
+                }
+
+                var target = GetStringMember(reward, "Target") ?? GetStringMember(reward, "target");
+                AmmoPackQuestDisplayMapping? mapping = null;
+
+                if (!string.IsNullOrWhiteSpace(target))
+                {
+                    mappingByOfferId.TryGetValue(target!, out mapping);
+                }
+
+                var items = GetMemberValue(reward, "Items") ?? GetMemberValue(reward, "items");
+                if (items is IEnumerable itemEnumerable && items is not string)
+                {
+                    foreach (var item in itemEnumerable)
+                    {
+                        var itemId = GetStringMember(item, "Id") ?? GetStringMember(item, "_id") ?? GetStringMember(item, "id");
+                        if (!string.IsNullOrWhiteSpace(itemId) && mappingByOfferId.TryGetValue(itemId!, out var itemMapping))
+                        {
+                            mapping ??= itemMapping;
+                        }
+                    }
+                }
+
+                if (mapping == null)
+                {
+                    continue;
+                }
+
+                if (SetJsonLikeMemberIfChanged(reward, "Target", mapping.ActiveOfferId)
+                    | SetJsonLikeMemberIfChanged(reward, "target", mapping.ActiveOfferId))
+                {
+                    patched++;
+                }
+
+                if (items is IEnumerable rewardItems && items is not string)
+                {
+                    foreach (var item in rewardItems)
+                    {
+                        var itemId = GetStringMember(item, "Id") ?? GetStringMember(item, "_id") ?? GetStringMember(item, "id");
+                        if (string.IsNullOrWhiteSpace(itemId) || !mappingByOfferId.ContainsKey(itemId!))
+                        {
+                            continue;
+                        }
+
+                        var changed = false;
+                        changed |= SetJsonLikeMemberIfChanged(item, "Id", mapping.ActiveOfferId);
+                        changed |= SetJsonLikeMemberIfChanged(item, "_id", mapping.ActiveOfferId);
+                        changed |= SetJsonLikeMemberIfChanged(item, "id", mapping.ActiveOfferId);
+                        changed |= SetJsonLikeMemberIfChanged(item, "_tpl", mapping.ActiveTpl);
+                        changed |= SetJsonLikeMemberIfChanged(item, "Tpl", mapping.ActiveTpl);
+                        changed |= SetJsonLikeMemberIfChanged(item, "tpl", mapping.ActiveTpl);
+                        changed |= SetJsonLikeMemberIfChanged(item, "Template", mapping.ActiveTpl);
+                        changed |= SetJsonLikeMemberIfChanged(item, "TemplateId", mapping.ActiveTpl);
+
+                        if (changed)
+                        {
+                            patched++;
+                        }
+                    }
+                }
+            }
+        }
+
+        return patched;
+    }
+
+    private static bool IsTonyAssortmentUnlockReward(object reward)
+    {
+        var rewardType = GetStringMember(reward, "Type") ?? GetStringMember(reward, "type");
+        if (!string.Equals(rewardType, "AssortmentUnlock", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        var traderId = GetStringMember(reward, "TraderId") ?? GetStringMember(reward, "traderId");
+        return string.Equals(traderId, _runtimeTraderId, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static IEnumerable<object> EnumerateRewardObjects(object rewards)
+    {
+        if (rewards is IDictionary dictionary)
+        {
+            foreach (DictionaryEntry entry in dictionary)
+            {
+                if (entry.Value is IEnumerable list && entry.Value is not string)
+                {
+                    foreach (var reward in list)
+                    {
+                        if (reward != null)
+                        {
+                            yield return reward;
+                        }
+                    }
+                }
+            }
+
+            yield break;
+        }
+
+        foreach (var phaseName in new[] { "Started", "Success", "Fail", "started", "success", "fail" })
+        {
+            var phase = GetMemberValue(rewards, phaseName);
+            if (phase is not IEnumerable list || phase is string)
+            {
+                continue;
+            }
+
+            foreach (var reward in list)
+            {
+                if (reward != null)
+                {
+                    yield return reward;
+                }
+            }
+        }
+    }
+
+    private static IEnumerable<object> EnumerateDictionaryValuesOrEnumerable(object value)
+    {
+        if (value is IDictionary dictionary)
+        {
+            foreach (DictionaryEntry entry in dictionary)
+            {
+                if (entry.Value != null)
+                {
+                    yield return entry.Value;
+                }
+            }
+
+            yield break;
+        }
+
+        if (value is IEnumerable enumerable && value is not string)
+        {
+            foreach (var entry in enumerable)
+            {
+                if (entry != null)
+                {
+                    yield return entry;
+                }
+            }
+        }
+    }
+
+    private static string? TryGetDictionaryStringValue(IDictionary dictionary, string key)
+    {
+        foreach (DictionaryEntry entry in dictionary)
+        {
+            if (entry.Key?.ToString()?.Equals(key, StringComparison.OrdinalIgnoreCase) == true)
+            {
+                return entry.Value?.ToString();
+            }
+        }
+
+        return null;
+    }
+
+    private static bool SetDictionaryStringValueIfChanged(IDictionary dictionary, string key, string value)
+    {
+        object? existingKey = null;
+        object? existingValue = null;
+        var found = false;
+
+        foreach (DictionaryEntry entry in dictionary)
+        {
+            if (entry.Key?.ToString()?.Equals(key, StringComparison.OrdinalIgnoreCase) == true)
+            {
+                existingKey = entry.Key;
+                existingValue = entry.Value;
+                found = true;
+                break;
+            }
+        }
+
+        if (found && string.Equals(existingValue?.ToString(), value, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        var runtimeKey = existingKey ?? CreateDictionaryKeyForString(dictionary, key);
+        if (runtimeKey == null)
+        {
+            YATMLogger.Log($"[QuestAssort] Warning: could not convert questAssort key '{key}' to dictionary key type. Patch skipped.");
+            return false;
+        }
+
+        var runtimeValue = CreateDictionaryValueForString(dictionary, value, existingValue);
+        if (runtimeValue == null && GetDictionaryValueType(dictionary) is { IsValueType: true })
+        {
+            YATMLogger.Log($"[QuestAssort] Warning: could not convert questAssort value '{value}' to dictionary value type. Patch skipped.");
+            return false;
+        }
+
+        var finalValue = runtimeValue ?? value;
+        try
+        {
+            dictionary[runtimeKey] = finalValue;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            YATMLogger.Log($"[QuestAssort] Warning: failed to set questAssort entry '{key}' -> '{value}' using key type {runtimeKey.GetType().FullName}: {ex.Message}");
+            return false;
+        }
+    }
+
+    private static object? CreateDictionaryKeyForString(IDictionary dictionary, string key)
+    {
+        // SPT questAssort dictionaries may be surfaced through non-generic IDictionary,
+        // but the actual runtime key can still be MongoId. Prefer live entry key type.
+        var keyType = GetFirstDictionaryKeyType(dictionary)
+            ?? GetDictionaryKeyType(dictionary);
+
+        if (keyType == typeof(string))
+        {
+            return key;
+        }
+
+        if (keyType == null || keyType == typeof(object))
+        {
+            return TryCreateMongoIdLikeValue(typeof(MongoId), key, out var mongoIdKey)
+                ? mongoIdKey
+                : key;
+        }
+
+        if (keyType.IsInstanceOfType(key))
+        {
+            return key;
+        }
+
+        if (IsMongoIdLikeType(keyType) && TryCreateMongoIdLikeValue(keyType, key, out var mongoIdLikeKey))
+        {
+            return mongoIdLikeKey;
+        }
+
+        if (TryConvertValueForMember(key, keyType, out var convertedKey) && convertedKey != null)
+        {
+            return convertedKey;
+        }
+
+        try
+        {
+            return Activator.CreateInstance(keyType, new object[] { key });
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static object? CreateDictionaryValueForString(IDictionary dictionary, string value, object? existingValue = null)
+    {
+        var valueType = existingValue?.GetType();
+        if (valueType == null || valueType == typeof(object) || valueType == typeof(string))
+        {
+            valueType = GetFirstDictionaryValueType(dictionary)
+                ?? GetDictionaryValueType(dictionary);
+        }
+
+        if (valueType == typeof(string))
+        {
+            return value;
+        }
+
+        if (valueType == null || valueType == typeof(object))
+        {
+            return TryCreateMongoIdLikeValue(typeof(MongoId), value, out var mongoIdValue)
+                ? mongoIdValue
+                : value;
+        }
+
+        if (valueType.IsInstanceOfType(value))
+        {
+            return value;
+        }
+
+        if (IsMongoIdLikeType(valueType) && TryCreateMongoIdLikeValue(valueType, value, out var mongoIdLikeValue))
+        {
+            return mongoIdLikeValue;
+        }
+
+        if (TryConvertValueForMember(value, valueType, out var convertedValue) && convertedValue != null)
+        {
+            return convertedValue;
+        }
+
+        try
+        {
+            return Activator.CreateInstance(valueType, new object[] { value });
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static Type? GetFirstDictionaryKeyType(IDictionary dictionary)
+    {
+        foreach (DictionaryEntry entry in dictionary)
+        {
+            if (entry.Key != null)
+            {
+                return entry.Key.GetType();
+            }
+        }
+
+        return null;
+    }
+
+    private static Type? GetFirstDictionaryValueType(IDictionary dictionary)
+    {
+        foreach (DictionaryEntry entry in dictionary)
+        {
+            if (entry.Value != null)
+            {
+                return entry.Value.GetType();
+            }
+        }
+
+        return null;
+    }
+
+    private static Type? GetDictionaryKeyType(IDictionary dictionary)
+    {
+        var type = dictionary.GetType();
+
+        if (type.IsGenericType)
+        {
+            var genericArgs = type.GetGenericArguments();
+            if (genericArgs.Length == 2 && typeof(IDictionary).IsAssignableFrom(type))
+            {
+                return genericArgs[0];
+            }
+        }
+
+        return type
+            .GetInterfaces()
+            .Concat(new[] { type })
+            .Where(x => x.IsGenericType)
+            .FirstOrDefault(x => x.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+            ?.GetGenericArguments()[0];
+    }
+
+    private static Type? GetDictionaryValueType(IDictionary dictionary)
+    {
+        var type = dictionary.GetType();
+
+        if (type.IsGenericType)
+        {
+            var genericArgs = type.GetGenericArguments();
+            if (genericArgs.Length == 2 && typeof(IDictionary).IsAssignableFrom(type))
+            {
+                return genericArgs[1];
+            }
+        }
+
+        return type
+            .GetInterfaces()
+            .Concat(new[] { type })
+            .Where(x => x.IsGenericType)
+            .FirstOrDefault(x => x.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+            ?.GetGenericArguments()[1];
+    }
+
+    private static object? GetPath(object? root, string path)
+    {
+        var current = root;
+        foreach (var part in path.Split('.', StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (current == null)
+            {
+                return null;
+            }
+
+            current = GetMemberValue(current, part);
+        }
+
+        return current;
+    }
+
+    private static bool SetJsonLikeMemberIfChanged(object target, string memberName, string value)
+    {
+        var currentObject = GetMemberValue(target, memberName);
+        var current = currentObject?.ToString();
+        var convertedValue = ConvertJsonLikeIdValue(memberName, value);
+
+        if (string.Equals(current, value, StringComparison.OrdinalIgnoreCase))
+        {
+            // Even when the text matches, normalize id-like values into MongoId for runtime SPT objects.
+            if (currentObject is string && convertedValue is MongoId)
+            {
+                TrySetMemberValue(target, memberName, convertedValue);
+                SetExtensionDataValue(target, memberName, convertedValue);
+                return true;
+            }
+
+            return false;
+        }
+
+        if (TrySetMemberValue(target, memberName, convertedValue))
+        {
+            SetExtensionDataValue(target, memberName, convertedValue);
+            return true;
+        }
+
+        if (target is IDictionary dictionary)
+        {
+            object? actualKey = null;
+            foreach (DictionaryEntry entry in dictionary)
+            {
+                if (entry.Key?.ToString()?.Equals(memberName, StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    actualKey = entry.Key;
+                    break;
+                }
+            }
+
+            dictionary[actualKey ?? memberName] = ConvertJsonLikeIdValue(memberName, value);
+            return true;
+        }
+
+        SetExtensionDataValue(target, memberName, convertedValue);
+        return true;
+    }
+
+    private static bool TrySetMemberValue(object target, string memberName, object? value)
+    {
+        var type = target.GetType();
+
+        var prop = type.GetProperty(memberName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+        if (prop != null && prop.CanWrite)
+        {
+            if (!TryConvertValueForMember(value, prop.PropertyType, out var convertedValue))
+            {
+                return false;
+            }
+
+            prop.SetValue(target, convertedValue);
+            return true;
+        }
+
+        var field = type.GetField(memberName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+        if (field != null)
+        {
+            if (!TryConvertValueForMember(value, field.FieldType, out var convertedValue))
+            {
+                return false;
+            }
+
+            field.SetValue(target, convertedValue);
+            return true;
+        }
+
+        return false;
+    }
 
     private async Task LoadQuestsAfterTraderExists(Assembly assembly, string modPath)
     {

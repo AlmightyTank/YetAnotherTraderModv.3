@@ -1,0 +1,104 @@
+{
+    "cloneOrigin": "5ed51652f6c34d2cc26336a1",
+    "id": "6a3fd8c382d8dd83f87b2010",
+    "fleaPrice": -0.45,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.25,
+    "inheritOriginBuffs": false,
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "ExaminedByDefault": false,
+        "effects_health": {},
+        "effects_damage": {}
+    },
+    "Buffs": [
+        {
+            "AbsoluteValue": false,
+            "BuffType": "WeightLimit",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "SkillName": "",
+            "Value": 0.25
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "HealthRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "SkillName": "",
+            "Value": -0.05
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Strength",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": 5,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Endurance",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": 5,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": -0.05,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": -0.05,
+            "AbsoluteValue": false
+        },
+        {
+            "AbsoluteValue": false,
+            "BuffType": "MaxStamina",
+            "Chance": 0.75,
+            "Delay": 610,
+            "Duration": 180,
+            "SkillName": "",
+            "Value": -0.08
+        },
+        {
+            "AbsoluteValue": false,
+            "BuffType": "StaminaRate",
+            "Chance": 0.75,
+            "Delay": 610,
+            "Duration": 180,
+            "SkillName": "",
+            "Value": -0.08
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "MULE-Lite field carrier",
+            "shortName": "MULE-L",
+            "description": "Full M.U.L.E. hits like a debt collector. MULE-Lite is the softer answer for moving heavy gear without snapping the body in half. It gives you carry strength and output for a few good minutes, then collects payment from your stamina."
+        }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 3,
+        "price": 41000,
+        "amountForSale": 40,
+        "buyRestrictionMax": 4,
+        "assortmentId": "6a2b83fcd2999bc7b9bba8c4"
+    }
+}

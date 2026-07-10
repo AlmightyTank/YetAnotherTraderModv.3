@@ -1,0 +1,92 @@
+{
+    "cloneOrigin": "637b612fb7afa97bfc3d7005",
+    "id": "6a3fd8c382d8dd83f87b2014",
+    "fleaPrice": -0.0,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": true,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.45,
+    "inheritOriginBuffs": false,
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "ExaminedByDefault": false,
+        "effects_health": {},
+        "effects_damage": {}
+    },
+    "Buffs": [
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Perception",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": 0.24,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Attention",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": 0.08,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "BodyTemperature",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": -0.035,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": 0.04,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 600,
+            "Value": 0.04,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "BodyTemperature",
+            "Chance": 1,
+            "Delay": 606,
+            "Duration": 300,
+            "Value": 0.05,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HandsTremor",
+            "Chance": 1,
+            "Delay": 650,
+            "Duration": 60,
+            "Value": 0,
+            "AbsoluteValue": true
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "FD-12 Field Stabilizer",
+            "shortName": "FD-12",
+            "description": "TerraGroup made fancy lab medicine for clean rooms and locked doors. This stripped-down field stabilizer is built for long raids, hot armor, and bad air. It sharpens the eyes, keeps the head cool, and helps the body hold energy and water while it works. When the dose runs out, the heat comes back with interest."
+        }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 2,
+        "price": 51000,
+        "amountForSale": 40,
+        "buyRestrictionMax": 4,
+        "assortmentId": "6a2b8279d2999bc7b9bba8c0"
+    }
+}

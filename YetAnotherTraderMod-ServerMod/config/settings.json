@@ -2,8 +2,8 @@
     "MinLevel": 1, //[Loyalty] Minimum player level required for Tony LL1 after he has been unlocked. This does not unlock Tony by itself.
     "UnlockedByDefault": false, //[Unlock] false = Tony stays locked until Fence's intro quest gives the TraderUnlock reward. true = Tony is unlocked immediately.
 
-    "TraderRefreshMin": 1800, //[Restock Timer] Minimum refresh time in seconds. 1800 = 30 min.
-    "TraderRefreshMax": 3600, //[Restock Timer] Maximum refresh time in seconds. 3600 = 60 min.
+    "TraderRefreshMin": 180, //[Restock Timer] Minimum refresh time in seconds. 1800 = 30 min.
+    "TraderRefreshMax": 360, //[Restock Timer] Maximum refresh time in seconds. 3600 = 60 min.
     "RerollAssortOnRestock": true, //[Restock] If true, Tony rerolls cash/barter split and stock on restock.
 
     "AddTraderToFleaMarket": true, //[Flea] If true, Tony's offers appear in flea search.

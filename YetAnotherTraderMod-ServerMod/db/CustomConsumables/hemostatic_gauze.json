@@ -1,0 +1,78 @@
+{
+    "cloneOrigin": "5e831507ea0a7c419c2f9bd9",
+    "id": "6a43f02538a6d33bffe98335",
+    "fleaPrice": 1.5,
+    "handBookPrice": 1.5,
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.45,
+    "MaxResource": 1,
+    "effects_health": {},
+    "effects_damage": {
+        "HeavyBleeding": {
+            "delay": 0,
+            "duration": 0,
+            "fadeOut": 0
+        }
+    },
+    "Buffs": [
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 120,
+            "SkillName": "Vitality",
+            "Value": 2
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "Hemostatic gauze",
+            "shortName": "H-Gauze",
+            "description": "Cheap wrap, clotting compound, and enough pressure to keep your blood where it belongs. It is not clean hospital stock, but clean does not matter when the floor is drinking you. Stop the leak first and complain after."
+        }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 1,
+        "price": 4200,
+        "amountForSale": 12,
+        "buyRestrictionMax": 4,
+        "assortmentId": "6a5044aa2373cd1c4e9ba91b"
+    },
+    "craft": {
+        "_id": "6a43f02638a6d33bffe98336",
+        "areaType": 7,
+        "requirements": [
+            {
+                "areaType": 7,
+                "requiredLevel": 1,
+                "type": "Area"
+            },
+            {
+                "templateId": "544fb25a4bdc2dfb738b4567",
+                "count": 1,
+                "isFunctional": false,
+                "isEncoded": false,
+                "type": "Item"
+            },
+            {
+                "templateId": "590c595c86f7747884343ad7",
+                "count": 1,
+                "isFunctional": false,
+                "isEncoded": false,
+                "type": "Item"
+            }
+        ],
+        "productionTime": 600,
+        "needFuelForAllProductionTime": false,
+        "locked": false,
+        "endProduct": "6a43f02538a6d33bffe98335",
+        "continuous": false,
+        "count": 1,
+        "productionLimitCount": 0,
+        "isEncoded": false
+    },
+    "addtoItemBlacklist": false
+}

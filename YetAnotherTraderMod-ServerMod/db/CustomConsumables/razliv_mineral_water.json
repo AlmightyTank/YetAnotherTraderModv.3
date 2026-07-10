@@ -1,0 +1,63 @@
+{
+    "cloneOrigin": "5448fee04bdc2dbc018b4567",
+    "id": "6a43f00638a6d33bffe98315",
+    "fleaPrice": 1.25,
+    "handBookPrice": 1.25,
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.25,
+    "MaxResource": 1,
+    "effects_damage": {},
+    "effects_health": {
+        "Hydration": {
+            "value": 70
+        },
+        "Energy": {
+            "value": 5
+        }
+    },
+    "Buffs": [
+        {
+            "AbsoluteValue": true,
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 180,
+            "SkillName": "",
+            "Value": 0.15
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 180,
+            "SkillName": "Metabolism",
+            "Value": 2
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 180,
+            "SkillName": "Immunity",
+            "Value": 1
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "Razliv mineral water",
+            "shortName": "Razliv",
+            "description": "The label promises springs, minerals, and clean recovery. The cap is sealed, the water has mineral bite, and that is more proof than most bottles in Tarkov can offer."
+        }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 1,
+        "price": 11000,
+        "amountForSale": 12,
+        "buyRestrictionMax": 6,
+        "assortmentId": "6a300025d2999bc7b9bba95e"
+    }
+}

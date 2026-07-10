@@ -1,0 +1,85 @@
+{
+    "cloneOrigin": "5fca13ca637ee0341a484f46",
+    "id": "6a3fd8c382d8dd83f87b2011",
+    "fleaPrice": 0.45,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": false,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.18,
+    "inheritOriginBuffs": false,
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "ExaminedByDefault": false,
+        "effects_health": {},
+        "effects_damage": {}
+    },
+    "Buffs": [
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "CovertMovement",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 240,
+            "Value": 12,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "StressResistance",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 240,
+            "Value": 8,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Perception",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 240,
+            "Value": -8,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "StaminaRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 240,
+            "Value": -0.04,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 240,
+            "Value": -0.04,
+            "AbsoluteValue": false
+        },
+        {
+            "BuffType": "QuantumTunnelling",
+            "Chance": 1,
+            "Delay": 250,
+            "Duration": 45,
+            "Value": 0,
+            "AbsoluteValue": true
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "GHOST-9 neural dampener",
+            "shortName": "GHOST-9",
+            "description": "Some jobs need speed. Some need silence. GHOST-9 steadies the nerves and helps your feet forget how to be loud, but it narrows the world while it works. Made for couriers, scouts, and men who prefer not to be remembered."
+        }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 2,
+        "price": 125414,
+        "amountForSale": 40,
+        "buyRestrictionMax": 4,
+        "assortmentId": "6a3fd8c382d8dd83f87b200d"
+    }
+}

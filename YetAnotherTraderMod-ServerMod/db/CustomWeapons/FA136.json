@@ -1,38 +1,38 @@
 {
-  "69ac2686f67026da2c75948f": {
-    "itemTplToClone": "59e6152586f77473dc057aa1",
-    "parentId": "5447b5f14bdc2d61278b4567",
-    "handbookParentId": "5b5f78e986f77447ed5636b1",
-    "overrideProperties": {
-        "ExaminedByDefault": true,
-        "Weight": 1,
-        "Ergonomics": 55,
-        "bFirerate": 700,
-        "bEffDist": 700,
-        "CenterOfImpact": 0.046,
-        "AimPlane": 0.2,
-        "RecoilCategoryMultiplierHandRotation": 0.207,
-        "RecoilReturnSpeedHandRotation": 2.5,
-        "RecoilDampingHandRotation": 0.85,
-        "RecoilCamera": 0.045,
-        "RecoilForceBack": 210,
-        "RecoilForceUp": 50,
-        "RecolDispersion": 10,
-        "RecoilReturnPathDampingHandRotation": 0.4,
-        "weapFireType": [
-            "single",
-            "fullauto"
-        ],
-        "CanSellOnRagfair": false
-    },
-    "fleaPriceRoubles": 17500,
-    "handbookPriceRoubles": 12500,
-    "locales": {
-      "en": {
-        "name": "VPO-136 \"Hunter's Regret\"",
-        "shortName": "136 HR",
-        "description": "A VPO-136 is supposed to be the civilized Vepr-KM: AKM bloodline, civilian papers, semi-auto manners. Tony never trusted manners. He tore into the trigger group, reworked the action, and converted the carbine to full-auto until the rifle stopped pretending to be harmless. Hunter's Regret still looks like something bought for sport shooting, but every pull reminds you what it was built from. Tony likes this one because it lies well — right up until it starts shouting."
-      }
+    "69ac2686f67026da2c75948f": {
+        "itemTplToClone": "59e6152586f77473dc057aa1",
+        "parentId": "5447b5f14bdc2d61278b4567",
+        "handbookParentId": "5b5f78e986f77447ed5636b1",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Weight": 1,
+            "Ergonomics": 55,
+            "bFirerate": 700,
+            "bEffDist": 700,
+            "CenterOfImpact": 0.046,
+            "AimPlane": 0.2,
+            "RecoilCategoryMultiplierHandRotation": 0.207,
+            "RecoilReturnSpeedHandRotation": 2.5,
+            "RecoilDampingHandRotation": 0.85,
+            "RecoilCamera": 0.045,
+            "RecoilForceBack": 210,
+            "RecoilForceUp": 50,
+            "RecolDispersion": 10,
+            "RecoilReturnPathDampingHandRotation": 0.4,
+            "weapFireType": [
+                "single",
+                "fullauto"
+            ],
+            "CanSellOnRagfair": false
+        },
+        "fleaPriceRoubles": 17500,
+        "handbookPriceRoubles": 12500,
+        "locales": {
+            "en": {
+                "name": "VPO-136 \"Hunter's Regret\"",
+                "shortName": "136 HR",
+                "description": "A VPO-136 is supposed to be the civilized Vepr-KM: AKM bloodline, civilian papers, semi-auto manners. This one stopped trusting manners. The trigger group, action, and fire-control work were rebuilt until the carbine stopped pretending to be harmless. Hunter's Regret still looks like sport shooting equipment, right up until it starts shouting."
+            }
+        }
     }
-  }
 }

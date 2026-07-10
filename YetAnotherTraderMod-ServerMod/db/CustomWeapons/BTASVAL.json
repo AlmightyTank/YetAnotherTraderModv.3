@@ -1,35 +1,35 @@
 {
-  "69ac37ebd05c3cf7e4542d12": {
-    "itemTplToClone": "57c44b372459772d2b39b8ce",
-    "parentId": "5447b5fc4bdc2d87278b4567",
-    "handbookParentId": "5b5f78fc86f77409407a7f90",
-    "overrideProperties": {
-        "ExaminedByDefault": true,
-        "Ergonomics": 54,
-        "bEffDist": 700,
-        "CenterOfImpact": 0.01,
-        "AimPlane": 0.16,
-        "RecoilCamera": 0.043,
-        "RecoilForceBack": 210,
-        "RecoilForceUp": 50,
-        "RecolDispersion": 6,
-        "RecoilReturnPathDampingHandRotation": 0.4,
-        "DurabilityBurnRatio": 1.15,
-        "HeatFactorGun": 1,
-        "CoolFactorGun": 3.168,
-        "CoolFactorGunMods": 1,
-        "HeatFactorByShot": 1.235,
-        "MaxRepairKitDegradation": 0.025,
-        "CanSellOnRagfair": false
-    },
-    "fleaPriceRoubles": 17500,
-    "handbookPriceRoubles": 12500,
-    "locales": {
-      "en": {
-        "name": "AS VAL \"Whisper Fang\"",
-        "shortName": "VAL WF",
-        "description": "Whisper Fang is Tony's better-tuned AS VAL, not a backyard full-auto stunt. The rifle was already born quiet and dangerous; Tony only made the good parts sharper. He refined the gas system, cleaned up the action, improved handling, and tuned the weapon for smoother strings of suppressed fire. The integral suppressor still does its work, but now the rifle feels more deliberate — less like issued equipment, more like a private tool for operators who plan to leave no witnesses and no echoes."
-      }
+    "69ac37ebd05c3cf7e4542d12": {
+        "itemTplToClone": "57c44b372459772d2b39b8ce",
+        "parentId": "5447b5fc4bdc2d87278b4567",
+        "handbookParentId": "5b5f78fc86f77409407a7f90",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Ergonomics": 54,
+            "bEffDist": 700,
+            "CenterOfImpact": 0.01,
+            "AimPlane": 0.16,
+            "RecoilCamera": 0.043,
+            "RecoilForceBack": 210,
+            "RecoilForceUp": 50,
+            "RecolDispersion": 6,
+            "RecoilReturnPathDampingHandRotation": 0.4,
+            "DurabilityBurnRatio": 1.15,
+            "HeatFactorGun": 1,
+            "CoolFactorGun": 3.168,
+            "CoolFactorGunMods": 1,
+            "HeatFactorByShot": 1.235,
+            "MaxRepairKitDegradation": 0.025,
+            "CanSellOnRagfair": false
+        },
+        "fleaPriceRoubles": 17500,
+        "handbookPriceRoubles": 12500,
+        "locales": {
+            "en": {
+                "name": "AS VAL \"Whisper Fang\"",
+                "shortName": "VAL WF",
+                "description": "Whisper Fang is a better-tuned AS VAL, not a backyard full-auto stunt. The rifle was already born quiet and dangerous; this rebuild only makes the good parts sharper. The gas system is refined, the action cleaned up, and the handling tuned for smoother strings of suppressed fire. Less issued equipment, more private tool."
+            }
+        }
     }
-  }
 }

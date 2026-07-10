@@ -1,0 +1,102 @@
+{
+    "cloneOrigin": "5c0e533786f7747fa23f4d47",
+    "id": "6a300025d2999bc7b9bba950",
+    "fleaPrice": 1.6,
+    "handBookPrice": "asOriginal",
+    "includeInSameQuestsAsOrigin": true,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.35,
+    "inheritOriginBuffs": false,
+    "overrideProperties": {
+        "CanSellOnRagfair": true,
+        "StackMaxSize": 1,
+        "effects_health": {},
+        "effects_damage": {
+            "Pain": {
+                "delay": 0,
+                "duration": 60,
+                "fadeOut": 15
+            }
+        }
+    },
+    "Buffs": [
+        {
+            "BuffType": "HealthRate",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 300,
+            "Value": 1.0,
+            "AbsoluteValue": true,
+            "SkillName": ""
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "RemoveAllBloodLosses",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 240,
+            "SkillName": "",
+            "Value": 1
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Vitality",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 180,
+            "Value": 20,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "SkillRate",
+            "SkillName": "Health",
+            "Chance": 1,
+            "Delay": 1,
+            "Duration": 180,
+            "Value": 20,
+            "AbsoluteValue": true
+        },
+        {
+            "BuffType": "HydrationRate",
+            "Chance": 1,
+            "Delay": 30,
+            "Duration": 300,
+            "Value": -0.4,
+            "AbsoluteValue": true,
+            "SkillName": ""
+        },
+        {
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 30,
+            "Duration": 300,
+            "Value": -0.4,
+            "AbsoluteValue": true,
+            "SkillName": ""
+        },
+        {
+            "BuffType": "HandsTremor",
+            "Chance": 1,
+            "Delay": 240,
+            "Duration": 90,
+            "Value": 1,
+            "AbsoluteValue": true,
+            "SkillName": ""
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "Hemostat injector",
+            "shortName": "Hemostat",
+            "description": "Zagustin taught blood to stop. This backroom mix adds enough pressure to keep you moving after the body listens. It seals bleeds, dulls pain, and buys distance from the fight. The crash comes later, assuming you earned a later."
+        }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 3,
+        "price": 110125,
+        "amountForSale": 40,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a3210dbd2999bc7b9bbab44"
+    }
+}

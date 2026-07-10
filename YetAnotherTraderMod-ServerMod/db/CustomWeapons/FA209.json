@@ -1,38 +1,38 @@
 {
-  "69ac236f895124b233cb4b5c": {
-    "itemTplToClone": "59e6687d86f77411d949b251",
-    "parentId": "5447b5f14bdc2d61278b4567",
-    "handbookParentId": "5b5f78e986f77447ed5636b1",
-    "overrideProperties": {
-        "ExaminedByDefault": true,
-        "Weight": 1,
-        "Ergonomics": 40,
-        "bFirerate": 700,
-        "bEffDist": 700,
-        "CenterOfImpact": 0.046,
-        "AimPlane": 0.2,
-        "RecoilCategoryMultiplierHandRotation": 0.207,
-        "RecoilReturnSpeedHandRotation": 2.5,
-        "RecoilDampingHandRotation": 0.85,
-        "RecoilCamera": 0.045,
-        "RecoilForceBack": 220,
-        "RecoilForceUp": 55,
-        "RecolDispersion": 10,
-        "RecoilReturnPathDampingHandRotation": 0.4,
-        "weapFireType": [
-            "single",
-            "fullauto"
-        ],
-        "CanSellOnRagfair": false
-    },
-    "fleaPriceRoubles": 17500,
-    "handbookPriceRoubles": 12500,
-    "locales": {
-      "en": {
-        "name": "VPO-209 \"Paradox Unleashed\"",
-        "shortName": "209 PU",
-        "description": "A civilian VPO-209 built around loopholes, paperwork, and .366 TKM — exactly the kind of thing Tony enjoys ruining. He stripped out the polite hunting-rifle behavior, reworked the fire-control group, opened the gas system, and forced the old AKM bones underneath to run full-auto. The result is not elegant. It kicks hard, barks loud, and throws .366 downrange like it is angry at the law that created it. Tony calls it Paradox Unleashed: a legal compromise turned into an illegal answer."
-      }
+    "69ac236f895124b233cb4b5c": {
+        "itemTplToClone": "59e6687d86f77411d949b251",
+        "parentId": "5447b5f14bdc2d61278b4567",
+        "handbookParentId": "5b5f78e986f77447ed5636b1",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Weight": 1,
+            "Ergonomics": 40,
+            "bFirerate": 700,
+            "bEffDist": 700,
+            "CenterOfImpact": 0.046,
+            "AimPlane": 0.2,
+            "RecoilCategoryMultiplierHandRotation": 0.207,
+            "RecoilReturnSpeedHandRotation": 2.5,
+            "RecoilDampingHandRotation": 0.85,
+            "RecoilCamera": 0.045,
+            "RecoilForceBack": 220,
+            "RecoilForceUp": 55,
+            "RecolDispersion": 10,
+            "RecoilReturnPathDampingHandRotation": 0.4,
+            "weapFireType": [
+                "single",
+                "fullauto"
+            ],
+            "CanSellOnRagfair": false
+        },
+        "fleaPriceRoubles": 17500,
+        "handbookPriceRoubles": 12500,
+        "locales": {
+            "en": {
+                "name": "VPO-209 \"Paradox Unleashed\"",
+                "shortName": "209 PU",
+                "description": "A civilian VPO-209 built around loopholes, paperwork, and.366 TKM. The polite hunting-rifle behavior is gone: reworked fire-control group, opened gas system, and old AKM bones forced to run full-auto. It is not elegant. It kicks hard, barks loud, and throws.366 downrange like it is angry at the law that created it."
+            }
+        }
     }
-  }
 }

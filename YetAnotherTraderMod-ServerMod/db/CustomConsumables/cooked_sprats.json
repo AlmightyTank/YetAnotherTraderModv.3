@@ -1,0 +1,86 @@
+{
+    "cloneOrigin": "5bc9c29cd4351e003562b8a3",
+    "id": "6a43f00538a6d33bffe98314",
+    "fleaPrice": 1.1,
+    "handBookPrice": 1.1,
+    "includeInSameQuestsAsOrigin": true,
+    "addSpawnsInSamePlacesAsOrigin": true,
+    "spawnWeightComparedToOrigin": 0.1,
+    "effects_health": {
+        "Hydration": {
+            "value": -7
+        },
+        "Energy": {
+            "value": 60
+        }
+    },
+    "Buffs": [
+        {
+            "AbsoluteValue": true,
+            "BuffType": "EnergyRate",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 75,
+            "SkillName": "",
+            "Value": 0.2
+        },
+        {
+            "AbsoluteValue": true,
+            "BuffType": "SkillRate",
+            "Chance": 1,
+            "Delay": 0,
+            "Duration": 120,
+            "SkillName": "Strength",
+            "Value": 2
+        }
+    ],
+    "locales": {
+        "en": {
+            "name": "Can of Cooked sprats",
+            "shortName": "Cooked Sprats",
+            "description": "Sprats in hot oil, warmed until the smell starts making threats. It builds character; mostly it builds thirst. Still, a man with food in his stomach shoots steadier than a man arguing with hunger."
+        }
+    },
+    "trader": {
+        "traderId": "66a0f6b2c4d8e90123456789",
+        "loyaltyReq": 3,
+        "price": 18500,
+        "amountForSale": 30,
+        "buyRestrictionMax": 2,
+        "assortmentId": "6a447e1638a6d33bffe98307"
+    },
+    "craft": {
+        "_id": "6a43f01538a6d33bffe98324",
+        "areaType": 5,
+        "requirements": [
+            {
+                "areaType": 5,
+                "requiredLevel": 1,
+                "type": "Area"
+            },
+            {
+                "templateId": "57347b8b24597737dd42e192",
+                "type": "Tool"
+            },
+            {
+                "templateId": "5d1b36a186f7742523398433",
+                "type": "Tool"
+            },
+            {
+                "templateId": "5bc9c29cd4351e003562b8a3",
+                "count": 1,
+                "isFunctional": false,
+                "isEncoded": false,
+                "type": "Item"
+            }
+        ],
+        "productionTime": 3000,
+        "needFuelForAllProductionTime": false,
+        "locked": false,
+        "endProduct": "6a43f00538a6d33bffe98314",
+        "continuous": false,
+        "count": 1,
+        "productionLimitCount": 0,
+        "isEncoded": false
+    }
+}
