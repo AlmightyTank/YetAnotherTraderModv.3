@@ -1,0 +1,33 @@
+{
+    "69d14a465f8c31b7640a9e13": {
+        "itemTplToClone": "6065878ac9cf8012264142fd",
+        "parentId": "555ef6e44bdc2de9068b457e",
+        "handbookParentId": "5b5f75c686f774094242f19f",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Ergonomics": -7,
+            "Recoil": -10,
+            "Slots": []
+        },
+        "fleaPriceRoubles": 31000,
+        "handbookPriceRoubles": 31000,
+        "copySlot": true,
+        "locales": {
+            "en": {
+                "name": "CMMG Mk47 5.45x39 409mm barrel",
+                "shortName": "Mk47 5.45 409mm",
+                "description": "A 409mm Mk47 barrel chambered for 5.45x39mm and fitted for the dedicated Mk47 5.45 upper receiver. The full-length profile gives the conversion steadier recoil and better velocity at the cost of weight and handling. Tony had the gas interface retained from the original Mk47 design, while the muzzle setup was converted for compatible 5.45 AK devices."
+            }
+        },
+        "copySlotsInfo": [
+            {
+                "id": "5beec2820db834001b095426",
+                "newSlotName": "mod_muzzle"
+            },
+            {
+                "id": "6065878ac9cf8012264142fd",
+                "newSlotName": "mod_gas_block"
+            }
+        ]
+    }
+}

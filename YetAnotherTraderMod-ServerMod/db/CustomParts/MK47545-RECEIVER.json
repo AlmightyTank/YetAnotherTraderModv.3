@@ -1,0 +1,57 @@
+{
+    "69d14a2e5f8c31b7640a9e11": {
+        "itemTplToClone": "606587a88900dc2d9a55b659",
+        "parentId": "55818a304bdc2db5418b457d",
+        "handbookParentId": "5b5f764186f77447ec5d7714",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "Recoil": -3,
+            "Ergonomics": 3,
+            "Slots": [
+                {
+                    "_id": "69d14a5e5f8c31b7640a9e15",
+                    "_mergeSlotWithChildren": false,
+                    "_name": "mod_barrel",
+                    "_parent": "69d14a2e5f8c31b7640a9e11",
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "69d14a3a5f8c31b7640a9e12",
+                                    "69d14a465f8c31b7640a9e13"
+                                ],
+                                "Shift": 0
+                            }
+                        ]
+                    },
+                    "_proto": "55d30c4c4bdc2db4468b457e",
+                    "_required": true
+                }
+            ]
+        },
+        "fleaPriceRoubles": 7500,
+        "handbookPriceRoubles": 7500,
+        "copySlot": true,
+        "locales": {
+            "en": {
+                "name": "CMMG Mk47 5.45x39 upper receiver",
+                "shortName": "Mk47 5.45 upper",
+                "description": "A CMMG Resolute Mk47 upper receiver rebuilt around Tony's 5.45x39 conversion. The feed geometry, bolt travel, and barrel interface were reworked as one system, so this receiver only accepts the matching 5.45 Mk47 barrels. It keeps the familiar Mk47 handguards and optic mounting while preventing somebody from mixing the conversion with the original 7.62 parts."
+            }
+        },
+        "copySlotsInfo": [
+            {
+                "id": "606587a88900dc2d9a55b659",
+                "newSlotName": "mod_scope"
+            },
+            {
+                "id": "606587a88900dc2d9a55b659",
+                "newSlotName": "mod_handguard"
+            },
+            {
+                "id": "606587a88900dc2d9a55b659",
+                "newSlotName": "mod_sight_rear"
+            }
+        ]
+    }
+}
