@@ -69,7 +69,7 @@ public sealed class YATMSlotCopyBootstrap(YATMSlotCloneHelper slotCloneHelper)
 
                 request.ItemId = itemId;
 
-                if (!request.ShouldCopySlots)
+                if (!request.CopySlot)
                 {
                     continue;
                 }

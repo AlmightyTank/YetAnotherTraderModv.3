@@ -38,13 +38,9 @@ public sealed class YATMWTTLoader(
         {
             Path.Join("db", "CustomItems"),
             Path.Join("db", "CustomAmmo"),
+            Path.Join("db", "CustomParts"),
             Path.Join("db", "CustomQuestItems"),
             Path.Join("db", "CustomWeapons"),
-        };
-
-        var slotCopyPaths = new[]
-        {
-            Path.Join("db", "CustomWeapons")
         };
 
         var presetPath = Path.Join("db", "CustomWeaponPresets");
@@ -57,10 +53,12 @@ public sealed class YATMWTTLoader(
             await wttCommon.CustomItemServiceExtended.CreateCustomItems(assembly, path);
         }
 
-        // 2. YATM slot clone helper copies missing slots onto custom weapons
+        // 2. YATM slot clone helper copies requested slots onto custom items
         YATMLogger.LogRealDebug("[CustomContentLoader] Processing YATM slot copies...");
 
-        foreach (var path in slotCopyPaths)
+        // Scan every custom-item folder. Files without copySlot=true are ignored.
+        // This is required for parts such as barrels and receivers in db/CustomParts.
+        foreach (var path in itemPaths)
         {
             await yatmSlotCopyBootstrap.ProcessSlotCopies(assembly, path);
         }

@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
@@ -17,41 +16,59 @@ public sealed class YATMSlotCloneHelper(
     {
         if (request == null)
         {
-            LogError("Request is null");
+            LogError("Process received a null request.");
             return;
         }
 
-        if (!request.ShouldCopySlots)
+        // Leave this enabled while testing. It confirms the helper is actually called.
+        YATMLogger.LogDebug(
+            $"[SlotCloneHelper] Process called for '{request.ItemId}'. " +
+            $"CopySlot={request.CopySlot}, CopySlots={request.CopySlots.Count}");
+
+        if (!request.CopySlot)
         {
+            YATMLogger.LogDebug(
+                $"[SlotCloneHelper] Slot copying disabled for '{request.ItemId}'.");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(request.ItemId))
         {
-            LogError("Request.ItemId is null or empty");
+            LogError("Request.ItemId is null or empty.");
             return;
         }
 
-        var copySlots = request.GetCopySlots();
-
-        if (copySlots == null || copySlots.Count == 0)
+        if (!MongoId.IsValidMongoId(request.ItemId))
         {
-            LogError($"Invalid copySlotsInfo for {request.ItemId}");
+            LogError($"Target item id '{request.ItemId}' is not a valid MongoId.");
             return;
         }
 
-        var itemDb = databaseService.GetItems();
+        var copySlots = request.CopySlots;
 
-        if (!itemDb.TryGetValue(request.ItemId, out var targetItem) || targetItem == null)
+        if (copySlots.Count == 0)
         {
-            LogError($"Target item {request.ItemId} not found.");
+            LogError(
+                $"No copy-slot entries were resolved for target '{request.ItemId}'. " +
+                "Check copySlot/copySlotsInfo deserialization.");
+            return;
+        }
+
+        var itemDatabase = databaseService.GetItems();
+        var targetItemId = new MongoId(request.ItemId);
+
+        if (!itemDatabase.TryGetValue(targetItemId, out var targetItem) ||
+            targetItem == null)
+        {
+            LogError(
+                $"Target item '{request.ItemId}' was not found in the item database. " +
+                "The slot helper must run after the custom item has been inserted.");
             return;
         }
 
         targetItem.Properties ??= new TemplateItemProperties();
-        targetItem.Properties.Slots ??= [];
 
-        var existingSlots = targetItem.Properties.Slots.ToList();
+        var existingSlots = targetItem.Properties.Slots?.ToList() ?? [];
         var createdSlots = new List<Slot>();
 
         foreach (var copyInfo in copySlots)
@@ -61,113 +78,205 @@ public sealed class YATMSlotCloneHelper(
                 continue;
             }
 
-            if (string.IsNullOrWhiteSpace(copyInfo.Id))
+            try
             {
-                LogError($"Source item id missing for {request.ItemId}");
-                continue;
-            }
-
-            if (string.IsNullOrWhiteSpace(copyInfo.NewSlotName))
-            {
-                LogError($"NewSlotName missing for {request.ItemId}");
-                continue;
-            }
-
-            var sourceSlotName = string.IsNullOrWhiteSpace(copyInfo.TgtSlotName)
-                ? copyInfo.NewSlotName
-                : copyInfo.TgtSlotName;
-
-            if (SlotExists(existingSlots, copyInfo.NewSlotName) ||
-                SlotExists(createdSlots, copyInfo.NewSlotName))
-            {
-                LogError($"Slot '{copyInfo.NewSlotName}' already exists on {request.ItemId}, skipping.");
-                continue;
-            }
-
-            if (!TryGetSlotByName(copyInfo.Id, sourceSlotName, out var sourceSlot) || sourceSlot == null)
-            {
-                LogError($"Slot '{sourceSlotName}' of id '{copyInfo.Id}' not found when adding to {request.ItemId}");
-                continue;
-            }
-
-            var clonedSlot = cloner.Clone(sourceSlot);
-
-            if (clonedSlot == null)
-            {
-                LogError($"Failed to clone full slot '{sourceSlotName}' from '{copyInfo.Id}'");
-                continue;
-            }
-
-            if (clonedSlot.Properties == null)
-            {
-                LogError($"Cloned slot '{sourceSlotName}' from '{copyInfo.Id}' has null Properties");
-                continue;
-            }
-
-            var clonedFilters = cloner.Clone(sourceSlot.Properties.Filters ?? []);
-
-            if (clonedFilters == null)
-            {
-                LogError($"Failed to clone filters for slot '{sourceSlotName}' from '{copyInfo.Id}'");
-                continue;
-            }
-
-            if (copyInfo.ItemsAddToSlot != null && copyInfo.ItemsAddToSlot.Length > 0)
-            {
-                var firstFilter = clonedFilters.FirstOrDefault();
-
-                if (firstFilter?.Filter != null)
+                if (string.IsNullOrWhiteSpace(copyInfo.Id))
                 {
-                    foreach (var tpl in copyInfo.ItemsAddToSlot)
-                    {
-                        if (string.IsNullOrWhiteSpace(tpl))
-                        {
-                            continue;
-                        }
-
-                        if (!firstFilter.Filter.Contains(tpl))
-                        {
-                            firstFilter.Filter.Add(tpl);
-                        }
-                    }
+                    LogError(
+                        $"Source item id is empty while processing '{request.ItemId}'.");
+                    continue;
                 }
+
+                if (!MongoId.IsValidMongoId(copyInfo.Id))
+                {
+                    LogError(
+                        $"Source item id '{copyInfo.Id}' is not a valid MongoId " +
+                        $"while processing '{request.ItemId}'.");
+                    continue;
+                }
+
+                if (string.IsNullOrWhiteSpace(copyInfo.NewSlotName))
+                {
+                    LogError(
+                        $"NewSlotName is missing while processing '{request.ItemId}'.");
+                    continue;
+                }
+
+                var sourceSlotName = string.IsNullOrWhiteSpace(copyInfo.TgtSlotName)
+                    ? copyInfo.NewSlotName
+                    : copyInfo.TgtSlotName;
+
+                if (SlotExists(existingSlots, copyInfo.NewSlotName) ||
+                    SlotExists(createdSlots, copyInfo.NewSlotName))
+                {
+                    LogError(
+                        $"Slot '{copyInfo.NewSlotName}' already exists on " +
+                        $"'{request.ItemId}', skipping.");
+                    continue;
+                }
+
+                if (!TryGetSlotByName(
+                        new MongoId(copyInfo.Id),
+                        sourceSlotName,
+                        out var sourceSlot) ||
+                    sourceSlot == null)
+                {
+                    LogError(
+                        $"Source slot '{sourceSlotName}' was not found on item " +
+                        $"'{copyInfo.Id}' while modifying '{request.ItemId}'.");
+                    continue;
+                }
+
+                if (sourceSlot.Properties?.Filters == null)
+                {
+                    LogError(
+                        $"Source slot '{sourceSlotName}' on '{copyInfo.Id}' " +
+                        "has no filter collection.");
+                    continue;
+                }
+
+                /*
+                 * Clone only the filters.
+                 *
+                 * Do not clone the complete source Slot. A full clone can retain
+                 * source-specific state, parent information, and property objects.
+                 */
+                var clonedFilters = cloner
+                    .Clone(sourceSlot.Properties.Filters)?
+                    .ToList();
+
+                if (clonedFilters == null || clonedFilters.Count == 0)
+                {
+                    LogError(
+                        $"Source slot '{sourceSlotName}' on '{copyInfo.Id}' " +
+                        "has no usable filters.");
+                    continue;
+                }
+
+                AddAdditionalItemsToFirstFilter(
+                    clonedFilters,
+                    copyInfo.ItemsAddToSlot,
+                    request.ItemId,
+                    copyInfo.NewSlotName);
+
+                var newSlot = new Slot
+                {
+                    Name = copyInfo.NewSlotName,
+
+                    // Matches the working CommonCore implementation.
+                    Id = MongoId.Empty(),
+
+                    Parent = request.ItemId,
+
+                    Properties = new SlotProperties
+                    {
+                        Filters = clonedFilters,
+                        MaxStackCount = sourceSlot.Properties.MaxStackCount
+                    },
+
+                    Required = copyInfo.Required ?? sourceSlot.Required,
+                    MaxCount = sourceSlot.MaxCount,
+                    MergeSlotWithChildren = sourceSlot.MergeSlotWithChildren,
+                    Prototype = sourceSlot.Prototype
+                };
+
+                createdSlots.Add(newSlot);
+
+                YATMLogger.LogDebug(
+                    $"[SlotCloneHelper] Copied '{sourceSlotName}' from " +
+                    $"'{copyInfo.Id}' to '{copyInfo.NewSlotName}' on " +
+                    $"'{request.ItemId}'. Filters={clonedFilters.Count}");
             }
-
-            clonedSlot.Name = copyInfo.NewSlotName;
-            clonedSlot.Parent = request.ItemId;
-            clonedSlot.Id = new MongoId(GenerateMongoId());
-            clonedSlot.Required = copyInfo.Required ?? sourceSlot.Required;
-            clonedSlot.Properties.Filters = clonedFilters;
-
-            if (!IsValidSlot(clonedSlot, request.ItemId))
+            catch (Exception exception)
             {
-                continue;
+                LogError(
+                    $"Failed while processing a copied slot for '{request.ItemId}': " +
+                    $"{exception}");
             }
-
-            createdSlots.Add(clonedSlot);
-
-            YATMLogger.LogDebug(
-                $"[SlotCloneHelper] Copied slot '{sourceSlotName}' from '{copyInfo.Id}' to '{copyInfo.NewSlotName}' on {request.ItemId}");
         }
 
-        existingSlots.AddRange(createdSlots);
+        if (createdSlots.Count == 0)
+        {
+            LogError(
+                $"No slots were added to '{request.ItemId}'. " +
+                "Review the preceding SlotCloneHelper errors.");
+            return;
+        }
 
-        targetItem.Properties.Slots = existingSlots
-            .Where(x => x != null && IsValidFinalSlot(x))
-            .ToList();
+        /*
+         * Keep every original slot intact.
+         *
+         * Do not run the original collection through a final validity filter,
+         * because that can remove slots that existed before this helper ran.
+         */
+        existingSlots.AddRange(createdSlots);
+        targetItem.Properties.Slots = existingSlots;
+
+        YATMLogger.Log(
+            $"[SlotCloneHelper] Added {createdSlots.Count} slot(s) to " +
+            $"'{request.ItemId}'. Total slots: {existingSlots.Count}.");
     }
 
-    private bool TryGetSlotByName(string itemId, string slotName, out Slot? slot)
+    private void AddAdditionalItemsToFirstFilter(
+        List<SlotFilter> filters,
+        IEnumerable<string>? additionalItems,
+        string targetItemId,
+        string slotName)
+    {
+        if (additionalItems == null)
+        {
+            return;
+        }
+
+        var firstFilter = filters.FirstOrDefault();
+
+        if (firstFilter == null)
+        {
+            LogError(
+                $"Cannot add extra items to slot '{slotName}' on " +
+                $"'{targetItemId}' because its filter list is empty.");
+            return;
+        }
+
+        firstFilter.Filter ??= new HashSet<MongoId>();
+
+        foreach (var tpl in additionalItems)
+        {
+            if (string.IsNullOrWhiteSpace(tpl))
+            {
+                continue;
+            }
+
+            if (!MongoId.IsValidMongoId(tpl))
+            {
+                LogError(
+                    $"Ignoring invalid item tpl '{tpl}' for slot " +
+                    $"'{slotName}' on '{targetItemId}'.");
+                continue;
+            }
+
+            firstFilter.Filter.Add(new MongoId(tpl));
+        }
+    }
+
+    private bool TryGetSlotByName(
+        MongoId itemId,
+        string slotName,
+        out Slot? slot)
     {
         slot = null;
 
-        if (string.IsNullOrWhiteSpace(itemId) || string.IsNullOrWhiteSpace(slotName))
+        if (itemId.IsEmpty || string.IsNullOrWhiteSpace(slotName))
         {
             return false;
         }
 
-        if (!databaseService.GetItems().TryGetValue(itemId, out var item) || item == null)
+        var itemDatabase = databaseService.GetItems();
+
+        if (!itemDatabase.TryGetValue(itemId, out var item) ||
+            item == null)
         {
+            LogError($"Source item '{itemId}' was not found.");
             return false;
         }
 
@@ -175,66 +284,30 @@ public sealed class YATMSlotCloneHelper(
 
         if (slots == null)
         {
+            LogError($"Source item '{itemId}' has no slot collection.");
             return false;
         }
 
-        foreach (var s in slots)
-        {
-            if (s != null &&
-                !string.IsNullOrWhiteSpace(s.Name) &&
-                s.Name.Equals(slotName, StringComparison.OrdinalIgnoreCase))
-            {
-                slot = s;
-                return true;
-            }
-        }
+        slot = slots.FirstOrDefault(candidate =>
+            candidate != null &&
+            !string.IsNullOrWhiteSpace(candidate.Name) &&
+            candidate.Name.Equals(
+                slotName,
+                StringComparison.OrdinalIgnoreCase));
 
-        return false;
+        return slot != null;
     }
 
-    private static bool SlotExists(IEnumerable<Slot> slots, string slotName)
+    private static bool SlotExists(
+        IEnumerable<Slot> slots,
+        string slotName)
     {
-        return slots.Any(x =>
-            x != null &&
-            !string.IsNullOrWhiteSpace(x.Name) &&
-            x.Name.Equals(slotName, StringComparison.OrdinalIgnoreCase));
-    }
-
-    private bool IsValidSlot(Slot slot, string targetItemId)
-    {
-        if (slot == null)
-        {
-            LogError($"Null slot generated for {targetItemId}");
-            return false;
-        }
-
-        if (string.IsNullOrWhiteSpace(slot.Name))
-        {
-            LogError($"Generated slot has null/empty Name for {targetItemId}");
-            return false;
-        }
-
-        if (slot.Properties == null)
-        {
-            LogError($"Generated slot '{slot.Name}' has null Properties for {targetItemId}");
-            return false;
-        }
-
-        slot.Properties.Filters ??= [];
-
-        return true;
-    }
-
-    private static bool IsValidFinalSlot(Slot? slot)
-    {
-        return slot != null &&
-               !string.IsNullOrWhiteSpace(slot.Name) &&
-               slot.Properties != null;
-    }
-
-    private static string GenerateMongoId()
-    {
-        return Convert.ToHexString(RandomNumberGenerator.GetBytes(12)).ToLowerInvariant();
+        return slots.Any(slot =>
+            slot != null &&
+            !string.IsNullOrWhiteSpace(slot.Name) &&
+            slot.Name.Equals(
+                slotName,
+                StringComparison.OrdinalIgnoreCase));
     }
 
     private static void LogError(string message)
