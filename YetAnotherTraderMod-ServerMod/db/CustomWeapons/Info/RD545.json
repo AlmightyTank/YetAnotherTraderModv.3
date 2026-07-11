@@ -102,25 +102,6 @@
             }
         },
         "addToTraders": true,
-        "presetTraders": {
-            "tony": {
-                "69d15e525f8c31b7640a9e21": {
-                    "presetId": "69d15e3a5f8c31b7640a9e20",
-                    "barterSettings": {
-                        "loyalLevel": 2,
-                        "unlimitedCount": false,
-                        "stackObjectsCount": 4,
-                        "buyRestrictionMax": 2
-                    },
-                    "barters": [
-                        {
-                            "_tpl": "5449016a4bdc2d6f028b456f",
-                            "count": 108000
-                        }
-                    ]
-                }
-            }
-        },
         "weaponBuildTraders": {
             "tony": {
                 "6a51aaaa6dacb02fc0d2d14d": {
@@ -145,7 +126,7 @@
             {
                 "traderId": "66a0f6b2c4d8e90123456789",
                 "questId": "6a30b2fbd2999bc7b9bbaab5",
-                "assortId": "69d15e525f8c31b7640a9e21",
+                "assortId": "6a51aaaa6dacb02fc0d2d14d",
                 "status": "Success"
             }
         ],
@@ -154,7 +135,7 @@
             {
                 "questId": "6a30b2fbd2999bc7b9bbaab5",
                 "rewardType": "WeaponPreset",
-                "presetId": "69d15e3a5f8c31b7640a9e20"
+                "presetId": "6a51aaaa6dacb02fc0d2d14c"
             }
         ]
     }
