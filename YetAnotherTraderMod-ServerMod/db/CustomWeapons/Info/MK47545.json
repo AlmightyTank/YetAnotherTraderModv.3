@@ -109,25 +109,6 @@
             }
         ],
         "addToTraders": true,
-        "presetTraders": {
-            "tony": {
-                "69d0ae38e19e61619791cd3c": {
-                    "presetId": "6a506989b267302037b2433a",
-                    "barterSettings": {
-                        "loyalLevel": 2,
-                        "unlimitedCount": true,
-                        "stackObjectsCount": 999999,
-                        "buyRestrictionMax": 100
-                    },
-                    "barters": [
-                        {
-                            "_tpl": "5449016a4bdc2d6f028b456f",
-                            "count": 75698
-                        }
-                    ]
-                }
-            }
-        },
         "weaponBuildTraders": {
             "tony": {
                 "6a51aaaa6dacb02fc0d2d14b": {
