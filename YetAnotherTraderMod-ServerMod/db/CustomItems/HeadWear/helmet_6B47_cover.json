@@ -91,8 +91,8 @@
                 "description": "An upgraded 6B47 Ratnik-BSh helmet with an EMR Digital Flora cover. Originally developed as a lightweight aramid helmet for the Ratnik program, this modified version has been reinforced with additional ballistic material and improved internal padding. The upgrade increases protection to Class 5 while retaining standard mounting equipment for lights and night vision devices. Heavier than the original, but much better suited for serious work."
             }
         },
-        "fleaPriceRoubles": 17710,
-        "handbookPriceRoubles": 17710,
+        "fleaPriceRoubles": 37710,
+        "handbookPriceRoubles": 37710,
         "addWeaponPreset": true,
         "weaponPresets": [
             {
