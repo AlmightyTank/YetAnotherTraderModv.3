@@ -46,18 +46,6 @@
                 "_id": "6a50708275db396b1c003016",
                 "_tpl": "628a7b23b0f75035732dd565",
                 "slotId": "mod_sight_rear",
-                "upd": {
-                    "Sight": {
-                        "ScopesCurrentCalibPointIndexes": [
-                            0
-                        ],
-                        "ScopesSelectedModes": [
-                            0
-                        ],
-                        "SelectedScope": 0,
-                        "ScopeZoomValue": 0.0
-                    }
-                },
                 "parentId": "6a50708275db396b1c003011"
             },
             {
