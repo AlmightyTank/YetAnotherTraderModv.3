@@ -11,8 +11,10 @@
             "DurabilityBurnRatio": 1.05,
             "Ergonomics": 48,
             "bFirerate": 50,
+            "BurstShotsCount": 3,
             "weapFireType": [
                 "single",
+                "burst",
                 "fullauto"
             ],
             "CanSellOnRagfair": false

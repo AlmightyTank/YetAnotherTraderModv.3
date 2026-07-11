@@ -81,7 +81,7 @@
             },
             {
                 "id": "628a60ae6b1d481ff772e9c8",
-                "newSlotName": "mod_stock"
+                "newSlotName": "mod_stock_000"
             },
             {
                 "id": "5644bd2b4bdc2d3b4c8b4572",
@@ -98,16 +98,16 @@
             "en": {
                 "name": "Rifle Dynamics RD-545 5.45x39 assault rifle",
                 "shortName": "RD-545",
-                "description": "The RD-704 had the balance Tony wanted, just not the appetite. His people reworked the rifle around 5.45x39, fitted it for standard AK-74 magazines, and changed the muzzle interface to accept common 5.45 AK devices. You get the same short, front-light Rifle Dynamics handling with a flatter cartridge and easier control when the room gets crowded. Clean conversion, common magazines, no speech about tradition. Tony sells rifles that work."
+                "description": "The RD-704 balance was worth keeping. The caliber was not. This conversion reworks the rifle around 5.45x39, fits it for standard AK-74 magazines, and changes the muzzle interface to accept common 5.45 AK devices. Same short, front-light Rifle Dynamics handling, flatter cartridge, easier control when the room gets crowded. Clean conversion, common magazines, no speech about tradition. Just a rifle that works."
             }
         },
         "addToTraders": true,
         "presetTraders": {
             "tony": {
                 "69d15e525f8c31b7640a9e21": {
-                    "presetId": "6a5068a324cdfa10b5000010",
+                    "presetId": "69d15e3a5f8c31b7640a9e20",
                     "barterSettings": {
-                        "loyalLevel": 3,
+                        "loyalLevel": 2,
                         "unlimitedCount": false,
                         "stackObjectsCount": 4,
                         "buyRestrictionMax": 2
@@ -121,9 +121,22 @@
                 }
             }
         },
-        "addToQuestAssorts": false,
-        "questAssorts": [],
-        "addToQuestRewards": false,
-        "questRewards": []
+        "addToQuestAssorts": true,
+        "questAssorts": [
+            {
+                "traderId": "66a0f6b2c4d8e90123456789",
+                "questId": "6a30b2fbd2999bc7b9bbaab5",
+                "assortId": "69d15e525f8c31b7640a9e21",
+                "status": "Success"
+            }
+        ],
+        "addToQuestRewards": true,
+        "questRewards": [
+            {
+                "questId": "6a30b2fbd2999bc7b9bbaab5",
+                "rewardType": "WeaponPreset",
+                "presetId": "69d15e3a5f8c31b7640a9e20"
+            }
+        ]
     }
 }

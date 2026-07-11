@@ -1,0 +1,25 @@
+{
+    "6a51aaaa6dacb02fc0d2d142": {
+        "itemTplToClone": "657baaf0b7e9ca9a02045c02",
+        "parentId": "65649eb40bf0ed77b8044453",
+        "handbookParentId": "6564b96a189fe36f356d177c",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "CanRequireOnRagfair": false,
+            "Durability": 20,
+            "MaxDurability": 20,
+            "armorClass": "5"
+        },
+        "locales": {
+            "en": {
+                "name": "Layers of aramid fiber",
+                "shortName": "",
+                "description": ""
+            }
+        },
+        "fleaPriceRoubles": 11213,
+        "handbookPriceRoubles": 11213,
+        "addtoItemBlacklist": false
+    }
+}

@@ -1,0 +1,143 @@
+{
+    "6a51aaaa6dacb02fc0d2d13b": {
+        "itemTplToClone": "5aa7cfc0e5b5b00015693143",
+        "parentId": "5a341c4086f77401f2541505",
+        "handbookParentId": "5b47574386f77428ca22b330",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "mousePenalty": -1,
+            "speedPenaltyPercent": 0,
+            "weaponErgonomicPenalty": -1,
+            "Slots": [
+                {
+                    "_id": "6a51aaaa6dacb02fc0d2d13c",
+                    "_mergeSlotWithChildren": true,
+                    "_name": "Helmet_top",
+                    "_parent": "6a51aaaa6dacb02fc0d2d13b",
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a51aaaa6dacb02fc0d2d142"
+                                ],
+                                "Plate": "6a51aaaa6dacb02fc0d2d142",
+                                "armorColliders": [
+                                    "ParietalHead"
+                                ],
+                                "armorPlateColliders": [],
+                                "bluntDamageReduceFromSoftArmor": false,
+                                "locked": true
+                            }
+                        ]
+                    },
+                    "_proto": "64479fdf9731c8fadc0642c1",
+                    "_required": true
+                },
+                {
+                    "_id": "6a51aaaa6dacb02fc0d2d13d",
+                    "_mergeSlotWithChildren": true,
+                    "_name": "Helmet_back",
+                    "_parent": "6a51aaaa6dacb02fc0d2d13b",
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a51aaaa6dacb02fc0d2d141"
+                                ],
+                                "Plate": "6a51aaaa6dacb02fc0d2d141",
+                                "armorColliders": [
+                                    "BackHead"
+                                ],
+                                "armorPlateColliders": [],
+                                "bluntDamageReduceFromSoftArmor": false,
+                                "locked": true
+                            }
+                        ]
+                    },
+                    "_proto": "64479fdf9731c8fadc0642c1",
+                    "_required": true
+                },
+                {
+                    "_id": "6a51aaaa6dacb02fc0d2d13e",
+                    "_mergeSlotWithChildren": true,
+                    "_name": "Helmet_ears",
+                    "_parent": "6a51aaaa6dacb02fc0d2d13b",
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a51aaaa6dacb02fc0d2d140"
+                                ],
+                                "Plate": "6a51aaaa6dacb02fc0d2d140",
+                                "armorColliders": [
+                                    "Ears"
+                                ],
+                                "armorPlateColliders": [],
+                                "bluntDamageReduceFromSoftArmor": false,
+                                "locked": true
+                            }
+                        ]
+                    },
+                    "_proto": "64479fdf9731c8fadc0642c1",
+                    "_required": true
+                }
+            ]
+        },
+        "locales": {
+            "en": {
+                "name": "6B47 Ratnik-BSh upgraded helmet (EMR cover)",
+                "shortName": "6B47-U EMR",
+                "description": "An upgraded 6B47 Ratnik-BSh helmet with an EMR Digital Flora cover. Originally developed as a lightweight aramid helmet for the Ratnik program, this modified version has been reinforced with additional ballistic material and improved internal padding. The upgrade increases protection to Class 5 while retaining standard mounting equipment for lights and night vision devices. Heavier than the original, but much better suited for serious work."
+            }
+        },
+        "fleaPriceRoubles": 1771,
+        "handbookPriceRoubles": 1771,
+        "addWeaponPreset": true,
+        "weaponPresets": [
+            {
+                "_id": "6a51aaaa6dacb02fc0d2d14a",
+                "_type": "Preset",
+                "_changeWeaponName": false,
+                "_name": "6B47U Default",
+                "_parent": "6a51aaaa6dacb02fc0d2d149",
+                "_items": [
+                    {
+                        "_id": "6a51aaaa6dacb02fc0d2d149",
+                        "_tpl": "6a51aaaa6dacb02fc0d2d13b"
+                    },
+                    {
+                        "_id": "6a446280898f52db204d6bb9",
+                        "_tpl": "6a51aaaa6dacb02fc0d2d142",
+                        "parentId": "6a51aaaa6dacb02fc0d2d149",
+                        "slotId": "Helmet_top"
+                    },
+                    {
+                        "_id": "6a446280898f52db204d6bba",
+                        "_tpl": "6a51aaaa6dacb02fc0d2d141",
+                        "parentId": "6a51aaaa6dacb02fc0d2d149",
+                        "slotId": "Helmet_back"
+                    },
+                    {
+                        "_id": "6a446280898f52db204d6bbb",
+                        "_tpl": "6a51aaaa6dacb02fc0d2d140",
+                        "parentId": "6a51aaaa6dacb02fc0d2d149",
+                        "slotId": "Helmet_ears"
+                    }
+                ],
+                "_encyclopedia": "6a51aaaa6dacb02fc0d2d13b"
+            }
+        ],
+        "copySlot": true,
+        "copySlotsInfo": [
+            {
+                "id": "5aa7cfc0e5b5b00015693143",
+                "newSlotName": "mod_equipment"
+            },
+            {
+                "id": "5aa7cfc0e5b5b00015693143",
+                "newSlotName": "mod_nvg"
+            }
+        ]
+    }
+}

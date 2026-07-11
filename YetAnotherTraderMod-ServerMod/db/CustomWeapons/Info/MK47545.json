@@ -79,7 +79,7 @@
             "en": {
                 "name": "CMMG Mk54 Mongrel 5.45x39 assault rifle",
                 "shortName": "Mk54",
-                "description": "American frame, Russian appetite. Tony rebuilt a CMMG Mk54 around a dedicated 5.45x39 upper, matching barrels, and an AK-pattern magazine system. The conversion accepts standard 5.45 AK magazines, but the receiver and barrels are a closed set so nobody can mix the new chamber with the original 7.62 hardware. It runs flatter than the parent rifle, keeps the Mk54 controls and furniture, and still looks like something that should not work until it starts firing."
+                "description": "American frame, Russian appetite. A CMMG Mk54 rebuilt around a dedicated 5.45x39 upper, matching barrels, and an AK-pattern magazine system. The conversion accepts standard 5.45 AK magazines, but the receiver and barrels are a closed set so the new chamber cannot be mixed with the original 7.62 hardware. It runs flatter than the parent rifle, keeps the familiar Mk54 controls and furniture, and still looks like something that should not work until it starts firing."
             }
         },
         "copySlotsInfo": [
@@ -112,9 +112,9 @@
         "presetTraders": {
             "tony": {
                 "69d0ae38e19e61619791cd3c": {
-                    "presetId": "69ac22f9c0d45abeb93140bd",
+                    "presetId": "6a506989b267302037b2433a",
                     "barterSettings": {
-                        "loyalLevel": 1,
+                        "loyalLevel": 2,
                         "unlimitedCount": true,
                         "stackObjectsCount": 999999,
                         "buyRestrictionMax": 100
@@ -128,21 +128,40 @@
                 }
             }
         },
+        "weaponBuildTraders": {
+            "tony": {
+                "69d0ae38e19e61619791cd3c": {
+                    "weaponBuildId": "6a3846fd82d8dd83f87b1f58",
+                    "barterSettings": {
+                        "loyalLevel": 2,
+                        "unlimitedCount": false,
+                        "stackObjectsCount": 5,
+                        "buyRestrictionMax": 1
+                    },
+                    "barters": [
+                        {
+                            "_tpl": "5449016a4bdc2d6f028b456f",
+                            "count": 85000
+                        }
+                    ]
+                }
+            }
+        },
         "addToQuestAssorts": true,
         "questAssorts": [
             {
-                "traderId": "698f904cd0fa772942d237c7",
-                "questId": "684edc10a8af5086d3e6557b",
+                "traderId": "66a0f6b2c4d8e90123456789",
+                "questId": "6a30b2fbd2999bc7b9bbaab5",
                 "assortId": "69d0ae38e19e61619791cd3c",
                 "status": "Success"
             }
         ],
-        "addToQuestRewards": false,
+        "addToQuestRewards": true,
         "questRewards": [
             {
-                "questId": "684edc10a8af5086d3e6557b",
+                "questId": "6a30b2fbd2999bc7b9bbaab5",
                 "rewardType": "WeaponPreset",
-                "presetId": "69ac22f9c0d45abeb93140bd"
+                "presetId": "6a506989b267302037b2433a"
             }
         ]
     }

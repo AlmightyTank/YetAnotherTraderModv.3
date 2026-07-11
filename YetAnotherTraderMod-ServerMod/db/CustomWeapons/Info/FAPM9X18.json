@@ -19,8 +19,10 @@
             "RecoilForceUp": 380,
             "RecolDispersion": 12,
             "RecoilReturnPathDampingHandRotation": 0.43,
+            "BurstShotsCount": 3,
             "weapFireType": [
                 "single",
+                "burst",
                 "fullauto"
             ],
             "CanSellOnRagfair": false

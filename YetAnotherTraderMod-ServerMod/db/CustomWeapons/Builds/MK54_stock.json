@@ -1,0 +1,122 @@
+{
+    "6a5199036dacb02fc0d2d13a": {
+        "name": "CMMG Mk54 Mongrel stock build",
+        "id": "6a5199036dacb02fc0d2d13a",
+        "parentId": "6a51990c120a6765d1002f48",
+        "encyclopedia": "69d045f6098455a254446df6",
+        "items": [
+            {
+                "_id": "6a51990c120a6765d1002f48",
+                "_tpl": "69d045f6098455a254446df6",
+                "upd": {
+                    "Repairable": {
+                        "MaxDurability": 100.0,
+                        "Durability": 100.0
+                    }
+                }
+            },
+            {
+                "_id": "6a51990c120a6765d1002f49",
+                "_tpl": "69d14a2e5f8c31b7640a9e11",
+                "slotId": "mod_reciever",
+                "parentId": "6a51990c120a6765d1002f48"
+            },
+            {
+                "_id": "6a51990c6da40d6f79000126",
+                "_tpl": "59db3a1d86f77429e05b4e92",
+                "slotId": "mod_pistol_grip",
+                "parentId": "6a51990c120a6765d1002f48"
+            },
+            {
+                "_id": "6a51990c6da40d6f79000132",
+                "_tpl": "5bed625c0db834001c062946",
+                "slotId": "mod_magazine",
+                "parentId": "6a51990c120a6765d1002f48"
+            },
+            {
+                "_id": "6a51990c6da40d6f790000cf",
+                "_tpl": "5c793fb92e221644f31bfb64",
+                "slotId": "mod_stock_001",
+                "parentId": "6a51990c120a6765d1002f48"
+            },
+            {
+                "_id": "6a51990c120a6765d1002f54",
+                "_tpl": "606587bd6d0bd7580617bacc",
+                "slotId": "mod_charge",
+                "parentId": "6a51990c120a6765d1002f48"
+            },
+            {
+                "_id": "6a51990c6da40d6f79000009",
+                "_tpl": "69d14a465f8c31b7640a9e13",
+                "slotId": "mod_barrel",
+                "parentId": "6a51990c120a6765d1002f49"
+            },
+            {
+                "_id": "6a51990c6da40d6f790000bf",
+                "_tpl": "64785e7c19d732620e045e15",
+                "slotId": "mod_scope",
+                "parentId": "6a51990c120a6765d1002f49"
+            },
+            {
+                "_id": "6a51990c6da40d6f79000020",
+                "_tpl": "5f6336bbda967c74a42e9932",
+                "slotId": "mod_handguard",
+                "parentId": "6a51990c120a6765d1002f49"
+            },
+            {
+                "_id": "6a51990c120a6765d1002f4f",
+                "_tpl": "5fb6564947ce63734e3fa1da",
+                "slotId": "mod_sight_rear",
+                "parentId": "6a51990c120a6765d1002f49"
+            },
+            {
+                "_id": "6a51990c6da40d6f79000108",
+                "_tpl": "56eabf3bd2720b75698b4569",
+                "slotId": "mod_stock_000",
+                "parentId": "6a51990c6da40d6f790000cf"
+            },
+            {
+                "_id": "6a51990c6da40d6f79000059",
+                "_tpl": "564caa3d4bdc2d17108b458e",
+                "slotId": "mod_muzzle",
+                "parentId": "6a51990c6da40d6f79000009"
+            },
+            {
+                "_id": "6a51990c6da40d6f7900005c",
+                "_tpl": "6065dc8a132d4d12c81fd8e3",
+                "slotId": "mod_gas_block",
+                "parentId": "6a51990c6da40d6f79000009"
+            },
+            {
+                "_id": "6a51990c6da40d6f79000065",
+                "_tpl": "6269220d70b6c02e665f2635",
+                "slotId": "mod_mount_001",
+                "parentId": "6a51990c6da40d6f79000020"
+            },
+            {
+                "_id": "6a51990c6da40d6f7900002a",
+                "_tpl": "5b7be4895acfc400170e2dd5",
+                "slotId": "mod_foregrip",
+                "parentId": "6a51990c6da40d6f79000020"
+            },
+            {
+                "_id": "6a51990c6da40d6f7900007a",
+                "_tpl": "56def37dd2720bec348b456a",
+                "slotId": "mod_tactical",
+                "parentId": "6a51990c6da40d6f79000065"
+            },
+            {
+                "_id": "6a51990c6da40d6f7900004f",
+                "_tpl": "5b057b4f5acfc4771e1bd3e9",
+                "slotId": "mod_foregrip",
+                "parentId": "6a51990c6da40d6f7900002a"
+            },
+            {
+                "_id": "6a51990c6da40d6f7900010a",
+                "_tpl": "58d2912286f7744e27117493",
+                "slotId": "mod_stock",
+                "parentId": "6a51990c6da40d6f79000108"
+            }
+        ]
+    }
+}
