@@ -68,6 +68,9 @@
     <Reference Include="BepInEx">
       <HintPath>$(SptPath)\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
+	<Reference Include="ItemComponent.Types">
+		<HintPath>$(ManagedPath)\ItemComponent.Types.dll</HintPath>
+	</Reference>
     <Reference Include="Comfort">
       <HintPath>$(ManagedPath)\Comfort.dll</HintPath>
     </Reference>

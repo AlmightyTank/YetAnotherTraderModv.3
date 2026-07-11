@@ -20,6 +20,9 @@ namespace YetAnotherTraderMod.Client
             new Patches.ConditionCounterCreatorDurabilityPatch().Enable();
             new Patches.KillConditionDurabilityPatch().Enable();
 
+            new Patches.TonyRigCreateGridsPatch().Enable();
+            new Patches.TonyRigContainedGridsViewShowPatch().Enable();
+
             LogSource.LogInfo("[YATM ClientMod PreLoad] Loaded.");
         }
     }
