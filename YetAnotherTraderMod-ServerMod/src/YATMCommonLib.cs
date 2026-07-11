@@ -1,6 +1,7 @@
 using SPTarkov.DI.Annotations;
 using YetAnotherTraderMod.src.Features.CustomConsumables;
 using YetAnotherTraderMod.src.Services;
+using YetAnotherTraderMod.src.Services.ItemHelpers;
 
 namespace YetAnotherTraderMod.src;
 
@@ -14,7 +15,8 @@ namespace YetAnotherTraderMod.src;
 [Injectable(InjectionType.Singleton)]
 public sealed class YATMCommonLib(
     YATMTraderOfferFeedService customTraderOfferServiceExtended,
-    CustomConsumablesLoader customConsumablesServiceExtended)
+    CustomConsumablesLoader customConsumablesServiceExtended,
+    YATMWeaponBuildService customWeaponBuildServiceExtended)
 {
     /// <summary>
     /// Registers Tony trader offers before the YATM runtime builds the final assort.
@@ -26,6 +28,12 @@ public sealed class YATMCommonLib(
     /// Plural name matches the service method: CreateCustomConsumables.
     /// </summary>
     public CustomConsumablesLoader CustomConsumablesServiceExtended { get; } = customConsumablesServiceExtended;
+
+
+    /// <summary>
+    /// Loads reusable non-preset weapon build trees for addon mods.
+    /// </summary>
+    public YATMWeaponBuildService CustomWeaponBuildServiceExtended { get; } = customWeaponBuildServiceExtended;
 
     /// <summary>
     /// Backward-compatible singular alias for older addon code.

@@ -14,6 +14,7 @@ using SPTarkov.Server.Core.Servers;
 using SPTarkov.Server.Core.Utils;
 using YetAnotherTraderMod.config;
 using YetAnotherTraderMod.src.GeneratedOffers;
+using YetAnotherTraderMod.src.Services;
 using Path = System.IO.Path;
 using SPTarkov.Server.Core.Helpers;
 
@@ -104,6 +105,10 @@ public sealed class YATMTraderAssortRuntimeRollService(
         bool refreshMarketPrices = true,
         bool applyConfiguredPriceMultiplier = true)
     {
+        // Do not allow typed SPT fields such as Item.Template ("_tpl") to also
+        // survive in JsonExtensionData. That would serialize duplicate JSON keys.
+        YATMJsonExtensionDataSanitizer.SanitizeAssort(assort);
+
         // HARD ORDER GUARANTEE:
         // 1) Start from the clean assort object after base/custom/addon content has been merged.
         // 2) Remove standalone ammo-pack helper roots so the visible rollable snapshot is stable.
@@ -157,6 +162,9 @@ public sealed class YATMTraderAssortRuntimeRollService(
         {
             YATMLogger.LogDebug($"[{rollReason}] [MarketPricing] Restock completed with no market lookup and no price multiplier pass.");
         }
+
+        // Final boundary check after payment and stock mutations.
+        YATMJsonExtensionDataSanitizer.SanitizeAssort(assort);
     }
 
     private void RollStock(
@@ -2192,24 +2200,26 @@ public sealed class YATMTraderAssortRuntimeRollService(
     {
         try
         {
-            var json = JsonSerializer.Serialize(looseOffer, looseOffer.GetType());
-            var cloned = JsonSerializer.Deserialize<Item>(json);
-            if (cloned == null)
+            if (looseOffer is not Item sourceItem)
             {
                 return null;
             }
 
-            SetMemberValue(cloned, "Id", packOfferId);
-            SetMemberValue(cloned, "_id", packOfferId);
-            SetMemberValue(cloned, "ParentId", "hideout");
-            SetMemberValue(cloned, "parentId", "hideout");
-            SetMemberValue(cloned, "SlotId", "hideout");
-            SetMemberValue(cloned, "slotId", "hideout");
-            SetOfferTemplate(cloned, packTpl);
-            SetExtensionDataValue(cloned, "_id", packOfferId);
-            SetExtensionDataValue(cloned, "id", packOfferId);
-            SetExtensionDataValue(cloned, "parentId", "hideout");
-            SetExtensionDataValue(cloned, "slotId", "hideout");
+            YATMJsonExtensionDataSanitizer.SanitizeObject(sourceItem);
+
+            // Follow CommonLibExtended's typed-item pattern. Construct a clean Item
+            // instead of serializing aliases through JsonExtensionData.
+            var cloned = new Item
+            {
+                Id = new MongoId(packOfferId),
+                Template = new MongoId(packTpl),
+                ParentId = "hideout",
+                SlotId = "hideout",
+                Location = sourceItem.Location,
+                Upd = CloneItemUpd(sourceItem.Upd)
+            };
+
+            YATMJsonExtensionDataSanitizer.SanitizeObject(cloned);
             return cloned;
         }
         catch (Exception ex)
@@ -2217,6 +2227,20 @@ public sealed class YATMTraderAssortRuntimeRollService(
             YATMLogger.Log($"[Pricing] Failed to clone ammo pack root offer {packOfferId}: {ex.Message}");
             return null;
         }
+    }
+
+    private static Upd? CloneItemUpd(Upd? sourceUpd)
+    {
+        if (sourceUpd == null)
+        {
+            return null;
+        }
+
+        YATMJsonExtensionDataSanitizer.SanitizeObject(sourceUpd);
+        var json = JsonSerializer.Serialize(sourceUpd);
+        var clonedUpd = JsonSerializer.Deserialize<Upd>(json);
+        YATMJsonExtensionDataSanitizer.SanitizeObject(clonedUpd);
+        return clonedUpd;
     }
 
     private static void CopyLoyalLevelUnlock(TraderAssort assort, string sourceOfferId, string targetOfferId)
@@ -2900,75 +2924,23 @@ public sealed class YATMTraderAssortRuntimeRollService(
         {
             return;
         }
-        SetMemberValue(offer, "_tpl", templateId);
-        SetMemberValue(offer, "Template", templateId);
-        SetMemberValue(offer, "Tpl", templateId);
-        SetMemberValue(offer, "TemplateId", templateId);
-        SetExtensionDataValue(offer, "_tpl", templateId);
-        SetExtensionDataValue(offer, "tpl", templateId);
-        SetExtensionDataValue(offer, "Template", templateId);
-        SetExtensionDataValue(offer, "Tpl", templateId);
-        SetExtensionDataValue(offer, "TemplateId", templateId);
 
-        var rawTpl = GetMemberValue(offer, "_tpl")?.ToString();
+        if (offer is not Item typedItem)
+        {
+            YATMLogger.LogDebug($"[Pricing] Warning: cannot set _tpl on unexpected offer type {offer.GetType().FullName}.");
+            return;
+        }
+
+        typedItem.Template = new MongoId(templateId);
+        YATMJsonExtensionDataSanitizer.SanitizeObject(typedItem);
+
+        var rawTpl = GetMemberValue(offer, "Template")?.ToString();
         var resolvedTpl = YATMConfig.GetTemplateId(offer);
         if (!string.Equals(rawTpl, templateId, StringComparison.OrdinalIgnoreCase)
             && !string.Equals(resolvedTpl, templateId, StringComparison.OrdinalIgnoreCase))
         {
             var offerId = GetMemberValue(offer, "Id")?.ToString() ?? "unknown offer";
-            YATMLogger.LogDebug($"[Pricing] Warning: attempted to set assort _tpl for {offerId} to {templateId}, but readback returned _tpl={rawTpl ?? "null"}, resolved={resolvedTpl ?? "null"}.");
-        }
-    }
-
-    private static void SetExtensionDataValue(object target, string key, object? value)
-    {
-        var type = target.GetType();
-
-        var extensionMember = type.GetProperty(
-                "ExtensionData",
-                BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)
-            ?? (MemberInfo?)type.GetField(
-                "ExtensionData",
-                BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-
-        if (extensionMember == null)
-        {
-            return;
-        }
-
-        object? extensionData = extensionMember switch
-        {
-            PropertyInfo prop => prop.GetValue(target),
-            FieldInfo field => field.GetValue(target),
-            _ => null
-        };
-
-        if (extensionData == null)
-        {
-            // Most SPT models use Dictionary<string, object> for ExtensionData.
-            extensionData = new Dictionary<string, object?>();
-
-            try
-            {
-                switch (extensionMember)
-                {
-                    case PropertyInfo prop when prop.CanWrite:
-                        prop.SetValue(target, extensionData);
-                        break;
-                    case FieldInfo field:
-                        field.SetValue(target, extensionData);
-                        break;
-                }
-            }
-            catch
-            {
-                return;
-            }
-        }
-
-        if (extensionData is IDictionary dictionary)
-        {
-            dictionary[key] = ConvertJsonLikeIdValue(key, value);
+            YATMLogger.LogDebug($"[Pricing] Warning: attempted to set assort _tpl for {offerId} to {templateId}, but readback returned Template={rawTpl ?? "null"}, resolved={resolvedTpl ?? "null"}.");
         }
     }
 
@@ -3164,13 +3136,21 @@ public sealed class YATMTraderAssortRuntimeRollService(
 
     private static void SetPaymentComponentValues(object paymentComponent, string tpl, double? count)
     {
-        SetMemberValue(paymentComponent, "_tpl", tpl);
-        SetMemberValue(paymentComponent, "tpl", tpl);
+        // SPT's BarterScheme exposes typed Template/Count properties.
+        // Writing serialized aliases as extra data can create duplicate keys.
+        if (paymentComponent is BarterScheme typedPayment)
+        {
+            typedPayment.Template = new MongoId(tpl);
+            typedPayment.Count = count;
+            YATMJsonExtensionDataSanitizer.SanitizeObject(typedPayment);
+            return;
+        }
+
+        // Compatibility fallback for a different concrete payment model: only
+        // declared typed members are written. No JsonExtensionData aliases.
         SetMemberValue(paymentComponent, "Template", tpl);
-        SetMemberValue(paymentComponent, "Tpl", tpl);
-        SetMemberValue(paymentComponent, "TemplateId", tpl);
-        SetMemberValue(paymentComponent, "count", count);
         SetMemberValue(paymentComponent, "Count", count);
+        YATMJsonExtensionDataSanitizer.SanitizeObject(paymentComponent);
     }
 
     private static Type? FindExistingPaymentComponentType(IList existingSchemeList)

@@ -30,7 +30,7 @@ public sealed class CustomConsumablesLoader(
     YATMTraderOfferFeedService traderOfferFeedService) : IOnLoad
 {
     private const string RoublesTpl = "5449016a4bdc2d6f028b456f";
-    private const string OwnConsumablesRelativePath = "db/CustomConsumables";
+    private const string OwnConsumablesRelativePath = "db/CustomItems/Consumables";
     private const string AddonConsumablesRelativePath = "db/YATM/CustomConsumables";
 
     private readonly HashSet<string> _loadedFiles = new(StringComparer.OrdinalIgnoreCase);

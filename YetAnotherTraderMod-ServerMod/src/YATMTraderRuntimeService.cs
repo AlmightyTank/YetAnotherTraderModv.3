@@ -5,6 +5,7 @@ using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Spt.Config;
 using SPTarkov.Server.Core.Routers;
 using SPTarkov.Server.Core.Servers;
+using SPTarkov.Server.Core.Utils.Cloners;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using YetAnotherTraderMod.config;
 using YetAnotherTraderMod.src.GeneratedOffers;
 using YetAnotherTraderMod.src.Services;
 using YetAnotherTraderMod.src.Services.Runtime;
+using YetAnotherTraderMod.src.Services.ItemHelpers;
 using Path = System.IO.Path;
 
 namespace YetAnotherTraderMod.src;
@@ -31,6 +33,8 @@ public sealed class YATMTraderRuntimeService(
     YATMTraderOfferFeedService yatmTraderOfferFeedService,
     YATMGeneratedOfferService generatedOfferService,
     YATMTraderAssortRuntimeRollService assortRuntimeRollService,
+    YATMDeferredQuestItemService deferredQuestItemService,
+    ICloner cloner,
     WTTServerCommonLib.WTTServerCommonLib wttCommon)
 {
     private const string DefaultTonyTraderId = "66a0f6b2c4d8e90123456789";
@@ -52,6 +56,7 @@ public sealed class YATMTraderRuntimeService(
     private static bool _questsLoaded;
     private static List<PriceConfigItem> _startupMarketPricedPrices = [];
     private static bool _startupMarketPricedPricesReady;
+    private static TraderAssort? _earlyInjectedAssortTemplate;
 
     // Simple restock pipeline:
     // 1) OnLoad builds the final market-priced PriceConfig table once after custom/addon content is merged.
@@ -78,6 +83,11 @@ public sealed class YATMTraderRuntimeService(
         var traderBase = modHelper.GetJsonDataFromFile<TraderBase>(pathToMod, "db/CustomTrader/Tony/base.json");
         var assort = modHelper.GetJsonDataFromFile<TraderAssort>(pathToMod, "db/CustomTrader/Tony/assort.json");
         var traderImagePath = Path.Combine(pathToMod, "db/CustomTrader/Tony/Tony.jpg");
+
+        // WTT/addon item loaders run against the early Tony placeholder. Preserve any
+        // offers they added there and merge them into the final runtime assort so they
+        // survive startup and every restock reroll.
+        CaptureAndMergeEarlyInjectedAssort(traderBase.Id, assort, "Startup");
 
         // Load Tony's own feed files, then auto-discover addon feed files before the runtime assort is built.
         // Addons can call YATMCommonLib.CustomTraderOfferServiceExtended before this runtime runs,
@@ -225,6 +235,8 @@ public sealed class YATMTraderRuntimeService(
         traderBase.ItemsBuyProhibited ??= new() { Category = [], IdList = [] };
         traderBase.ItemsSell ??= [];
 
+        YATMJsonExtensionDataSanitizer.SanitizeAssort(assort);
+
         assortRuntimeRollService.ApplyRuntimeAssortRolls(
             assort,
             config,
@@ -264,6 +276,10 @@ public sealed class YATMTraderRuntimeService(
         // WTT quest-assort import must happen only after Tony exists in the live trader DB.
         // This is intentionally inside the trader runtime instead of a separate IOnLoad so the order is guaranteed.
         await LoadQuestsAfterTraderExists(Assembly.GetExecutingAssembly(), pathToMod);
+
+        // WTT item JSON quest extensions are deliberately applied only after the final
+        // trader assort and all enabled custom quests are present.
+        deferredQuestItemService.ApplyDeferredQuestData("Startup");
 
         PatchAmmoPackQuestAssortAndVisibleRewards(config, assort, "Startup");
 
@@ -455,6 +471,8 @@ public sealed class YATMTraderRuntimeService(
             cleanBase.Id = _runtimeTraderId;
         }
 
+        MergeCapturedEarlyInjectedAssort(cleanAssort, "Restock");
+
         var generatedAssort = generatedOfferService.LoadGeneratedAssortFromCache(
             Assembly.GetExecutingAssembly());
 
@@ -482,6 +500,8 @@ public sealed class YATMTraderRuntimeService(
             YATMLogger.Log("[Restock] Startup market-priced config snapshot was not ready; running one fallback market-pricing pass.");
         }
 
+        YATMJsonExtensionDataSanitizer.SanitizeAssort(cleanAssort);
+
         assortRuntimeRollService.ApplyRuntimeAssortRolls(
             cleanAssort,
             config,
@@ -505,6 +525,8 @@ public sealed class YATMTraderRuntimeService(
 
     private void ReplaceLiveAssortInPlace(Trader traderData, TraderAssort replacementAssort)
     {
+        YATMJsonExtensionDataSanitizer.SanitizeAssort(replacementAssort);
+
         if (traderData.Assort == null)
         {
             traderData.Assort = replacementAssort;
@@ -530,6 +552,7 @@ public sealed class YATMTraderRuntimeService(
         CopyDictionaryMemberIfPresent(liveAssort, replacementAssort, "loyal_level_items");
 
         SyncAssortExtensionData(liveAssort);
+        YATMJsonExtensionDataSanitizer.SanitizeAssort(liveAssort);
         traderData.Assort = liveAssort;
     }
 
@@ -553,19 +576,10 @@ public sealed class YATMTraderRuntimeService(
 
     private static void SyncAssortExtensionData(TraderAssort assort)
     {
-        SetExtensionDataValue(assort, "items", assort.Items);
-        SetExtensionDataValue(assort, "Items", assort.Items);
-        SetExtensionDataValue(assort, "barter_scheme", assort.BarterScheme);
-        SetExtensionDataValue(assort, "BarterScheme", assort.BarterScheme);
-
-        var loyalLevelItems = GetMemberValue(assort, "LoyalLevelItems")
-            ?? GetMemberValue(assort, "loyal_level_items");
-
-        if (loyalLevelItems != null)
-        {
-            SetExtensionDataValue(assort, "loyal_level_items", loyalLevelItems);
-            SetExtensionDataValue(assort, "LoyalLevelItems", loyalLevelItems);
-        }
+        // The typed TraderAssort properties already serialize as items,
+        // barter_scheme, and loyal_level_items. Never mirror them into
+        // JsonExtensionData. Only remove stale collisions here.
+        YATMJsonExtensionDataSanitizer.SanitizeAssort(assort);
     }
 
     private static bool GetBoolSetting(object settings, string settingName, bool defaultValue)
@@ -648,23 +662,6 @@ public sealed class YATMTraderRuntimeService(
         }
 
         return null;
-    }
-
-    private static void SetExtensionDataValue(object target, string key, object? value)
-    {
-        var extensionData = GetMemberValue(target, "ExtensionData");
-        var convertedValue = ConvertJsonLikeIdValue(key, value);
-
-        if (extensionData is IDictionary<string, object?> stringObjectDictionary)
-        {
-            stringObjectDictionary[key] = convertedValue;
-            return;
-        }
-
-        if (extensionData is IDictionary dictionary)
-        {
-            dictionary[key] = convertedValue;
-        }
     }
 
     private static object? ConvertJsonLikeIdValue(string memberName, object? value)
@@ -896,6 +893,7 @@ public sealed class YATMTraderRuntimeService(
 
         var patchedQuestAssortEntries = PatchTraderQuestAssortForAmmoPacks(mappings);
         var patchedVisibleRewards = PatchVisibleAmmoPackAssortmentUnlockRewards(mappings);
+        YATMJsonExtensionDataSanitizer.SanitizeAssort(activeAssort);
 
         if (patchedQuestAssortEntries > 0 || patchedVisibleRewards > 0)
         {
@@ -1043,8 +1041,7 @@ public sealed class YATMTraderRuntimeService(
                     continue;
                 }
 
-                if (SetJsonLikeMemberIfChanged(reward, "Target", mapping.ActiveOfferId)
-                    | SetJsonLikeMemberIfChanged(reward, "target", mapping.ActiveOfferId))
+                if (SetJsonLikeMemberIfChanged(reward, "Target", mapping.ActiveOfferId))
                 {
                     patched++;
                 }
@@ -1061,13 +1058,7 @@ public sealed class YATMTraderRuntimeService(
 
                         var changed = false;
                         changed |= SetJsonLikeMemberIfChanged(item, "Id", mapping.ActiveOfferId);
-                        changed |= SetJsonLikeMemberIfChanged(item, "_id", mapping.ActiveOfferId);
-                        changed |= SetJsonLikeMemberIfChanged(item, "id", mapping.ActiveOfferId);
-                        changed |= SetJsonLikeMemberIfChanged(item, "_tpl", mapping.ActiveTpl);
-                        changed |= SetJsonLikeMemberIfChanged(item, "Tpl", mapping.ActiveTpl);
-                        changed |= SetJsonLikeMemberIfChanged(item, "tpl", mapping.ActiveTpl);
                         changed |= SetJsonLikeMemberIfChanged(item, "Template", mapping.ActiveTpl);
-                        changed |= SetJsonLikeMemberIfChanged(item, "TemplateId", mapping.ActiveTpl);
 
                         if (changed)
                         {
@@ -1397,47 +1388,59 @@ public sealed class YATMTraderRuntimeService(
 
     private static bool SetJsonLikeMemberIfChanged(object target, string memberName, string value)
     {
-        var currentObject = GetMemberValue(target, memberName);
-        var current = currentObject?.ToString();
         var convertedValue = ConvertJsonLikeIdValue(memberName, value);
-
-        if (string.Equals(current, value, StringComparison.OrdinalIgnoreCase))
-        {
-            // Even when the text matches, normalize id-like values into MongoId for runtime SPT objects.
-            if (currentObject is string && convertedValue is MongoId)
-            {
-                TrySetMemberValue(target, memberName, convertedValue);
-                SetExtensionDataValue(target, memberName, convertedValue);
-                return true;
-            }
-
-            return false;
-        }
-
-        if (TrySetMemberValue(target, memberName, convertedValue))
-        {
-            SetExtensionDataValue(target, memberName, convertedValue);
-            return true;
-        }
 
         if (target is IDictionary dictionary)
         {
             object? actualKey = null;
+            object? existingValue = null;
+
             foreach (DictionaryEntry entry in dictionary)
             {
                 if (entry.Key?.ToString()?.Equals(memberName, StringComparison.OrdinalIgnoreCase) == true)
                 {
                     actualKey = entry.Key;
+                    existingValue = entry.Value;
                     break;
                 }
             }
 
-            dictionary[actualKey ?? memberName] = ConvertJsonLikeIdValue(memberName, value);
+            if (string.Equals(existingValue?.ToString(), value, StringComparison.OrdinalIgnoreCase)
+                && !(existingValue is string && convertedValue is MongoId))
+            {
+                return false;
+            }
+
+            dictionary[actualKey ?? memberName] = convertedValue;
             return true;
         }
 
-        SetExtensionDataValue(target, memberName, convertedValue);
-        return true;
+        var currentObjectValue = GetMemberValue(target, memberName);
+        var current = currentObjectValue?.ToString();
+
+        if (string.Equals(current, value, StringComparison.OrdinalIgnoreCase))
+        {
+            if (currentObjectValue is string && convertedValue is MongoId
+                && TrySetMemberValue(target, memberName, convertedValue))
+            {
+                YATMJsonExtensionDataSanitizer.SanitizeObject(target);
+                return true;
+            }
+
+            YATMJsonExtensionDataSanitizer.SanitizeObject(target);
+            return false;
+        }
+
+        if (TrySetMemberValue(target, memberName, convertedValue))
+        {
+            YATMJsonExtensionDataSanitizer.SanitizeObject(target);
+            return true;
+        }
+
+        // All call sites use declared SPT model members (Reward.Target,
+        // Item.Id, Item.Template). Never fall back to JsonExtensionData.
+        YATMJsonExtensionDataSanitizer.SanitizeObject(target);
+        return false;
     }
 
     private static bool TrySetMemberValue(object target, string memberName, object? value)
@@ -1471,6 +1474,79 @@ public sealed class YATMTraderRuntimeService(
         return false;
     }
 
+
+    private void CaptureAndMergeEarlyInjectedAssort(string traderId, TraderAssort targetAssort, string reason)
+    {
+        if (string.IsNullOrWhiteSpace(traderId))
+        {
+            traderId = DefaultTonyTraderId;
+        }
+
+        var tables = databaseServer.GetTables();
+        if (!tables.Traders.TryGetValue(traderId, out var earlyTrader)
+            || earlyTrader?.Assort == null
+            || earlyTrader.Assort.Items.Count == 0)
+        {
+            _earlyInjectedAssortTemplate = null;
+            return;
+        }
+
+        _earlyInjectedAssortTemplate = cloner.Clone(earlyTrader.Assort);
+        YATMJsonExtensionDataSanitizer.SanitizeAssort(_earlyInjectedAssortTemplate);
+        MergeCapturedEarlyInjectedAssort(targetAssort, reason);
+    }
+
+    private void MergeCapturedEarlyInjectedAssort(TraderAssort targetAssort, string reason)
+    {
+        if (_earlyInjectedAssortTemplate == null || _earlyInjectedAssortTemplate.Items.Count == 0)
+        {
+            return;
+        }
+
+        var sourceAssort = cloner.Clone(_earlyInjectedAssortTemplate);
+        YATMJsonExtensionDataSanitizer.SanitizeAssort(sourceAssort);
+        if (sourceAssort == null)
+        {
+            YATMLogger.Log($"[{reason}] [EarlyAssort] Failed to clone the captured early trader assort.");
+            return;
+        }
+
+        var existingItemIds = targetAssort.Items
+            .Select(x => x.Id.ToString())
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var addedRows = 0;
+        foreach (var item in sourceAssort.Items)
+        {
+            if (existingItemIds.Add(item.Id.ToString()))
+            {
+                targetAssort.Items.Add(item);
+                addedRows++;
+            }
+        }
+
+        foreach (var (offerId, scheme) in sourceAssort.BarterScheme)
+        {
+            if (!targetAssort.BarterScheme.ContainsKey(offerId))
+            {
+                targetAssort.BarterScheme[offerId] = scheme;
+            }
+        }
+
+        foreach (var (offerId, loyaltyLevel) in sourceAssort.LoyalLevelItems)
+        {
+            if (!targetAssort.LoyalLevelItems.ContainsKey(offerId))
+            {
+                targetAssort.LoyalLevelItems[offerId] = loyaltyLevel;
+            }
+        }
+
+        if (addedRows > 0)
+        {
+            YATMLogger.Log($"[{reason}] [EarlyAssort] Preserved {addedRows} WTT/addon assort item row(s) from Tony's early placeholder.");
+        }
+    }
+
     private async Task LoadQuestsAfterTraderExists(Assembly assembly, string modPath)
     {
         if (_questsLoaded)
@@ -1491,7 +1567,7 @@ public sealed class YATMTraderRuntimeService(
 
                 await wttCommon.CustomQuestService.CreateCustomQuests(assembly, Path.Join("db", "CustomQuests", "MainQuests"));
                 await wttCommon.CustomQuestService.CreateCustomQuests(assembly, Path.Join("db", "CustomQuests", "SideQuests"));
-                await wttCommon.CustomQuestZoneService.CreateCustomQuestZones(assembly);
+                await wttCommon.CustomQuestZoneService.CreateCustomQuestZones(assembly, Path.Join("db", "CustomQuests", "Zones"));
             }
             else if (CustomQuestsEnabled(modPath) && !CustomSideQuestEnabled(modPath))
             {

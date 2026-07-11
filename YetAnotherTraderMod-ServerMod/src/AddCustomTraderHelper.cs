@@ -9,6 +9,7 @@ using SPTarkov.Server.Core.Utils.Cloners;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using YetAnotherTraderMod.src.Services;
 
 namespace YetAnotherTraderMod.src;
 
@@ -40,6 +41,10 @@ public class AddCustomTraderHelper(
 
     public void AddTraderToDb(TraderBase traderDetailsToAdd, TraderAssort assort)
     {
+        // Final serialization boundary: only typed SPT properties may carry
+        // _id/_tpl/parentId/slotId and assort container fields.
+        YATMJsonExtensionDataSanitizer.SanitizeAssort(assort);
+
         var traders = databaseService.GetTables().Traders;
 
         if (traders.TryGetValue(traderDetailsToAdd.Id, out var existingTrader))
@@ -109,6 +114,8 @@ public class AddCustomTraderHelper(
 
     public void OverwriteTraderAssort(string traderId, TraderAssort newAssorts)
     {
+        YATMJsonExtensionDataSanitizer.SanitizeAssort(newAssorts);
+
         if (!databaseService.GetTables().Traders.TryGetValue(traderId, out var traderToEdit))
         {
             logger.Warning($"Unable to update assorts for trader: {traderId}");
