@@ -138,6 +138,43 @@
                 "id": "5aa7cfc0e5b5b00015693143",
                 "newSlotName": "mod_nvg"
             }
+        ],
+        "addToTraders": true,
+        "presetTraders": {
+            "tony": {
+                "6a523f906dacb02fc0d2d16c": {
+                    "presetId": "6a51aaaa6dacb02fc0d2d14a",
+                    "barterSettings": {
+                        "loyalLevel": 3,
+                        "unlimitedCount": false,
+                        "stackObjectsCount": 4,
+                        "buyRestrictionMax": 2
+                    },
+                    "barters": [
+                        {
+                            "_tpl": "5449016a4bdc2d6f028b456f",
+                            "count": 89444
+                        }
+                    ]
+                }
+            }
+        },
+        "addToQuestAssorts": false,
+        "questAssorts": [
+            {
+                "traderId": "66a0f6b2c4d8e90123456789",
+                "questId": "6a30b2fbd2999bc7b9bbaab5",
+                "assortId": "6a523f906dacb02fc0d2d16c",
+                "status": "Success"
+            }
+        ],
+        "addToQuestRewards": false,
+        "questRewards": [
+            {
+                "questId": "6a30b2fbd2999bc7b9bbaab5",
+                "rewardType": "WeaponPreset",
+                "presetId": "6a51aaaa6dacb02fc0d2d14a"
+            }
         ]
     }
 }
