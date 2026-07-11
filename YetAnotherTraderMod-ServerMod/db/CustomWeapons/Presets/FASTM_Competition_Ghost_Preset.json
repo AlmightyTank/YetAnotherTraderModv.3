@@ -1,0 +1,117 @@
+{
+    "9b037c80e680f7bf777ca589": {
+        "_changeWeaponName": true,
+        "_encyclopedia": "699bacc55a0601415c931358",
+        "_id": "9b037c80e680f7bf777ca589",
+        "_name": "SSTM-9 Gen.2 \"Competition Ghost\"",
+        "_parent": "6a300025d2999bc7b9bba967",
+        "_type": "Preset",
+        "_items": [
+            {
+                "_id": "6a300025d2999bc7b9bba967",
+                "_tpl": "699bacc55a0601415c931358",
+                "upd": {
+                    "FireMode": {
+                        "FireMode": "single"
+                    }
+                }
+            },
+            {
+                "_id": "6a2a1c7d7cf9d174bc00002d",
+                "_tpl": "57c55efc2459772d2c6271e7",
+                "slotId": "mod_pistol_grip",
+                "parentId": "6a300025d2999bc7b9bba967"
+            },
+            {
+                "_id": "6a2a1c7d3e483e77460031b5",
+                "_tpl": "5a7ad2e851dfba0016153692",
+                "slotId": "mod_magazine",
+                "parentId": "6a300025d2999bc7b9bba967"
+            },
+            {
+                "_id": "6a2a1c7d3e483e77460031b6",
+                "_tpl": "602e63fb6335467b0c5ac94d",
+                "slotId": "mod_reciever",
+                "parentId": "6a300025d2999bc7b9bba967"
+            },
+            {
+                "_id": "6a2a1c7d7cf9d174bc00006d",
+                "_tpl": "5c793fb92e221644f31bfb64",
+                "slotId": "mod_stock_001",
+                "parentId": "6a300025d2999bc7b9bba967"
+            },
+            {
+                "_id": "6a2a1c7d7cf9d174bc000037",
+                "_tpl": "5d44334ba4b9362b346d1948",
+                "slotId": "mod_charge",
+                "parentId": "6a300025d2999bc7b9bba967"
+            },
+            {
+                "_id": "6a2a1c7d7cf9d174bc000100",
+                "_tpl": "60338ff388382f4fab3fd2c8",
+                "slotId": "mod_tactical_000",
+                "parentId": "6a300025d2999bc7b9bba967"
+            },
+            {
+                "_id": "6a2a1c7d7cf9d174bc0000e4",
+                "_tpl": "570fd6c2d2720bc6458b457f",
+                "slotId": "mod_scope",
+                "parentId": "6a2a1c7d3e483e77460031b6"
+            },
+            {
+                "_id": "6a2a1c7d3e483e77460031b7",
+                "_tpl": "603372b4da11d6478d5a07ff",
+                "slotId": "mod_barrel",
+                "parentId": "6a2a1c7d3e483e77460031b6"
+            },
+            {
+                "_id": "6a2a1c7d3e483e77460031b9",
+                "_tpl": "6034e3cb0ddce744014cb870",
+                "slotId": "mod_handguard",
+                "parentId": "6a2a1c7d3e483e77460031b6"
+            },
+            {
+                "_id": "6a2a1c7d7cf9d174bc000096",
+                "_tpl": "5fb6564947ce63734e3fa1da",
+                "slotId": "mod_sight_rear",
+                "parentId": "6a2a1c7d3e483e77460031b6"
+            },
+            {
+                "_id": "6a2a1c7d7cf9d174bc00008a",
+                "_tpl": "602e620f9b513876d4338d9a",
+                "slotId": "mod_stock_000",
+                "parentId": "6a2a1c7d7cf9d174bc00006d"
+            },
+            {
+                "_id": "6a2a1c7d7cf9d174bc000005",
+                "_tpl": "5c6165902e22160010261b28",
+                "slotId": "mod_muzzle",
+                "parentId": "6a2a1c7d3e483e77460031b7"
+            },
+            {
+                "_id": "6a2a1c7d7cf9d174bc0000e9",
+                "_tpl": "6269220d70b6c02e665f2635",
+                "slotId": "mod_mount_001",
+                "parentId": "6a2a1c7d3e483e77460031b9"
+            },
+            {
+                "_id": "6a2a1c7d7cf9d174bc00000f",
+                "_tpl": "57cffb66245977632f391a99",
+                "slotId": "mod_foregrip",
+                "parentId": "6a2a1c7d3e483e77460031b9"
+            },
+            {
+                "_id": "6a2a1c7d7cf9d174bc0000a0",
+                "_tpl": "5fb6567747ce63734e3fa1dc",
+                "slotId": "mod_sight_front",
+                "parentId": "6a2a1c7d3e483e77460031b9"
+            },
+            {
+                "_id": "6a2a1c7d7cf9d174bc0000fe",
+                "_tpl": "56def37dd2720bec348b456a",
+                "slotId": "mod_tactical",
+                "parentId": "6a2a1c7d7cf9d174bc0000e9"
+            }
+        ]
+    }
+}

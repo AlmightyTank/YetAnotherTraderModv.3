@@ -12,20 +12,16 @@
             "Ergonomics": 46,
             "bFirerate": 650,
             "BurstShotsCount": 3,
-            "weapFireType": [
-                "single",
-                "burst",
-                "fullauto"
-            ],
+            "weapFireType": [ "single", "burst", "fullauto" ],
             "CanSellOnRagfair": false
         },
         "fleaPriceRoubles": 42800,
         "handbookPriceRoubles": 42800,
         "locales": {
             "en": {
-                "name": "SVDS \"Arbiter\"",
-                "shortName": "SVDS ARB",
-                "description": "The Arbiter answers a question nobody sane asked: what if an SVDS stopped acting like a disciplined marksman's rifle and started handing down sentences in bursts? Reinforced, tuned, expensive to feed, and punishing if treated casually. Not a precision tool — judgment with a folding stock."
+                "name": "Kalashnikov SVDS 7.62x54R automatic sniper rifle",
+                "shortName": "SVDS Auto",
+                "description": "A modified version of the Kalashnikov SVDS sniper rifle chambered in 7.62x54R. The fire-control mechanism and operating system have been extensively reworked to provide three-round burst and fully automatic fire. Reinforced internal components allow the rifle to withstand the increased firing load, though the powerful cartridge and lightweight folding-stock configuration produce severe recoil during sustained fire."
             }
         }
     }

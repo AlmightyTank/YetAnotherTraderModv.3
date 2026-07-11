@@ -20,20 +20,16 @@
             "RecolDispersion": 10,
             "RecoilReturnPathDampingHandRotation": 0.4,
             "BurstShotsCount": 3,
-            "weapFireType": [
-                "single",
-                "burst",
-                "fullauto"
-            ],
+            "weapFireType": [ "single", "burst", "fullauto" ],
             "CanSellOnRagfair": false
         },
         "fleaPriceRoubles": 17500,
         "handbookPriceRoubles": 12500,
         "locales": {
             "en": {
-                "name": "VPO-136 \"Hunter's Regret\"",
-                "shortName": "136 HR",
-                "description": "A VPO-136 is supposed to be the civilized Vepr-KM: AKM bloodline, civilian papers, semi-auto manners. This one stopped trusting manners. The trigger group, action, and fire-control work were rebuilt until the carbine stopped pretending to be harmless. Hunter's Regret still looks like sport shooting equipment, right up until it starts shouting."
+                "name": "Molot Arms VPO-136 Vepr-KM 7.62x39 automatic carbine",
+                "shortName": "VPO-136 Auto",
+                "description": "A modified version of the Molot Arms VPO-136 Vepr-KM carbine chambered in 7.62x39mm. The original civilian fire-control components have been replaced with a reworked mechanism capable of three-round burst and fully automatic fire. Additional modifications to the action and recoil system improve handling during rapid fire, though the conversion places greater stress on the weapon's internal components."
             }
         }
     }

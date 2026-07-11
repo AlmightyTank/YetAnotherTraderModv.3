@@ -23,9 +23,9 @@
         "handbookPriceRoubles": 12500,
         "locales": {
             "en": {
-                "name": "STM-9 Gen.2 \"Competition Ghost\"",
-                "shortName": "STM-9 CG",
-                "description": "The STM-9 was built for clean stages, fast splits, and shooters who care about timers. This rebuild keeps the smooth recoil impulse and Glock-pattern magazines, then changes the purpose: tuned cycling, reinforced feed work, and a full-auto conversion that turns a race gun into a hallway cleaner."
+                "name": "Soyuz-TM STM-9 Gen.2 9x19 machine carbine",
+                "shortName": "STM-9 Gen.2",
+                "description": "A modified version of the Soyuz-TM STM-9 Gen.2 9x19 carbine, originally designed for practical shooting competitions. The weapon features a reworked fire-control group capable of three-round burst and fully automatic fire, reinforced internal components, and a tuned operating system. The increased rate of fire improves its effectiveness at close range, but also places additional stress on the weapon's internal mechanisms."
             }
         }
     }

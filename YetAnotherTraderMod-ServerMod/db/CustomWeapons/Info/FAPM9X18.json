@@ -20,20 +20,16 @@
             "RecolDispersion": 12,
             "RecoilReturnPathDampingHandRotation": 0.43,
             "BurstShotsCount": 3,
-            "weapFireType": [
-                "single",
-                "burst",
-                "fullauto"
-            ],
+            "weapFireType": [ "single", "burst", "fullauto" ],
             "CanSellOnRagfair": false
         },
         "fleaPriceRoubles": 3850,
         "handbookPriceRoubles": 4097,
         "locales": {
             "en": {
-                "name": "Makarov PM \"Loose Ends\"",
-                "shortName": "PM LE",
-                "description": "A plain 9x18PM Makarov should be simple: cheap, reliable, and easy to hide. This one was pushed until the old PM could dump a magazine in full-auto. Ugly, jumpy, and nearly impossible to control past bad-breath distance. Loose Ends is not a sidearm. It is a pocket-sized problem solver."
+                "name": "Makarov PM 9x18PM machine pistol",
+                "shortName": "PM Auto",
+                "description": "A modified version of the Makarov PM pistol chambered in 9x18PM. The original fire-control mechanism has been reworked to provide three-round burst and fully automatic fire. Although the conversion greatly increases its close-range firepower, the compact frame, light weight, and simple blowback action make the weapon difficult to control during sustained fire."
             }
         }
     }

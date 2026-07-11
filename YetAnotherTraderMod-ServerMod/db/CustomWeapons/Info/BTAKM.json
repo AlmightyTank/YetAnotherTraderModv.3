@@ -26,9 +26,9 @@
         "handbookPriceRoubles": 12500,
         "locales": {
             "en": {
-                "name": "AKM \"Red Debt\"",
-                "shortName": "AKM RD",
-                "description": "Red Debt is not a gimmick conversion. It is a better-tuned AKM for people who need the old rifle to hit harder, handle cleaner, and keep working when everything around it gets cheap and dirty. The action has been smoothed, recoil behavior tightened, and heat and wear tolerances cleaned up without sanding away the Kalashnikov soul. It still collects what people owe with less wasted movement."
+                "name": "Kalashnikov AKM 7.62x39 assault rifle modified",
+                "shortName": "AKM Mod.",
+                "description": "A modified version of the Kalashnikov AKM assault rifle chambered in 7.62x39mm. The weapon features a polished action, reworked gas system, and reinforced internal components intended to improve reliability, recoil recovery, and heat dissipation. The modifications make the rifle easier to control during rapid fire while preserving the durability and operating characteristics of the original design."
             }
         }
     }

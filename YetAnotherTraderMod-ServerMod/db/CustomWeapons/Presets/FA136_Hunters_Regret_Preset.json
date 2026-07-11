@@ -1,0 +1,105 @@
+{
+    "ca0492ca117da7844ae63ee2": {
+        "_changeWeaponName": true,
+        "_encyclopedia": "69ac2686f67026da2c75948f",
+        "_id": "ca0492ca117da7844ae63ee2",
+        "_name": "Hunter's Regret",
+        "_parent": "6a300025d2999bc7b9bba964",
+        "_type": "Preset",
+        "_items": [
+            {
+                "_id": "6a300025d2999bc7b9bba964",
+                "_tpl": "69ac2686f67026da2c75948f",
+                "upd": {
+                    "FireMode": {
+                        "FireMode": "single"
+                    }
+                }
+            },
+            {
+                "_id": "6a2a1a8d2729d887c400004f",
+                "_tpl": "59c6633186f7740cf0493bb9",
+                "slotId": "mod_gas_block",
+                "parentId": "6a300025d2999bc7b9bba964"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c400000f",
+                "_tpl": "64942bfc6ee699f6890dff95",
+                "slotId": "mod_muzzle",
+                "parentId": "6a300025d2999bc7b9bba964"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c40000e0",
+                "_tpl": "5c6bf4aa2e2216001219b0ae",
+                "slotId": "mod_pistol_grip",
+                "parentId": "6a300025d2999bc7b9bba964"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c4000103",
+                "_tpl": "5d2c76ed48f03532f2136169",
+                "slotId": "mod_reciever",
+                "parentId": "6a300025d2999bc7b9bba964"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c40000ef",
+                "_tpl": "6087e2a5232e5a31c233d552",
+                "slotId": "mod_stock",
+                "parentId": "6a300025d2999bc7b9bba964"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c40000aa",
+                "_tpl": "59d6272486f77466146386ff",
+                "slotId": "mod_magazine",
+                "parentId": "6a300025d2999bc7b9bba964"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c40000f2",
+                "_tpl": "5648ac824bdc2ded0b8b457d",
+                "slotId": "mod_charge",
+                "parentId": "6a300025d2999bc7b9bba964"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c4000011",
+                "_tpl": "5a0f096dfcdbcb0176308b15",
+                "slotId": "mod_sight_front",
+                "parentId": "6a300025d2999bc7b9bba964"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c4000070",
+                "_tpl": "5b800e9286f7747a8b04f3ff",
+                "slotId": "mod_handguard",
+                "parentId": "6a2a1a8d2729d887c400004f"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c4000148",
+                "_tpl": "570fd6c2d2720bc6458b457f",
+                "slotId": "mod_scope",
+                "parentId": "6a2a1a8d2729d887c4000103"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c4000073",
+                "_tpl": "5b800ebc86f774394e230a90",
+                "slotId": "mod_mount_000",
+                "parentId": "6a2a1a8d2729d887c4000070"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c400014b",
+                "_tpl": "5b800ed086f7747baf6e2f9e",
+                "slotId": "mod_mount_003",
+                "parentId": "6a2a1a8d2729d887c4000070"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c4000098",
+                "_tpl": "588226d124597767ad33f787",
+                "slotId": "mod_foregrip",
+                "parentId": "6a2a1a8d2729d887c4000073"
+            },
+            {
+                "_id": "6a2a1a8d2729d887c4000161",
+                "_tpl": "56def37dd2720bec348b456a",
+                "slotId": "mod_tactical",
+                "parentId": "6a2a1a8d2729d887c400014b"
+            }
+        ]
+    }
+}

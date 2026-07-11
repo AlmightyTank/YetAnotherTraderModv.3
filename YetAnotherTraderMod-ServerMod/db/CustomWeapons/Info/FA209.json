@@ -20,20 +20,16 @@
             "RecolDispersion": 10,
             "RecoilReturnPathDampingHandRotation": 0.4,
             "BurstShotsCount": 3,
-            "weapFireType": [
-                "single",
-                "burst",
-                "fullauto"
-            ],
+            "weapFireType": [ "single", "burst", "fullauto" ],
             "CanSellOnRagfair": false
         },
         "fleaPriceRoubles": 17500,
         "handbookPriceRoubles": 12500,
         "locales": {
             "en": {
-                "name": "VPO-209 \"Paradox Unleashed\"",
-                "shortName": "209 PU",
-                "description": "A civilian VPO-209 built around loopholes, paperwork, and.366 TKM. The polite hunting-rifle behavior is gone: reworked fire-control group, opened gas system, and old AKM bones forced to run full-auto. It is not elegant. It kicks hard, barks loud, and throws.366 downrange like it is angry at the law that created it."
+                "name": "Molot Arms VPO-209 .366 TKM automatic carbine",
+                "shortName": "VPO-209 Auto",
+                "description": "A modified version of the Molot Arms VPO-209 carbine chambered in .366 TKM. The weapon has been converted from its original civilian configuration with a reworked fire-control group capable of three-round burst and fully automatic fire. Additional modifications to the gas system and internal components improve cycling and controllability during automatic fire, at the cost of increased wear and heavy recoil."
             }
         }
     }

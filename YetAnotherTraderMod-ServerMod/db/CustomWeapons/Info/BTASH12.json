@@ -26,9 +26,9 @@
         "handbookPriceRoubles": 93800,
         "locales": {
             "en": {
-                "name": "ASh-12 \"Debt Collector\" 12.7x55 assault rifle",
-                "shortName": "Debt-12",
-                "description": "A tuned ASh-12 rebuilt through a back-room armory network. The rifle has been tightened, rebalanced, and fitted for hard urban work where subtlety is already off the table. Heavy recoil, heavy rounds, and heavy consequences. When this thing shows up, somebody already owes too much."
+                "name": "KBP ASh-12 12.7x55 assault rifle modified",
+                "shortName": "ASh-12 Mod.",
+                "description": "A modified version of the KBP ASh-12 assault rifle chambered in 12.7x55mm. The weapon features a rebalanced operating system, a refined fire-control group, and reinforced internal components designed to improve handling and recoil recovery. Despite the modifications, the rifle retains the considerable recoil and stopping power characteristic of the original platform."
             }
         }
     }

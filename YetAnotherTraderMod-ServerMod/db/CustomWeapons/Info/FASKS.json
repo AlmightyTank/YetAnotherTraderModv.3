@@ -10,22 +10,18 @@
             "RecolDispersion": 9,
             "DurabilityBurnRatio": 1.05,
             "Ergonomics": 48,
-            "bFirerate": 50,
+            "bFirerate": 650,
             "BurstShotsCount": 3,
-            "weapFireType": [
-                "single",
-                "burst",
-                "fullauto"
-            ],
+            "weapFireType": [ "single", "burst", "fullauto" ],
             "CanSellOnRagfair": false
         },
         "fleaPriceRoubles": 17500,
         "handbookPriceRoubles": 12500,
         "locales": {
             "en": {
-                "name": "OP-SKS \"Relic Reborn\"",
-                "shortName": "SKS RR",
-                "description": "This OP-SKS started life as a quiet civilian hunting carbine, the kind of rifle that should have stayed behind a cabin door and aged in peace. Under the varnish was an old war relic with enough steel left to misbehave. The rebuild does not make it modern; it makes it furious."
+                "name": "Molot Arms Simonov OP-SKS 7.62x39 automatic carbine",
+                "shortName": "OP-SKS Auto",
+                "description": "A modified version of the Molot Arms OP-SKS hunting carbine chambered in 7.62x39mm. The original semi-automatic fire-control mechanism has been reworked to provide three-round burst and fully automatic fire. Additional modifications to the action and gas system improve cycling during rapid fire, though the rifle's traditional layout and powerful cartridge make sustained automatic fire difficult to control."
             }
         }
     }

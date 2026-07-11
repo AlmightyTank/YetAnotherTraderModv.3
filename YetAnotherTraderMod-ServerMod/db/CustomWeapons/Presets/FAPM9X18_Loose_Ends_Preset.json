@@ -1,0 +1,51 @@
+{
+    "53bde991bf5576e0e27ed948": {
+        "_changeWeaponName": true,
+        "_encyclopedia": "6a3804fd82d8dd83f87b1f52",
+        "_id": "53bde991bf5576e0e27ed948",
+        "_name": "Makarov PM \"Loose Ends\"",
+        "_parent": "6a300025d2999bc7b9bba962",
+        "_type": "Preset",
+        "_items": [
+            {
+                "_id": "6a300025d2999bc7b9bba962",
+                "_tpl": "6a3804fd82d8dd83f87b1f52",
+                "upd": {
+                    "FireMode": {
+                        "FireMode": "single"
+                    }
+                }
+            },
+            {
+                "_id": "6a2a1bd97fcb217acc000006",
+                "_tpl": "55d485be4bdc2d962f8b456f",
+                "slotId": "mod_magazine",
+                "parentId": "6a300025d2999bc7b9bba962"
+            },
+            {
+                "_id": "6a2a1bd97fcb217acc000001",
+                "_tpl": "6374a822e629013b9c0645c8",
+                "slotId": "mod_reciever",
+                "parentId": "6a300025d2999bc7b9bba962"
+            },
+            {
+                "_id": "6a2a1bd97fcb217acc00000c",
+                "_tpl": "637b6d610aef6cfc5e02dd14",
+                "slotId": "mod_pistolgrip",
+                "parentId": "6a300025d2999bc7b9bba962"
+            },
+            {
+                "_id": "6a2a1bd97fcb217acc000003",
+                "_tpl": "63c6adcfb4ba094317063742",
+                "slotId": "mod_sight_rear",
+                "parentId": "6a2a1bd97fcb217acc000001"
+            },
+            {
+                "_id": "6a2a1bd97fcb217acc00000f",
+                "_tpl": "5a7b483fe899ef0016170d15",
+                "slotId": "mod_tactical",
+                "parentId": "6a2a1bd97fcb217acc00000c"
+            }
+        ]
+    }
+}

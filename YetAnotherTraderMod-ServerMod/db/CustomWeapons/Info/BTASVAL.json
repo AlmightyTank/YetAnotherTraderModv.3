@@ -26,9 +26,9 @@
         "handbookPriceRoubles": 12500,
         "locales": {
             "en": {
-                "name": "AS VAL \"Whisper Fang\"",
-                "shortName": "VAL WF",
-                "description": "Whisper Fang is a better-tuned AS VAL, not a backyard full-auto stunt. The rifle was already born quiet and dangerous; this rebuild only makes the good parts sharper. The gas system is refined, the action cleaned up, and the handling tuned for smoother strings of suppressed fire. Less issued equipment, more private tool."
+                "name": "AS VAL 9x39 special assault rifle modified",
+                "shortName": "AS VAL Mod.",
+                "description": "A modified version of the AS VAL special assault rifle chambered in 9x39mm. The weapon features a refined gas system, a tuned action, and reworked internal components intended to improve accuracy, handling, and controllability during sustained suppressed fire. The extensive modifications provide better overall performance at the cost of increased mechanical wear."
             }
         }
     }

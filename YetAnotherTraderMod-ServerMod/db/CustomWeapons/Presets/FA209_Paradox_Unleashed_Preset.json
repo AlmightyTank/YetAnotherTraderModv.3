@@ -1,0 +1,99 @@
+{
+    "1c54c2408ad6d3d7be305de7": {
+        "_changeWeaponName": true,
+        "_encyclopedia": "69ac236f895124b233cb4b5c",
+        "_id": "1c54c2408ad6d3d7be305de7",
+        "_name": "Paradox Unleashed",
+        "_parent": "6a300025d2999bc7b9bba965",
+        "_type": "Preset",
+        "_items": [
+            {
+                "_id": "6a300025d2999bc7b9bba965",
+                "_tpl": "69ac236f895124b233cb4b5c",
+                "upd": {
+                    "FireMode": {
+                        "FireMode": "single"
+                    }
+                }
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc000009",
+                "_tpl": "59c6633186f7740cf0493bb9",
+                "slotId": "mod_gas_block",
+                "parentId": "6a300025d2999bc7b9bba965"
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc00011d",
+                "_tpl": "5a9fbb74a2750c0032157181",
+                "slotId": "mod_muzzle",
+                "parentId": "6a300025d2999bc7b9bba965"
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc0000bc",
+                "_tpl": "5c6bf4aa2e2216001219b0ae",
+                "slotId": "mod_pistol_grip",
+                "parentId": "6a300025d2999bc7b9bba965"
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc0000d6",
+                "_tpl": "5d2c76ed48f03532f2136169",
+                "slotId": "mod_reciever",
+                "parentId": "6a300025d2999bc7b9bba965"
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc0000cb",
+                "_tpl": "6087e2a5232e5a31c233d552",
+                "slotId": "mod_stock",
+                "parentId": "6a300025d2999bc7b9bba965"
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc000087",
+                "_tpl": "59d6272486f77466146386ff",
+                "slotId": "mod_magazine",
+                "parentId": "6a300025d2999bc7b9bba965"
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc0000ce",
+                "_tpl": "5648ac824bdc2ded0b8b457d",
+                "slotId": "mod_charge",
+                "parentId": "6a300025d2999bc7b9bba965"
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc00002c",
+                "_tpl": "5b800e9286f7747a8b04f3ff",
+                "slotId": "mod_handguard",
+                "parentId": "6a2a1b453aa0245ddc000009"
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc00011b",
+                "_tpl": "570fd6c2d2720bc6458b457f",
+                "slotId": "mod_scope",
+                "parentId": "6a2a1b453aa0245ddc0000d6"
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc00004f",
+                "_tpl": "5b800ebc86f774394e230a90",
+                "slotId": "mod_mount_000",
+                "parentId": "6a2a1b453aa0245ddc00002c"
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc000034",
+                "_tpl": "5b800ed086f7747baf6e2f9e",
+                "slotId": "mod_mount_003",
+                "parentId": "6a2a1b453aa0245ddc00002c"
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc000074",
+                "_tpl": "588226d124597767ad33f787",
+                "slotId": "mod_foregrip",
+                "parentId": "6a2a1b453aa0245ddc00004f"
+            },
+            {
+                "_id": "6a2a1b453aa0245ddc00004a",
+                "_tpl": "56def37dd2720bec348b456a",
+                "slotId": "mod_tactical",
+                "parentId": "6a2a1b453aa0245ddc000034"
+            }
+        ]
+    }
+}

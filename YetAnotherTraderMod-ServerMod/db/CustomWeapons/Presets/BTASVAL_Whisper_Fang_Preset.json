@@ -1,0 +1,82 @@
+{
+    "3eb5989d9d8b5ce83ae4f80a": {
+        "_changeWeaponName": true,
+        "_encyclopedia": "69ac37ebd05c3cf7e4542d12",
+        "_id": "3eb5989d9d8b5ce83ae4f80a",
+        "_name": "AS VAL \"Whisper Fang\"",
+        "_parent": "6a3007dfd2999bc7b9bba98a",
+        "_type": "Preset",
+        "_items": [
+            {
+                "_id": "6a3007dfd2999bc7b9bba98a",
+                "_tpl": "69ac37ebd05c3cf7e4542d12"
+            },
+            {
+                "_id": "6a2c011351ab7898b841bfc0",
+                "_tpl": "57c44dd02459772d2e0ae249",
+                "parentId": "6a3007dfd2999bc7b9bba98a",
+                "slotId": "mod_muzzle"
+            },
+            {
+                "_id": "6a2c011351ab7898b841bfc1",
+                "_tpl": "57c44f4f2459772d2c627113",
+                "parentId": "6a3007dfd2999bc7b9bba98a",
+                "slotId": "mod_reciever"
+            },
+            {
+                "_id": "6a2c011351ab7898b841bfc2",
+                "_tpl": "65118f531b90b4fc77015083",
+                "parentId": "6a3007dfd2999bc7b9bba98a",
+                "slotId": "mod_magazine"
+            },
+            {
+                "_id": "6a2c011351ab7898b841bfc3",
+                "_tpl": "5a69a2ed8dc32e000d46d1f1",
+                "parentId": "6a3007dfd2999bc7b9bba98a",
+                "slotId": "mod_pistol_grip"
+            },
+            {
+                "_id": "6a2c011351ab7898b841bfc4",
+                "_tpl": "6130ca3fd92c473c77020dbd",
+                "parentId": "6a3007dfd2999bc7b9bba98a",
+                "slotId": "mod_charge"
+            },
+            {
+                "_id": "6a2c011351ab7898b841bfc5",
+                "_tpl": "67069c8cee8138ed2f05ad34",
+                "parentId": "6a3007dfd2999bc7b9bba98a",
+                "slotId": "mod_mount_000"
+            },
+            {
+                "_id": "6a2c011351ab7898b841bfc6",
+                "_tpl": "651178336cad06c37c049eb4",
+                "parentId": "6a3007dfd2999bc7b9bba98a",
+                "slotId": "mod_handguard"
+            },
+            {
+                "_id": "6a2c011351ab7898b841bfc7",
+                "_tpl": "57c44e7b2459772d28133248",
+                "parentId": "6a2c011351ab7898b841bfc0",
+                "slotId": "mod_sight_rear"
+            },
+            {
+                "_id": "6a2c011351ab7898b841bfc8",
+                "_tpl": "59eb7ebe86f7740b373438ce",
+                "parentId": "6a2c011351ab7898b841bfc0",
+                "slotId": "mod_mount_000"
+            },
+            {
+                "_id": "6a2c011351ab7898b841bfc9",
+                "_tpl": "56eabf3bd2720b75698b4569",
+                "parentId": "6a2c011351ab7898b841bfc3",
+                "slotId": "mod_stock_000"
+            },
+            {
+                "_id": "6a2c011351ab7898b841bfca",
+                "_tpl": "58491f3324597764bc48fa02",
+                "parentId": "6a2c011351ab7898b841bfc5",
+                "slotId": "mod_scope"
+            }
+        ]
+    }
+}
