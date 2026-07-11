@@ -1,8 +1,8 @@
 {
-    "6a51aaaa6dacb02fc0d2d140": {
+    "6a523f906dacb02fc0d2d176": {
         "itemTplToClone": "65764e1e2bc38ef78e076489",
-        "parentId": "5448e5284bdc2dcb718b4567",
-        "handbookParentId": "5b5f6f8786f77447ed563642",
+        "parentId": "65649eb40bf0ed77b8044453",
+        "handbookParentId": "6564b96a189fe36f356d177c",
         "overrideProperties": {
             "ExaminedByDefault": true,
             "CanSellOnRagfair": false,

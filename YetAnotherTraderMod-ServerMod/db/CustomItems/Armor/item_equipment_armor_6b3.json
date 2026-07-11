@@ -213,9 +213,9 @@
                         "filters": [
                             {
                                 "Filter": [
-                                    "6a51aaaa6dacb02fc0d2d140"
+                                    "6a523f906dacb02fc0d2d176"
                                 ],
-                                "Plate": "6a51aaaa6dacb02fc0d2d140",
+                                "Plate": "6a523f906dacb02fc0d2d176",
                                 "armorColliders": [
                                     "RibcageUp",
                                     "RibcageLow"
@@ -311,8 +311,8 @@
                 "description": "An upgraded 6B3TM-01 armored rig in khaki. Originally developed as modified Soviet general army body armor and used during the war in Afghanistan, the 6B3TM-01 combines protective armor with integrated magazine and grenade pouches. This reinforced variant has been fitted with improved protective inserts and repaired carrier sections, increasing its protection to Class 5 at the cost of additional weight and reduced comfort."
             }
         },
-        "fleaPriceRoubles": 84000,
-        "handbookPriceRoubles": 84000,
+        "fleaPriceRoubles": 114000,
+        "handbookPriceRoubles": 114000,
         "addWeaponPreset": true,
         "weaponPresets": [
             {
@@ -328,7 +328,7 @@
                     },
                     {
                         "_id": "6a523f906dacb02fc0d2d168",
-                        "_tpl": "6a51aaaa6dacb02fc0d2d140",
+                        "_tpl": "6a523f906dacb02fc0d2d176",
                         "parentId": "6a523f906dacb02fc0d2d166",
                         "slotId": "Soft_armor_front"
                     },
