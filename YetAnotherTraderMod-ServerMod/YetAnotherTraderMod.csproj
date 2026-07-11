@@ -50,7 +50,12 @@
     <Content Remove="db\CustomItems\Armor\Builtins\6b3TM_level4_soft_armor_back.json" />
     <Content Remove="db\customitems\armor\builtins\6b3TM_level4_soft_armor_groin_back.json" />
     <Content Remove="db\CustomItems\Armor\Builtins\6b3TM_level5_soft_armor_groin_front.json" />
+    <Content Remove="db\CustomItems\Armor\Builtins\6b5-15_level4_soft_armor_collar.json" />
+    <Content Remove="db\CustomItems\Armor\Builtins\6b5-15_level5_soft_armor_back.json" />
+    <Content Remove="db\CustomItems\Armor\Builtins\6b5-15_level5_soft_armor_front.json" />
+    <Content Remove="db\CustomItems\Armor\Builtins\6b5-15_level5_soft_armor_groin.json" />
     <Content Remove="db\CustomItems\Armor\item_equipment_armor_6b3.json" />
+    <Content Remove="db\customitems\armor\item_equipment_rig_6b5_flora.json" />
     <Content Remove="db\CustomItems\Consumables\medvedol_650mg_tablets.json" />
     <Content Remove="db\CustomItems\Consumables\noctapyrin_focus_tablets.json" />
     <Content Remove="db\CustomItems\Consumables\volkov_cocoa_thermos.json" />
