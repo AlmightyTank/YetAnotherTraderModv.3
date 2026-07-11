@@ -20,9 +20,11 @@ namespace YetAnotherTraderMod.Client
             new Patches.ConditionCounterCreatorDurabilityPatch().Enable();
             new Patches.KillConditionDurabilityPatch().Enable();
 
+            // Dynamic inventory layouts for configured YATM custom rigs.
             new Patches.TonyRigCreateGridsPatch().Enable();
             new Patches.TonyRigContainedGridsViewShowPatch().Enable();
 
+            LogSource.LogInfo("[YATM Rig Grid] Dynamic custom-rig grid layouts enabled for 2 template IDs.");
             LogSource.LogInfo("[YATM ClientMod PreLoad] Loaded.");
         }
     }

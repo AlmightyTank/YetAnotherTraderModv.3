@@ -8,10 +8,10 @@ using UnityEngine;
 namespace YetAnotherTraderMod.Client.Patches
 {
     /// <summary>
-    /// Forces Tony's upgraded 6B3TM-01U to use <see cref="GeneratedGridsView"/> instead of static
+    /// Forces configured YATM custom rigs to use <see cref="GeneratedGridsView"/> instead of static
     /// <see cref="TemplatedGridsView"/> layouts. Templated layouts bake grid positions into
     /// Unity prefabs, which means they cannot adapt when grid dimensions are modified at
-    /// runtime. By intercepting <see cref="ContainedGridsView.CreateGrids"/> for the target rig
+    /// runtime. By intercepting <see cref="ContainedGridsView.CreateGrids"/> for configured target rigs
     /// that have a <see cref="GridLayoutComponent"/>, we force instantiation of the dynamic
     /// template so that grid views are created to match actual grid data.
     /// </summary>
@@ -27,7 +27,7 @@ namespace YetAnotherTraderMod.Client.Patches
         }
 
         /// <summary>
-        /// Intercepts grid creation for the target rig that would normally load a static
+        /// Intercepts grid creation for configured target rigs that would normally load a static
         /// layout prefab. Instead, instantiates the dynamic <see cref="GeneratedGridsView"/>
         /// template which creates one <see cref="GridView"/> per grid at runtime.
         /// </summary>
@@ -38,7 +38,7 @@ namespace YetAnotherTraderMod.Client.Patches
             ref ContainedGridsView __result
         )
         {
-            // Only replace the baked layout for Tony's upgraded 6B3TM-01U.
+            // Only replace baked layouts for configured YATM custom rigs.
             if (!TonyRigGridLayout.IsTarget(item))
             {
                 return true;

@@ -1,0 +1,25 @@
+{
+    "6a52c7dd6dacb02fc0d2d186": {
+        "itemTplToClone": "65708afe4a747dbb63005eee",
+        "parentId": "65649eb40bf0ed77b8044453",
+        "handbookParentId": "6564b96a189fe36f356d177c",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "CanRequireOnRagfair": false,
+            "Durability": 20,
+            "MaxDurability": 20,
+            "armorClass": "4"
+        },
+        "locales": {
+            "en": {
+                "name": "Aramid insert",
+                "shortName": "",
+                "description": ""
+            }
+        },
+        "fleaPriceRoubles": 4559,
+        "handbookPriceRoubles": 4559,
+        "addtoItemBlacklist": false
+    }
+}

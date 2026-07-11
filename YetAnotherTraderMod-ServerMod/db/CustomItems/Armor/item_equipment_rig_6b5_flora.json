@@ -1,0 +1,348 @@
+{
+    "6a52c7dd6dacb02fc0d2d177": {
+        "itemTplToClone": "5c0e446786f7742013381639",
+        "parentId": "5448e5284bdc2dcb718b4567",
+        "handbookParentId": "5b5f6f8786f77447ed563642",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "mousePenalty": -1,
+            "speedPenaltyPercent": -2,
+            "weaponErgonomicPenalty": -1,
+            "Grids": [
+                {
+                    "_id": "6a52c7dd6dacb02fc0d2d178",
+                    "_name": "1",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 3,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                },
+                {
+                    "_id": "6a52c7dd6dacb02fc0d2d179",
+                    "_name": "2",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 3,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                },
+                {
+                    "_id": "6a52c7dd6dacb02fc0d2d17a",
+                    "_name": "3",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 3,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                },
+                {
+                    "_id": "6a52c7dd6dacb02fc0d2d17b",
+                    "_name": "4",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 3,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                },
+                {
+                    "_id": "6a52c7dd6dacb02fc0d2d17c",
+                    "_name": "5",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 2,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                },
+                {
+                    "_id": "6a52c7dd6dacb02fc0d2d17d",
+                    "_name": "6",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 2,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                }
+            ],
+            "Slots": [
+                {
+                    "_id": "6a52c7dd6dacb02fc0d2d17f",
+                    "_mergeSlotWithChildren": true,
+                    "_name": "Soft_armor_front",
+                    "_parent": "6a52c7dd6dacb02fc0d2d177",
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a52c7dd6dacb02fc0d2d184"
+                                ],
+                                "Plate": "6a52c7dd6dacb02fc0d2d184",
+                                "armorColliders": [
+                                    "RibcageLow",
+                                    "RibcageUp"
+                                ],
+                                "armorPlateColliders": [],
+                                "bluntDamageReduceFromSoftArmor": false,
+                                "locked": true
+                            }
+                        ]
+                    },
+                    "_proto": "64479fdf9731c8fadc0642c1",
+                    "_required": true
+                },
+                {
+                    "_id": "6a52c7dd6dacb02fc0d2d180",
+                    "_mergeSlotWithChildren": true,
+                    "_name": "Soft_armor_back",
+                    "_parent": "6a52c7dd6dacb02fc0d2d177",
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a52c7dd6dacb02fc0d2d185"
+                                ],
+                                "Plate": "6a52c7dd6dacb02fc0d2d185",
+                                "armorColliders": [
+                                    "SpineTop",
+                                    "SpineDown"
+                                ],
+                                "armorPlateColliders": [],
+                                "bluntDamageReduceFromSoftArmor": false,
+                                "locked": true
+                            }
+                        ]
+                    },
+                    "_proto": "64479fdf9731c8fadc0642c1",
+                    "_required": true
+                },
+                {
+                    "_id": "6a52c7dd6dacb02fc0d2d181",
+                    "_mergeSlotWithChildren": true,
+                    "_name": "Collar",
+                    "_parent": "6a52c7dd6dacb02fc0d2d177",
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a52c7dd6dacb02fc0d2d186"
+                                ],
+                                "Plate": "6a52c7dd6dacb02fc0d2d186",
+                                "armorColliders": [
+                                    "NeckBack",
+                                    "NeckFront"
+                                ],
+                                "armorPlateColliders": [],
+                                "bluntDamageReduceFromSoftArmor": false,
+                                "locked": true
+                            }
+                        ]
+                    },
+                    "_proto": "64479fdf9731c8fadc0642c1",
+                    "_required": true
+                },
+                {
+                    "_id": "6a52c7dd6dacb02fc0d2d182",
+                    "_mergeSlotWithChildren": true,
+                    "_name": "Groin",
+                    "_parent": "6a52c7dd6dacb02fc0d2d177",
+                    "_props": {
+                        "filters": [
+                            {
+                                "Filter": [
+                                    "6a52c7dd6dacb02fc0d2d187"
+                                ],
+                                "Plate": "6a52c7dd6dacb02fc0d2d187",
+                                "armorColliders": [
+                                    "Pelvis"
+                                ],
+                                "armorPlateColliders": [],
+                                "bluntDamageReduceFromSoftArmor": false,
+                                "locked": true
+                            }
+                        ]
+                    },
+                    "_proto": "64479fdf9731c8fadc0642c1",
+                    "_required": true
+                }
+            ]
+        },
+        "locales": {
+            "en": {
+                "name": "6B5-15 Zh-86 Uley armored rig (Flora) reinforced",
+                "shortName": "6B5-15R",
+                "description": "A reinforced 6B5-15 Zh-86 Uley armored rig in Flora camouflage. The original 6B5-15 was built for assault units with boron carbide protection and integrated magazine pouches. This refitted version has upgraded armor inserts that bring it up to class 5 protection while keeping the same old Soviet layout: heavy, awkward, ugly, and harder to kill than it looks."
+            }
+        },
+        "fleaPriceRoubles": 113000,
+        "handbookPriceRoubles": 113000,
+        "addWeaponPreset": true,
+        "weaponPresets": [
+            {
+                "_id": "6a52c7dd6dacb02fc0d2d188",
+                "_type": "Preset",
+                "_changeWeaponName": false,
+                "_name": "6B3TM-01U Default",
+                "_parent": "6a52c7dd6dacb02fc0d2d189",
+                "_items": [
+                    {
+                        "_id": "6a52c7dd6dacb02fc0d2d189",
+                        "_tpl": "6a52c7dd6dacb02fc0d2d177"
+                    },
+                    {
+                        "_id": "6a523f906dacb02fc0d2d168",
+                        "_tpl": "6a52c7dd6dacb02fc0d2d184",
+                        "parentId": "6a52c7dd6dacb02fc0d2d189",
+                        "slotId": "Soft_armor_front"
+                    },
+                    {
+                        "_id": "6a523f906dacb02fc0d2d169",
+                        "_tpl": "6a52c7dd6dacb02fc0d2d185",
+                        "parentId": "6a52c7dd6dacb02fc0d2d189",
+                        "slotId": "Soft_armor_back"
+                    },
+                    {
+                        "_id": "6a523f906dacb02fc0d2d16a",
+                        "_tpl": "6a52c7dd6dacb02fc0d2d186",
+                        "parentId": "6a52c7dd6dacb02fc0d2d189",
+                        "slotId": "Collar"
+                    },
+                    {
+                        "_id": "6a523f906dacb02fc0d2d16b",
+                        "_tpl": "6a52c7dd6dacb02fc0d2d187",
+                        "parentId": "6a52c7dd6dacb02fc0d2d189",
+                        "slotId": "Groin"
+                    }
+                ],
+                "_encyclopedia": "6a52c7dd6dacb02fc0d2d177"
+            }
+        ],
+        "addToTraders": true,
+        "presetTraders": {
+            "tony": {
+                "6a52c7dd6dacb02fc0d2d18a": {
+                    "presetId": "6a52c7dd6dacb02fc0d2d188",
+                    "barterSettings": {
+                        "loyalLevel": 3,
+                        "unlimitedCount": false,
+                        "stackObjectsCount": 4,
+                        "buyRestrictionMax": 2
+                    },
+                    "barters": [
+                        {
+                            "_tpl": "5449016a4bdc2d6f028b456f",
+                            "count": 104444
+                        }
+                    ]
+                }
+            }
+        },
+        "addToQuestAssorts": false,
+        "questAssorts": [
+            {
+                "traderId": "66a0f6b2c4d8e90123456789",
+                "questId": "6a30b2fbd2999bc7b9bbaab5",
+                "assortId": "6a52c7dd6dacb02fc0d2d18a",
+                "status": "Success"
+            }
+        ],
+        "addToQuestRewards": false,
+        "questRewards": [
+            {
+                "questId": "6a30b2fbd2999bc7b9bbaab5",
+                "rewardType": "WeaponPreset",
+                "presetId": "6a52c7dd6dacb02fc0d2d188"
+            }
+        ]
+    }
+}

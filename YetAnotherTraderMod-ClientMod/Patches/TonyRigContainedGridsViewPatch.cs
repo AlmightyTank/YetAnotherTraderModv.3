@@ -11,7 +11,7 @@ using UnityEngine.UI;
 namespace YetAnotherTraderMod.Client.Patches
 {
     /// <summary>
-    /// Arranges the upgraded 6B3TM-01U grids using the Maximal Rectangles Best Short Side Fit
+    /// Arranges configured YATM custom-rig grids using the Maximal Rectangles Best Short Side Fit
     /// (BSSF) bin packing algorithm. When the rig has more grids than can fit in a
     /// single row (exceeding <see cref="MaxColumns"/> cells wide), this patch repositions
     /// all grid views into a compact layout and resizes the parent container to fit.
@@ -98,7 +98,7 @@ namespace YetAnotherTraderMod.Client.Patches
         [PatchPostfix]
         private static void Postfix(ContainedGridsView __instance, CompoundItem compoundItem)
         {
-            // Only repack Tony's upgraded 6B3TM-01U.
+            // Only repack configured YATM custom rigs.
             if (!TonyRigGridLayout.IsTarget(compoundItem))
             {
                 return;
@@ -135,8 +135,21 @@ namespace YetAnotherTraderMod.Client.Patches
                 existingLayout.enabled = false;
             }
 
-            // Run the BSSF algorithm and position each grid view.
-            PackGridViews(activeViews, out float totalWidth, out float totalHeight);
+            float totalWidth;
+            float totalHeight;
+
+            // This six-grid rig uses a deliberate visual layout: grids 1-4 form the
+            // top row and grids 5-6 are centered beneath them. Preserve the original
+            // grid order instead of allowing the packing algorithm to reorder them.
+            if (TonyRigGridLayout.UsesCenteredBottomPair(compoundItem) && activeViews.Count == 6)
+            {
+                LayoutCenteredBottomPair(activeViews, out totalWidth, out totalHeight);
+            }
+            else
+            {
+                // Use the general BSSF algorithm for every other configured rig.
+                PackGridViews(activeViews, out totalWidth, out totalHeight);
+            }
 
             // Update the container's size and layout element so parent layout systems
             // (equipment container, grid window) can accommodate the new dimensions.
@@ -173,6 +186,88 @@ namespace YetAnotherTraderMod.Client.Patches
             }
 
             return active.Count > 1 ? active : null;
+        }
+
+        /// <summary>
+        /// Places grids 1-4 in the top row and centers grids 5-6 on the bottom row.
+        /// Grid order is the order supplied by the item's Grids array.
+        /// </summary>
+        private static void LayoutCenteredBottomPair(
+            List<GridView> activeViews,
+            out float totalWidth,
+            out float totalHeight
+        )
+        {
+            const int topRowCount = 4;
+
+            float topRowWidth = MeasureRowWidth(activeViews, 0, topRowCount);
+            float bottomRowWidth = MeasureRowWidth(activeViews, topRowCount, 2);
+            float topRowHeight = MeasureRowHeight(activeViews, 0, topRowCount);
+            float bottomRowHeight = MeasureRowHeight(activeViews, topRowCount, 2);
+
+            totalWidth = Mathf.Max(topRowWidth, bottomRowWidth);
+            totalHeight = topRowHeight + GridSpacing + bottomRowHeight;
+
+            // The first row normally defines the full width. Center it too in case a
+            // future edit makes the bottom pair wider than the first four grids.
+            float topStartX = (totalWidth - topRowWidth) * 0.5f;
+            float bottomStartX = (totalWidth - bottomRowWidth) * 0.5f;
+
+            PositionRow(activeViews, 0, topRowCount, topStartX, 0f);
+            PositionRow(activeViews, topRowCount, 2, bottomStartX, topRowHeight + GridSpacing);
+        }
+
+        private static float MeasureRowWidth(List<GridView> views, int startIndex, int count)
+        {
+            float width = 0f;
+
+            for (int i = 0; i < count; i++)
+            {
+                var rt = (RectTransform)views[startIndex + i].transform;
+                width += rt.sizeDelta.x;
+
+                if (i < count - 1)
+                {
+                    width += GridSpacing;
+                }
+            }
+
+            return width;
+        }
+
+        private static float MeasureRowHeight(List<GridView> views, int startIndex, int count)
+        {
+            float height = 0f;
+
+            for (int i = 0; i < count; i++)
+            {
+                var rt = (RectTransform)views[startIndex + i].transform;
+                height = Mathf.Max(height, rt.sizeDelta.y);
+            }
+
+            return height;
+        }
+
+        private static void PositionRow(
+            List<GridView> views,
+            int startIndex,
+            int count,
+            float startX,
+            float topY
+        )
+        {
+            float x = startX;
+
+            for (int i = 0; i < count; i++)
+            {
+                var rt = (RectTransform)views[startIndex + i].transform;
+                rt.anchorMin = new Vector2(0f, 1f);
+                rt.anchorMax = new Vector2(0f, 1f);
+                rt.pivot = new Vector2(0f, 1f);
+                rt.anchoredPosition = new Vector2(x, -topY);
+
+                x += rt.sizeDelta.x + GridSpacing;
+            }
         }
 
         /// <summary>
