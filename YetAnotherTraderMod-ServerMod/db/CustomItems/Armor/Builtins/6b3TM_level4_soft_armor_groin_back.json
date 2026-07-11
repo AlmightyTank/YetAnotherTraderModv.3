@@ -1,0 +1,25 @@
+{
+    "6a523f906dacb02fc0d2d165": {
+        "itemTplToClone": "6576500f526e320fbe03577f",
+        "parentId": "65649eb40bf0ed77b8044453",
+        "handbookParentId": "6564b96a189fe36f356d177c",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "CanRequireOnRagfair": false,
+            "Durability": 45,
+            "MaxDurability": 45,
+            "armorClass": "4"
+        },
+        "locales": {
+            "en": {
+                "name": "1.25 mm aramid insert and titanium plates",
+                "shortName": "",
+                "description": ""
+            }
+        },
+        "fleaPriceRoubles": 5424,
+        "handbookPriceRoubles": 5424,
+        "addtoItemBlacklist": false
+    }
+}

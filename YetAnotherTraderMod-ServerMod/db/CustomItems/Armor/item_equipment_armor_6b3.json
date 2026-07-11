@@ -1,5 +1,5 @@
 {
-    "6a51aaaa6dacb02fc0d2d144": {
+    "6a523f906dacb02fc0d2d167": {
         "itemTplToClone": "5d5d646386f7742797261fd9",
         "parentId": "5448e5284bdc2dcb718b4567",
         "handbookParentId": "5b5f6f8786f77447ed563642",
@@ -9,19 +9,213 @@
             "mousePenalty": -1,
             "speedPenaltyPercent": -5,
             "weaponErgonomicPenalty": -7,
+            "Grids": [
+                {
+                    "_id": "6a523f906dacb02fc0d2d16e",
+                    "_name": "1",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 2,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                },
+                {
+                    "_id": "6a523f906dacb02fc0d2d16f",
+                    "_name": "2",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 2,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                },
+                {
+                    "_id": "6a523f906dacb02fc0d2d170",
+                    "_name": "3",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 3,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                },
+                {
+                    "_id": "6a523f906dacb02fc0d2d171",
+                    "_name": "4",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 3,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                },
+                {
+                    "_id": "6a523f906dacb02fc0d2d172",
+                    "_name": "5",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 3,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                },
+                {
+                    "_id": "6a523f906dacb02fc0d2d173",
+                    "_name": "6",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 3,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                },
+                {
+                    "_id": "6a523f906dacb02fc0d2d174",
+                    "_name": "7",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 2,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                },
+                {
+                    "_id": "6a523f906dacb02fc0d2d175",
+                    "_name": "8",
+                    "_parent": "6a523f906dacb02fc0d2d167",
+                    "_props": {
+                        "cellsH": 1,
+                        "cellsV": 2,
+                        "filters": [
+                            {
+                                "ExcludedFilter": [
+                                    "5448bf274bdc2dfc2f8b456a"
+                                ],
+                                "Filter": [
+                                    "54009119af1c881c07000029"
+                                ]
+                            }
+                        ],
+                        "isSortingTable": false,
+                        "maxCount": 0,
+                        "maxWeight": 0,
+                        "minCount": 0
+                    },
+                    "_proto": "55d329c24bdc2d892f8b4567"
+                }
+            ],
             "Slots": [
                 {
                     "_id": "6a51aaaa6dacb02fc0d2d145",
                     "_mergeSlotWithChildren": true,
                     "_name": "Soft_armor_front",
-                    "_parent": "6a51aaaa6dacb02fc0d2d144",
+                    "_parent": "6a523f906dacb02fc0d2d167",
                     "_props": {
                         "filters": [
                             {
                                 "Filter": [
-                                    "65764e1e2bc38ef78e076489"
+                                    "6a51aaaa6dacb02fc0d2d140"
                                 ],
-                                "Plate": "65764e1e2bc38ef78e076489",
+                                "Plate": "6a51aaaa6dacb02fc0d2d140",
                                 "armorColliders": [
                                     "RibcageUp",
                                     "RibcageLow"
@@ -39,14 +233,14 @@
                     "_id": "6a51aaaa6dacb02fc0d2d146",
                     "_mergeSlotWithChildren": true,
                     "_name": "Soft_armor_back",
-                    "_parent": "6a51aaaa6dacb02fc0d2d144",
+                    "_parent": "6a523f906dacb02fc0d2d167",
                     "_props": {
                         "filters": [
                             {
                                 "Filter": [
-                                    "65764fae2bc38ef78e07648d"
+                                    "6a523f906dacb02fc0d2d163"
                                 ],
-                                "Plate": "65764fae2bc38ef78e07648d",
+                                "Plate": "6a523f906dacb02fc0d2d163",
                                 "armorColliders": [
                                     "SpineTop",
                                     "SpineDown"
@@ -64,14 +258,14 @@
                     "_id": "6a51aaaa6dacb02fc0d2d147",
                     "_mergeSlotWithChildren": true,
                     "_name": "Groin",
-                    "_parent": "6a51aaaa6dacb02fc0d2d144",
+                    "_parent": "6a523f906dacb02fc0d2d167",
                     "_props": {
                         "filters": [
                             {
                                 "Filter": [
-                                    "6576504b526e320fbe035783"
+                                    "6a523f906dacb02fc0d2d164"
                                 ],
-                                "Plate": "6576504b526e320fbe035783",
+                                "Plate": "6a523f906dacb02fc0d2d164",
                                 "armorColliders": [
                                     "Pelvis"
                                 ],
@@ -88,14 +282,14 @@
                     "_id": "6a51aaaa6dacb02fc0d2d148",
                     "_mergeSlotWithChildren": true,
                     "_name": "Groin_back",
-                    "_parent": "6a51aaaa6dacb02fc0d2d144",
+                    "_parent": "6a523f906dacb02fc0d2d167",
                     "_props": {
                         "filters": [
                             {
                                 "Filter": [
-                                    "6576500f526e320fbe03577f"
+                                    "6a523f906dacb02fc0d2d165"
                                 ],
-                                "Plate": "6576500f526e320fbe03577f",
+                                "Plate": "6a523f906dacb02fc0d2d165",
                                 "armorColliders": [
                                     "PelvisBack"
                                 ],
@@ -125,39 +319,76 @@
                 "_id": "6a51aaaa6dacb02fc0d2d13f",
                 "_type": "Preset",
                 "_changeWeaponName": false,
-                "_name": "Altyn RAC Default",
-                "_parent": "6a44635138a6d33bffe982f2",
+                "_name": "6B3TM-01U Default",
+                "_parent": "6a523f906dacb02fc0d2d166",
                 "_items": [
                     {
-                        "_id": "6a44635138a6d33bffe982f2",
-                        "_tpl": "6a51aaaa6dacb02fc0d2d13b"
+                        "_id": "6a523f906dacb02fc0d2d166",
+                        "_tpl": "6a523f906dacb02fc0d2d167"
                     },
                     {
-                        "_id": "6a446280898f52db204d6bb9",
-                        "_tpl": "657bc06daab96fccee08be9b",
-                        "parentId": "6a44635138a6d33bffe982f2",
-                        "slotId": "Helmet_top"
+                        "_id": "6a523f906dacb02fc0d2d168",
+                        "_tpl": "6a51aaaa6dacb02fc0d2d140",
+                        "parentId": "6a523f906dacb02fc0d2d166",
+                        "slotId": "Soft_armor_front"
                     },
                     {
-                        "_id": "6a446280898f52db204d6bba",
-                        "_tpl": "657bc0d8a1c61ee0c303632f",
-                        "parentId": "6a44635138a6d33bffe982f2",
-                        "slotId": "Helmet_back"
+                        "_id": "6a523f906dacb02fc0d2d169",
+                        "_tpl": "6a523f906dacb02fc0d2d163",
+                        "parentId": "6a523f906dacb02fc0d2d166",
+                        "slotId": "Soft_armor_back"
                     },
                     {
-                        "_id": "6a446280898f52db204d6bbb",
-                        "_tpl": "657bc107aab96fccee08be9f",
-                        "parentId": "6a44635138a6d33bffe982f2",
-                        "slotId": "Helmet_ears"
+                        "_id": "6a523f906dacb02fc0d2d16a",
+                        "_tpl": "6a523f906dacb02fc0d2d164",
+                        "parentId": "6a523f906dacb02fc0d2d166",
+                        "slotId": "Groin"
                     },
                     {
-                        "_id": "6a446280898f52db204d6bbc",
-                        "_tpl": "5a16b9fffcdbcb0176308b34",
-                        "parentId": "6a44635138a6d33bffe982f2",
-                        "slotId": "mod_equipment_001"
+                        "_id": "6a523f906dacb02fc0d2d16b",
+                        "_tpl": "6a523f906dacb02fc0d2d165",
+                        "parentId": "6a523f906dacb02fc0d2d166",
+                        "slotId": "Groin_back"
                     }
                 ],
-                "_encyclopedia": "6a51aaaa6dacb02fc0d2d13b"
+                "_encyclopedia": "6a523f906dacb02fc0d2d167"
+            }
+        ],
+        "addToTraders": true,
+        "presetTraders": {
+            "tony": {
+                "6a523f906dacb02fc0d2d16d": {
+                    "presetId": "6a51aaaa6dacb02fc0d2d13f",
+                    "barterSettings": {
+                        "loyalLevel": 3,
+                        "unlimitedCount": false,
+                        "stackObjectsCount": 4,
+                        "buyRestrictionMax": 2
+                    },
+                    "barters": [
+                        {
+                            "_tpl": "5449016a4bdc2d6f028b456f",
+                            "count": 104444
+                        }
+                    ]
+                }
+            }
+        },
+        "addToQuestAssorts": false,
+        "questAssorts": [
+            {
+                "traderId": "66a0f6b2c4d8e90123456789",
+                "questId": "6a30b2fbd2999bc7b9bbaab5",
+                "assortId": "6a523f906dacb02fc0d2d16d",
+                "status": "Success"
+            }
+        ],
+        "addToQuestRewards": false,
+        "questRewards": [
+            {
+                "questId": "6a30b2fbd2999bc7b9bbaab5",
+                "rewardType": "WeaponPreset",
+                "presetId": "6a51aaaa6dacb02fc0d2d14a"
             }
         ]
     }
