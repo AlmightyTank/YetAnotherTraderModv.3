@@ -1,0 +1,95 @@
+{
+    "6a51aaaa6dacb02fc0d2d14c": {
+        "name": "Rifle Dynamics RD-545 stock build",
+        "id": "6a51aaaa6dacb02fc0d2d14c",
+        "parentId": "6a50708275db396b1c003011",
+        "encyclopedia": "69d15e3a5f8c31b7640a9e20",
+        "items": [
+            {
+                "_id": "6a50708275db396b1c003011",
+                "_tpl": "69d15e3a5f8c31b7640a9e20",
+                "upd": {
+                    "Repairable": {
+                        "MaxDurability": 100.0,
+                        "Durability": 100.0
+                    },
+                    "FireMode": {
+                        "FireMode": "single"
+                    }
+                }
+            },
+            {
+                "_id": "6a50708275db396b1c003012",
+                "_tpl": "628a83c29179c324ed269508",
+                "slotId": "mod_gas_block",
+                "parentId": "6a50708275db396b1c003011"
+            },
+            {
+                "_id": "6a50708275db396b1c003013",
+                "_tpl": "5649aa744bdc2ded0b8b457e",
+                "slotId": "mod_muzzle",
+                "parentId": "6a50708275db396b1c003011"
+            },
+            {
+                "_id": "6a50708275db396b1c003014",
+                "_tpl": "628a664bccaab13006640e47",
+                "slotId": "mod_pistol_grip",
+                "parentId": "6a50708275db396b1c003011"
+            },
+            {
+                "_id": "6a50708275db396b1c003015",
+                "_tpl": "628a665a86cbd9750d2ff5e5",
+                "slotId": "mod_reciever",
+                "parentId": "6a50708275db396b1c003011"
+            },
+            {
+                "_id": "6a50708275db396b1c003016",
+                "_tpl": "628a7b23b0f75035732dd565",
+                "slotId": "mod_sight_rear",
+                "upd": {
+                    "Sight": {
+                        "ScopesCurrentCalibPointIndexes": [
+                            0
+                        ],
+                        "ScopesSelectedModes": [
+                            0
+                        ],
+                        "SelectedScope": 0,
+                        "ScopeZoomValue": 0.0
+                    }
+                },
+                "parentId": "6a50708275db396b1c003011"
+            },
+            {
+                "_id": "6a5070590832f841f20000b2",
+                "_tpl": "5649b2314bdc2d79388b4576",
+                "slotId": "mod_stock_000",
+                "parentId": "6a50708275db396b1c003011"
+            },
+            {
+                "_id": "6a50708275db396b1c003017",
+                "_tpl": "55d480c04bdc2d1d4e8b456a",
+                "slotId": "mod_magazine",
+                "parentId": "6a50708275db396b1c003011"
+            },
+            {
+                "_id": "6a50708275db396b1c003018",
+                "_tpl": "6130ca3fd92c473c77020dbd",
+                "slotId": "mod_charge",
+                "parentId": "6a50708275db396b1c003011"
+            },
+            {
+                "_id": "6a5070590832f841f20000c4",
+                "_tpl": "5649be884bdc2d79388b4577",
+                "slotId": "mod_stock",
+                "parentId": "6a5070590832f841f20000b2"
+            },
+            {
+                "_id": "6a5070590832f841f20000e1",
+                "_tpl": "628a85ee6b1d481ff772e9d5",
+                "slotId": "mod_stock_000",
+                "parentId": "6a5070590832f841f20000c4"
+            }
+        ]
+    }
+}

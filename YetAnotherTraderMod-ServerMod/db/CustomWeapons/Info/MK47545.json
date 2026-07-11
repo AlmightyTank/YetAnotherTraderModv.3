@@ -130,8 +130,8 @@
         },
         "weaponBuildTraders": {
             "tony": {
-                "69d0ae38e19e61619791cd3c": {
-                    "weaponBuildId": "6a3846fd82d8dd83f87b1f58",
+                "6a51aaaa6dacb02fc0d2d14b": {
+                    "weaponBuildId": "6a5199036dacb02fc0d2d13a",
                     "barterSettings": {
                         "loyalLevel": 2,
                         "unlimitedCount": false,
@@ -152,7 +152,7 @@
             {
                 "traderId": "66a0f6b2c4d8e90123456789",
                 "questId": "6a30b2fbd2999bc7b9bbaab5",
-                "assortId": "69d0ae38e19e61619791cd3c",
+                "assortId": "6a51aaaa6dacb02fc0d2d14b",
                 "status": "Success"
             }
         ],

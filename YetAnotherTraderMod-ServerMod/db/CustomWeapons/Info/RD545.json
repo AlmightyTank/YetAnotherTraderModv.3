@@ -121,6 +121,25 @@
                 }
             }
         },
+        "weaponBuildTraders": {
+            "tony": {
+                "6a51aaaa6dacb02fc0d2d14d": {
+                    "weaponBuildId": "6a51aaaa6dacb02fc0d2d14c",
+                    "barterSettings": {
+                        "loyalLevel": 2,
+                        "unlimitedCount": false,
+                        "stackObjectsCount": 5,
+                        "buyRestrictionMax": 1
+                    },
+                    "barters": [
+                        {
+                            "_tpl": "5449016a4bdc2d6f028b456f",
+                            "count": 128000
+                        }
+                    ]
+                }
+            }
+        },
         "addToQuestAssorts": true,
         "questAssorts": [
             {
