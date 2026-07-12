@@ -87,9 +87,9 @@
         },
         "locales": {
             "en": {
-                "name": "6B47 Ratnik-BSh upgraded helmet (Black)",
-                "shortName": "6B47-U Black",
-                "description": "An upgraded 6B47 Ratnik-BSh helmet finished in matte black. Originally developed as a lightweight aramid helmet for the Ratnik program, this modified version has been reinforced with additional ballistic material and improved internal padding. The upgrade increases protection to Class 5 while retaining the standard mounts for lights and night vision devices. Heavier than the original, but built for people who expect the shooting to start before negotiations do."
+                "name": "6B47 Ratnik-BSh upgraded helmet (Flora)",
+                "shortName": "6B47-U Flora",
+                "description": "An upgraded 6B47 Ratnik-BSh helmet finished in Flora camouflage. Originally developed as a lightweight aramid helmet for the Ratnik program, this modified version has been reinforced with additional ballistic material and improved internal padding. The upgrade increases protection to Class 5 while retaining the standard mounts for lights and night vision devices. Heavier than the original, but built for people who expect the shooting to start before negotiations do."
             }
         },
         "fleaPriceRoubles": 37710,

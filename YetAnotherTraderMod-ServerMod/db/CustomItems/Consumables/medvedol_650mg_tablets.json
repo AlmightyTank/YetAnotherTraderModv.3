@@ -6,7 +6,6 @@
     "includeInSameQuestsAsOrigin": false,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.08,
-    "BackgroundColor": "violet",
     "effects_damage": {
         "Pain": {
             "delay": 20,
