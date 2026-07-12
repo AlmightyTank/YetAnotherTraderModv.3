@@ -34,9 +34,9 @@ namespace YetAnotherTraderMod.Client.Patches
         }
 
         [PatchPrefix]
-        public static void Prefix(Item item)
+        public static void Prefix(Item item, bool isAnimated)
         {
-            TextureOverrideService.Instance?.OnCreateItem(item);
+            TextureOverrideService.Instance?.OnCreateItem(item, isAnimated);
         }
     }
 

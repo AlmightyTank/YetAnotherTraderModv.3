@@ -79,6 +79,8 @@ namespace YetAnotherTraderMod.Client.Models
 
         public string SourceTemplateId { get; set; } = string.Empty;
 
+        public string Context { get; set; } = string.Empty;
+
         public string ExportedUtc { get; set; } = string.Empty;
 
         public List<DefaultTextureMaterialEntry> Materials { get; set; }

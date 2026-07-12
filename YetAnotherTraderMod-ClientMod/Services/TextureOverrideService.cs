@@ -60,7 +60,7 @@ namespace YetAnotherTraderMod.Client.Services
             logger.LogInfo($"[YATM Textures] Loaded {enabledCount} enabled template override(s).");
         }
 
-        public void OnCreateItem(Item item)
+        public void OnCreateItem(Item item, bool isAnimated)
         {
             if (!_hasEnabledRules || item == null)
             {
@@ -88,7 +88,7 @@ namespace YetAnotherTraderMod.Client.Services
                     _pendingByPrefab.Add(item.Prefab, queue);
                 }
 
-                queue.Enqueue(new PendingTextureRequest(templateId, rule, DateTime.UtcNow));
+                queue.Enqueue(new PendingTextureRequest(templateId, rule, DateTime.UtcNow, isAnimated));
             }
         }
 
@@ -105,12 +105,14 @@ namespace YetAnotherTraderMod.Client.Services
                 return;
             }
 
-            if (!gameObject.TryGetComponent(out AssetPoolObject assetPoolObject))
+            AssetPoolObject assetPoolObject = FindAssetPoolObject(gameObject);
+            if (assetPoolObject == null)
             {
                 if (request.Rule != null)
                 {
                     _logger.LogWarning(
-                        $"[YATM Textures] No AssetPoolObject found for custom TPL {request.TemplateId}.");
+                        $"[YATM Textures] No AssetPoolObject found for custom TPL "
+                        + $"{request.TemplateId}, animated={request.IsAnimated}.");
                 }
 
                 return;
@@ -128,10 +130,20 @@ namespace YetAnotherTraderMod.Client.Services
 
             if (_config.ExportDefaultTextures)
             {
-                ExportDefaultTextures(request.TemplateId, request.Rule, assetPoolObject, renderers);
+                ExportDefaultTextures(
+                    request.TemplateId,
+                    request.Rule,
+                    assetPoolObject,
+                    renderers,
+                    request.IsAnimated);
             }
 
-            ApplyOverride(request.TemplateId, request.Rule, assetPoolObject, renderers);
+            ApplyOverride(
+                request.TemplateId,
+                request.Rule,
+                assetPoolObject,
+                renderers,
+                request.IsAnimated);
         }
 
         public void Restore(AssetPoolObject assetPoolObject)
@@ -210,7 +222,8 @@ namespace YetAnotherTraderMod.Client.Services
             string customTemplateId,
             TextureOverrideRule rule,
             AssetPoolObject assetPoolObject,
-            IReadOnlyList<Renderer> renderers)
+            IReadOnlyList<Renderer> renderers,
+            bool isAnimated)
         {
             Dictionary<string, string> configuredTextures = BuildTextureMap(rule);
             if (configuredTextures.Count == 0)
@@ -326,8 +339,9 @@ namespace YetAnotherTraderMod.Client.Services
             int instanceId = assetPoolObject.gameObject.GetInstanceID();
             _appliedByInstanceId[instanceId] = new AppliedObjectState(savedMaterials, touchedRenderers);
 
-            _logger.LogDebug(
-                $"[YATM Textures] Applied permanent texture override to TPL {customTemplateId} "
+            string context = isAnimated ? "Animated" : "Standard";
+            _logger.LogInfo(
+                $"[YATM Textures] Applied {context} texture override to TPL {customTemplateId} "
                 + $"on {changedSlots} material slot(s).");
         }
 
@@ -335,17 +349,20 @@ namespace YetAnotherTraderMod.Client.Services
             string customTemplateId,
             TextureOverrideRule rule,
             AssetPoolObject assetPoolObject,
-            IReadOnlyList<Renderer> renderers)
+            IReadOnlyList<Renderer> renderers,
+            bool isAnimated)
         {
             string sourceTemplateId = string.IsNullOrWhiteSpace(rule.SourceTemplateId)
                 ? customTemplateId
                 : rule.SourceTemplateId.Trim();
 
             string safeSourceTemplateId = MakeSafeFileName(sourceTemplateId);
+            string contextDirectory = isAnimated ? "Animated" : "Standard";
             string outputDirectory = Path.Combine(
                 _pluginDirectory,
                 DefaultTexturesDirectoryName,
-                safeSourceTemplateId);
+                safeSourceTemplateId,
+                contextDirectory);
 
             string manifestPath = Path.Combine(outputDirectory, "manifest.json");
 
@@ -364,6 +381,7 @@ namespace YetAnotherTraderMod.Client.Services
                 {
                     CustomTemplateId = customTemplateId,
                     SourceTemplateId = sourceTemplateId,
+                    Context = isAnimated ? "Animated" : "Standard",
                     ExportedUtc = DateTime.UtcNow.ToString("O")
                 };
 
@@ -442,7 +460,8 @@ namespace YetAnotherTraderMod.Client.Services
 
                 _exportedDefaultFolders.Add(outputDirectory);
                 _logger.LogInfo(
-                    $"[YATM Textures] Saved default textures for {sourceTemplateId} to {outputDirectory}");
+                    $"[YATM Textures] Saved {(isAnimated ? "animated" : "standard")} "
+                    + $"default textures for {sourceTemplateId} to {outputDirectory}");
             }
             catch (Exception exception)
             {
@@ -580,21 +599,52 @@ namespace YetAnotherTraderMod.Client.Services
             return fullPath;
         }
 
+        private static AssetPoolObject FindAssetPoolObject(GameObject gameObject)
+        {
+            if (gameObject == null)
+            {
+                return null;
+            }
+
+            AssetPoolObject assetPoolObject = gameObject.GetComponent<AssetPoolObject>();
+            if (assetPoolObject != null)
+            {
+                return assetPoolObject;
+            }
+
+            assetPoolObject = gameObject.GetComponentInParent<AssetPoolObject>();
+            if (assetPoolObject != null)
+            {
+                return assetPoolObject;
+            }
+
+            return gameObject.GetComponentInChildren<AssetPoolObject>(true);
+        }
+
         private static IReadOnlyList<Renderer> GetRenderers(AssetPoolObject assetPoolObject)
         {
+            var renderers = new List<Renderer>();
+
             if (assetPoolObject.Renderers != null)
             {
-                Renderer[] configuredRenderers = assetPoolObject.Renderers
-                    .Where(renderer => renderer != null)
-                    .ToArray();
-
-                if (configuredRenderers.Length > 0)
+                foreach (Renderer renderer in assetPoolObject.Renderers)
                 {
-                    return configuredRenderers;
+                    if (renderer != null && !renderers.Contains(renderer))
+                    {
+                        renderers.Add(renderer);
+                    }
                 }
             }
 
-            return assetPoolObject.GetComponentsInChildren<Renderer>(true);
+            foreach (Renderer renderer in assetPoolObject.GetComponentsInChildren<Renderer>(true))
+            {
+                if (renderer != null && !renderers.Contains(renderer))
+                {
+                    renderers.Add(renderer);
+                }
+            }
+
+            return renderers;
         }
 
         private static bool MatchesMaterial(string rawName, string[] configuredNames)
@@ -722,11 +772,13 @@ namespace YetAnotherTraderMod.Client.Services
             public PendingTextureRequest(
                 string templateId,
                 TextureOverrideRule rule,
-                DateTime createdUtc)
+                DateTime createdUtc,
+                bool isAnimated)
             {
                 TemplateId = templateId;
                 Rule = rule;
                 CreatedUtc = createdUtc;
+                IsAnimated = isAnimated;
             }
 
             public string TemplateId { get; }
@@ -734,6 +786,8 @@ namespace YetAnotherTraderMod.Client.Services
             public TextureOverrideRule Rule { get; }
 
             public DateTime CreatedUtc { get; }
+
+            public bool IsAnimated { get; }
         }
 
         private sealed class AppliedObjectState
