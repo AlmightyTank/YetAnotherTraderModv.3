@@ -1,0 +1,58 @@
+{
+    "enabled": true,
+    "exportDefaultTextures": true,
+    "overwriteDefaultTextures": false,
+    "exportTextureProperties": [
+        "_MainTex"
+    ],
+    "overrides": {
+        "6a51aaaa6dacb02fc0d2d13b": {
+            "enabled": true,
+            "sourceTemplateId": "5aa7cfc0e5b5b00015693143",
+            "texture": "Textures/Custom/6B47_Black.png",
+            "textureProperty": "_MainTex",
+            "textures": {},
+            "materials": [
+                "helmet_6B47"
+            ],
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "offsetX": 0.0,
+            "offsetY": 0.0,
+            "color": "#FFFFFF",
+            "colorProperty": "_Color"
+        },
+        "6a52c7dd6dacb02fc0d2d177": {
+            "enabled": true,
+            "sourceTemplateId": "5c0e446786f7742013381639",
+            "texture": "Textures/Custom/6b5_Desert.png",
+            "textureProperty": "_MainTex",
+            "textures": {},
+            "materials": [
+                "item_equipment_rig_6b5_flora"
+            ],
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "offsetX": 0.0,
+            "offsetY": 0.0,
+            "color": "#FFFFFF",
+            "colorProperty": "_Color"
+        },
+        "6a523f906dacb02fc0d2d167": {
+            "enabled": true,
+            "sourceTemplateId": "5d5d646386f7742797261fd9",
+            "texture": "",
+            "textureProperty": "_MainTex",
+            "textures": {},
+            "materials": [
+                "*"
+            ],
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "offsetX": 0.0,
+            "offsetY": 0.0,
+            "color": "#FFFFFF",
+            "colorProperty": "_Color"
+        }
+    }
+}

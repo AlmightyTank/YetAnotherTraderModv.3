@@ -14,6 +14,7 @@ namespace YetAnotherTraderMod.Client
             LogSource = Logger;
 
             WeaponDurabilityRules.Load(LogSource);
+            TextureOverrideService.Initialize(LogSource);
 
             new Patches.ConditionTypeResolverPatch().Enable();
             new Patches.ConditionTypeToKeyPatch().Enable();
@@ -24,7 +25,18 @@ namespace YetAnotherTraderMod.Client
             new Patches.TonyRigCreateGridsPatch().Enable();
             new Patches.TonyRigContainedGridsViewShowPatch().Enable();
 
+            // Permanent, TPL-based textures for YATM cloned items.
+            new Patches.TonyTextureCreateItemAsyncPatch().Enable();
+            new Patches.TonyTextureCreatedGameObjectPatch().Enable();
+            new Patches.TonyTextureReturnToPoolPatch().Enable();
+            new Patches.TonyTextureDestroyPatch().Enable();
+            new Patches.TonyTextureHotObjectPatch().Enable();
+            new Patches.TonyTextureRainEnablePatch().Enable();
+            new Patches.TonyTextureRainUpdatePatch().Enable();
+            new Patches.TonyTextureRainDisablePatch().Enable();
+
             LogSource.LogInfo("[YATM Rig Grid] Dynamic custom-rig grid layouts enabled for 2 template IDs.");
+            LogSource.LogInfo("[YATM Textures] Permanent TPL texture system initialized.");
             LogSource.LogInfo("[YATM ClientMod PreLoad] Loaded.");
         }
     }

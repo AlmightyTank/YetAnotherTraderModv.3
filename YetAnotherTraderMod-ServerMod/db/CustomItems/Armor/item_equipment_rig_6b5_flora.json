@@ -259,9 +259,9 @@
         },
         "locales": {
             "en": {
-                "name": "6B5-15 Zh-86 Uley armored rig (Flora) reinforced",
-                "shortName": "6B5-15R",
-                "description": "A reinforced 6B5-15 Zh-86 Uley armored rig in Flora camouflage. The original 6B5-15 was built for assault units with boron carbide protection and integrated magazine pouches. This refitted version has upgraded armor inserts that bring it up to class 5 protection while keeping the same old Soviet layout: heavy, awkward, ugly, and harder to kill than it looks."
+                "name": "6B5-15 Zh-86 Uley armored rig (Desert Digital) reinforced",
+                "shortName": "6B5-15R DD",
+                "description": "A reinforced 6B5-15 Zh-86 Uley armored rig finished in desert digital camouflage. The original 6B5-15 was built for Soviet assault units with boron carbide armor and integrated magazine pouches. This refitted version uses upgraded armor inserts that raise protection to class 5 while keeping the same old layout: heavy, awkward, ugly, and much harder to kill than it looks."
             }
         },
         "fleaPriceRoubles": 113000,
