@@ -1,7 +1,0 @@
-Place your custom PNG files in this folder.
-
-Example:
-  6B47U_EMR_MainTex.png
-
-Then add the cloned custom item TPL to texture_overrides.json and set enabled to true.
-The cloned item must keep the original EFT Prefab path. Do not give it a custom bundle.
