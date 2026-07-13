@@ -27,6 +27,20 @@ public sealed class CustomConsumableDefinition
     [JsonPropertyName("handBookPrice")]
     public JsonElement HandBookPrice { get; set; }
 
+    /// <summary>
+    /// Optional legacy exact flea price field. Prefer fleaPrice for new files.
+    /// Used only when fleaPrice is omitted.
+    /// </summary>
+    [JsonPropertyName("fleaPriceRoubles")]
+    public double? FleaPriceRoubles { get; set; }
+
+    /// <summary>
+    /// Optional legacy exact handbook price field. Prefer handBookPrice for new files.
+    /// Used only when handBookPrice is omitted.
+    /// </summary>
+    [JsonPropertyName("handbookPriceRoubles")]
+    public double? HandbookPriceRoubles { get; set; }
+
     [JsonPropertyName("includeInSameQuestsAsOrigin")]
     public bool IncludeInSameQuestsAsOrigin { get; set; }
 
@@ -43,6 +57,15 @@ public sealed class CustomConsumableDefinition
     /// </summary>
     [JsonPropertyName("inheritOriginBuffs")]
     public bool InheritOriginBuffs { get; set; } = true;
+
+    /// <summary>
+    /// Controls whether the loader creates a custom StimulatorBuffs set for this item.
+    /// null (default): create one only when Buffs contains entries.
+    /// true: always create one, optionally inheriting the origin set.
+    /// false: clear StimulatorBuffs and do not register a custom set.
+    /// </summary>
+    [JsonPropertyName("useStimulatorBuffs")]
+    public bool? UseStimulatorBuffs { get; set; }
 
     [JsonPropertyName("Buffs")]
     public List<JsonElement>? Buffs { get; set; }
@@ -76,6 +99,20 @@ public sealed class CustomConsumableDefinition
     /// </summary>
     [JsonPropertyName("overrideProperties")]
     public Dictionary<string, JsonElement>? OverrideProperties { get; set; }
+
+    /// <summary>
+    /// Safety escape hatch for a deliberate patch of an item template that another loader already created.
+    /// False by default so an ID collision cannot silently mutate another mod's item.
+    /// </summary>
+    [JsonPropertyName("allowExistingItem")]
+    public bool AllowExistingItem { get; set; }
+
+    /// <summary>
+    /// Retained for compatibility with older ConsumablesGalore-style files.
+    /// The current YATM loader does not add templates to a global item blacklist.
+    /// </summary>
+    [JsonPropertyName("addtoItemBlacklist")]
+    public bool? AddToItemBlacklist { get; set; }
 
     /// <summary>
     /// Backward-compatible top-level item property overrides. Prefer overrideProperties for new files.

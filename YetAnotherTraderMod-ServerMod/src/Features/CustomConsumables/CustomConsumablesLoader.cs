@@ -34,6 +34,7 @@ public sealed class CustomConsumablesLoader(
     private const string AddonConsumablesRelativePath = "db/YATM/CustomConsumables";
 
     private readonly HashSet<string> _loadedFiles = new(StringComparer.OrdinalIgnoreCase);
+    private readonly HashSet<string> _loadedItemIds = new(StringComparer.OrdinalIgnoreCase);
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -175,6 +176,12 @@ public sealed class CustomConsumablesLoader(
                 }
 
                 ValidateDefinition(definition, file);
+                if (!_loadedItemIds.Add(definition.Id))
+                {
+                    YATMLogger.Log($"[Tony] Duplicate custom consumable item id '{definition.Id}' in {file}. Skipping the later definition.");
+                    continue;
+                }
+
                 LoadOne(tables, definition, file);
                 loaded++;
             }
@@ -303,9 +310,23 @@ public sealed class CustomConsumablesLoader(
         var originFleaPrice = FindPrice(tables, definition.CloneOrigin) ?? 1;
         var originHandbookPrice = FindHandbookPrice(tables, definition.CloneOrigin) ?? originFleaPrice;
 
-        var fleaPrice = ResolvePrice(definition.FleaPrice, originFleaPrice, originHandbookPrice);
-        var handbookPrice = ResolvePrice(definition.HandBookPrice, originFleaPrice, originHandbookPrice);
+        var fleaPrice = ResolvePrice(
+            definition.FleaPrice,
+            definition.FleaPriceRoubles,
+            originFleaPrice,
+            originFleaPrice,
+            "fleaPrice",
+            definition.Id);
+        var handbookPrice = ResolvePrice(
+            definition.HandBookPrice,
+            definition.HandbookPriceRoubles,
+            originFleaPrice,
+            originHandbookPrice,
+            "handBookPrice",
+            definition.Id);
 
+        var customPrefabPath = GetConfiguredPropertyPath(definition, "Prefab");
+        var customUsePrefabPath = GetConfiguredPropertyPath(definition, "UsePrefab");
         var overrideProperties = BuildOverrideProperties(originItem, definition);
         var locales = BuildLocales(definition);
 
@@ -314,7 +335,14 @@ public sealed class CustomConsumablesLoader(
         var alreadyExists = GetDictionaryValue(itemsDb, definition.Id) is not null;
         if (alreadyExists)
         {
-            YATMLogger.Log($"[Tony] Custom consumable item id '{definition.Id}' already exists. Skipping clone creation, but still applying buffs/quests/spawns/trader data.");
+            if (!definition.AllowExistingItem)
+            {
+                throw new InvalidOperationException(
+                    $"Custom consumable item id '{definition.Id}' already exists. Refusing to mutate an existing template. " +
+                    "Set allowExistingItem=true only when this is a deliberate patch.");
+            }
+
+            YATMLogger.Log($"[Tony] Custom consumable item id '{definition.Id}' already exists and allowExistingItem=true. Applying configured patches and integrations.");
         }
         else
         {
@@ -345,7 +373,12 @@ public sealed class CustomConsumablesLoader(
             }
         }
 
-        LoadStimBuffs(tables, originItem, definition);
+        PatchPrefabPaths(itemsDb, definition.Id, customPrefabPath, customUsePrefabPath);
+
+        if (ShouldCreateCustomStimulatorBuffSet(definition))
+        {
+            LoadStimBuffs(tables, originItem, definition);
+        }
 
         if (definition.IncludeInSameQuestsAsOrigin)
         {
@@ -391,10 +424,18 @@ public sealed class CustomConsumablesLoader(
 
     private TemplateItemProperties BuildOverrideProperties(object originItem, CustomConsumableDefinition definition)
     {
+        _ = originItem;
         var overrides = new TemplateItemProperties();
+        var useCustomStimulatorBuffSet = ShouldCreateCustomStimulatorBuffSet(definition);
 
-        // The new item must use its own StimulatorBuffs key so we can merge origin buffs + custom buffs.
-        SetPropertyIfExists(overrides, "StimulatorBuffs", definition.Id);
+        if (definition.UseStimulatorBuffs == false)
+        {
+            SetPropertyIfExists(overrides, "StimulatorBuffs", string.Empty);
+        }
+        else if (useCustomStimulatorBuffSet)
+        {
+            SetPropertyIfExists(overrides, "StimulatorBuffs", definition.Id);
+        }
 
         var aliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -404,17 +445,16 @@ public sealed class CustomConsumablesLoader(
             ["MaxResource"] = "MaxHpResource",
             ["MaxHpResource"] = "MaxHpResource",
             ["medUseTime"] = "MedUseTime",
-            ["Prefab"] = "Prefab",
-            ["UsePrefab"] = "UsePrefab",
             ["ItemSound"] = "ItemSound",
             ["CanSellOnRagfair"] = "CanSellOnRagfair"
         };
 
         var reserved = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "cloneOrigin", "id", "fleaPrice", "handBookPrice", "includeInSameQuestsAsOrigin",
-            "addSpawnsInSamePlacesAsOrigin", "spawnWeightComparedToOrigin", "inheritOriginBuffs",
-            "Buffs", "locales", "trader", "traders", "craft", "crafts", "overrideProperties"
+            "cloneOrigin", "id", "fleaPrice", "handBookPrice", "fleaPriceRoubles", "handbookPriceRoubles",
+            "includeInSameQuestsAsOrigin", "addSpawnsInSamePlacesAsOrigin", "spawnWeightComparedToOrigin",
+            "inheritOriginBuffs", "useStimulatorBuffs", "Buffs", "locales", "trader", "traders",
+            "craft", "crafts", "overrideProperties", "allowExistingItem", "addtoItemBlacklist"
         };
 
         if (definition.ExtraProperties is not null)
@@ -426,7 +466,7 @@ public sealed class CustomConsumablesLoader(
                     continue;
                 }
 
-                ApplyOverrideProperty(overrides, aliases, jsonKey, value);
+                ApplyOverrideProperty(overrides, aliases, jsonKey, value, definition.Id);
             }
         }
 
@@ -434,20 +474,146 @@ public sealed class CustomConsumablesLoader(
         {
             foreach (var (jsonKey, value) in definition.OverrideProperties)
             {
-                ApplyOverrideProperty(overrides, aliases, jsonKey, value);
+                ApplyOverrideProperty(overrides, aliases, jsonKey, value, definition.Id);
             }
         }
 
-        // Force this again after JSON overrides so the custom stim always points at its own buff group.
-        SetPropertyIfExists(overrides, "StimulatorBuffs", definition.Id);
+        // Do not let a generic JSON override point a generated buff set at the wrong key.
+        if (definition.UseStimulatorBuffs == false)
+        {
+            SetPropertyIfExists(overrides, "StimulatorBuffs", string.Empty);
+        }
+        else if (useCustomStimulatorBuffSet)
+        {
+            SetPropertyIfExists(overrides, "StimulatorBuffs", definition.Id);
+        }
 
         return overrides;
     }
 
-    private static void ApplyOverrideProperty(object overrides, Dictionary<string, string> aliases, string jsonKey, JsonElement value)
+    private static bool ShouldCreateCustomStimulatorBuffSet(CustomConsumableDefinition definition)
     {
+        return definition.UseStimulatorBuffs
+               ?? definition.Buffs is { Count: > 0 };
+    }
+
+    private static void ApplyOverrideProperty(
+        object overrides,
+        Dictionary<string, string> aliases,
+        string jsonKey,
+        JsonElement value,
+        string itemId)
+    {
+        // ItemGen applies bundle paths after cloning so the existing Prefab/UsePrefab model objects
+        // are retained. Do the same here instead of replacing the nested objects during clone creation.
+        if (string.Equals(jsonKey, "Prefab", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(jsonKey, "UsePrefab", StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
         var propertyName = aliases.TryGetValue(jsonKey, out var alias) ? alias : jsonKey;
-        SetPropertyIfExists(overrides, propertyName, value);
+        if (!SetMemberIfExists(overrides, propertyName, value))
+        {
+            YATMLogger.Log($"[Tony] Unknown consumable override '{jsonKey}' on {itemId}; the value was ignored.");
+        }
+    }
+
+    private static string? GetConfiguredPropertyPath(CustomConsumableDefinition definition, string propertyName)
+    {
+        if (definition.OverrideProperties is not null
+            && TryGetJsonPropertyIgnoreCase(definition.OverrideProperties, propertyName, out var overrideValue))
+        {
+            return ReadConfiguredPath(overrideValue);
+        }
+
+        if (definition.ExtraProperties is not null
+            && TryGetJsonPropertyIgnoreCase(definition.ExtraProperties, propertyName, out var extraValue))
+        {
+            return ReadConfiguredPath(extraValue);
+        }
+
+        return null;
+    }
+
+    private static bool TryGetJsonPropertyIgnoreCase(
+        IReadOnlyDictionary<string, JsonElement> source,
+        string propertyName,
+        out JsonElement value)
+    {
+        foreach (var pair in source)
+        {
+            if (string.Equals(pair.Key, propertyName, StringComparison.OrdinalIgnoreCase))
+            {
+                value = pair.Value;
+                return true;
+            }
+        }
+
+        value = default;
+        return false;
+    }
+
+    private static string? ReadConfiguredPath(JsonElement value)
+    {
+        if (value.ValueKind == JsonValueKind.String)
+        {
+            return value.GetString();
+        }
+
+        if (value.ValueKind != JsonValueKind.Object)
+        {
+            return null;
+        }
+
+        foreach (var property in value.EnumerateObject())
+        {
+            if (string.Equals(property.Name, "path", StringComparison.OrdinalIgnoreCase)
+                && property.Value.ValueKind == JsonValueKind.String)
+            {
+                return property.Value.GetString();
+            }
+        }
+
+        return null;
+    }
+
+    private static void PatchPrefabPaths(
+        object itemsDb,
+        string itemId,
+        string? customPrefabPath,
+        string? customUsePrefabPath)
+    {
+        if (string.IsNullOrWhiteSpace(customPrefabPath)
+            && string.IsNullOrWhiteSpace(customUsePrefabPath))
+        {
+            return;
+        }
+
+        var item = GetDictionaryValue(itemsDb, itemId);
+        var properties = GetMember(item, "Properties") ?? GetMember(item, "_props");
+        if (properties is null)
+        {
+            YATMLogger.Log($"[Tony] Could not apply Prefab paths for {itemId}: cloned item properties were not found.");
+            return;
+        }
+
+        PatchNestedPath(properties, "Prefab", customPrefabPath, itemId);
+        PatchNestedPath(properties, "UsePrefab", customUsePrefabPath, itemId);
+    }
+
+    private static void PatchNestedPath(object properties, string memberName, string? path, string itemId)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return;
+        }
+
+        var nested = GetMember(properties, memberName);
+        if (nested is null || !SetMemberIfExists(nested, "Path", path))
+        {
+            YATMLogger.Log($"[Tony] Could not apply {memberName}.Path for {itemId}; the cloned property object was not available.");
+        }
     }
 
     private static Dictionary<string, LocaleDetails> BuildLocales(CustomConsumableDefinition definition)
@@ -467,7 +633,7 @@ public sealed class CustomConsumablesLoader(
         var buffDictionary = FindStimulatorBuffDictionary(tables);
         if (buffDictionary is null)
         {
-            YATMLogger.Log($"[Tony] Could not find the stimulator buff dictionary. Checked Globals.Config/Globals.Configuration and DatabaseService.GetGlobals(). Stim buffs were not added for {definition.Id}");
+            YATMLogger.Log($"[Tony] Could not find the stimulator buff dictionary. Checked supported SPT globals layouts and DatabaseService.GetGlobals(). Stim buffs were not added for {definition.Id}");
             return;
         }
 
@@ -967,22 +1133,174 @@ public sealed class CustomConsumablesLoader(
             throw new InvalidOperationException($"Missing cloneOrigin in {file}");
         }
 
+        if (!IsMongoIdLike(definition.CloneOrigin))
+        {
+            throw new InvalidOperationException($"cloneOrigin '{definition.CloneOrigin}' in {file} is not a 24-character hexadecimal MongoId.");
+        }
+
         if (string.IsNullOrWhiteSpace(definition.Id))
         {
             throw new InvalidOperationException($"Missing id in {file}");
+        }
+
+        if (!IsMongoIdLike(definition.Id))
+        {
+            throw new InvalidOperationException($"id '{definition.Id}' in {file} is not a 24-character hexadecimal MongoId.");
         }
 
         if (definition.Locales.Count == 0)
         {
             throw new InvalidOperationException($"Missing locales in {file}");
         }
+
+        foreach (var (localeName, locale) in definition.Locales)
+        {
+            if (string.IsNullOrWhiteSpace(localeName)
+                || string.IsNullOrWhiteSpace(locale.Name)
+                || string.IsNullOrWhiteSpace(locale.ShortName)
+                || string.IsNullOrWhiteSpace(locale.Description))
+            {
+                throw new InvalidOperationException($"Locale '{localeName}' in {file} must contain name, shortName, and description.");
+            }
+        }
+
+        if (definition.AddSpawnsInSamePlacesAsOrigin && definition.SpawnWeightComparedToOrigin <= 0)
+        {
+            throw new InvalidOperationException($"spawnWeightComparedToOrigin must be greater than zero in {file} when spawn injection is enabled.");
+        }
+
+        if (definition.UseStimulatorBuffs == false && definition.Buffs is { Count: > 0 })
+        {
+            throw new InvalidOperationException($"{file} sets useStimulatorBuffs=false but also defines Buffs. Remove the Buffs or enable stimulator buffs.");
+        }
+
+        if (definition.AddToItemBlacklist == true)
+        {
+            YATMLogger.Log($"[Tony] {file} requests addtoItemBlacklist=true, but YATM does not currently implement a global item blacklist hook.");
+        }
+
+        if (definition.Trader is not null)
+        {
+            ValidateTraderDefinition(definition.Trader, file);
+        }
+
+        if (definition.Traders is not null)
+        {
+            foreach (var trader in definition.Traders)
+            {
+                ValidateTraderDefinition(trader, file);
+            }
+        }
+
+        if (definition.Craft.HasValue)
+        {
+            ValidateCraftDefinition(definition.Craft.Value, definition.Id, file);
+        }
+
+        if (definition.Crafts is not null)
+        {
+            foreach (var craft in definition.Crafts)
+            {
+                ValidateCraftDefinition(craft, definition.Id, file);
+            }
+        }
     }
 
-    private static double ResolvePrice(JsonElement element, double originFleaPrice, double originHandbookPrice)
+    private static void ValidateTraderDefinition(CustomConsumableTrader trader, string file)
+    {
+        if (!IsMongoIdLike(trader.TraderId))
+        {
+            throw new InvalidOperationException($"Trader id '{trader.TraderId}' in {file} is not a valid 24-character hexadecimal MongoId.");
+        }
+
+        if (trader.LoyaltyReq is < 1 or > 4)
+        {
+            throw new InvalidOperationException($"loyaltyReq must be between 1 and 4 in {file}.");
+        }
+
+        if (trader.AmountForSale <= 0)
+        {
+            throw new InvalidOperationException($"amountForSale must be greater than zero in {file}.");
+        }
+
+        if (trader.BuyRestrictionMax.HasValue && trader.BuyRestrictionMax.Value <= 0)
+        {
+            throw new InvalidOperationException($"buyRestrictionMax must be greater than zero when supplied in {file}.");
+        }
+
+        var barterScheme = trader.BarterScheme ?? trader.BarterSchemeSnake;
+        if (!barterScheme.HasValue && trader.Price <= 0)
+        {
+            throw new InvalidOperationException($"Trader price must be greater than zero in {file} when no barterScheme is supplied.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(trader.CurrencyTpl) && !IsMongoIdLike(trader.CurrencyTpl))
+        {
+            throw new InvalidOperationException($"currencyTpl '{trader.CurrencyTpl}' in {file} is not a valid 24-character hexadecimal MongoId.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(trader.AssortmentId) && !IsMongoIdLike(trader.AssortmentId))
+        {
+            throw new InvalidOperationException($"assortmentId '{trader.AssortmentId}' in {file} is not a valid 24-character hexadecimal MongoId.");
+        }
+    }
+
+    private static void ValidateCraftDefinition(JsonElement craft, string itemId, string file)
+    {
+        if (craft.ValueKind != JsonValueKind.Object)
+        {
+            throw new InvalidOperationException($"Craft entry in {file} must be a JSON object.");
+        }
+
+        var craftId = ReadJsonElementString(craft, "id")
+                      ?? ReadJsonElementString(craft, "Id")
+                      ?? ReadJsonElementString(craft, "_id");
+        if (string.IsNullOrWhiteSpace(craftId) || !IsMongoIdLike(craftId))
+        {
+            throw new InvalidOperationException($"Craft in {file} must have a valid 24-character hexadecimal id/_id.");
+        }
+
+        var endProduct = ReadJsonElementString(craft, "endProduct");
+        if (!string.Equals(endProduct, itemId, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                $"Craft '{craftId}' in {file} has endProduct '{endProduct}', but this consumable id is '{itemId}'.");
+        }
+    }
+
+    private static bool IsMongoIdLike(string? value)
+    {
+        return !string.IsNullOrWhiteSpace(value)
+               && value.Length == 24
+               && value.All(Uri.IsHexDigit);
+    }
+
+    private static double ResolvePrice(
+        JsonElement element,
+        double? legacyExactPrice,
+        double multiplierBasePrice,
+        double originalPrice,
+        string fieldName,
+        string itemId)
     {
         if (element.ValueKind == JsonValueKind.Undefined || element.ValueKind == JsonValueKind.Null)
         {
-            return originFleaPrice;
+            if (legacyExactPrice.HasValue)
+            {
+                return ValidateResolvedPrice(legacyExactPrice.Value, fieldName, itemId);
+            }
+
+            return ValidateResolvedPrice(originalPrice, fieldName, itemId);
+        }
+
+        if (element.ValueKind == JsonValueKind.True)
+        {
+            return ValidateResolvedPrice(originalPrice, fieldName, itemId);
+        }
+
+        if (element.ValueKind == JsonValueKind.False)
+        {
+            throw new InvalidOperationException($"{fieldName} cannot be false for {itemId}. Use true/asOriginal, a positive multiplier, or an exact positive rouble value.");
         }
 
         if (element.ValueKind == JsonValueKind.String)
@@ -990,23 +1308,46 @@ public sealed class CustomConsumablesLoader(
             var text = element.GetString();
             if (string.Equals(text, "asOriginal", StringComparison.OrdinalIgnoreCase))
             {
-                return originHandbookPrice;
+                return ValidateResolvedPrice(originalPrice, fieldName, itemId);
             }
 
             if (double.TryParse(text, out var parsed))
             {
-                return parsed <= 10 ? Math.Round(originFleaPrice * parsed) : parsed;
+                return ResolveNumericPrice(parsed, multiplierBasePrice, fieldName, itemId);
             }
 
-            return originFleaPrice;
+            throw new InvalidOperationException($"Unsupported {fieldName} value '{text}' for {itemId}.");
         }
 
         if (element.ValueKind == JsonValueKind.Number && element.TryGetDouble(out var value))
         {
-            return value <= 10 ? Math.Round(originFleaPrice * value) : value;
+            return ResolveNumericPrice(value, multiplierBasePrice, fieldName, itemId);
         }
 
-        return originFleaPrice;
+        throw new InvalidOperationException($"Unsupported JSON type for {fieldName} on {itemId}.");
+    }
+
+    private static double ResolveNumericPrice(double value, double multiplierBasePrice, string fieldName, string itemId)
+    {
+        if (value <= 0)
+        {
+            throw new InvalidOperationException($"{fieldName} for {itemId} must be greater than zero; received {value}.");
+        }
+
+        var resolved = value <= 10
+            ? Math.Round(multiplierBasePrice * value)
+            : value;
+        return ValidateResolvedPrice(resolved, fieldName, itemId);
+    }
+
+    private static double ValidateResolvedPrice(double value, string fieldName, string itemId)
+    {
+        if (double.IsNaN(value) || double.IsInfinity(value) || value <= 0)
+        {
+            throw new InvalidOperationException($"Resolved {fieldName} for {itemId} must be a finite positive value; received {value}.");
+        }
+
+        return value;
     }
 
     private static object? GetPath(object? source, string path)
@@ -1208,18 +1549,28 @@ public sealed class CustomConsumablesLoader(
 
     private object? FindStimulatorBuffDictionary(object tables)
     {
+        // SPT has moved/renamed this dictionary across versions and generated model shapes.
+        // ItemGen checks all of these layouts, so YATM should not depend on only one path.
         var directCandidates = new[]
         {
             "Globals.Config.Health.Effects.Stimulator.Buffs",
             "Globals.Configuration.Health.Effects.Stimulator.Buffs",
+            "Globals.Config.Health.Effects.Stimulator.BuffSets",
+            "Globals.Configuration.Health.Effects.Stimulator.BuffSets",
+            "Globals.Config.HealthEffects.StimulatorBuffs",
+            "Globals.Configuration.HealthEffects.StimulatorBuffs",
             "globals.config.Health.Effects.Stimulator.Buffs",
-            "globals.configuration.Health.Effects.Stimulator.Buffs"
+            "globals.configuration.Health.Effects.Stimulator.Buffs",
+            "globals.config.Health.Effects.Stimulator.BuffSets",
+            "globals.configuration.Health.Effects.Stimulator.BuffSets",
+            "globals.config.HealthEffects.StimulatorBuffs",
+            "globals.configuration.HealthEffects.StimulatorBuffs"
         };
 
         foreach (var path in directCandidates)
         {
             var value = GetPath(tables, path);
-            if (value is not null)
+            if (IsDictionaryLike(value))
             {
                 return value;
             }
@@ -1234,11 +1585,153 @@ public sealed class CustomConsumablesLoader(
             return null;
         }
 
-        var config = GetFirstMember(globals, "Config", "Configuration", "config", "configuration") ?? globals;
-        var health = GetFirstMember(config, "Health", "health");
-        var effects = GetFirstMember(health, "Effects", "effects");
-        var stimulator = GetFirstMember(effects, "Stimulator", "stimulator");
-        return GetFirstMember(stimulator, "Buffs", "buffs");
+        var relativeCandidates = new[]
+        {
+            "Config.Health.Effects.Stimulator.Buffs",
+            "Configuration.Health.Effects.Stimulator.Buffs",
+            "Config.Health.Effects.Stimulator.BuffSets",
+            "Configuration.Health.Effects.Stimulator.BuffSets",
+            "Config.HealthEffects.StimulatorBuffs",
+            "Configuration.HealthEffects.StimulatorBuffs",
+            "Health.Effects.Stimulator.Buffs",
+            "Health.Effects.Stimulator.BuffSets",
+            "HealthEffects.StimulatorBuffs"
+        };
+
+        foreach (var path in relativeCandidates)
+        {
+            var value = GetPath(globals, path);
+            if (IsDictionaryLike(value))
+            {
+                return value;
+            }
+        }
+
+        // Generated SPT models may preserve unknown JSON members in ExtensionData.
+        var extensionData = GetFirstMember(globals, "ExtensionData", "extensionData");
+        var healthEffects = GetDictionaryValue(extensionData, "HealthEffects")
+                            ?? GetDictionaryValue(extensionData, "healthEffects")
+                            ?? GetFirstMember(extensionData, "HealthEffects", "healthEffects");
+        var extensionBuffs = GetDictionaryValue(healthEffects, "StimulatorBuffs")
+                             ?? GetDictionaryValue(healthEffects, "stimulatorBuffs")
+                             ?? GetFirstMember(healthEffects, "StimulatorBuffs", "stimulatorBuffs");
+        if (IsDictionaryLike(extensionBuffs))
+        {
+            return extensionBuffs;
+        }
+
+        // Last-resort bounded search for custom/generated wrappers. This mirrors ItemGen's
+        // compatibility fallback without walking the entire database indefinitely.
+        return FindNamedDictionaryMember(
+                   globals,
+                   new[] { "StimulatorBuffs", "BuffSets" },
+                   remainingDepth: 6,
+                   new HashSet<object>(ReferenceEqualityComparer.Instance));
+    }
+
+    private static object? FindNamedDictionaryMember(
+        object? source,
+        IReadOnlyCollection<string> targetNames,
+        int remainingDepth,
+        HashSet<object> visited)
+    {
+        if (source is null || remainingDepth < 0 || source is string)
+        {
+            return null;
+        }
+
+        var type = source.GetType();
+        if (type.IsPrimitive || type.IsEnum || type == typeof(decimal) || type == typeof(DateTime))
+        {
+            return null;
+        }
+
+        if (!type.IsValueType && !visited.Add(source))
+        {
+            return null;
+        }
+
+        foreach (var targetName in targetNames)
+        {
+            var direct = GetMember(source, targetName)
+                         ?? GetDictionaryValue(source, targetName);
+            if (IsDictionaryLike(direct))
+            {
+                return direct;
+            }
+        }
+
+        if (remainingDepth == 0)
+        {
+            return null;
+        }
+
+        if (source is IDictionary dictionary)
+        {
+            foreach (DictionaryEntry entry in dictionary)
+            {
+                var found = FindNamedDictionaryMember(entry.Value, targetNames, remainingDepth - 1, visited);
+                if (found is not null)
+                {
+                    return found;
+                }
+            }
+
+            return null;
+        }
+
+        const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
+        foreach (var property in type.GetProperties(flags))
+        {
+            if (property.GetIndexParameters().Length != 0 || !property.CanRead)
+            {
+                continue;
+            }
+
+            object? value;
+            try
+            {
+                value = property.GetValue(source);
+            }
+            catch
+            {
+                continue;
+            }
+
+            var found = FindNamedDictionaryMember(value, targetNames, remainingDepth - 1, visited);
+            if (found is not null)
+            {
+                return found;
+            }
+        }
+
+        foreach (var field in type.GetFields(flags))
+        {
+            var found = FindNamedDictionaryMember(field.GetValue(source), targetNames, remainingDepth - 1, visited);
+            if (found is not null)
+            {
+                return found;
+            }
+        }
+
+        return null;
+    }
+
+    private static bool IsDictionaryLike(object? value)
+    {
+        if (value is null)
+        {
+            return false;
+        }
+
+        if (value is IDictionary)
+        {
+            return true;
+        }
+
+        return value.GetType().GetInterfaces().Any(interfaceType =>
+            interfaceType.IsGenericType
+            && interfaceType.GetGenericTypeDefinition() == typeof(IDictionary<,>));
     }
 
     private static object? TryCallNoArg(object source, string methodName)
