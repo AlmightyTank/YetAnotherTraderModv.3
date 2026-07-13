@@ -1,263 +1,105 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <RootNamespace>YetAnotherTraderMod</RootNamespace>
-    <AssemblyName>YetAnotherTraderMod</AssemblyName>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <OutputType>Library</OutputType>
-    <Version>0.2.0</Version>
-    <Configurations>Debug;Release;Package</Configurations>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-    <DefaultItemExcludes>$(DefaultItemExcludes);dist\**;Inspector\**</DefaultItemExcludes>
-    <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
-    <DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
-    <GenerateDependencyFile>false</GenerateDependencyFile>
-    <StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="SPTarkov.Common" Version="4.0.13" />
-    <PackageReference Include="SPTarkov.DI" Version="4.0.13" />
-    <PackageReference Include="SPTarkov.Server.Core" Version="4.0.13" />
-	<PackageReference Include="WTT-ServerCommonLib" Version="2.0.20" />
-  </ItemGroup>
-      <ItemGroup>
-
-	    <None Include="config\settings.json">
-		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </None>
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<RootNamespace>YetAnotherTraderMod</RootNamespace>
+		<AssemblyName>YetAnotherTraderMod</AssemblyName>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<OutputType>Library</OutputType>
+		<Version>0.2.0</Version>
+		<Configurations>Debug;Release;Package</Configurations>
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+		<DefaultItemExcludes>$(DefaultItemExcludes);dist\**;Inspector\**;Resources\**</DefaultItemExcludes>
+		<DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+		<DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
+		<GenerateDependencyFile>false</GenerateDependencyFile>
+		<StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="SPTarkov.Common" Version="4.0.13" />
+		<PackageReference Include="SPTarkov.DI" Version="4.0.13" />
+		<PackageReference Include="SPTarkov.Server.Core" Version="4.0.13" />
+		<PackageReference Include="WTT-ServerCommonLib" Version="2.0.20" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="config\settings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 
 		<None Include="config\manual_offers.jsonc">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 
-	    <None Include="config\generated_trade_settings.jsonc">
-		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </None>
+		<None Include="config\generated_trade_settings.jsonc">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 
-	    <None Include="config\generated_barter_whitelist.jsonc">
-		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </None>
-		
-	    <None Include="db\**\*.*" Exclude="db\**\*.cs;db\Generated\generated_barters.jsonc">
-		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </None>
-    </ItemGroup>
-  <ItemGroup>
-    <Content Remove="db\CustomItems\Armor\Builtins\6b3TM_leve5_soft_armor_front.json" />
-    <Content Remove="db\CustomItems\Armor\Builtins\6b3TM_level4_soft_armor_back.json" />
-    <Content Remove="db\customitems\armor\builtins\6b3TM_level4_soft_armor_groin_back.json" />
-    <Content Remove="db\CustomItems\Armor\Builtins\6b3TM_level5_soft_armor_groin_front.json" />
-    <Content Remove="db\CustomItems\Armor\Builtins\6b5-15_level4_soft_armor_collar.json" />
-    <Content Remove="db\CustomItems\Armor\Builtins\6b5-15_level5_soft_armor_back.json" />
-    <Content Remove="db\CustomItems\Armor\Builtins\6b5-15_level5_soft_armor_front.json" />
-    <Content Remove="db\CustomItems\Armor\Builtins\6b5-15_level5_soft_armor_groin.json" />
-    <Content Remove="db\CustomItems\Armor\item_equipment_armor_6b3.json" />
-    <Content Remove="db\customitems\armor\item_equipment_rig_6b5_flora.json" />
-    <Content Remove="db\CustomItems\Consumables\medvedol_650mg_tablets.json" />
-    <Content Remove="db\CustomItems\Consumables\noctapyrin_focus_tablets.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_cocoa_thermos.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_cooked_green_peas.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_cooked_herring.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_cooked_pacific_saury.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_cooked_sprats.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_cooked_squash_spread.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_cooked_tushonka_large.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_cooked_tushonka_small.json" />
-    <Content Remove="db\CustomItems\Consumables\Volkov_field_medkit.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_field_stabilizer.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_ghost_9.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_hemostatic_gauze.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_mule_lite.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_nerve_igniter.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_razliv_mineral_water.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_rus_alpha.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_super_army_bandage.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_super_iskra.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_warm_milk_thermos.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_zaryad_vitamin_pouch.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_zarya_energy_drink.json" />
-    <Content Remove="db\CustomHideoutRecipes\clean_run_sealed_cargo_package.json" />
-    <Content Remove="db\customhideoutrecipes\tonys_calling_card.json" />
-    <Content Remove="db\CustomItems\altyn_with_headphones.json" />
-    <Content Remove="db\CustomItems\buried_steel_crate.json" />
-    <Content Remove="db\CustomItems\coded_dead_drop_tag.json" />
-    <Content Remove="db\CustomItems\cold_chain_medical_case.json" />
-    <Content Remove="db\CustomItems\cqcm_demon_v2.json" />
-    <Content Remove="db\CustomItems\cqcm_skull_v2.json" />
-    <Content Remove="db\customitems\dead-drop_package.json" />
-    <Content Remove="db\CustomItems\experimental_stim_case.json" />
-    <Content Remove="db\CustomItems\forged_route_documents.json" />
-    <Content Remove="db\customitems\headwear\builtins\ratnik_6b47_level3_helmet_armor_ears.json" />
-    <Content Remove="db\CustomItems\HeadWear\Builtins\ratnik_6b47_level5_helmet_armor_nape.json" />
-    <Content Remove="db\CustomItems\HeadWear\Builtins\ratnik_6b47_level5_helmet_armor_top.json" />
-    <Content Remove="db\CustomItems\rogue_shipment_evidence.json" />
-    <Content Remove="db\CustomItems\sealed_cargo_package.json" />
-    <Content Remove="db\customitems\super_salad.json" />
-    <Content Remove="db\CustomItems\thicc_holodilnick_thermal_bag.json" />
-    <Content Remove="db\customitems\tony_calling_card.json" />
-    <Content Remove="db\CustomItems\tony_quest_items.json" />
-    <Content Remove="db\customitems\trauma_bag.json" />
-    <Content Remove="db\CustomItems\volkovs_concordia_ledger.json" />
-    <Content Remove="db\CustomItems\volkov_gssh_01.json" />
-    <Content Remove="db\CustomItems\volkov_gssh_01m.json" />
-    <Content Remove="db\CustomItems\volkov_gssh_02.json" />
-    <Content Remove="db\CustomItems\volkov_gssh_02m.json" />
-    <Content Remove="db\customlocales\en.json" />
-    <Content Remove="db\CustomLootSpawns\CustomSpawnpointsForced\bigmap_forced.json" />
-    <Content Remove="db\customlootspawns\customspawnpointsforced\factory_forced.json" />
-    <Content Remove="db\CustomLootSpawns\CustomSpawnpointsForced\interchange_forced.json" />
-    <Content Remove="db\customlootspawns\customspawnpointsforced\lighthouse_forced.json" />
-    <Content Remove="db\CustomLootSpawns\CustomSpawnpointsForced\rezervbase_forced.json" />
-    <Content Remove="db\customlootspawns\customspawnpointsforced\shoreline_forced.json" />
-    <Content Remove="db\CustomLootSpawns\CustomSpawnpointsForced\woods_forced.json" />
-    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Locales\en.json" />
-    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\QuestAssort\assort.json" />
-    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\army_leftovers.json" />
-    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\bunker_tax.json" />
-    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\cold_chain.json" />
-    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\depot_rats.json" />
-    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\red_caliber.json" />
-    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\street_clinic.json" />
-    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\street_colors.json" />
-    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\test_batch.json" />
-    <Content Remove="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\used_but_usable.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\questassort\assort.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\quests\back_room_etiquette.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\broken_radios.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\buried_steel.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\clean_run.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\cold_freight.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\dead_drop_rules.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\foreign_parts.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\quests\no_names_spoken.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\quests\old_bear_trails.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\paper_shields.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\quest.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\red_debt.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\quests\safe_hands.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\quests\street_tax.json" />
-    <Content Remove="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Quests\worn_down.json" />
-    <Content Remove="db\CustomQuests\Zones\back_room_etiquette.json" />
-    <Content Remove="db\CustomQuests\Zones\broken_radios.json" />
-    <Content Remove="db\CustomQuests\Zones\bunker_tax.json" />
-    <Content Remove="db\CustomQuests\Zones\buried_steel.json" />
-    <Content Remove="db\CustomQuests\Zones\clean_run.json" />
-    <Content Remove="db\CustomQuests\Zones\cold_chain.json" />
-    <Content Remove="db\CustomQuests\Zones\cold_freight.json" />
-    <Content Remove="db\CustomQuests\Zones\dead_drop_rules.json" />
-    <Content Remove="db\CustomQuests\Zones\depot_rats.json" />
-    <Content Remove="db\CustomQuests\Zones\first_dead_drop.json" />
-    <Content Remove="db\CustomQuests\Zones\foreign_parts.json" />
-    <Content Remove="db\CustomQuests\Zones\no_names_spoken.json" />
-    <Content Remove="db\CustomQuests\Zones\old_bear_trails.json" />
-    <Content Remove="db\CustomQuests\Zones\paper_shields.json" />
-    <Content Remove="db\CustomQuests\Zones\safe_hands.json" />
-    <Content Remove="db\CustomQuests\Zones\street_clinic.json" />
-    <Content Remove="db\CustomQuests\Zones\street_tax.json" />
-    <Content Remove="db\CustomQuests\Zones\test_batch.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_hemostat.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_redline.json" />
-    <Content Remove="db\CustomItems\Consumables\volkov_regen.json" />
-    <Content Remove="db\CustomQuests\Zones\used_but_usable.json" />
-    <Content Remove="db\CustomWeapons\Builds\RD545_modded.json" />
-    <Content Remove="db\CustomWeapons\Presets\BTAKM_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\BTAKM_Red_Debt_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\BTASH-12_Debt_Collector_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\BTASH-12_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\BTASVAL_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\BTASVAL_Whisper_Fang_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\FA136_Hunters_Regret_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\FA209_Paradox_Unleashed_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\FA209_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\FAPM9X18_Loose_Ends_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\FAPM9X18_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\FASKS_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\FASKS_Relic_Reborn_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\FASTM_Competition_Ghost_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\FASTM_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\SVDSARB_Arbiter_Preset.json" />
-    <Content Remove="db\CustomWeapons\Presets\SVDSARB_Preset.json" />
-    <Content Remove="db\CustomWeapons\BTAKM.json" />
-    <Content Remove="db\CustomWeapons\BTASH12.json" />
-    <Content Remove="db\CustomWeapons\BTASVAL.json" />
-    <Content Remove="db\CustomWeapons\FA136.json" />
-    <Content Remove="db\CustomWeapons\FA136_Preset.json" />
-    <Content Remove="db\CustomWeapons\FA209.json" />
-    <Content Remove="db\CustomWeapons\FAPM9X18.json" />
-    <Content Remove="db\CustomWeapons\FASKS.json" />
-    <Content Remove="db\CustomWeapons\FASTM.json" />
-    <Content Remove="db\CustomWeapons\SVDSARB.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="db\CustomTrader\Tony\assort.json" />
-    <None Include="db\CustomTrader\Tony\base.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Images\" />
-    <Folder Include="db\CustomQuests\MainQuests\579dc571d53a0658a154fbec\Images\" />
-    <Folder Include="db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Images\" />
-    <Folder Include="db\CustomLocales\" />
-    <Folder Include="src\Models\" />
-    <Folder Include="src\Services\ItemHelpers\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\used_but_usable.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\test_batch.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\street_colors.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\street_clinic.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\red_caliber.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\depot_rats.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\cold_chain.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\bunker_tax.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\army_leftovers.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\QuestAssort\assort.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Locales\en.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+		<None Include="config\generated_barter_whitelist.jsonc">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+
+		<None Include="Resources\db\**\*.*" Exclude="Resources\db\**\*.cs;Resources\db\Generated\generated_barters.jsonc">
+			<Link>db\%(RecursiveDir)%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+
+		<None Include="Resources\bundles\**\*.*">
+			<Link>bundles\%(RecursiveDir)%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+
+		<Compile Remove="Resources\bundles\assets\yatm\usable_items\item_meds_field\materials\**" />
+
+		<Content Remove="Resources\bundles\assets\yatm\usable_items\item_meds_field\materials\**" />
+
+		<EmbeddedResource Remove="Resources\bundles\assets\yatm\usable_items\item_meds_field\materials\**" />
+
+		<None Remove="Resources\bundles\assets\yatm\usable_items\item_meds_field\materials\**" />
+
+		<None Remove="Resources\bundles\assets\**" />
+
+		<None Include="Resources\bundles.json">
+			<Link>bundles.json</Link>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<Folder Include="Resources\db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Images\" />
+		<Folder Include="Resources\db\CustomQuests\MainQuests\579dc571d53a0658a154fbec\Images\" />
+		<Folder Include="Resources\db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Images\" />
+		<Folder Include="Resources\db\CustomLocales\" />
+		<Folder Include="src\Models\" />
+		<Folder Include="src\Services\ItemHelpers\" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\test_batch.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\street_clinic.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\depot_rats.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Quests\bunker_tax.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\QuestAssort\assort.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 	<PropertyGroup>
 		<!-- Change this to your SPT server root folder, or pass /p:SptInstallPath="C:\RealSPT" from the root solution. -->
