@@ -1,0 +1,18 @@
+{
+    "manifest": [
+        {
+            "key": "item_meds_field.bundle",
+            "dependencyKeys": [
+                "cubemaps",
+                "shaders"
+            ]
+        },
+        {
+            "key": "item_meds_field_loot.bundle",
+            "dependencyKeys": [
+                "cubemaps",
+                "shaders"
+            ]
+        }
+    ]
+}

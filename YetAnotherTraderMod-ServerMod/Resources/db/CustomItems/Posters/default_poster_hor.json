@@ -1,0 +1,21 @@
+{
+    "6a542b626dacb02fc0d2d18c": {
+        "itemTplToClone": "6759e07e4ff23436160d7fed",
+        "parentId": "6759673c76e93d8eb20b2080",
+        "handbookParentId": "5b47574386f77428ca22b2f4",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false
+        },
+        "locales": {
+            "en": {
+                "name": "Atomic Defense CQCM ballistic mask (Skull) V2",
+                "shortName": "Skull V2",
+                "description": "The regular Skull mask scares amateurs. This one stops them. The plates are thickened, the padding is fixed, and the straps wear less like punishment. Two classes tougher, more durable, and still wearing that grin because hesitation is worth money."
+            }
+        },
+        "fleaPriceRoubles": 100000,
+        "handbookPriceRoubles": 100000,
+        "addtoItemBlacklist": true
+    }
+}

@@ -11,7 +11,15 @@
         "MaxHpResource": 600,
         "HpResourceRate": 65,
         "MedUseTime": 2.5,
-        "MedEffectType": "duringUse"
+        "MedEffectType": "duringUse",
+        "Prefab": {
+            "path": "assets/yatm/usable_items/item_meds_field/item_meds_field_loot.bundle",
+            "rcid": ""
+        },
+        "UsePrefab": {
+            "path": "assets/yatm/usable_items/item_meds_field/item_meds_field.bundle",
+            "rcid": ""
+        }
     },
 
     "useStimulatorBuffs": false,
