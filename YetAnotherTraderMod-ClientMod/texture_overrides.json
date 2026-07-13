@@ -9,7 +9,7 @@
         "6a51aaaa6dacb02fc0d2d13b": {
             "enabled": true,
             "sourceTemplateId": "5aa7cfc0e5b5b00015693143",
-            "texture": "Textures/Custom/6B47_Flora.png",
+            "texture": "Textures/Custom/6B47_Izlom.png",
             "textureProperty": "_MainTex",
             "textures": {},
             "materials": [
@@ -25,7 +25,7 @@
         "6a52c7dd6dacb02fc0d2d177": {
             "enabled": true,
             "sourceTemplateId": "5c0e446786f7742013381639",
-            "texture": "Textures/Custom/6b5_Desert.png",
+            "texture": "Textures/Custom/6b5_Izlom.png",
             "textureProperty": "_MainTex",
             "textures": {},
             "materials": [
@@ -41,7 +41,7 @@
         "6a523f906dacb02fc0d2d167": {
             "enabled": true,
             "sourceTemplateId": "5d5d646386f7742797261fd9",
-            "texture": "Textures/Custom/6B3_Flora.png",
+            "texture": "Textures/Custom/6B3_Izlom.png",
             "textureProperty": "_MainTex",
             "textures": {},
             "materials": [
@@ -73,10 +73,125 @@
         "6a44635138a6d33bffe982f3": {
             "enabled": true,
             "sourceTemplateId": "5751435d24597720a27126d1",
+
+            "texture": "Textures/Custom/item_maxenergy_Zarya.png",
+            "textureProperty": "_MainTex",
+            "textures": {},
+            "materials": [
+                "item_maxenergy"
+            ],
+
+            "animatedTexture": "Textures/Custom/item_maxenergy_Zarya.png",
+            "animatedTextureProperty": "_MainTex",
+            "animatedTextures": {},
+            "animatedMaterials": [
+                "item_maxenergy"
+            ],
+
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "offsetX": 0.0,
+            "offsetY": 0.0,
+            "color": "#FFFFFF",
+            "colorProperty": "_Color"
+        },
+        "6a3fd8c382d8dd83f87b200c": {
+            "enabled": true,
+            "sourceTemplateId": "637b6179104668754b72f8f5",
+            "texture": "Textures/Custom/item_simulator_PNB_RUS.png",
+            "textureProperty": "_MainTex",
+            "textures": {},
+            "materials": [
+                "item_simulator_PNB"
+            ],
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "offsetX": 0.0,
+            "offsetY": 0.0,
+            "color": "#FFFFFF",
+            "colorProperty": "_Color"
+        },
+        "6a43f02738a6d33bffe98337": {
+            "enabled": true,
+            "sourceTemplateId": "544fb45d4bdc2dee738b4568",
+
+            "texture": "Textures/Custom/item_meds_salewa_Field.png",
+            "textureProperty": "_MainTex",
+            "textures": {},
+            "materials": [
+                "item_meds_salewa"
+            ],
+
+            "animatedTexture": "Textures/Custom/item_meds_salewa_Field.png",
+            "animatedTextureProperty": "_MainTex",
+            "animatedTextures": {},
+            "animatedMaterials": [
+                "item_meds_salewa"
+            ],
+
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "offsetX": 0.0,
+            "offsetY": 0.0,
+            "color": "#FFFFFF",
+            "colorProperty": "_Color"
+        },
+        "6a4933e1fb1eff152bd649aa": {
+            "enabled": true,
+            "sourceTemplateId": "5d6e68a8a4b9360b6c0d54e2",
+            "texture": "Textures/Custom/patron_12x70_slug_homemade.png",
+            "textureProperty": "_MainTex",
+            "textures": {},
+            "materials": [
+                "patron_12x70_slug_ap_20"
+            ],
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "offsetX": 0.0,
+            "offsetY": 0.0,
+            "color": "#FFFFFF",
+            "colorProperty": "_Color"
+        },
+        "6a417b0582d8dd83f87b20f0": {
+            "enabled": true,
+            "sourceTemplateId": "5aafbcd986f7745e590fff23",
+            "texture": "Textures/Custom/item_container_meds_THICC.png",
+            "textureProperty": "_MainTex",
+            "textures": {},
+            "materials": [
+                "item_container_meds"
+            ],
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "offsetX": 0.0,
+            "offsetY": 0.0,
+            "color": "#FFFFFF",
+            "colorProperty": "_Color"
+        },
+        "6a542b626dacb02fc0d2d18c": {
+            "enabled": true,
+            "sourceTemplateId": "6759e07e4ff23436160d7fed",
             "texture": "",
             "textureProperty": "_MainTex",
             "textures": {},
             "materials": [
+                "*"
+            ],
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "offsetX": 0.0,
+            "offsetY": 0.0,
+            "color": "#FFFFFF",
+            "colorProperty": "_Color"
+        },
+        "6a542b626dacb02fc0d2d18b": {
+            "enabled": true,
+            "sourceTemplateId": "675a04fdb8913ff13e0496bb",
+            "texture": "",
+            "textureProperty": "_MainTex",
+            "textures": {},
+            "materials": [
+                "*"
             ],
             "scaleX": 1.0,
             "scaleY": 1.0,
