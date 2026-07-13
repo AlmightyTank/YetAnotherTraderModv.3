@@ -306,9 +306,9 @@
         },
         "locales": {
             "en": {
-                "name": "6B3TM-01 upgraded armored rig (Flora)",
-                "shortName": "6B3TM-01U",
-                "description": "An upgraded 6B3TM-01 armored rig in flora camouflage. Originally developed as modified Soviet general army body armor and used during the war in Afghanistan, the 6B3TM-01 combines protective armor with integrated magazine and grenade pouches. This reinforced variant has been fitted with improved protective inserts and repaired carrier sections, increasing its protection to Class 5 at the cost of additional weight and reduced comfort."
+                "name": "6B3TM-01 armored rig (Izlom) reinforced",
+                "shortName": "6B3TM-01RI",
+                "description": "A reinforced 6B3TM-01 armored rig in Izlom camouflage. Originally developed as modified Soviet general army body armor and used during the war in Afghanistan, the 6B3TM-01 combines protective armor with integrated magazine and grenade pouches. This reinforced variant has been fitted with improved protective inserts and repaired carrier sections, increasing its protection to Class 5 at the cost of additional weight and reduced comfort."
             }
         },
         "fleaPriceRoubles": 114000,

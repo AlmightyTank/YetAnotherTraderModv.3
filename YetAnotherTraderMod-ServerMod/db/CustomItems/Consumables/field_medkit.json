@@ -3,43 +3,22 @@
     "id": "6a43f02738a6d33bffe98337",
     "fleaPrice": 1.35,
     "handBookPrice": 1.35,
-    "includeInSameQuestsAsOrigin": false,
+    "includeInSameQuestsAsOrigin": true,
     "addSpawnsInSamePlacesAsOrigin": true,
     "spawnWeightComparedToOrigin": 0.18,
-    "MaxResource": 600,
-    "effects_health": {},
-    "effects_damage": {
-        "LightBleeding": {
-            "delay": 0,
-            "duration": 60,
-            "fadeOut": 0
-        },
-        "HeavyBleeding": {
-            "delay": 0,
-            "duration": 60,
-            "fadeOut": 0
-        }
+
+    "overrideProperties": {
+        "MaxHpResource": 600,
+        "HpResourceRate": 65,
+        "MedUseTime": 2.5,
+        "MedEffectType": "duringUse"
     },
-    "Buffs": [
-        {
-            "AbsoluteValue": true,
-            "BuffType": "SkillRate",
-            "Chance": 1,
-            "Delay": 0,
-            "Duration": 240,
-            "SkillName": "Health",
-            "Value": 1
-        },
-        {
-            "AbsoluteValue": true,
-            "BuffType": "SkillRate",
-            "Chance": 1,
-            "Delay": 0,
-            "Duration": 240,
-            "SkillName": "Vitality",
-            "Value": 1
-        }
-    ],
+
+    "useStimulatorBuffs": false,
+    "inheritOriginBuffs": false,
+
+    "Buffs": [],
+
     "locales": {
         "en": {
             "name": "Field medkit",
@@ -47,6 +26,7 @@
             "description": "Salewa bones, rough tape, and quality control done by men who were in a hurry. The supplies are good, the labels are ugly, and the blood will not care either way. Clean is nice; working is better."
         }
     },
+
     "trader": {
         "traderId": "66a0f6b2c4d8e90123456789",
         "loyaltyReq": 2,
@@ -55,6 +35,7 @@
         "buyRestrictionMax": 2,
         "assortmentId": "6a5044aa2373cd1c4e9ba91d"
     },
+
     "craft": {
         "_id": "6a43f02838a6d33bffe98338",
         "areaType": 7,
@@ -95,5 +76,6 @@
         "productionLimitCount": 0,
         "isEncoded": false
     },
+
     "addtoItemBlacklist": false
 }

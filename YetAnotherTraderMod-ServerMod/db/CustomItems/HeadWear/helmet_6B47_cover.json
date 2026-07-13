@@ -9,7 +9,6 @@
             "mousePenalty": -1,
             "speedPenaltyPercent": 0,
             "weaponErgonomicPenalty": -1,
-            "BackgroundColor": "violet",
             "Slots": [
                 {
                     "_id": "6a51aaaa6dacb02fc0d2d13c",
@@ -87,9 +86,9 @@
         },
         "locales": {
             "en": {
-                "name": "6B47 Ratnik-BSh upgraded helmet (Flora)",
-                "shortName": "6B47-U Flora",
-                "description": "An upgraded 6B47 Ratnik-BSh helmet finished in Flora camouflage. Originally developed as a lightweight aramid helmet for the Ratnik program, this modified version has been reinforced with additional ballistic material and improved internal padding. The upgrade increases protection to Class 5 while retaining the standard mounts for lights and night vision devices. Heavier than the original, but built for people who expect the shooting to start before negotiations do."
+                "name": "6B47 Ratnik-BSh helmet (Izlom) reinforced",
+                "shortName": "6B47-URI",
+                "description": "A reinforced 6B47 Ratnik-BSh helmet finished in Fractured Izlom camouflage. Originally developed as a lightweight aramid helmet for the Ratnik program, this modified version has been reinforced with additional ballistic material and improved internal padding. The upgrade increases protection to Class 5 while retaining the standard mounts for lights and night vision devices. Heavier than the original, but built for people who expect the shooting to start before negotiations do."
             }
         },
         "fleaPriceRoubles": 37710,
