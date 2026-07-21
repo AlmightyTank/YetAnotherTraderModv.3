@@ -9,6 +9,10 @@
             "mousePenalty": -1,
             "speedPenaltyPercent": -5,
             "weaponErgonomicPenalty": -7,
+            "Prefab": {
+                "path": "assets/content/items/equipment/armor_6b3/item_equipment_armor_6b3_izlom.bundle",
+                "rcid": ""
+            },
             "Grids": [
                 {
                     "_id": "6a523f906dacb02fc0d2d16e",

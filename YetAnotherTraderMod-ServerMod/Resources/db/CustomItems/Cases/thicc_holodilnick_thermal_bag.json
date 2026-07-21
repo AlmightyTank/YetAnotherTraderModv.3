@@ -9,6 +9,10 @@
             "Height": 3,
             "Weight": 16,
             "CanSellOnRagfair": false,
+            "Prefab": {
+                "path": "assets/content/items/containers/item_container_food/item_container_thicc_food.bundle",
+                "rcid": ""
+            },
             "Grids": [
                 {
                     "_name": "main",

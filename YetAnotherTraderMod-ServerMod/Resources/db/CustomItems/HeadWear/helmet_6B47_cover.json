@@ -9,6 +9,10 @@
             "mousePenalty": -1,
             "speedPenaltyPercent": 0,
             "weaponErgonomicPenalty": -1,
+            "Prefab": {
+                "path": "assets/content/items/equipment/helmet_6b47covered/item_equipment_helmet_6b47covered_izlom.bundle",
+                "rcid": ""
+            },
             "Slots": [
                 {
                     "_id": "6a51aaaa6dacb02fc0d2d13c",

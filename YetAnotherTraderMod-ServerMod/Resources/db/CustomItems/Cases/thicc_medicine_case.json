@@ -9,6 +9,10 @@
             "Height": 3,
             "Weight": 14,
             "CanSellOnRagfair": false,
+            "Prefab": {
+                "path": "assets/content/items/containers/item_container_meds/item_container_thicc_meds.bundle",
+                "rcid": ""
+            },
             "Grids": [
                 {
                     "_name": "main",

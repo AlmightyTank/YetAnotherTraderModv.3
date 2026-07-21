@@ -9,6 +9,10 @@
             "mousePenalty": -2,
             "speedPenaltyPercent": 0,
             "weaponErgonomicPenalty": -1,
+            "Prefab": {
+                "path": "assets/content/items/equipment/helmet_altyn/item_equipment_helmet_altyn_medved.bundle",
+                "rcid": ""
+            },
             "Slots": [
                 {
                     "_id": "6a43cb6e38a6d33bffe982da",
@@ -19,7 +23,8 @@
                         "filters": [
                             {
                                 "Filter": [
-                                    "5aa7e373e5b5b000137b76f0"
+                                    "5aa7e373e5b5b000137b76f0",
+                                    "6a5f99f6b43c3660257e7546"
                                 ],
                                 "Shift": 0
                             }

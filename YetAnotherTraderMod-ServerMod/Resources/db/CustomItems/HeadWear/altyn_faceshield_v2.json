@@ -1,0 +1,31 @@
+{
+    "6a5f99f6b43c3660257e7546": {
+        "itemTplToClone": "5aa7e373e5b5b000137b76f0",
+        "parentId": "57bef4c42459772e8d35a53b",
+        "handbookParentId": "5b5f704686f77447ec5d76d7",
+        "overrideProperties": {
+            "ExaminedByDefault": true,
+            "CanSellOnRagfair": false,
+            "Durability": 55,
+            "MaxDurability": 55,
+            "armorClass": "5",
+            "mousePenalty": -6,
+            "speedPenaltyPercent": 0,
+            "weaponErgonomicPenalty": -6,
+            "Prefab": {
+                "path": "assets/content/items/equipment/helmet_altyn_shield/item_equipment_helmet_altyn_shield_medved.bundle",
+                "rcid": ""
+            }
+        },
+        "locales": {
+            "en": {
+                "name": "Altyn helmet face shield V2",
+                "shortName": "Altyn FS V2",
+                "description": "A special armored face shield for the \"Altyn\" heavy assault helmet. Increases the chances of surviving the impacts of bullets and shrapnel."
+            }
+        },
+        "fleaPriceRoubles": 108463,
+        "handbookPriceRoubles": 108463,
+        "addtoItemBlacklist": true
+    }
+}

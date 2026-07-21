@@ -14,6 +14,64 @@
                 "cubemaps",
                 "shaders"
             ]
+        },
+        {
+            "key": "assets/content/items/equipment/helmet_6b47covered/item_equipment_helmet_6b47covered_izlom.bundle",
+            "dependencyKeys": [
+                "cubemaps",
+                "shaders"
+            ]
+        },
+        {
+            "key": "assets/content/items/equipment/armor_6b3/item_equipment_armor_6b3_izlom.bundle",
+            "dependencyKeys": [
+                "cubemaps",
+                "shaders"
+            ]
+        },
+        {
+            "key": "assets/content/items/equipment/armor_6b5/item_equipment_rig_6b5_izlom.bundle",
+            "dependencyKeys": [
+                "assets/content/characters/character/vest/ar_6b5_mesh_izlom",
+                "cubemaps",
+                "shaders"
+            ]
+        },
+        {
+            "key": "assets/content/characters/character/vest/ar_6b5_mesh_izlom",
+            "dependencyKeys": [
+                "cubemaps",
+                "shaders"
+            ]
+        },
+        {
+            "key": "assets/content/items/equipment/helmet_altyn_shield/item_equipment_helmet_altyn_shield_medved.bundle",
+            "dependencyKeys": [
+                "assets/content/items/equipment/helmet_altyn/item_equipment_helmet_altyn_medved.bundle",
+                "cubemaps",
+                "shaders"
+            ]
+        },
+        {
+            "key": "assets/content/items/equipment/helmet_altyn/item_equipment_helmet_altyn_medved.bundle",
+            "dependencyKeys": [
+                "cubemaps",
+                "shaders"
+            ]
+        },
+        {
+            "key": "assets/content/items/containers/item_container_food/item_container_thicc_food.bundle",
+            "dependencyKeys": [
+                "cubemaps",
+                "shaders"
+            ]
+        },
+        {
+            "key": "assets/content/items/containers/item_container_meds/item_container_thicc_meds.bundle",
+            "dependencyKeys": [
+                "cubemaps",
+                "shaders"
+            ]
         }
     ]
 }
