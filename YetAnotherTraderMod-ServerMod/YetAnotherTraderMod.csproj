@@ -50,16 +50,6 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 
-		<Compile Remove="Resources\bundles\assets\yatm\usable_items\item_meds_field\materials\**" />
-
-		<Content Remove="Resources\bundles\assets\yatm\usable_items\item_meds_field\materials\**" />
-
-		<EmbeddedResource Remove="Resources\bundles\assets\yatm\usable_items\item_meds_field\materials\**" />
-
-		<None Remove="Resources\bundles\assets\yatm\usable_items\item_meds_field\materials\**" />
-
-		<None Remove="Resources\bundles\assets\**" />
-
 		<None Include="Resources\bundles.json">
 			<Link>bundles.json</Link>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -68,6 +58,7 @@
 
 
 	<ItemGroup>
+		<Folder Include="Resources\bundles\" />
 		<Folder Include="Resources\db\CustomQuests\SideQuests\66a0f6b2c4d8e90123456789\Images\" />
 		<Folder Include="Resources\db\CustomQuests\MainQuests\579dc571d53a0658a154fbec\Images\" />
 		<Folder Include="Resources\db\CustomQuests\MainQuests\66a0f6b2c4d8e90123456789\Images\" />

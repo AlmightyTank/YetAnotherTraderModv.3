@@ -44,6 +44,7 @@ public sealed class YATMWTTLoader(
             Path.Join("db", "CustomItems", "HeadWear"),
             Path.Join("db", "CustomItems", "Armor", "Builtins"),
             Path.Join("db", "CustomItems", "Armor"),
+            Path.Join("db", "CustomItems", "Posters"),
             Path.Join("db", "CustomWeapons", "Parts"),
             Path.Join("db", "CustomQuests", "Items"),
             Path.Join("db", "CustomWeapons", "Info"),

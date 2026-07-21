@@ -1,14 +1,15 @@
 {
     "manifest": [
         {
-            "key": "item_meds_field.bundle",
+            "key": "assets/content/items/infosubject/item_thin_ledger.bundle",
             "dependencyKeys": [
+                "assets/content/items/infosubject/textures.bundle",
                 "cubemaps",
                 "shaders"
             ]
         },
         {
-            "key": "item_meds_field_loot.bundle",
+            "key": "assets/content/items/infosubject/textures.bundle",
             "dependencyKeys": [
                 "cubemaps",
                 "shaders"

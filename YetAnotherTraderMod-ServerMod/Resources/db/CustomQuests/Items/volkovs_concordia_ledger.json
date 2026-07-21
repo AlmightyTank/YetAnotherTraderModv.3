@@ -1,6 +1,6 @@
 {
     "6a300025d2999bc7b9bba952": {
-        "itemTplToClone": "590c645c86f77412b01304d9",
+        "itemTplToClone": "590c651286f7741e566b6461",
         "parentId": "5448ecbe4bdc2d60728b4568",
         "handbookParentId": "5b47574386f77428ca22b341",
         "overrideProperties": {
@@ -12,7 +12,11 @@
             "DiscardingBlock": true,
             "CanSellOnRagfair": false,
             "isQuestItem": true,
-            "QuestItem": true
+            "QuestItem": true,
+            "Prefab": {
+                "path": "assets/content/items/infosubject/item_thin_ledger.bundle",
+                "rcid": ""
+            }
         },
         "locales": {
             "en": {
