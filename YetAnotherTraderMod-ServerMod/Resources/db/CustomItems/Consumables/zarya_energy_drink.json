@@ -19,7 +19,15 @@
                 "value": 33
             }
         },
-        "effects_damage": {}
+        "effects_damage": {},
+        "Prefab": {
+            "path": "assets/content/weapons/usable_items/item_drink_cans/item_zarya_loot.bundle",
+            "rcid": ""
+        },
+        "UsePrefab": {
+            "path": "assets/content/weapons/usable_items/item_drink_cans/item_zarya_container.bundle",
+            "rcid": ""
+        }
     },
     "Buffs": [
         {

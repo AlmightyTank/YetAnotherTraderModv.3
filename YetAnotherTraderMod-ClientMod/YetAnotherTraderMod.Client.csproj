@@ -129,12 +129,7 @@
 
   <Target Name="DeployClientToTestSpt" AfterTargets="Build" Condition="'$(DeployClientToSpt)' == 'true' and '$(Configuration)' == 'Debug' and '$(SptPath)' != ''">
     <Message Text="Deploying $(AssemblyName) to $(PluginOutputPath)" Importance="high" />
-    <MakeDir Directories="$(PluginOutputPath)" />
-    <MakeDir Directories="$(PluginOutputPath)\Textures" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PluginOutputPath)" SkipUnchangedFiles="false" />
     <Copy SourceFiles="$(ProjectDir)settings.json" DestinationFolder="$(PluginOutputPath)" Condition="Exists('$(ProjectDir)settings.json')" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="$(ProjectDir)texture_overrides.json" DestinationFolder="$(PluginOutputPath)" Condition="Exists('$(ProjectDir)texture_overrides.json')" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="@(TextureFiles)" DestinationFiles="@(TextureFiles->'$(PluginOutputPath)\Textures\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
 
 </Project>
