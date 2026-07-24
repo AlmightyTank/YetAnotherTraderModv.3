@@ -239,12 +239,12 @@
                     "isHidden": false,
                     "items": [
                         {
-                            "_id": "6a300025d2999bc7b9bba954",
+                            "_id": "6a63625099377840f8e2b84a",
                             "_tpl": "5a01ad4786f77450561fda02"
                         }
                     ],
                     "loyaltyLevel": 2,
-                    "target": "6a300025d2999bc7b9bba954",
+                    "target": "6a63625099377840f8e2b84a",
                     "traderId": "66a0f6b2c4d8e90123456789",
                     "type": "AssortmentUnlock",
                     "unknown": false

@@ -1,5 +1,5 @@
 {
-    "_id": "6a300025d2999bc7b9bba955",
+    "_id": "6a6361c699377840f8e2b849",
     "areaType": 11,
     "requirements": [
         {
@@ -15,7 +15,7 @@
             "type": "Item"
         },
         {
-            "templateId": "62a09ee4cf4a99369e262453", // Military flash drive
+            "templateId": "62a0a16d0b9d3c46de5b6e97", // Military flash drive
             "count": 1,
             "isFunctional": false,
             "isEncoded": false,
@@ -43,6 +43,6 @@
     "count": 1,
     "productionLimitCount": 0,
     "isEncoded": false,
-    "locked": false,
+    "locked": true,
     "needFuelForAllProductionTime": false
 }

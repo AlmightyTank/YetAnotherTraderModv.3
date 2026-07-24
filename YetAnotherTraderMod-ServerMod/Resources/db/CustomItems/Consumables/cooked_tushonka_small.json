@@ -51,10 +51,10 @@
     },
     "craft": {
         "_id": "68328f4263bfdf6b03ad838a",
-        "areaType": 5,
+        "areaType": 8,
         "requirements": [
             {
-                "areaType": 5,
+                "areaType": 8,
                 "requiredLevel": 1,
                 "type": "Area"
             },

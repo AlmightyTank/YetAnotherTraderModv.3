@@ -82,61 +82,6 @@
                 "cubemaps",
                 "shaders"
             ]
-        },
-        {
-            "key": "assets/content/weapons/usable_items/item_drink_cans/item_zarya_container.bundle",
-            "dependencyKeys": [
-                "assets/content/weapons/usable_items/item_drink_cans/client_assets.bundle",
-                "assets/content/weapons/usable_items/item_drink_cans/textures/client_assets.bundle",
-                "assets/content/audio/weapons/usable_items/item_drinkcan",
-                "assets/content/prefabs/muzzleflash_base",
-                "assets/commonassets/physics/physicsmaterials.bundle",
-                "cubemaps",
-                "shaders"
-            ]
-        },
-        {
-            "key": "assets/content/weapons/usable_items/item_drink_cans/item_zarya_loot.bundle",
-            "dependencyKeys": [
-                "assets/content/weapons/usable_items/item_drink_cans/client_assets.bundle",
-                "assets/content/weapons/usable_items/item_drink_cans/textures/client_assets.bundle",
-                "assets/commonassets/physics/physicsmaterials.bundle",
-                "cubemaps",
-                "shaders"
-            ]
-        },
-        {
-            "key": "assets/content/weapons/usable_items/item_drink_cans/client_assets.bundle",
-            "dependencyKeys": [
-                "assets/content/weapons/usable_items/item_drink_cans/textures/client_assets.bundle",
-                "assets/commonassets/physics/physicsmaterials.bundle",
-                "cubemaps",
-                "shaders"
-            ]
-        },
-        {
-            "key": "assets/content/weapons/usable_items/item_drink_cans/textures/client_assets.bundle",
-            "dependencyKeys": [
-                "assets/commonassets/physics/physicsmaterials.bundle",
-                "cubemaps",
-                "shaders"
-            ]
-        },
-        {
-            "key": "assets/content/prefabs/muzzleflash_base",
-            "dependencyKeys": [
-                "assets/commonassets/physics/physicsmaterials.bundle",
-                "cubemaps",
-                "shaders"
-            ]
-        },
-        {
-            "key": "assets/content/audio/weapons/usable_items/item_drinkcan",
-            "dependencyKeys": [
-                "assets/commonassets/physics/physicsmaterials.bundle",
-                "cubemaps",
-                "shaders"
-            ]
         }
     ]
 }

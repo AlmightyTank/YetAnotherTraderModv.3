@@ -221,6 +221,30 @@
                     "type": "Item",
                     "unknown": false,
                     "value": 1
+                },
+                {
+                    "availableInGameEditions": [],
+                    "gameMode": [
+                        "regular",
+                        "pve"
+                    ],
+                    "id": "6a6363ef99377840f8e2b84b",
+                    "isHidden": false,
+                    "items": [
+                        {
+                            "_id": "6a6363f499377840f8e2b84c",
+                            "_tpl": "6a300025d2999bc7b9bba954",
+                            "upd": {
+                                "SpawnedInSession": true,
+                                "StackObjectsCount": 1
+                            }
+                        }
+                    ],
+                    "loyaltyLevel": 2,
+                    "target": "6a6363f499377840f8e2b84c",
+                    "traderId": 11,
+                    "type": "ProductionScheme",
+                    "unknown": false
                 }
             ],
             "Success": [
