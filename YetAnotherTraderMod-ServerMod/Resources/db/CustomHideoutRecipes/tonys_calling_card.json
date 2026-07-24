@@ -34,6 +34,10 @@
             "isFunctional": false,
             "isEncoded": false,
             "type": "Tool"
+        },
+        {
+            "questId": "6a300025d2999bc7b9bba926",
+            "type": "QuestComplete"
         }
     ],
     "productionTime": 1800,
